@@ -108,6 +108,23 @@ figure.illustrazione figcaption {
   color: #6b6358;
 }
 
+/* Tavola: pagina con una illustrazione a tutta pagina */
+.pagina.tavola {
+  padding: 9mm 10mm 9mm;
+  text-align: center;
+}
+
+.pagina.tavola figure.illustrazione {
+  margin: 0;
+}
+
+.pagina.tavola figure.illustrazione img {
+  width: auto;
+  max-width: 100%;
+  max-height: 180mm;
+  margin: 0 auto;
+}
+
 /* Copertina: immagine a tutta pagina con titolo sopra */
 .pagina.copertina {
   padding: 0;
