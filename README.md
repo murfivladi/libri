@@ -7,7 +7,8 @@ Libri di fantascienza e fantasy, scritti da Vlad con l'aiuto dell'AI.
 
 | N. | Titolo | Genere | Stato |
 |----|--------|--------|-------|
-| 1  | Il Custode dell'Etna | fantascienza / fantasy | in scrittura (capitolo 1 pronto) |
+| 1  | Il Custode dell'Etna | fantascienza / fantasy | completo (10 capitoli, PDF pronto) |
+| 2  | da decidere | fantascienza / fantasy | da scrivere (il vero nemico esce dall'ombra) |
 
 ## Come lavoriamo
 
