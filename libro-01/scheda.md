@@ -34,6 +34,8 @@
 - Vlad e Ludovica vedono cadere una stella in mare (variante 4). Dentro c'e' qualcosa di antico e luminoso.
 - La storia parte pero' dalla scuola media, a Trappitello (frazione di Taormina, IC 1 Taormina), nella piana a circa 2 km dal mare, con vista su Etna, Taormina e Castelmola.
 - La spiaggia di Giardini Naxos si raggiunge in bici.
+- Orario scuola: ingresso alle 8:05, 6 ore al giorno. Cambio dell'ora alle :05. Merenda dalle 10:55 alle 11:05. Martedi': 1a-2a matematica, 3a tecnologia, merenda, 4a-5a italiano (prof Siligato), 6a inglese. In classe: lavagna di gesso e LIM (Thomas la ripara).
+- La storia comincia a ottobre, un martedi'.
 - Nota: l'indirizzo di casa di Vlad non va scritto nel libro ne' nei file.
 
 ## La "cosa antica"

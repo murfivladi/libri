@@ -21,7 +21,7 @@ Vlad corre dalla nonna. Nonna Tanya gli spiega che la famiglia custodisce da sec
 Esercizi con Ludovica: armatura che cambia forma, forza, magia, tecnologia. Scienza e idee geniali: Ludovica inventa un trucco per controllare i poteri. Scene divertenti. Vlad scopre che si scarica e deve ricaricarsi al sole. *Indizio 2:* in classe la prof non ricorda cosa ha detto il giorno prima.
 
 ## Capitolo 5 - La gita
-Gita all'Etna con la classe e la prof. Il vulcano trema piano. Vlad sente una voce misteriosa. Si accorge che la prof e' sempre vicina alle grotte e fa domande strane su Vlad e la sua famiglia. *Indizio 3:* dove passa la prof fa piu' freddo, anche d'estate.
+Gita all'Etna con la classe e la prof. Il vulcano trema piano. Vlad sente una voce misteriosa. Si accorge che la prof e' sempre vicina alle grotte e fa domande strane su Vlad e la sua famiglia. *Indizio 3:* dove passa la prof fa piu' freddo, anche se fuori c'e' il sole.
 
 ## Capitolo 6 - Tutti sospettano
 Ludovica trova nell'archivio della scuola un libro vecchio sulle leggende dell'Etna. La prof sembra interessata proprio a Tifeo. Vlad e Ludovica concludono che la prof voglia svegliare la creatura per ottenere poteri. *Indizio 4:* in una foto vecchia della scuola c'e' uno studente di 20 anni fa con lo sguardo uguale a quello della prof nei momenti strani. Vlad non ci fa caso.
