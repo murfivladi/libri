@@ -11,15 +11,15 @@
     },
     "ludovica": {
       "descrizione": "Ludovica, a 13-year-old girl with long wavy light brown hair, big expressive eyes, brave and quick, casual summer clothes",
-      "riferimento": "immagini/cap02.jpg"
+      "riferimento": "riferimenti/ludovica.jpg"
     },
     "prof_siligato": {
       "descrizione": "Professor Marcella Siligato, a friendly woman aged about 57 with short curly white hair (a pencil tucked into it), round glasses, kind lined face, warm smile, light shirt and long blue skirt",
-      "riferimento": null
+      "riferimento": "riferimenti/prof_siligato.jpg"
     },
     "nonna_tanya": {
-      "descrizione": "Nonna Tatiana (Tanya), Vlad's grandmother, around 70, kind and mysterious, grey hair in a bun with a colorful Russian headscarf, warm wise eyes, embroidered cardigan, gentle smile",
-      "riferimento": null
+      "descrizione": "Nonna Tatiana (Tanya), Vlad's grandmother, around 70, kind and mysterious, grey hair in a bun under a colorful Russian headscarf, warm amber eyes, embroidered dark cardigan, orange skirt, gentle smile",
+      "riferimento": "riferimenti/nonna_tanya.jpg"
     }
   }
 }
