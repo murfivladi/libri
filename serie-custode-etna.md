@@ -4,7 +4,7 @@
 
 ## Il vero nemico (rivelato solo nel Libro 2)
 - Uno studente della scuola di 20 anni fa (nome da decidere).
-- Fu tradito e rimase intrappolato nell'altro mondo sotto l'Etna. Voleva vendetta.
+- Fu tradito dai compagni e abbandonato nelle grotte dell'Etna durante una gita. Rimase intrappolato nell'altro mondo sotto il vulcano. Voleva vendetta.
 - Ha trovato il modo di uscire come fantasma dall'Etna.
 - Ha scoperto che, entrando nel corpo di qualcuno e svegliando la creatura antica, puo' tornare in vita e avere poteri assoluti.
 - Ha preso possesso della professoressa e le ha fatto provare a svegliare la creatura.

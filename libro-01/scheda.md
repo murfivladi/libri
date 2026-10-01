@@ -26,7 +26,7 @@
 ## Personaggi
 - **Ludovica**: compagna di classe, migliore amica di Vlad, aiutante coraggiosa
 - **La nonna**: dolce e misteriosa, custodisce da secoli un segreto di famiglia
-- **La professoressa** (nome da decidere, vedi nota): all'inizio simpatica, aiuta Vlad. Tutti pensano che voglia svegliare la creatura per avere poteri. Ci sono indizi che sia una serva di qualcun altro (vedi serie-custode-etna.md)
+- **Marcella Siligato**: vera professoressa di italiano di Vlad, ha dato il permesso di usare il suo nome. All'inizio simpatica, aiuta Vlad. Tutti pensano che voglia svegliare la creatura per avere poteri. Ci sono indizi che sia posseduta e serva di qualcun altro (vedi serie-custode-etna.md). Nel Libro 2 si scopre che e' una vittima.
 - **Compagni di classe**: nomi veri (solo nome di battesimo, con permesso). Niente bulli.
 
 ## Inizio della storia
@@ -40,8 +40,8 @@
 - Cos'e' esattamente: da scoprire (lo decide l'autore insieme all'AI).
 
 ## Nemico
-- Una creatura antica che dorme sotto l'Etna (nome da decidere)
-- Il suo servitore e' il prof
+- Una creatura antica che dorme sotto l'Etna: Tifeo (proposta, da approvare)
+- La professoressa sembra la sua serva, ma e' posseduta da un fantasma (segreto del Libro 2)
 
 ## Finale
 - Vlad vince e sconfigge il nemico.
