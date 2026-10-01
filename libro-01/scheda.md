@@ -18,7 +18,7 @@
 - Potere preferito nella vita vera: trasformarsi
 
 ## Protagonista
-- **Vlad**, 13 anni, russo che vive a Giardini Naxos, seconda media
+- **Vlad**, 13 anni, russo che vive a Trappitello (frazione di Taormina), seconda media all'IC 1 Taormina, plesso Trappitello
 - Il prescelto, ma non sa perche': il mistero si svela alla fine
 - Poteri: mix di armatura tecnologica e magia, con trasformazioni (stile Iron Man / Venom)
 - Non ha fratelli o sorelle
@@ -31,7 +31,9 @@
 
 ## Inizio della storia
 - Vlad e Ludovica vedono cadere una stella in mare (variante 4). Dentro c'e' qualcosa di antico e luminoso.
-- La storia parte pero' dalla scuola media.
+- La storia parte pero' dalla scuola media, a Trappitello (frazione di Taormina, IC 1 Taormina), nella piana a circa 2 km dal mare, con vista su Etna, Taormina e Castelmola.
+- La spiaggia di Giardini Naxos si raggiunge in bici.
+- Nota: l'indirizzo di casa di Vlad non va scritto nel libro ne' nei file.
 
 ## La "cosa antica"
 - Non e' un simbionte. E' qualcosa di antico che la famiglia di Vlad custodisce da secoli.

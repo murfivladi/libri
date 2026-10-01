@@ -1,17 +1,18 @@
 # Vlad Editore
 
-Casa editrice fondata da Vlad, Giardini Naxos (Sicilia).
+Casa editrice fondata da Vlad, Taormina - Trappitello (Sicilia).
 Libri di fantascienza e fantasy, scritti da Vlad con l'aiuto dell'AI.
 
 ## Catalogo
 
 | N. | Titolo | Genere | Stato |
 |----|--------|--------|-------|
-| 1  | da decidere | fantascienza / fantasy | in preparazione |
+| 1  | Il Custode dell'Etna | fantascienza / fantasy | in scrittura (capitolo 1 pronto) |
 
 ## Come lavoriamo
 
 - `libro-NN/scheda.md`: idea, personaggi, mondo
 - `libro-NN/trama.md`: capitoli in breve
-- `libro-NN/capitolo-01.md`, `capitolo-02.md`, ...: il testo
+- `libro-NN/stile.css`: stile condiviso da tutte le pagine
+- `libro-NN/pagine/capNN-pNN.html`: il testo, una pagina per file (formato A5)
 - Vlad decide idee e scelte; l'AI scrive bozze e propone miglioramenti.

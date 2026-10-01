@@ -9,10 +9,10 @@ Proposta dell'AI, da correggere da parte di Vlad. Nomi dei compagni da inserire 
 - **L'alleato antico:** lo spirito della Piuma. Parla poco e per enigmi.
 
 ## Capitolo 1 - Una mattina qualunque (scuola)
-Seconda media a Giardini Naxos. Vlad, Ludovica e i compagni. Lezione di italiano con la prof Marcella Siligato, simpatica e amata. Piccola scena buffa. *Indizio 1:* per un attimo la prof parla con una voce strana e dice una parola antica. Tutti ridono, lei dice "scusate, ho avuto un vuoto".
+Seconda media a Trappitello (Taormina), nella piana con vista sull'Etna. Vlad, Ludovica e i compagni. Lezione di italiano con la prof Marcella Siligato, simpatica e amata. Piccola scena buffa. *Indizio 1:* per un attimo la prof parla con una voce strana e dice una parola antica. Tutti ridono, lei dice "scusate, ho avuto un vuoto".
 
 ## Capitolo 2 - La stella caduta
-Dopo scuola, Vlad e Ludovica vanno in spiaggia. Una stella cade in mare, la vanno a cercare. Dentro c'e' una luce viva che si lega al medaglione della nonna che Vlad porta al collo senza sapere cos'e'. Prima trasformazione, accidentale e caotica.
+Dopo scuola, Vlad e Ludovica vanno in bici alla spiaggia di Giardini Naxos. Una stella cade in mare, la vanno a cercare. Dentro c'e' una luce viva che si lega al medaglione della nonna che Vlad porta al collo senza sapere cos'e'. Prima trasformazione, accidentale e caotica.
 
 ## Capitolo 3 - Il segreto della nonna
 Vlad corre dalla nonna. Nonna Tanya gli spiega che la famiglia custodisce da secoli la Piuma di Zhar-ptitsa, portata dalla Russia in Italia per una missione: tenere sveglio il custode, perche' qualcosa sotto l'Etna sta per svegliarsi. Non spiega tutto ("quando sara' il momento"). Vlad non sa perche' proprio lui.
