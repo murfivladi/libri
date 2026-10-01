@@ -5,7 +5,7 @@ Proposta dell'AI, da correggere da parte di Vlad. Nomi dei compagni da inserire 
 ## Idee nuove da approvare
 - **La cosa antica della famiglia:** una *Piuma di Zhar-ptitsa* (l'Uccello di Fuoco delle fiabe russe), custodita dalla nonna in un medaglione. Spiega perche' Vlad si ricarica con il sole.
 - **La creatura sotto l'Etna:** *Tifeo*, il gigante del mito siciliano sepolto sotto il vulcano.
-- **La nonna:** *Nadezhda* (Nadia).
+- **La nonna:** *Tatiana* (Tanya), scelta da Vlad.
 - **L'alleato antico:** lo spirito della Piuma. Parla poco e per enigmi.
 
 ## Capitolo 1 - Una mattina qualunque (scuola)
@@ -15,7 +15,7 @@ Seconda media a Giardini Naxos. Vlad, Ludovica e i compagni. Lezione di italiano
 Dopo scuola, Vlad e Ludovica vanno in spiaggia. Una stella cade in mare, la vanno a cercare. Dentro c'e' una luce viva che si lega al medaglione della nonna che Vlad porta al collo senza sapere cos'e'. Prima trasformazione, accidentale e caotica.
 
 ## Capitolo 3 - Il segreto della nonna
-Vlad corre dalla nonna. Nadia gli spiega che la famiglia custodisce da secoli la Piuma di Zhar-ptitsa, portata dalla Russia in Italia per una missione: tenere sveglio il custode, perche' qualcosa sotto l'Etna sta per svegliarsi. Non spiega tutto ("quando sara' il momento"). Vlad non sa perche' proprio lui.
+Vlad corre dalla nonna. Nonna Tanya gli spiega che la famiglia custodisce da secoli la Piuma di Zhar-ptitsa, portata dalla Russia in Italia per una missione: tenere sveglio il custode, perche' qualcosa sotto l'Etna sta per svegliarsi. Non spiega tutto ("quando sara' il momento"). Vlad non sa perche' proprio lui.
 
 ## Capitolo 4 - Imparare a usare i poteri
 Esercizi con Ludovica: armatura che cambia forma, forza, magia, tecnologia. Scienza e idee geniali: Ludovica inventa un trucco per controllare i poteri. Scene divertenti. Vlad scopre che si scarica e deve ricaricarsi al sole. *Indizio 2:* in classe la prof non ricorda cosa ha detto il giorno prima.
