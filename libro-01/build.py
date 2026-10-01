@@ -11,7 +11,7 @@ import subprocess
 import sys
 
 QUI = os.path.dirname(os.path.abspath(__file__))
-PAGINE = sorted(glob.glob(os.path.join(QUI, "pagine", "cap*-p*.html")))
+PAGINE = sorted(glob.glob(os.path.join(QUI, "pagine", "*.html")))
 BUILD = os.path.join(QUI, "build")
 HTML_UNITO = os.path.join(BUILD, "libro-unito.html")
 PDF = os.path.join(BUILD, "il-custode-dell-etna.pdf")
