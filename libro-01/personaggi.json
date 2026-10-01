@@ -3,7 +3,7 @@
   "personaggi": {
     "vlad": {
       "descrizione": "Vlad, a 13-year-old boy with short messy dark brown hair, brown eyes, light freckles, slim build, friendly curious face; he wears a small dark metal feather-shaped pendant on a thin chain around his neck",
-      "riferimento": "immagini/copertina.jpg"
+      "riferimento": "riferimenti/vlad.jpg"
     },
     "vlad_armatura": {
       "descrizione": "Vlad in his magical golden armor: polished golden plates with glowing golden runes, a glowing firebird feather emblem on the chest, golden helmet with a crest of orange fire feathers, warm orange glow between the plates; armor design may change with the situation but always golden with the firebird feather emblem",
