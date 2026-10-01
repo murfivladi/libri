@@ -15,4 +15,6 @@ Libri di fantascienza e fantasy, scritti da Vlad con l'aiuto dell'AI.
 - `libro-NN/trama.md`: capitoli in breve
 - `libro-NN/stile.css`: stile condiviso da tutte le pagine
 - `libro-NN/pagine/capNN-pNN.html`: il testo, una pagina per file (formato A5)
+- `libro-NN/immagini/`: copertina e illustrazioni (vanno su git)
+- `libro-NN/build.py`: crea il PDF in `libro-NN/build/` (anche il PDF va su git)
 - Vlad decide idee e scelte; l'AI scrive bozze e propone miglioramenti.
