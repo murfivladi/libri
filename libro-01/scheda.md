@@ -1,6 +1,6 @@
 # Libro 1 - scheda
 
-**Titolo:** (da scegliere)
+**Titolo:** Il Custode dell'Etna
 **Autore:** Vlad
 **Editore:** Vlad Editore
 **Genere:** fantascienza + fantasy, con un pizzico di paura
@@ -50,4 +50,25 @@
 ## Da decidere
 - Nome e aspetto della creatura antica sotto l'Etna
 - Cos'e' esattamente la cosa antica custodita dalla famiglia
-- Titolo
+
+## Trasformazioni e poteri
+- L'armatura cambia ogni volta, in base alla situazione
+- Poteri: forza, magia, tecnologia
+- Punto debole: deve ricaricarsi alla luce del sole (come Superman)
+
+## Scontro finale
+- Luogo: dentro l'Etna
+- Aiutano Vlad: Ludovica e i compagni di classe
+- Molti momenti divertenti legati alla scuola
+
+## Scrittura
+- Narratore: sceglie l'AI
+- Capitoli lunghi (circa 2000 parole), 10 capitoli
+- Metodo: l'AI scrive, Vlad corregge
+
+## Edizione
+- Copertina: Vlad trasformato davanti all'Etna
+- Illustrazioni: stile pittura fantasy, generate con Polza (API), una per capitolo
+- Una pagina = un file HTML, poi build in PDF (Chromium)
+- Formato PDF: A5 verticale (scelto dall'AI)
+- Vlad e' curioso di vedere come viene
