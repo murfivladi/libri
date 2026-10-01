@@ -26,7 +26,7 @@
 ## Personaggi
 - **Ludovica**: compagna di classe, migliore amica di Vlad, aiutante coraggiosa
 - **La nonna**: dolce e misteriosa, custodisce da secoli un segreto di famiglia
-- **Il prof**: all'inizio simpatico, aiuta Vlad. Alla fine si scopre che e' il servitore del nemico
+- **La professoressa** (nome da decidere, vedi nota): all'inizio simpatica, aiuta Vlad. Tutti pensano che voglia svegliare la creatura per avere poteri. Ci sono indizi che sia una serva di qualcun altro (vedi serie-custode-etna.md)
 - **Compagni di classe**: nomi veri (solo nome di battesimo, con permesso). Niente bulli.
 
 ## Inizio della storia
@@ -72,3 +72,6 @@
 - Una pagina = un file HTML, poi build in PDF (Chromium)
 - Formato PDF: A5 verticale (scelto dall'AI)
 - Vlad e' curioso di vedere come viene
+
+## Serie
+- Il libro fa parte di una serie. I segreti sono in `serie-custode-etna.md`.
