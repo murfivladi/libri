@@ -25,8 +25,8 @@ URL = "https://polza.ai/api/v1/media"
 MODELLO = "bytedance/seedream-4.5"
 
 
-def carica_config():
-    with open(os.path.join(QUI, "personaggi.json"), encoding="utf-8") as f:
+def carica_config(base):
+    with open(os.path.join(base, "personaggi.json"), encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -60,7 +60,8 @@ def chiedi(corpo, chiave):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--out", required=True, help="file di uscita, relativo a libro-01/")
+    p.add_argument("--libro", default="libro-01", help="cartella del libro (default libro-01), es. libro-02")
+    p.add_argument("--out", required=True, help="file di uscita, relativo alla cartella del libro")
     p.add_argument("--personaggi", default="", help="nomi separati da virgola (da personaggi.json)")
     p.add_argument("--scena", default="", help="descrizione della scena in inglese")
     p.add_argument("--scheda", default="", help="genera la scheda di riferimento di un personaggio")
@@ -71,7 +72,8 @@ def main():
     if not chiave:
         sys.exit("Manca la variabile d'ambiente POLZA")
 
-    cfg = carica_config()
+    base = os.path.normpath(os.path.join(QUI, "..", a.libro))
+    cfg = carica_config(base)
     pers = cfg["personaggi"]
 
     if a.scheda:
@@ -98,7 +100,7 @@ def main():
     for n in nomi:
         rif = pers[n].get("riferimento")
         if rif:
-            percorso = os.path.join(QUI, rif)
+            percorso = os.path.normpath(os.path.join(base, rif))
             if os.path.exists(percorso):
                 immagini.append({"type": "base64", "data": file_base64(percorso)})
 
@@ -119,7 +121,7 @@ def main():
     if not dati or not dati[0].get("url"):
         sys.exit("Nessuna immagine nella risposta: " + json.dumps(ris, ensure_ascii=False)[:400])
 
-    out = os.path.join(QUI, a.out)
+    out = os.path.join(base, a.out)
     os.makedirs(os.path.dirname(out), exist_ok=True)
     subprocess.run(["curl", "-sS", "-m", "90", "-o", out, dati[0]["url"]], check=True)
     costo = (ris.get("usage") or {}).get("cost_rub")
