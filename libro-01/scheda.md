@@ -27,7 +27,7 @@
 ## Personaggi
 - **Ludovica**: compagna di classe, migliore amica di Vlad, aiutante coraggiosa
 - **Nonna Tatiana (Tanya)**: dolce e misteriosa, custodisce da secoli un segreto di famiglia
-- **Marcella Siligato**: vera professoressa di italiano di Vlad, ha dato il permesso di usare il suo nome. All'inizio simpatica, aiuta Vlad. Tutti pensano che voglia svegliare la creatura per avere poteri. Ci sono indizi che sia posseduta e serva di qualcun altro (vedi serie-custode-etna.md). Nel Libro 2 si scopre che e' una vittima.
+- **Marcella Siligato**: vera professoressa di italiano di Vlad, circa 55-60 anni, capelli ricci bianchi, ha dato il permesso di usare il suo nome. All'inizio simpatica, aiuta Vlad. Tutti pensano che voglia svegliare la creatura per avere poteri. Ci sono indizi che sia posseduta e serva di qualcun altro (vedi serie-custode-etna.md). Nel Libro 2 si scopre che e' una vittima.
 - **Compagni di classe**: nomi veri (solo nome di battesimo, con permesso). Niente bulli.
 
 ## Inizio della storia

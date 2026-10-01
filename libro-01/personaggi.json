@@ -1,0 +1,25 @@
+{
+  "stile": "digital oil painting, fantasy storybook illustration, rich warm colors, soft cinematic lighting, painterly brush strokes, no text, no letters, no watermark",
+  "personaggi": {
+    "vlad": {
+      "descrizione": "Vlad, a 13-year-old boy with short messy dark brown hair, brown eyes, light freckles, slim build, friendly curious face; he wears a small dark metal feather-shaped pendant on a thin chain around his neck",
+      "riferimento": "immagini/copertina.jpg"
+    },
+    "vlad_armatura": {
+      "descrizione": "Vlad in his magical golden armor: polished golden plates with glowing runes, a glowing firebird feather emblem on the chest, golden helmet with a crest, warm orange glow between the plates; armor design changes with the situation but always golden with the firebird feather emblem",
+      "riferimento": "immagini/copertina.jpg"
+    },
+    "ludovica": {
+      "descrizione": "Ludovica, a 13-year-old girl with long wavy light brown hair, big expressive eyes, brave and quick, casual summer clothes",
+      "riferimento": "immagini/cap02.jpg"
+    },
+    "prof_siligato": {
+      "descrizione": "Professor Marcella Siligato, a friendly woman aged about 57 with short curly white hair (a pencil tucked into it), round glasses, kind lined face, warm smile, light shirt and long blue skirt",
+      "riferimento": null
+    },
+    "nonna_tanya": {
+      "descrizione": "Nonna Tatiana (Tanya), Vlad's grandmother, around 70, kind and mysterious, grey hair in a bun with a colorful Russian headscarf, warm wise eyes, embroidered cardigan, gentle smile",
+      "riferimento": null
+    }
+  }
+}
