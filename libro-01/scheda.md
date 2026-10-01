@@ -22,6 +22,7 @@
 - Il prescelto, ma non sa perche': il mistero si svela alla fine
 - Poteri: mix di armatura tecnologica e magia, con trasformazioni (stile Iron Man / Venom)
 - Non ha fratelli o sorelle
+- E' arrivato in Italia dalla Russia in quarta elementare. Ha fatto quarta e quinta elementare e ora prima e seconda media qui. Ludovica e' sua amica da allora (da quarta elementare).
 
 ## Personaggi
 - **Ludovica**: compagna di classe, migliore amica di Vlad, aiutante coraggiosa
