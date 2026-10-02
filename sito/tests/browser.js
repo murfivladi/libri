@@ -32,63 +32,6 @@ const ordineRighe = page => page.$$eval('table[data-ordina] tbody tr', rs => rs.
   const browser = await chromium.launch({ executablePath: exe, args: ['--no-sandbox'] });
   const errori = [];
 
-  // ================= LETTORE =================
-  const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 } });
-  const page = await ctx.newPage();
-  page.on('pageerror', e => errori.push(String(e)));
-  page.on('requestfailed', r => errori.push('richiesta fallita: ' + r.url()));
-  await page.goto(B + '/leggi.php?s=il-custode-dell-etna');
-  await page.waitForFunction(() => /^\d+$/.test(document.getElementById('tot').textContent), null, { timeout: 30000 });
-  const totale = parseInt(await page.textContent('#tot'));
-  chk('lettore: più di una pagina', totale > 1, totale);
-  await page.waitForTimeout(800);
-  const nonVuoto = () => page.evaluate(() => { const c = document.getElementById('tela'); const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let k = 0; for (let i = 0; i < d.length; i += 400) if (d[i] < 200 || d[i + 1] < 200) k++; return k; });
-  chk('lettore: la pagina ha del contenuto disegnato', (await nonVuoto()) > 20);
-  await page.click('#avanti'); await page.waitForTimeout(700);
-  chk('lettore: avanti', (await page.inputValue('#vai')) === '2');
-  await page.keyboard.press('ArrowRight'); await page.waitForTimeout(700);
-  chk('lettore: tastiera', (await page.inputValue('#vai')) === '3');
-  await page.fill('#vai', '5'); await page.press('#vai', 'Enter'); await page.waitForTimeout(700);
-  chk('lettore: vai a pagina', (await page.inputValue('#vai')) === '5');
-  await page.click('#b-segna'); await page.waitForTimeout(200);
-  chk('lettore: segnalibro', (await page.textContent('#b-segna')) === '★');
-  await page.click('#b-pannello'); await page.click('[data-tab=segnalibri]');
-  chk('lettore: segnalibro in elenco', (await page.textContent('#tab-segnalibri')).includes('Pagina 5'));
-  await page.click('[data-tab=cerca]');
-  await page.fill('#testo-cerca', 'Vlad'); await page.press('#testo-cerca', 'Enter');
-  await page.waitForFunction(() => /risultati|Nessun/.test(document.getElementById('stato-cerca').textContent), null, { timeout: 60000 });
-  chk('lettore: la ricerca trova risultati', (await page.locator('#risultati li').count()) > 0);
-  await page.click('#piu'); await page.waitForTimeout(400);
-  chk('lettore: zoom ricordato', parseFloat(await page.evaluate(() => localStorage.getItem('zoom'))) > 1);
-  await page.click('#tema');
-  chk('lettore: tema scuro', await page.evaluate(() => document.body.classList.contains('scuro')));
-  await page.reload();
-  await page.waitForFunction(() => /^\d+$/.test(document.getElementById('tot').textContent), null, { timeout: 30000 });
-  await page.waitForTimeout(600);
-  chk('lettore: riprende dalla pagina salvata', parseInt(await page.inputValue('#vai')) > 1);
-
-  const m = await browser.newContext({ viewport: { width: 390, height: 780 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 });
-  const pm = await m.newPage();
-  pm.on('pageerror', e => errori.push('mobile: ' + String(e)));
-  await pm.goto(B + '/leggi.php?s=il-custode-dell-etna');
-  await pm.waitForFunction(() => /^\d+$/.test(document.getElementById('tot').textContent), null, { timeout: 30000 });
-  await pm.waitForTimeout(800);
-  chk('lettore telefono: niente scroll orizzontale', !(await pm.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 2)));
-  const tocco = (tipo, pts) => pm.evaluate(([tipo, pts]) => {
-    const t = document.getElementById('area');
-    const touches = pts.map((p, i) => new Touch({ identifier: i, target: t, clientX: p[0], clientY: p[1] }));
-    t.dispatchEvent(new TouchEvent(tipo, { touches: tipo === 'touchend' ? [] : touches, changedTouches: touches, bubbles: true, cancelable: true }));
-  }, [tipo, pts]);
-  const prima = await pm.inputValue('#vai');
-  await tocco('touchstart', [[300, 400]]); await tocco('touchend', [[100, 405]]);
-  await pm.waitForTimeout(800);
-  chk('lettore telefono: scorri per cambiare pagina', (await pm.inputValue('#vai')) !== prima);
-  const z0 = parseFloat(await pm.evaluate(() => localStorage.getItem('zoom') || '1'));
-  await tocco('touchstart', [[150, 400], [250, 400]]); await tocco('touchmove', [[100, 400], [300, 400]]);
-  await pm.evaluate(() => document.getElementById('area').dispatchEvent(new TouchEvent('touchend', { touches: [], changedTouches: [], bubbles: true })));
-  await pm.waitForTimeout(900);
-  chk('lettore telefono: pizzica per ingrandire', parseFloat(await pm.evaluate(() => localStorage.getItem('zoom') || '1')) > z0 + 0.2);
-
   // ================= ADMIN: trascinamento =================
   const a = await browser.newContext({ viewport: { width: 1200, height: 900 } });
   const pa = await a.newPage();

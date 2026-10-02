@@ -66,6 +66,30 @@ body:not(.lettore) { overflow-x:hidden; }
 .sottotitolo { font-size:1.2rem; margin:-6px 0 8px; font-style:italic; }
 .avviso { background:#fff3cd; color:#5c4400; padding:10px 14px; border-radius:6px; }
 .pagina-testo { max-width:720px; margin:0 auto; }
+/* Lettore a libro: pagine che si girano (stile di base di StPageFlip) e scena con zoom */
+.stf__parent { position:relative; display:block; box-sizing:border-box; transform:translateZ(0); }
+.stf__block { position:absolute; width:100%; height:100%; box-sizing:border-box; perspective:2000px; }
+.stf__item { display:none; position:absolute; transform-style:preserve-3d; }
+.stf__outerShadow, .stf__innerShadow, .stf__hardShadow, .stf__hardInnerShadow { position:absolute; left:0; top:0; }
+body.lettore { height:100vh; height:100dvh; display:flex; flex-direction:column; overflow:hidden; --sfondo:#ddd6c8; }
+body.lettore.scuro { --sfondo:#1a1a1a; }
+.lettore .barra { flex:none; position:relative; }
+.lettore #progresso { flex:none; position:relative; top:auto; }
+#scena { flex:1; min-height:0; position:relative; overflow:hidden; touch-action:none; user-select:none; -webkit-user-select:none; background:radial-gradient(ellipse at center, #cfc7b6 0%, #b8af9b 100%); }
+body.lettore.scuro #scena { background:radial-gradient(ellipse at center, #2a2724 0%, #121110 100%); }
+#zoom { position:absolute; inset:0; transform-origin:0 0; will-change:transform; }
+#libro { position:absolute; inset:14px 60px; }
+@media (max-width:700px) { #libro { inset:6px; } }
+.pagina-pdf { background:#fffdf7; overflow:hidden; }
+.pagina-pdf canvas { position:absolute; left:0; top:0; width:100%; height:100%; display:block; }
+body.lettore.scuro .pagina-pdf { background:#222; }
+body.lettore.scuro .pagina-pdf canvas { filter:invert(1) hue-rotate(180deg); }
+#scena.zoomato { cursor:grab; } #scena.zoomato:active { cursor:grabbing; }
+.freccia { position:absolute; top:50%; transform:translateY(-50%); width:44px; height:64px; border:0; border-radius:10px; background:#0006; color:#fff; font-size:32px; cursor:pointer; z-index:3; opacity:.55; transition:opacity .2s; }
+.freccia:hover { opacity:1; } .freccia.sx { left:8px; } .freccia.dx { right:8px; }
+#scena.zoomato .freccia { display:none; }
+#stato { position:absolute; inset:0; display:grid; place-items:center; margin:0; color:inherit; z-index:2; }
+@media (max-width:700px) { .freccia { display:none; } }
 /* Lettore: barra, pannello, progresso */
 .barra { padding-top:max(8px, env(safe-area-inset-top)); }
 .barra .indietro-libro { max-width:30vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }

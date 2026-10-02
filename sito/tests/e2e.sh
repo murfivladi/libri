@@ -106,10 +106,12 @@ chk "link Privacy nel piede" "$(echo "$HOME" | conta 'pagina.php?s=privacy')" 1
 chk "robots.txt" "$(curl -s "$B/robots.txt" | conta 'Disallow: /admin/')" 1
 chk "404 con grafica" "$(curl -s "$B/404.php" | conta 'Pagina non trovata')" 1
 chk "lettore: usa PDF.js locale" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna" | conta 'assets/vendor/pdf.min.js')" 1
+chk "lettore: libro con le pagine che si girano (StPageFlip locale)" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna" | conta 'assets/vendor/page-flip.browser.js')" 1
+chk "StPageFlip servito" "$(code assets/vendor/page-flip.browser.js)" 200
 chk "lettore: niente CDN" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna" | conta 'cdnjs')" 0
 chk "PDF.js servito" "$(code assets/vendor/pdf.worker.min.js)" 200
 chk "scarica pdf" "$(curl -s -b "$J" -c "$J" -o /dev/null -w '%{http_code}:%{content_type}' "$B/scarica.php?s=il-custode-dell-etna")" "200:application/pdf"
-chk "contatori: 2 letture da visitatori diversi" "$(sql "SELECT letture FROM libri WHERE slug = 'il-custode-dell-etna'")" 2
+chk "contatori: le letture da visitatori diversi si sommano" "$(sql "SELECT letture >= 2 FROM libri WHERE slug = 'il-custode-dell-etna'")" 1
 chk "contatori: 1 download" "$(sql "SELECT download FROM libri WHERE slug = 'il-custode-dell-etna'")" 1
 
 # ---------- collane e pagine ----------

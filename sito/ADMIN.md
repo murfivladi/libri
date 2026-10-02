@@ -99,7 +99,10 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
 
 ## Lato pubblico (novità)
 - Miniature delle copertine (il catalogo carica immagini leggere), anteprime ricche quando condividi un link (Open Graph), pagina Privacy, `robots.txt`, pagina 404 con la grafica del sito, nessun servizio esterno (PDF.js è incluso)
-- **Lettore**: indice, segnalibri, ricerca nel testo con evidenziazione, vai a pagina, schermo intero, zoom (anche pizzicando), scorri per girare pagina, tema scuro, riprende dall'ultima pagina
+- **Lettore a libro**: le pagine si girano davvero (con ombra e piega), a doppia pagina su schermi larghi e a pagina singola sul telefono; copertina e retro rigidi
+  - gira con le frecce, trascinando un angolo, con una strisciata veloce (telefono), con la tastiera o la rotella
+  - **zoom che resta sul punto che tocchi**: pizzico, doppio tocco/doppio clic, Ctrl+rotella, pulsanti ＋/−; da ingrandito si sposta trascinando e la pagina non si gira per sbaglio
+  - indice, segnalibri, ricerca nel testo con evidenziazione, vai a pagina, schermo intero, tema scuro, riprende dall'ultima pagina
 65. Ricerca nel catalogo, filtro per collana e per tag, paginazione
 66. Libri in evidenza, «Nella stessa collana»
 67. Contatore di letture e download

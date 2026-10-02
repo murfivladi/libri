@@ -38,14 +38,14 @@ function trovaChromium() {
   const richiestePdf = [];
   page.on('response', r => { if (r.url().includes('pdf.php')) richiestePdf.push(r.status()); });
   await page.goto(B + '/leggi.php?s=' + (process.env.SLUG || 'il-custode-dell-etna'));
-  await page.waitForFunction(() => /^\d+$/.test(document.getElementById('tot').textContent), null, { timeout: 30000 });
+  await page.waitForFunction(() => /^\d+$/.test(document.getElementById('tot').textContent) && document.querySelectorAll('.pagina-pdf.pronta').length > 0, null, { timeout: 40000 });
   const totale = parseInt(await page.textContent('#tot'));
   chk('lettore B: PDF aperto (più pagine)', totale > 1, totale);
   await page.waitForTimeout(900);
-  const pieno = await page.evaluate(() => { const c = document.getElementById('tela'); const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let k = 0; for (let i = 0; i < d.length; i += 400) if (d[i] < 200) k++; return k; });
-  chk('lettore B: la pagina è disegnata', pieno > 20, pieno);
-  await page.click('#avanti'); await page.waitForTimeout(700);
-  chk('lettore B: cambio pagina', (await page.inputValue('#vai')) === '2');
+  const pieno = await page.evaluate(() => { const c = document.querySelector('.pagina-pdf canvas'); const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let k = 0; for (let i = 0; i < d.length; i += 800) if (d[i] < 200) k++; return k; });
+  chk('lettore B: la copertina è disegnata', pieno > 20, pieno);
+  await page.click('#avanti'); await page.waitForTimeout(1500);
+  chk('lettore B: la pagina si gira', (await page.inputValue('#vai')) === '2', await page.inputValue('#vai'));
   chk('lettore B: il PDF arriva dal principale (pdf.php)', richiestePdf.length > 0 && richiestePdf.every(s => s === 200 || s === 206), richiestePdf.join());
   chk('nessun errore (CORS compreso)', errori.length === 0, errori.slice(0, 3));
 
