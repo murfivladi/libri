@@ -20,6 +20,22 @@
     "nonna_tanya": {
       "descrizione": "Nonna Tatiana (Tanya), Vlad's grandmother, around 70, kind and mysterious, grey hair in a bun under a colorful Russian headscarf, warm amber eyes, embroidered dark cardigan, orange skirt, gentle smile; in winter scenes a long fur-collared coat",
       "riferimento": "../libro-01/riferimenti/nonna_tanya.jpg"
+    },
+    "zinaida": {
+      "descrizione": "Zinaida, a tiny thin elderly Russian woman of about 75, very pale ice-blue eyes, weathered face, white braid under a heavy grey wool shawl, long dark felt coat and valenki felt boots, carries a carved wooden walking stick and an old brass lantern",
+      "riferimento": "riferimenti/zinaida.jpg"
+    },
+    "baba_yaga": {
+      "descrizione": "Baba Yaga, a grumpy ancient Russian witch with a long hooked nose, wild grey hair, a few iron teeth, sharp bright black eyes, ragged dark patchwork dress and a red headscarf, holding a broom and a wooden mortar; funny and scary at once, not evil",
+      "riferimento": "riferimenti/baba_yaga.jpg"
+    },
+    "koschei": {
+      "descrizione": "Koschei the Deathless, a very tall skeletal man with ash-grey skin, hollow ice-blue eyes, long white hair, a crown of black iron, a long black cloak made of raven feathers, thin long fingers; sad, proud and menacing",
+      "riferimento": "riferimenti/koschei.jpg"
+    },
+    "lupo": {
+      "descrizione": "The Grey Wolf of Russian fairy tales, a huge wolf the size of a horse with thick silver-grey fur, intelligent amber eyes, frost on its whiskers, calm and noble",
+      "riferimento": "riferimenti/lupo.jpg"
     }
   }
 }
