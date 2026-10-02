@@ -33,10 +33,9 @@ if ($l['anteprima']): ?><p class="avviso">👁 Anteprima privata: questo libro n
     <?php if ($l['pdf']): ?>
     <p class="azioni">
       <a class="bottone" href="leggi.php?s=<?= e($l['slug']) . $suffisso ?>">Leggi online</a>
-      <a class="bottone secondario" href="scarica.php?s=<?= e($l['slug']) . $suffisso ?>">Scarica PDF</a>
     </p>
     <?php endif; ?>
-    <?php if (impost('contatori_pubblici') === '1'): ?><p class="meta">👁 <?= (int)$l['letture'] ?> letture · ⬇ <?= (int)$l['download'] ?> download</p><?php endif; ?>
+    <?php if (impost('contatori_pubblici') === '1'): ?><p class="meta">👁 <?= (int)$l['letture'] ?> letture</p><?php endif; ?>
   </div>
 </article>
 <?php if ($altri): ?>

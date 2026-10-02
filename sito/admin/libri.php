@@ -29,7 +29,7 @@ $collana = $_GET['collana'] ?? '';
 $tag = trim($_GET['tag'] ?? '');
 $ora = date('Y-m-d H:i:s');
 $ordini = ['manuale' => 'l.ordine, l.numero, l.id', 'titolo' => sql_nocase('l.titolo'), 'numero' => 'l.numero', 'creato' => 'l.creato', 'aggiornato' => 'l.aggiornato',
-           'letture' => 'l.letture', 'download' => 'l.download', 'stato' => 'l.pubblicato', 'collana' => sql_nocase('c.nome')];
+           'letture' => 'l.letture','stato' => 'l.pubblicato', 'collana' => sql_nocase('c.nome')];
 $ord = isset($ordini[$_GET['ord'] ?? '']) ? $_GET['ord'] : 'manuale';
 $dir = ($_GET['dir'] ?? 'asc') === 'desc' ? 'DESC' : 'ASC';
 $per = (int)($_GET['per'] ?? 25);
@@ -116,7 +116,7 @@ admin_testata($stato === 'cestino' ? 'Cestino' : 'Libri', 'libri');
 <table class="tabella"<?= $ordina ? ' data-ordina="libri" data-csrf="' . e(csrf()) . '"' : '' ?>>
 <thead><tr><th></th><th><input type="checkbox" data-tutti aria-label="Seleziona tutti"></th><th></th>
   <?= th_ord('Titolo', 'titolo') ?><?= th_ord('Collana', 'collana') ?><?= th_ord('N.', 'numero') ?><?= th_ord('Stato', 'stato') ?>
-  <?= th_ord('👁', 'letture') ?><?= th_ord('⬇', 'download') ?><?= th_ord('Modificato', 'aggiornato') ?><th>Azioni</th></tr></thead><tbody>
+  <?= th_ord('👁', 'letture') ?><?= th_ord('Modificato', 'aggiornato') ?><th>Azioni</th></tr></thead><tbody>
 <?php foreach ($libri as $l):
     $id = (int)$l['id'];
     $prog = $l['pubblicato'] && $l['pubblica_il'] > $ora;
@@ -132,8 +132,7 @@ admin_testata($stato === 'cestino' ? 'Cestino' : 'Libri', 'libri');
   <td><?= e($l['nome_collana'] ?? '') ?></td>
   <td><?= $l['numero'] ? (int)$l['numero'] : '' ?></td>
   <td><span class="stato <?= $cl ?>"><?= e($tx) ?></span></td>
-  <td><?= (int)$l['letture'] ?></td><td><?= (int)$l['download'] ?></td>
-  <td class="muto"><?= e(formatta_data($l['aggiornato'])) ?></td>
+  <td><?= (int)$l['letture'] ?></td>  <td class="muto"><?= e(formatta_data($l['aggiornato'])) ?></td>
   <td><div class="azioni-riga">
     <?php if ($l['eliminato']): ?>
       <button class="mini" name="riga" value="<?= $id ?>:ripristina">Ripristina</button>

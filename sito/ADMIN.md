@@ -7,7 +7,7 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
 2. Schede rapide per stato: tutti, pubblicati, bozze, programmati, in evidenza, senza PDF, senza copertina, senza trama, cestino (con i conteggi)
 3. Filtro per collana (anche «senza collana»)
 4. Filtro per tag (con quanti libri hanno ogni tag)
-5. Ordinamento cliccando sulle colonne (titolo, collana, numero, stato, letture, download, data)
+5. Ordinamento cliccando sulle colonne (titolo, collana, numero, stato, letture, data)
 6. Ordine manuale con le frecce ↑ ↓
 7. Paginazione e scelta di quanti libri per pagina (10/25/50/100)
 8. Miniatura della copertina e avvisi (⚠ no PDF, ⚠ no copertina)
@@ -42,7 +42,7 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
 33. Pubblicazione programmata (data e ora)
 34. Indirizzo (slug) modificabile
 35. Link segreto di anteprima per vedere le bozze (con «Copia link» e rigenerazione)
-36. Statistiche del libro (letture, download, date)
+36. Statistiche del libro (letture, date)
 37. Salva / salva e torna all'elenco / salva e aggiungi un altro
 38. Avviso se esci con modifiche non salvate
 39. Contatore caratteri della descrizione SEO
@@ -105,6 +105,6 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
   - indice, segnalibri, ricerca nel testo con evidenziazione, vai a pagina, schermo intero, tema scuro, riprende dall'ultima pagina
 65. Ricerca nel catalogo, filtro per collana e per tag, paginazione
 66. Libri in evidenza, «Nella stessa collana»
-67. Contatore di letture e download
+67. Contatore di letture. **I PDF non si possono scaricare**: si leggono solo online (nessun pulsante, `scarica.php` risponde 410, accesso diretto al file bloccato)
 68. Pagine statiche modificabili e menu dinamico
 69. `sitemap.php` e `feed.php` (RSS)

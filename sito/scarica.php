@@ -1,9 +1,13 @@
 <?php
+// Il download dei PDF non esiste: i libri si leggono online. Questo indirizzo resta solo per i vecchi link.
 require __DIR__ . '/inc/pubblico.php';
-
-$token = (string)($_GET['anteprima'] ?? '');
-$l = libro_per_slug((string)($_GET['s'] ?? ''), $token);
-if (!$l || $l['pdf'] === '') pagina_non_trovata();
-if (!$l['anteprima']) conta_una_volta('download', (int)$l['id']);
-session_write_close();
-invia_download($l['pdf'], 'pdf', $l['slug'] . '.pdf', 'application/pdf');
+http_response_code(410);
+header('Cache-Control: public, max-age=86400');
+intestazione('Solo lettura online');
+?>
+<div class="pagina-testo centro">
+  <h1>I libri si leggono online</h1>
+  <p>I PDF non si possono scaricare: ogni libro si legge qui, nel lettore a pagine.</p>
+  <p><a class="bottone" href="index.php">Vai al catalogo</a></p>
+</div>
+<?php piede();

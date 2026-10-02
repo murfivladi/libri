@@ -136,7 +136,7 @@ if ($id && $l['eliminato']) echo '<p class="errore">Questo libro è nel cestino 
   <label><span>In evidenza</span><span><input type="checkbox" name="evidenza" value="1" <?= $l['evidenza'] ? 'checked' : '' ?>> Mostra in cima al catalogo</span></label>
 </div>
 <?php if ($id): ?>
-  <p class="muto">Creato: <?= e(formatta_data($l['creato'])) ?> · Modificato: <?= e(formatta_data($l['aggiornato'])) ?> · 👁 <?= (int)$l['letture'] ?> letture · ⬇ <?= (int)$l['download'] ?> download</p>
+  <p class="muto">Creato: <?= e(formatta_data($l['creato'])) ?> · Modificato: <?= e(formatta_data($l['aggiornato'])) ?> · 👁 <?= (int)$l['letture'] ?> letture</p>
   <?php if ($pubblico): ?><p><a href="../libro.php?s=<?= e($l['slug']) ?>" target="_blank">Vedi la pagina pubblica ↗</a> · Indirizzo (slug): <code><?= e($l['slug']) ?></code> <label style="display:inline">modifica: <input type="text" name="slug" value="<?= e($l['slug']) ?>" style="width:220px"></label></p>
   <?php else: ?><input type="hidden" name="slug" value="<?= e($l['slug']) ?>"><?php endif; ?>
   <p>Link segreto di anteprima (anche se è bozza): <br><input type="text" readonly value="<?= e($anteprima_url) ?>" onclick="this.select()">
@@ -157,7 +157,7 @@ if ($id && $l['eliminato']) echo '<p class="errore">Questo libro è nel cestino 
   <?= csrf_campo() ?><b style="align-self:center">Altre azioni:</b>
   <button class="bottone sec piccolo" name="azione" value="duplica">⧉ Duplica</button>
   <button class="bottone sec piccolo" name="azione" value="nuovo_token" data-conferma="Il vecchio link di anteprima smetterà di funzionare. Continuare?">🔗 Rigenera link anteprima</button>
-  <button class="bottone sec piccolo" name="azione" value="azzera_contatori" data-conferma="Azzerare letture e download?">↺ Azzera contatori</button>
+  <button class="bottone sec piccolo" name="azione" value="azzera_contatori" data-conferma="Azzerare le letture?">↺ Azzera contatori</button>
   <?php if ($l['eliminato']): ?>
     <button class="bottone sec piccolo" name="azione" value="ripristina">Ripristina</button>
     <button class="bottone pericolo piccolo" name="azione" value="elimina_def" data-conferma="Eliminare per sempre questo libro e i suoi file?">Elimina per sempre</button>

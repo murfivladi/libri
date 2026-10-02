@@ -13,6 +13,12 @@ $nome = basename((string)($_GET['f'] ?? ''));
 $file = RADICE . '/uploads/pdf/' . $nome;
 if (!sito_principale() || !preg_match('/^[A-Za-z0-9._-]+\.pdf$/', $nome) || !is_file($file)) { http_response_code(404); exit; }
 
+// Solo per il lettore (PDF.js usa fetch): il browser che apre il PDF in una scheda, un frame o un incorporamento viene respinto.
+$dest = strtolower((string)($_SERVER['HTTP_SEC_FETCH_DEST'] ?? ''));
+if (in_array($dest, ['document', 'iframe', 'frame', 'embed', 'object'], true)) { http_response_code(403); exit; }
+header('X-Content-Type-Options: nosniff');
+header('Content-Disposition: inline');
+
 $tot = filesize($file);
 $da = 0; $a = $tot - 1;
 header('Content-Type: application/pdf');

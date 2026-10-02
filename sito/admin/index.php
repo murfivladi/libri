@@ -10,9 +10,8 @@ $n = [
     'Collane' => [$q('SELECT COUNT(*) FROM collane'), 'collane.php'],
     'Pagine' => [$q('SELECT COUNT(*) FROM pagine'), 'pagine.php'],
     'Letture' => [$q('SELECT COALESCE(SUM(letture),0) FROM libri'), 'libri.php?ord=letture&dir=desc'],
-    'Download' => [$q('SELECT COALESCE(SUM(download),0) FROM libri'), 'libri.php?ord=download&dir=desc'],
 ];
-$piu_letti = db()->query('SELECT id, titolo, letture, download FROM libri WHERE eliminato IS NULL AND (letture > 0 OR download > 0) ORDER BY letture + download DESC LIMIT 5')->fetchAll();
+$piu_letti = db()->query('SELECT id, titolo, letture FROM libri WHERE eliminato IS NULL AND letture > 0 ORDER BY letture DESC LIMIT 5')->fetchAll();
 $recenti = db()->query('SELECT id, titolo, aggiornato, pubblicato FROM libri WHERE eliminato IS NULL ORDER BY aggiornato DESC, id DESC LIMIT 6')->fetchAll();
 $spazio = 0;
 if (dir_uploads() !== null) foreach (['pdf', 'cover'] as $c) foreach (glob(dir_uploads() . "/$c/*") ?: [] as $f) if (is_file($f) && basename($f)[0] !== '.') $spazio += filesize($f);
@@ -54,7 +53,7 @@ admin_testata('Dashboard', 'dashboard');
   </div>
   <div class="pannello"><b>Più letti e scaricati</b>
     <table class="tabella"><?php foreach ($piu_letti as $r): ?>
-      <tr><td><a href="libro.php?id=<?= (int)$r['id'] ?>"><?= e($r['titolo']) ?></a></td><td>👁 <?= (int)$r['letture'] ?></td><td>⬇ <?= (int)$r['download'] ?></td></tr>
+      <tr><td><a href="libro.php?id=<?= (int)$r['id'] ?>"><?= e($r['titolo']) ?></a></td><td>👁 <?= (int)$r['letture'] ?></td></tr>
     <?php endforeach; if (!$piu_letti): ?><tr><td class="muto">Ancora nessuna lettura.</td></tr><?php endif; ?></table>
   </div>
 </div>

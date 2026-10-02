@@ -8,7 +8,7 @@ const VERSIONE_DB = 5;
 
 // Testo iniziale della pagina Privacy (modificabile dall'admin). È un modello: va controllato da un adulto.
 const TESTO_PRIVACY = "Questo sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti.\n\n"
-    . "## Cookie tecnici\n\nIl sito usa un solo cookie tecnico di sessione. Serve per l'area riservata e per contare una sola volta le letture e i download di un libro. Si cancella chiudendo il browser e non richiede consenso.\n\n"
+    . "## Cookie tecnici\n\nIl sito usa un solo cookie tecnico di sessione. Serve per l'area riservata e per contare una sola volta le letture di un libro. Si cancella chiudendo il browser e non richiede consenso.\n\n"
     . "## Dati salvati nel tuo dispositivo\n\nIl lettore ricorda la pagina, i segnalibri, il tema e lo zoom nel tuo browser. Questi dati restano solo sul tuo dispositivo: non vengono inviati a noi.\n\n"
     . "## Registri del server\n\nIl servizio di hosting può registrare l'indirizzo IP dei visitatori per motivi di sicurezza, secondo la propria informativa.\n\n"
     . "## Contatti\n\nPer qualsiasi domanda sui tuoi dati puoi scrivere all'indirizzo email indicato in fondo alla pagina.";

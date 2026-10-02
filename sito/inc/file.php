@@ -220,25 +220,3 @@ function file_raggiungibile(string $url): bool {
     curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE); curl_close($ch);
     return $code >= 200 && $code < 300;
 }
-
-// Invia il file al visitatore come download; se sta su un altro sito (il principale) lo ricopia al volo.
-function invia_download(string $valore, string $cartella, string $nomeDownload, string $mime): void {
-    header('Content-Type: ' . $mime);
-    header('Content-Disposition: attachment; filename="' . $nomeDownload . '"');
-    $loc = file_locale($valore, $cartella);
-    if ($loc !== null) { header('Content-Length: ' . filesize($loc)); readfile($loc); return; }
-    $url = url_file($valore, $cartella);
-    if (!e_nostro($valore) || !function_exists('curl_init')) { header_remove('Content-Type'); header_remove('Content-Disposition'); header('Location: ' . $url); return; }
-    $ok = true;
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => false, CURLOPT_TIMEOUT => 600, CURLOPT_CONNECTTIMEOUT => 10, CURLOPT_FOLLOWLOCATION => true, CURLOPT_MAXREDIRS => 3,
-        CURLOPT_HEADERFUNCTION => function ($c, $riga) use (&$ok) {
-            if (preg_match('#^HTTP/\S+\s+(\d+)#', $riga, $m)) $ok = $m[1] === '200';
-            if ($ok && stripos($riga, 'content-length:') === 0) header('Content-Length: ' . trim(substr($riga, 15)));
-            return strlen($riga);
-        },
-        CURLOPT_WRITEFUNCTION => function ($c, $dati) use (&$ok) { if (!$ok) return strlen($dati); echo $dati; flush(); return strlen($dati); },
-    ]);
-    curl_exec($ch); curl_close($ch);
-}

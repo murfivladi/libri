@@ -94,7 +94,7 @@ TK=$(sql "SELECT token FROM libri WHERE slug = 'libro-segreto'")
 chk "anteprima con token" "$(code "libro.php?s=libro-segreto&anteprima=$TK")" 200
 chk "anteprima con token sbagliato" "$(code "libro.php?s=libro-segreto&anteprima=sbagliato")" 404
 
-# ---------- sito pubblico: miniature, Open Graph, lettore, download, contatori ----------
+# ---------- sito pubblico: miniature, Open Graph, lettore, contatori ----------
 HOME=$(curl -s "$B/")
 chk "miniature nel catalogo (3 libri + 1 in evidenza)" "$(echo "$HOME" | conta 'src="uploads/thumb/400-')" 4
 chk "miniatura creata sul disco" "$([ -n "$(ls uploads/thumb 2>/dev/null)" ] && echo si)" si
@@ -110,9 +110,10 @@ chk "lettore: libro con le pagine che si girano (StPageFlip locale)" "$(curl -s 
 chk "StPageFlip servito" "$(code assets/vendor/page-flip.browser.js)" 200
 chk "lettore: niente CDN" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna" | conta 'cdnjs')" 0
 chk "PDF.js servito" "$(code assets/vendor/pdf.worker.min.js)" 200
-chk "scarica pdf" "$(curl -s -b "$J" -c "$J" -o /dev/null -w '%{http_code}:%{content_type}' "$B/scarica.php?s=il-custode-dell-etna")" "200:application/pdf"
+chk "scarica.php: il download non esiste (410)" "$(curl -s -o /dev/null -w '%{http_code}' "$B/scarica.php?s=il-custode-dell-etna")" 410
+chk "libro: nessun pulsante Scarica" "$(curl -s "$B/libro.php?s=il-custode-dell-etna" | conta '[Ss]carica')" 0
+chk "pdf.php: aperto come pagina -> 403" "$(curl -s -o /dev/null -H 'Sec-Fetch-Dest: document' -w '%{http_code}' "$B/pdf.php?f=$(basename "$(sql "SELECT pdf FROM libri WHERE slug = 'il-custode-dell-etna'")")")" 403
 chk "contatori: le letture da visitatori diversi si sommano" "$(sql "SELECT letture >= 2 FROM libri WHERE slug = 'il-custode-dell-etna'")" 1
-chk "contatori: 1 download" "$(sql "SELECT download FROM libri WHERE slug = 'il-custode-dell-etna'")" 1
 
 # ---------- collane e pagine ----------
 Tk=$(tok admin/collane.php)

@@ -139,7 +139,7 @@ admin_testata('Strumenti', 'strumenti');
   <form method="post" class="azioni-riga"><?= csrf_campo() ?>
     <button class="bottone sec piccolo" name="azione" value="conta_pagine">Calcola pagine dei PDF</button>
     <button class="bottone sec piccolo" name="azione" value="ottimizza">Ottimizza database</button>
-    <button class="bottone sec piccolo" name="azione" value="azzera_tutti" data-conferma="Azzerare tutte le letture e i download?">Azzera contatori</button>
+    <button class="bottone sec piccolo" name="azione" value="azzera_tutti" data-conferma="Azzerare tutte le letture?">Azzera contatori</button>
     <button class="bottone sec piccolo" name="azione" value="nuovi_token" data-conferma="Tutti i link segreti di anteprima cambieranno. Continuare?">Rigenera link anteprima</button>
     <button class="bottone pericolo piccolo" name="azione" value="svuota_cestino" data-conferma="Eliminare per sempre tutto il cestino?">Svuota cestino</button></form>
 </div>

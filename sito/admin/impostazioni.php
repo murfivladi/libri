@@ -32,7 +32,7 @@ admin_testata('Impostazioni', 'impostazioni');
       <option value="<?= $k ?>" <?= impost('ordine_catalogo') === $k ? 'selected' : '' ?>><?= e($et) ?></option><?php endforeach; ?></select></label>
   <label><span>Opzioni</span>
     <span><input type="checkbox" name="mostra_evidenza" value="1" <?= impost('mostra_evidenza') === '1' ? 'checked' : '' ?>> Mostra i libri in evidenza in cima</span>
-    <span><input type="checkbox" name="contatori_pubblici" value="1" <?= impost('contatori_pubblici') === '1' ? 'checked' : '' ?>> Mostra letture/download ai visitatori</span></label>
+    <span><input type="checkbox" name="contatori_pubblici" value="1" <?= impost('contatori_pubblici') === '1' ? 'checked' : '' ?>> Mostra le letture ai visitatori</span></label>
 </div></div>
 
 <div class="pannello"><h2 style="margin-top:0">Manutenzione</h2>

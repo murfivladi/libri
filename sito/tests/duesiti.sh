@@ -80,10 +80,10 @@ chk "pdf.php: CORS aperto" "$(curl -sI -H "Origin: $URLB" "$PDFURL" | tr -d '\r'
 chk "pdf.php: ultimi byte" "$(curl -s -o /dev/null -r -50 -w '%{http_code}' "$PDFURL")" 206
 chk "pdf.php: Range fuori misura -> 416" "$(curl -s -o /dev/null -r 999999999-999999999 -w '%{http_code}' "$PDFURL")" 416
 chk "pdf.php: nome non valido" "$(curl -s -o /dev/null -w '%{http_code}' "$URLA/pdf.php?f=../data/config.php")" 404
-DIM=$(stat -c %s "$A/uploads/pdf/$(basename "$PDF")")
-chk "B: scarica.php: PDF intero (copiato dal principale)" "$(curl -s -o "$T/d.pdf" -w '%{http_code}:%{content_type}:%{size_download}' "$URLB/scarica.php?s=il-custode-dell-etna")" "200:application/pdf:$DIM"
-chk "B: scarica.php: il file è identico" "$(cmp -s "$T/d.pdf" "$A/uploads/pdf/$(basename "$PDF")" && echo si)" si
-chk "contatore download condiviso" "$(sql "SELECT download FROM libri WHERE slug = 'il-custode-dell-etna'")" 1
+chk "B: scarica.php non esiste (410)" "$(curl -s -o /dev/null -w '%{http_code}' "$URLB/scarica.php?s=il-custode-dell-etna")" 410
+chk "pdf.php: dal lettore (fetch) -> 200/206" "$(curl -s -o /dev/null -r 0-9 -H 'Sec-Fetch-Dest: empty' -w '%{http_code}' "$PDFURL")" 206
+chk "pdf.php: in una scheda del browser -> 403" "$(curl -s -o /dev/null -H 'Sec-Fetch-Dest: document' -w '%{http_code}' "$PDFURL")" 403
+chk "pdf.php: in un frame -> 403" "$(curl -s -o /dev/null -H 'Sec-Fetch-Dest: iframe' -w '%{http_code}' "$PDFURL")" 403
 
 # ---------- admin: stessa password sui due siti, stessi dati ----------
 Tb=$(tokB admin/login.php)
