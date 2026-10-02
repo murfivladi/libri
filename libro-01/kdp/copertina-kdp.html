@@ -5,16 +5,16 @@
 <title>Il Custode dell'Etna - Copertina KDP (retro + dorso + fronte)</title>
 <style>
   /* Misure in pollici. Gabbia 5,83 x 8,27; abbondanza 0,125 su ogni lato.
-     Dorso: 82 pagine x 0,0032 (carta premium a colori) = 0,262.
-     Totale: 0,125 + 5,83 + 0,262 + 5,83 + 0,125 = 12,172 x 8,52 */
-  @page { size: 12.172in 8.52in; margin: 0; }
+     Dorso: 0,192 (ricavato dalla misura richiesta da KDP).
+     Totale: 0,125 + 5,83 + 0,192 + 5,83 + 0,125 = 12,102 x 8,52 */
+  @page { size: 12.102in 8.52in; margin: 0; }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: #0d0b0a; }
-  .copertina { position: relative; width: 12.172in; height: 8.52in; overflow: hidden; font-family: Georgia, "Times New Roman", serif; color: #fff7e0; }
+  .copertina { position: relative; width: 12.102in; height: 8.52in; overflow: hidden; font-family: Georgia, "Times New Roman", serif; color: #fff7e0; }
 
   .retro  { position: absolute; left: 0; top: 0; width: 5.955in; height: 8.52in; overflow: hidden; }
-  .dorso  { position: absolute; left: 5.955in; top: 0; width: 0.262in; height: 8.52in; background: #0b1230; }
-  .fronte { position: absolute; left: 6.217in; top: 0; width: 5.955in; height: 8.52in; overflow: hidden; }
+  .dorso  { position: absolute; left: 5.955in; top: 0; width: 0.192in; height: 8.52in; background: #0b1230; }
+  .fronte { position: absolute; left: 6.147in; top: 0; width: 5.955in; height: 8.52in; overflow: hidden; }
   .retro img, .fronte img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
   /* Fronte (stesso testo della copertina interna) */
@@ -26,7 +26,7 @@
 
   /* Dorso: testo che si legge dall'alto verso il basso */
   .dorso { display: flex; justify-content: center; padding-top: 0.55in; }
-  .dorso .testo { writing-mode: vertical-rl; white-space: nowrap; font-size: 12pt; letter-spacing: .08em; line-height: 1; }
+  .dorso .testo { writing-mode: vertical-rl; white-space: nowrap; font-size: 10pt; letter-spacing: .06em; line-height: 1; }
   .dorso .testo b { font-weight: normal; letter-spacing: .1em; }
   .dorso .autore-dorso { position: absolute; left: 50%; bottom: .5in; transform: translateX(-50%); font-size: 8pt; letter-spacing: .25em; text-transform: uppercase; writing-mode: vertical-rl; }
 
