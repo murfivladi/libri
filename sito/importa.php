@@ -33,4 +33,5 @@ foreach ($libri as [$n, $titolo, $pdf, $genere]) {
                    valore_file('cover', $nomeCop), valore_file('pdf', $nomePdf), conta_pagine_pdf("$dir/pdf/$nomePdf"), nuovo_token(), $n, date('Y-m-d H:i:s')]);
     echo "Importato: $titolo\n";
 }
+semina_ru(db());   // titoli, generi e trame in russo
 echo "Fatto. I libri sono in bozza: pubblicali dall'admin (aggiungi anche la trama).\n";

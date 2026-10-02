@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 db()->prepare('UPDATE lettori SET stato = 1 WHERE id = ? AND stato = 2')->execute([$id]);
                 registra('Lettore riattivato', $lt['nick']); flash("{$lt['nick']} riattivato."); break;
             case 'reset':
+                lingua($lt['lingua'] ?? 'it');                       // l'email parte nella lingua del lettore
                 $t = crea_token($id, 'reset', 60);
                 $err = invia_email($lt['email'], 'Reimposta la password · ' . impost('nome_sito'), "Ciao {$lt['nick']},\nl'amministratore ti manda questo link per scegliere una nuova password (vale un'ora).", url_sito('account.php?a=reimposta&t=' . $t), 'Scegli una nuova password');
                 if ($err === null) { registra('Reset password inviato', $lt['nick']); flash("Email di reset spedita a {$lt['nick']}."); } else flash('Invio non riuscito: ' . $err, 'errore');

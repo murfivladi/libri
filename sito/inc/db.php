@@ -4,7 +4,7 @@
 // Questo file contiene: configurazione, connessione, schema delle tabelle (uguale per i due motori) e piccole
 // funzioni che nascondono le differenze di linguaggio SQL.
 
-const VERSIONE_DB = 7;
+const VERSIONE_DB = 8;
 
 // Testo iniziale della pagina Privacy (modificabile dall'admin). È un modello: va controllato da un adulto.
 const TESTO_PRIVACY = "Questo sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti.\n\n"
@@ -130,17 +130,17 @@ function schema(): array {
             'copertina' => 'url', 'pdf' => 'url', 'pdf_ru' => 'url', 'pubblicato' => 'int', 'creato' => 'creato',
             'sottotitolo' => 's', 'autore' => 's', 'lingua' => 's:it', 'anno' => 'int', 'pagine_n' => 'int', 'isbn' => 's',
             'tags' => 'txt', 'collana_id' => 'int', 'evidenza' => 'int', 'pubblica_il' => 'dt', 'ordine' => 'int',
-            'note' => 'txt', 'meta' => 'txt', 'token' => 's', 'letture' => 'int', 'download' => 'int', 'eliminato' => 'dtnull', 'aggiornato' => 'dt',
+            'note' => 'txt', 'meta' => 'txt', 'titolo_ru' => 's', 'sottotitolo_ru' => 's', 'trama_ru' => 'txt', 'meta_ru' => 'txt', 'genere_ru' => 's', 'token' => 's', 'letture' => 'int', 'download' => 'int', 'eliminato' => 'dtnull', 'aggiornato' => 'dt',
         ],
-        'collane' => ['id' => 'pk', 'slug' => 'slug', 'nome' => 's', 'descrizione' => 'txt', 'banner' => 'url', 'visibile' => 'int:1', 'ordine' => 'int'],
-        'pagine' => ['id' => 'pk', 'slug' => 'slug', 'titolo' => 's', 'contenuto' => 'txt', 'visibile' => 'int:1', 'nel_menu' => 'int', 'ordine' => 'int'],
+        'collane' => ['id' => 'pk', 'slug' => 'slug', 'nome' => 's', 'descrizione' => 'txt', 'nome_ru' => 's', 'descrizione_ru' => 'txt', 'banner' => 'url', 'visibile' => 'int:1', 'ordine' => 'int'],
+        'pagine' => ['id' => 'pk', 'slug' => 'slug', 'titolo' => 's', 'contenuto' => 'txt', 'titolo_ru' => 's', 'contenuto_ru' => 'txt', 'visibile' => 'int:1', 'nel_menu' => 'int', 'ordine' => 'int'],
         'impostazioni' => ['chiave' => 'chiave', 'valore' => 'txt'],
         'log' => ['id' => 'pk', 'quando' => 'dt', 'azione' => 's', 'dettaglio' => 's', 'ip' => 'ip'],
         'tentativi' => ['ip' => 'ip', 'quando' => 'big'],
         'admin' => ['id' => 'idfisso', 'password' => 's', 'recupero' => 's', 'totp_segreto' => 's', 'totp_attivo' => 'int', 'codici_backup' => 'txt:[]'],
         // Lettori registrati (stato: 0 da verificare, 1 attivo, 2 sospeso)
         'lettori' => ['id' => 'pk', 'email' => 'slug', 'nick' => 'slug', 'password' => 's', 'stato' => 'int', 'creato' => 'creato',
-            'verificato' => 'dt', 'ultimo_accesso' => 'dt', 'privacy_versione' => 's', 'privacy_il' => 'dt', 'eta_ok' => 'int'],
+            'verificato' => 'dt', 'ultimo_accesso' => 'dt', 'privacy_versione' => 's', 'privacy_il' => 'dt', 'eta_ok' => 'int', 'lingua' => 's:it'],
         'token_lettori' => ['id' => 'pk', 'lettore_id' => 'int', 'tipo' => 's', 'hash' => 's', 'scade' => 'dt', 'dato' => 's'],
         'liste' => ['id' => 'pk', 'lettore_id' => 'int', 'libro_id' => 'int', 'lista' => 's', 'creato' => 'creato'],
         'progressi' => ['id' => 'pk', 'lettore_id' => 'int', 'libro_id' => 'int', 'pagina' => 'int', 'totale' => 'int', 'aggiornato' => 'dt'],
@@ -193,6 +193,15 @@ function colonne_esistenti(PDO $p, string $tabella): array {
 
 function tabelle_sito(): array { return array_keys(schema()); }
 
+// Traduzioni russe iniziali (contenuti_ru.php): solo dove il campo è ancora vuoto. Si richiama anche da importa.php dopo l'import dei libri.
+function semina_ru(PDO $p): void {
+    $ru = require __DIR__ . '/contenuti_ru.php';
+    $u = $p->prepare("UPDATE libri SET titolo_ru = ?, genere_ru = ?, trama_ru = ? WHERE slug = ? AND titolo_ru = '' AND trama_ru = ''");
+    foreach ($ru['libri'] as $slug => $d) $u->execute([$d['titolo_ru'], $d['genere_ru'], $d['trama_ru'], $slug]);
+    $p->prepare("UPDATE collane SET nome_ru = ?, descrizione_ru = ? WHERE slug = ? AND nome_ru = ''")->execute([$ru['collana']['nome_ru'], $ru['collana']['descrizione_ru'], $ru['collana']['slug']]);
+    $p->prepare("UPDATE pagine SET titolo_ru = ?, contenuto_ru = ? WHERE slug = 'chi-siamo' AND titolo_ru = ''")->execute([$ru['pagina_chi_siamo']['titolo_ru'], $ru['pagina_chi_siamo']['contenuto_ru']]);
+}
+
 function migra(PDO $p): void {
     $driver = db_driver();
     foreach (schema() as $tabella => $colonne) {
@@ -223,6 +232,8 @@ function migra(PDO $p): void {
     $ins->execute(['chi-siamo', 'Chi siamo',
         "**Vlad Editore** è la casa editrice fondata da Vlad a Taormina - Trappitello, in Sicilia.\n\nPubblichiamo libri di fantascienza e fantasy, scritti da Vlad con l'aiuto dell'intelligenza artificiale.", 1, 10]);
     $ins->execute(['privacy', 'Privacy', TESTO_PRIVACY, 0, 20]);
+
+    semina_ru($p);
 
     salva_versione_db($p, VERSIONE_DB);
 }

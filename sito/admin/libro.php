@@ -4,7 +4,7 @@ require __DIR__ . '/../inc/libri.php';
 
 $id = (int)($_GET['id'] ?? 0);
 $vuoto = ['titolo' => '', 'sottotitolo' => '', 'slug' => '', 'autore' => impost('autore_predefinito'), 'collana_id' => (int)($_GET['collana'] ?? 0), 'numero' => 0, 'genere' => '',
-          'lingua' => 'it', 'anno' => (int)date('Y'), 'pagine_n' => 0, 'isbn' => '', 'tags' => '', 'trama' => '', 'meta' => '', 'note' => '', 'copertina' => '', 'pdf' => '', 'pdf_ru' => '',
+          'titolo_ru' => '', 'sottotitolo_ru' => '', 'genere_ru' => '', 'trama_ru' => '', 'meta_ru' => '', 'lingua' => 'it', 'anno' => (int)date('Y'), 'pagine_n' => 0, 'isbn' => '', 'tags' => '', 'trama' => '', 'meta' => '', 'note' => '', 'copertina' => '', 'pdf' => '', 'pdf_ru' => '',
           'pubblicato' => 0, 'evidenza' => 0, 'pubblica_il' => '', 'token' => '', 'letture' => 0, 'download' => 0, 'creato' => '', 'aggiornato' => '', 'eliminato' => null];
 $l = $id ? carica_libro($id) : $vuoto;
 if (!$l) { flash('Libro non trovato.', 'errore'); torna('libri.php'); }
@@ -49,6 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'slug' => slug_unico('libri', $slugVoluto, $id), 'collana_id' => $cid, 'collana' => $nomeCollana,
             'numero' => (int)($_POST['numero'] ?? 0), 'genere' => trim($_POST['genere'] ?? ''), 'lingua' => trim($_POST['lingua'] ?? 'it'),
             'anno' => (int)($_POST['anno'] ?? 0), 'pagine_n' => $pagine_n, 'isbn' => trim($_POST['isbn'] ?? ''),
+            'titolo_ru' => trim($_POST['titolo_ru'] ?? ''), 'sottotitolo_ru' => trim($_POST['sottotitolo_ru'] ?? ''), 'genere_ru' => trim($_POST['genere_ru'] ?? ''),
+            'trama_ru' => trim($_POST['trama_ru'] ?? ''), 'meta_ru' => trim($_POST['meta_ru'] ?? ''),
             'tags' => normalizza_tags($_POST['tags'] ?? ''), 'trama' => trim($_POST['trama'] ?? ''), 'meta' => trim($_POST['meta'] ?? ''),
             'note' => trim($_POST['note'] ?? ''), 'copertina' => $copertina, 'pdf' => $pdf_att, 'pdf_ru' => $pdf_ru_att,
             'pubblicato' => ($_POST['stato'] ?? '') === 'pubblicato' ? 1 : 0, 'evidenza' => empty($_POST['evidenza']) ? 0 : 1,
@@ -111,6 +113,14 @@ if ($id && $l['eliminato']) echo '<p class="errore">Questo libro è nel cestino 
   <label>ISBN <small>(se non ce l'hai, lascia vuoto)</small><input type="text" name="isbn" value="<?= e($l['isbn']) ?>"></label>
   <label class="largo">Tag <small>(separati da virgola)</small><input type="text" name="tags" value="<?= e(implode(', ', tags_di($l['tags']))) ?>" placeholder="fantasy, Etna, avventura"></label>
   <label class="largo">Trama <textarea name="trama" rows="7"><?= e($l['trama']) ?></textarea></label>
+  <details class="largo" <?= ($l['titolo_ru'] . $l['trama_ru']) !== '' ? 'open' : '' ?>><summary>🇷🇺 Versione in russo (titolo, trama… facoltativi: se vuoti il sito mostra l'italiano)</summary>
+    <div class="form-griglia">
+      <label class="largo">Название (titolo) <input type="text" name="titolo_ru" value="<?= e($l['titolo_ru']) ?>" lang="ru"></label>
+      <label class="largo">Подзаголовок (sottotitolo) <input type="text" name="sottotitolo_ru" value="<?= e($l['sottotitolo_ru']) ?>" lang="ru"></label>
+      <label>Жанр (genere) <input type="text" name="genere_ru" value="<?= e($l['genere_ru']) ?>" lang="ru"></label>
+      <label class="largo">Описание (trama) <textarea name="trama_ru" rows="7" lang="ru"><?= e($l['trama_ru']) ?></textarea></label>
+      <label class="largo">Описание для поисковиков (meta) <input type="text" name="meta_ru" value="<?= e($l['meta_ru']) ?>" lang="ru"></label>
+    </div></details>
   <label class="largo">Descrizione per i motori di ricerca <small id="cmeta"></small><input type="text" name="meta" value="<?= e($l['meta']) ?>" data-conta="cmeta" placeholder="Una frase breve (max 160 caratteri); se vuota si usa la trama"></label>
   <label class="largo">Note private <small>(le vedi solo tu)</small><textarea name="note" rows="3"><?= e($l['note']) ?></textarea></label>
 </div></div>

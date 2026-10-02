@@ -47,6 +47,14 @@ Senza `data/config.php` il sito usa SQLite (un solo sito, tutto in locale: va be
 - I lettori vivono nel database condiviso (stessi account sui due siti), ma l'accesso è **per sito**: chi entra su un sito deve entrare anche sull'altro. I link nelle email puntano sempre all'indirizzo ufficiale.
 - La password SMTP sta nel database (serve per spedire) ed è esclusa dal backup JSON di MySQL; la copia del file SQLite la contiene: tienila privata.
 
+## Italiano e russo
+- Tutto il sito pubblico è bilingue: **menu, pagine, lettore, account, errori, email e privacy**. La lingua si sceglie con l'interruttore **IT | RU** in alto (`?lang=ru`), si ricorda in un cookie (`lingua`, un anno) e, alla prima visita, segue la lingua del browser. Le pagine hanno `hreflang` e indirizzo canonico per lingua.
+- Testi dell'interfaccia: `t('testo italiano')` in `inc/lingua.php`; le traduzioni russe stanno in `inc/ru.php` (la chiave è il testo italiano). `php sito/tests/chiavi_ru.php` (e `unit.php`) controllano che non ne manchi nessuna.
+- Contenuti: ogni libro (titolo, sottotitolo, genere, trama, descrizione SEO), collana (nome, descrizione), pagina (titolo, testo), frase in home, piede e privacy hanno il campo «in russo» nell'admin. Dove manca la traduzione il sito mostra l'italiano. Le traduzioni russe iniziali dei 5 libri, della collana e di «Chi siamo» (`inc/contenuti_ru.php`) si applicano da sole, solo ai campi ancora vuoti.
+- PDF: ogni libro può avere il PDF italiano e/o quello russo; con il sito in russo si apre il PDF russo se c'è.
+- I lettori ricevono le email nella lingua con cui si sono registrati. **L'admin resta in italiano.**
+- Le **trame russe** sono sintesi brevi scritte sui piani dei libri: correggile se vuoi un altro testo. **I PDF dei libri non sono tradotti**: la versione russa va caricata a parte.
+
 ## Messa online di un sito singolo (senza MySQL)
 1. Carica la cartella `sito/` (o lascia fare al deploy). Controlla che `data/` e `uploads/` siano scrivibili.
 2. Apri `/admin/login.php`: crea la password (min. 10 caratteri) e **salva il codice di recupero**. In Admin → Sicurezza puoi attivare la verifica in due passaggi.

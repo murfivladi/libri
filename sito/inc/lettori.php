@@ -20,11 +20,11 @@ function privacy_versione(): string { return impost('privacy_versione') !== '' ?
 // ---------- email ----------
 // Invia una email di testo + HTML. Restituisce null se è partita, altrimenti il motivo dell'errore.
 function invia_email(string $a, string $oggetto, string $testo, string $bottoneUrl = '', string $bottoneTesto = ''): ?string {
-    if (!smtp_configurato()) return 'Le email non sono configurate.';
+    if (!smtp_configurato()) return t('Le email non sono configurate.');
     $nome = impost('nome_sito');
     $html = '<div style="font:16px/1.5 Georgia,serif;color:#1d2433;max-width:560px;margin:auto"><div style="background:' . e(colore_valido(impost('colore_blu'), '#0b1a36')) . ';color:#f3e7c6;padding:14px 18px;letter-spacing:.1em">' . e(strtoupper($nome)) . '</div><div style="padding:18px">'
           . nl2br(e($testo))
-          . ($bottoneUrl !== '' ? '<p style="margin:22px 0"><a href="' . e($bottoneUrl) . '" style="background:' . e(colore_valido(impost('colore_blu'), '#0b1a36')) . ';color:#f3e7c6;padding:11px 20px;border-radius:6px;text-decoration:none">' . e($bottoneTesto) . '</a></p><p style="font-size:13px;color:#777">Se il pulsante non funziona copia questo indirizzo nel browser:<br>' . e($bottoneUrl) . '</p>' : '')
+          . ($bottoneUrl !== '' ? '<p style="margin:22px 0"><a href="' . e($bottoneUrl) . '" style="background:' . e(colore_valido(impost('colore_blu'), '#0b1a36')) . ';color:#f3e7c6;padding:11px 20px;border-radius:6px;text-decoration:none">' . e($bottoneTesto) . '</a></p><p style="font-size:13px;color:#777">' . e(t('Se il pulsante non funziona copia questo indirizzo nel browser:')) . '<br>' . e($bottoneUrl) . '</p>' : '')
           . '</div><div style="padding:0 18px 18px;font-size:12px;color:#777">' . e($nome) . ' · ' . e(impost('footer')) . '</div></div>';
     $piano = $testo . ($bottoneUrl !== '' ? "\n\n$bottoneTesto: $bottoneUrl" : '') . "\n\n— $nome";
     try {
@@ -142,15 +142,15 @@ function dimentica_dispositivi(int $id): void { db()->prepare("DELETE FROM token
 // ---------- controlli sui dati ----------
 function email_pulita(string $e): string { return strtolower(trim($e)); }
 function nick_errore(string $n): ?string {
-    if (!preg_match('/^[A-Za-z0-9_.-]{3,20}$/', $n)) return 'Il nome pubblico deve avere da 3 a 20 caratteri: lettere, numeri, punto, trattino o underscore.';
-    if (preg_match('/admin|editore|vlad|moderat|staff|support|sistema/i', $n)) return 'Questo nome non si può usare: scegline un altro.';
+    if (!preg_match('/^[A-Za-z0-9_.-]{3,20}$/', $n)) return t('Il nome pubblico deve avere da 3 a 20 caratteri: lettere, numeri, punto, trattino o underscore.');
+    if (preg_match('/admin|editore|vlad|moderat|staff|support|sistema/i', $n)) return t('Questo nome non si può usare: scegline un altro.');
     return null;
 }
 function password_errore(string $p, string $email = '', string $nick = ''): ?string {
-    if (strlen($p) < 10) return 'La password deve avere almeno 10 caratteri.';
-    if (strlen($p) > 200) return 'La password è troppo lunga.';
-    if (strtolower($p) === strtolower($email) || ($nick !== '' && strtolower($p) === strtolower($nick))) return 'La password non può essere uguale all\'email o al nome pubblico.';
-    if (preg_match('/^(.)\1+$/', $p) || in_array(strtolower($p), ['password12', 'password123', '1234567890', 'qwertyuiop', '0123456789'], true)) return 'Questa password è troppo facile da indovinare.';
+    if (strlen($p) < 10) return t('La password deve avere almeno 10 caratteri.');
+    if (strlen($p) > 200) return t('La password è troppo lunga.');
+    if (strtolower($p) === strtolower($email) || ($nick !== '' && strtolower($p) === strtolower($nick))) return t('La password non può essere uguale all\'email o al nome pubblico.');
+    if (preg_match('/^(.)\1+$/', $p) || in_array(strtolower($p), ['password12', 'password123', '1234567890', 'qwertyuiop', '0123456789'], true)) return t('Questa password è troppo facile da indovinare.');
     return null;
 }
 function lettore_per_email(string $email): ?array {
@@ -248,7 +248,7 @@ Il titolare del trattamento è {titolare}{indirizzo}. Per qualsiasi richiesta sc
 
 ## Se non ti registri
 
-Puoi leggere tutti i libri senza registrarti. Il sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti. Usa un solo cookie tecnico di sessione, che serve per il funzionamento del sito e per contare una sola volta le letture di un libro: non richiede consenso e si cancella chiudendo il browser. Il lettore ricorda pagina, segnalibri, tema e zoom nel tuo dispositivo: questi dati restano lì e non vengono inviati a noi. I PDF dei libri non si possono scaricare.
+Puoi leggere tutti i libri senza registrarti. Il sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti. Usa un solo cookie tecnico di sessione, che serve per il funzionamento del sito e per contare una sola volta le letture di un libro: non richiede consenso e si cancella chiudendo il browser. Se scegli la lingua del sito, questa viene ricordata in un cookie («lingua») per un anno. Il lettore ricorda pagina, segnalibri, tema e zoom nel tuo dispositivo: questi dati restano lì e non vengono inviati a noi. I PDF dei libri non si possono scaricare.
 
 ## Se ti registri
 
@@ -283,9 +283,54 @@ In Italia chi ha almeno 14 anni può registrarsi da solo a un servizio online. S
 Se questa informativa cambia in modo importante, cambia anche la versione e ti verrà chiesto di accettarla di nuovo.
 TXT;
 
+const PRIVACY_MODELLO_RU = <<<'TXT'
+Это политика обработки персональных данных сайта {sito} в соответствии со статьями 13 и 14 Регламента (ЕС) 2016/679 (GDPR). Версия {versione}.
+
+## Кто является оператором данных
+
+Оператором (контролёром) обработки данных является {titolare}{indirizzo}. По любым вопросам пишите на {email_titolare}.
+
+## Если вы не регистрируетесь
+
+Читать все книги можно без регистрации. Сайт не использует cookie для профилирования, не использует сторонние средства аналитики и не загружает скрипты, шрифты или изображения с других сайтов. Используется только один технический cookie сессии: он нужен для работы сайта и для того, чтобы засчитывать одно прочтение книги один раз; согласия он не требует и удаляется при закрытии браузера. Если вы выбираете язык сайта, он запоминается в cookie «lingua» на один год. Читалка запоминает страницу, закладки, тему и масштаб в вашем устройстве: эти данные остаются там и нам не передаются. PDF-файлы книг скачать нельзя.
+
+## Если вы регистрируетесь
+
+Какие данные мы собираем: адрес электронной почты, публичное имя (ник), пароль (хранится только в зашифрованном виде и недоступен нам), дата регистрации и последнего входа, версия настоящей политики, которую вы приняли, и когда. Когда вы пользуетесь аккаунтом, мы также сохраняем ваши избранные книги и книги «прочитать позже», страницу, до которой вы дошли, закладки, а также отзывы и оценки, если вы их оставляете.
+
+Для чего мы их используем и на каком правовом основании:
+- создание и ведение вашего аккаунта, вход и доступ к вашим книгам на любом устройстве: исполнение запрошенной вами услуги (ст. 6.1.b GDPR);
+- отправка служебных писем (подтверждение адреса, восстановление пароля, уведомления о безопасности): то же основание; мы не рассылаем ни новостей, ни рекламы;
+- публикация ваших отзывов под вашим публичным именем после проверки оператором: ваше согласие (ст. 6.1.a), которое можно отозвать, удалив отзыв;
+- защита сайта от злоупотреблений (ограничение числа попыток, проверка вводимых данных): законный интерес (ст. 6.1.f).
+
+Cookie «запомнить меня» создаётся только если вы выбрали эту опцию при входе, действует {giorni} дн. и позволяет оставаться в системе на этом устройстве. Его можно удалить, выйдя из аккаунта.
+
+## Кто видит ваши данные
+
+Только оператор. Ваша почта никогда не публикуется: другие читатели видят только публичное имя рядом с отзывами. Мы не продаём и не передаём данные никому. Для отправки писем мы пользуемся почтовым сервисом, указанным оператором (SMTP-провайдер), а также хостингом и базой данных, на которых работает сайт: они хранят данные от нашего имени. Оператор по собственной инициативе не передаёт данные за пределы Европейской экономической зоны.
+
+## Как долго
+
+Данные хранятся, пока существует аккаунт. Если вы не подтвердите почту в течение 7 дней, аккаунт удаляется. Если вы удалите аккаунт, все ваши данные (списки, закладки, прогресс, отзывы, журнал согласий) удаляются сразу. Резервные копии базы данных, если они есть, со временем перезаписываются.
+
+## Ваши права
+
+В профиле вы в любой момент можете: посмотреть и исправить свои данные, скачать копию своих данных в читаемом формате (переносимость), удалить аккаунт и все данные. Вы также можете попросить оператора ограничить обработку или возразить против неё и подать жалобу в Garante per la protezione dei dati personali (www.garanteprivacy.it).
+
+## Несовершеннолетние
+
+В Италии с 14 лет можно самостоятельно регистрироваться в онлайн-сервисах. Если вам меньше 14 лет, регистрироваться можно только с согласия родителя или законного представителя: поэтому, регистрируясь, вы подтверждаете, что вам не менее 14 лет либо что родитель или опекун согласен.
+
+## Изменения
+
+Если политика существенно изменится, изменится и её версия, и вас попросят принять её заново.
+TXT;
+
 function testo_privacy(): string {
-    $t = trim(impost('privacy_testo')) !== '' ? impost('privacy_testo') : PRIVACY_MODELLO;
-    $nd = '__da compilare__';
+    if (lingua() === 'ru') $t = trim(impost('privacy_testo_ru')) !== '' ? impost('privacy_testo_ru') : PRIVACY_MODELLO_RU;
+    else $t = trim(impost('privacy_testo')) !== '' ? impost('privacy_testo') : PRIVACY_MODELLO;
+    $nd = t('__da compilare__');
     return strtr($t, [
         '{sito}' => impost('nome_sito'), '{versione}' => privacy_versione(), '{giorni}' => (string)GIORNI_RICORDAMI,
         '{titolare}' => trim(impost('titolare_nome')) !== '' ? impost('titolare_nome') : $nd,

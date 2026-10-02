@@ -9,6 +9,7 @@ if (!defined('SENZA_SESSIONE')) {
     session_start();
 }
 
+require_once __DIR__ . '/lingua.php';
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/file.php';
 
@@ -34,14 +35,18 @@ const IMPOSTAZIONI_PREDEFINITE = [
     'per_pagina' => '12', 'ordine_catalogo' => 'numero', 'contatori_pubblici' => '0',
     'manutenzione' => '0', 'messaggio_manutenzione' => 'Il sito è in manutenzione. Torna presto!',
     'mostra_evidenza' => '1',
+    'slogan_ru' => 'Истории фэнтези и научной фантастики', 'sottoslogan_ru' => 'С склонов Этны — книги, написанные Владом.',
+    'footer_ru' => 'Таормина · Сицилия', 'messaggio_manutenzione_ru' => 'Сайт на техническом обслуживании. Скоро вернёмся!',
     'colore_blu' => '#0b1a36', 'colore_oro' => '#c9a14a', 'logo_emblema' => '', 'logo_grande' => '', 'banner_home' => '',
     // lettori registrati, email e privacy (la registrazione resta chiusa finché non sono compilati titolare ed email)
-    'registrazione_attiva' => '0', 'recensioni_moderate' => '1', 'privacy_versione' => '1', 'privacy_testo' => '',
+    'registrazione_attiva' => '0', 'privacy_testo_ru' => '', 'recensioni_moderate' => '1', 'privacy_versione' => '1', 'privacy_testo' => '',
     'titolare_nome' => '', 'titolare_email' => '', 'titolare_indirizzo' => '',
     'smtp_host' => '', 'smtp_porta' => '587', 'smtp_cifratura' => 'tls', 'smtp_utente' => '', 'smtp_password' => '',
     'email_mittente' => '', 'nome_mittente' => '',
 ];
 function &impost_cache(): ?array { static $cache = null; return $cache; }
+// Impostazione di testo nella lingua corrente (se in russo e c'è la versione «_ru», altrimenti l'italiano).
+function impost_l(string $k): string { return lingua() === 'ru' && trim(impost($k . '_ru')) !== '' ? impost($k . '_ru') : impost($k); }
 function impost(string $k): string {
     $cache =& impost_cache();
     if ($cache === null) {
@@ -121,7 +126,7 @@ function csrf(): string {
 }
 function csrf_campo(): string { return '<input type="hidden" name="csrf" value="' . e(csrf()) . '">'; }
 function csrf_verifica(): void {
-    if (!hash_equals($_SESSION['csrf'] ?? '', $_POST['csrf'] ?? '')) { http_response_code(400); exit('Richiesta non valida (CSRF).'); }
+    if (!hash_equals($_SESSION['csrf'] ?? '', $_POST['csrf'] ?? '')) { http_response_code(400); exit(t('Richiesta non valida (CSRF).')); }
 }
 
 function formatta_byte(int $b): string {
@@ -133,8 +138,8 @@ function formatta_data(?string $d): string { return $d ? date('d/m/Y H:i', strto
 // Manutenzione: i visitatori vedono un avviso, l'admin loggato no.
 if (!defined('SENZA_SESSIONE') && !defined('SENZA_DB') && impost('manutenzione') === '1' && empty($_SESSION['admin']) && strpos($_SERVER['SCRIPT_NAME'] ?? '', '/admin/') === false && PHP_SAPI !== 'cli') {
     http_response_code(503); header('Retry-After: 3600');
-    echo '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . e(impost('nome_sito')) . '</title>'
-       . '<body style="font:18px Georgia,serif;background:#0b1a36;color:#f3e7c6;display:grid;place-items:center;min-height:100vh;text-align:center;margin:0"><div><h1>' . e(impost('nome_sito')) . '</h1><p>' . e(impost('messaggio_manutenzione')) . '</p></div>';
+    echo '<!doctype html><html lang="' . lingua() . '"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . e(impost('nome_sito')) . '</title>'
+       . '<body style="font:18px Georgia,serif;background:#0b1a36;color:#f3e7c6;display:grid;place-items:center;min-height:100vh;text-align:center;margin:0"><div><h1>' . e(impost('nome_sito')) . '</h1><p>' . e(impost_l('messaggio_manutenzione')) . '</p></div>';
     exit;
 }
 
@@ -161,37 +166,42 @@ function intestazione(string $titolo, string $prefisso = '', string $descrizione
     $descr = mb_substr(trim(preg_replace('/\s+/', ' ', $descrizione)), 0, 200);
     $extra = !empty($og['noindex']) ? '<meta name="robots" content="noindex,nofollow">' : '';
     if (!$prefisso) {                                  // anteprime social (Open Graph) e indirizzo ufficiale solo sul sito pubblico
-        $url = base_ufficiale() . ($og['canonico'] ?? ltrim(basename($_SERVER['SCRIPT_NAME']) . (($_SERVER['QUERY_STRING'] ?? '') !== '' ? '?' . $_SERVER['QUERY_STRING'] : ''), '/'));
+        $rel = $og['canonico'] ?? ltrim(basename($_SERVER['SCRIPT_NAME']) . (($_SERVER['QUERY_STRING'] ?? '') !== '' ? '?' . preg_replace('/(^|&)lang=[a-z]*/', '', $_SERVER['QUERY_STRING']) : ''), '/');
+        $rel = rtrim(str_replace('?&', '?', $rel), '?');
+        $conlang = fn($l) => base_ufficiale() . $rel . ($l === 'it' ? '' : (strpos($rel, '?') === false ? '?' : '&') . 'lang=' . $l);
+        $url = $conlang(lingua());
         $img = assoluto($og['immagine'] ?? asset_banner());
-        $extra .= '<meta property="og:site_name" content="' . e($nome) . '"><meta property="og:locale" content="it_IT">'
+        $extra .= '<meta property="og:site_name" content="' . e($nome) . '"><meta property="og:locale" content="' . (lingua() === 'ru' ? 'ru_RU' : 'it_IT') . '">'
                . '<meta property="og:type" content="' . e($og['tipo'] ?? 'website') . '"><meta property="og:title" content="' . e($titolo) . '">'
                . ($descr ? '<meta property="og:description" content="' . e($descr) . '">' : '')
                . '<meta property="og:url" content="' . e($url) . '"><meta property="og:image" content="' . e($img) . '">'
                . '<meta name="twitter:card" content="summary_large_image"><link rel="canonical" href="' . e($url) . '">'
-               . '<link rel="alternate" type="application/rss+xml" title="Novità" href="feed.php"><link rel="sitemap" type="application/xml" href="sitemap.php">';
+               . '<link rel="alternate" hreflang="it" href="' . e($conlang('it')) . '"><link rel="alternate" hreflang="ru" href="' . e($conlang('ru')) . '"><link rel="alternate" hreflang="x-default" href="' . e($conlang('it')) . '">'
+               . '<link rel="alternate" type="application/rss+xml" title="' . e(t('Novità')) . '" href="feed.php"><link rel="sitemap" type="application/xml" href="sitemap.php">';
     }
     $d = $descr ? '<meta name="description" content="' . e($descr) . '">' : '';
-    echo "<!doctype html><html lang=\"it\"><head><meta charset=\"utf-8\">
+    echo "<!doctype html><html lang=\"" . lingua() . "\"><head><meta charset=\"utf-8\">
 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
 <title>$t</title>$d$extra<link rel=\"icon\" type=\"image/png\" href=\"" . e(asset_emblema($prefisso)) . "\"><link rel=\"stylesheet\" href=\"{$prefisso}assets/stile.css\">" . stile_tema($prefisso) . "</head><body>
-<header class=\"testata\"><a class=\"marchio\" href=\"{$prefisso}index.php\"><img src=\"" . e(asset_emblema($prefisso)) . "\" alt=\"\" width=\"44\" height=\"44\"><span>" . e(strtoupper($nome)) . "</span></a><nav><a href=\"{$prefisso}index.php\">Catalogo</a>";
+<header class=\"testata\"><a class=\"marchio\" href=\"{$prefisso}index.php\"><img src=\"" . e(asset_emblema($prefisso)) . "\" alt=\"\" width=\"44\" height=\"44\"><span>" . e(strtoupper($nome)) . "</span></a><nav><a href=\"{$prefisso}index.php\">" . e(t('Catalogo')) . "</a>";
     if (!$prefisso) {
-        if (db()->query('SELECT 1 FROM collane WHERE visibile = 1 LIMIT 1')->fetchColumn()) echo '<a href="collane.php">Collane</a>';
-        foreach (db()->query('SELECT slug, titolo FROM pagine WHERE visibile = 1 AND nel_menu = 1 ORDER BY ordine, id') as $p)
-            echo '<a href="pagina.php?s=' . e($p['slug']) . '">' . e($p['titolo']) . '</a>';
+        if (db()->query('SELECT 1 FROM collane WHERE visibile = 1 LIMIT 1')->fetchColumn()) echo '<a href="collane.php">' . e(t('Collane')) . '</a>';
+        foreach (db()->query('SELECT slug, titolo, titolo_ru FROM pagine WHERE visibile = 1 AND nel_menu = 1 ORDER BY ordine, id') as $p)
+            echo '<a href="pagina.php?s=' . e($p['slug']) . '">' . e(campo_l($p, 'titolo')) . '</a>';
         if (function_exists('lettore_corrente')) {
             if ($lt = lettore_corrente()) echo '<a href="account.php">👤 ' . e($lt['nick']) . '</a>';
-            elseif (registrazione_aperta()) echo '<a href="account.php?a=accedi">Accedi</a>';
+            elseif (registrazione_aperta()) echo '<a href="account.php?a=accedi">' . e(t('Accedi')) . '</a>';
         }
+        echo '<span class="lingue"><a href="' . e(url_lingua('it')) . '"' . (lingua() === 'it' ? ' class="att"' : '') . ' hreflang="it" lang="it">IT</a><a href="' . e(url_lingua('ru')) . '"' . (lingua() === 'ru' ? ' class="att"' : '') . ' hreflang="ru" lang="ru">RU</a></span>';
     }
     echo "</nav></header><main class=\"contenuto\">";
 }
 function piede(): void {
     $mail = impost('email');
     $priv = db()->query("SELECT 1 FROM pagine WHERE slug = 'privacy' AND visibile = 1")->fetchColumn();
-    echo '</main><footer class="piede">© ' . date('Y') . ' ' . e(impost('nome_sito')) . ' · ' . e(impost('footer'))
+    echo '</main><footer class="piede">© ' . date('Y') . ' ' . e(impost('nome_sito')) . ' · ' . e(impost_l('footer'))
        . ($mail ? ' · <a href="mailto:' . e($mail) . '">' . e($mail) . '</a>' : '')
-       . ' · <a href="privacy.php">Privacy</a>' . '</footer></body></html>';
+       . ' · <a href="privacy.php">' . e(t('Privacy')) . '</a>' . '</footer></body></html>';
 }
 
 // Aspetto personalizzabile dall'admin: emblema, logo, banner e colori.

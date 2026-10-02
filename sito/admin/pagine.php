@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($az === 'salva') {
         $titolo = trim($_POST['titolo'] ?? '');
         if ($titolo === '') { flash('Il titolo è obbligatorio.', 'errore'); torna('pagine.php' . ($pid ? "?id=$pid" : '?nuova=1')); }
-        $dati = ['titolo' => $titolo, 'slug' => slug_unico('pagine', trim($_POST['slug'] ?? '') ?: $titolo, $pid), 'contenuto' => trim($_POST['contenuto'] ?? ''),
+        $dati = ['titolo' => $titolo, 'slug' => slug_unico('pagine', trim($_POST['slug'] ?? '') ?: $titolo, $pid), 'contenuto' => trim($_POST['contenuto'] ?? ''), 'titolo_ru' => trim($_POST['titolo_ru'] ?? ''), 'contenuto_ru' => trim($_POST['contenuto_ru'] ?? ''),
                  'visibile' => empty($_POST['visibile']) ? 0 : 1, 'nel_menu' => empty($_POST['nel_menu']) ? 0 : 1, 'ordine' => (int)($_POST['ordine'] ?? 0)];
         if ($pid) { $set = implode(', ', array_map(fn($k) => "$k = :$k", array_keys($dati))); $dati['id'] = $pid; db()->prepare("UPDATE pagine SET $set WHERE id = :id")->execute($dati); }
         else { db()->prepare('INSERT INTO pagine (' . implode(',', array_keys($dati)) . ') VALUES (:' . implode(',:', array_keys($dati)) . ')')->execute($dati); $pid = (int)db()->lastInsertId(); }
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $p = null;
 if ($id) { $p = db()->query("SELECT * FROM pagine WHERE id = $id")->fetch(); if (!$p) torna('pagine.php'); }
-elseif ($nuova) $p = ['id' => 0, 'titolo' => '', 'slug' => '', 'contenuto' => '', 'visibile' => 1, 'nel_menu' => 1, 'ordine' => 0];
+elseif ($nuova) $p = ['id' => 0, 'titolo' => '', 'slug' => '', 'contenuto' => '', 'titolo_ru' => '', 'contenuto_ru' => '', 'visibile' => 1, 'nel_menu' => 1, 'ordine' => 0];
 
 admin_testata($p ? ($id ? 'Modifica pagina' : 'Nuova pagina') : 'Pagine', 'pagine');
 if ($p): ?>
@@ -42,6 +42,9 @@ if ($p): ?>
       <span><input type="checkbox" name="nel_menu" value="1" <?= $p['nel_menu'] ? 'checked' : '' ?>> Nel menu in alto</span></label>
     <label class="largo">Testo <small>Formattazione: **grassetto**, *corsivo*, # Titolo, [testo](https://link). Riga vuota = nuovo paragrafo.</small>
       <textarea name="contenuto" rows="14"><?= e($p['contenuto']) ?></textarea></label>
+    <label>🇷🇺 Заголовок (titolo in russo) <input type="text" name="titolo_ru" value="<?= e($p['titolo_ru'] ?? '') ?>" lang="ru"></label>
+    <label>🇷🇺 Текст (contenuto in russo — stessa formattazione)
+      <textarea name="contenuto_ru" rows="14" lang="ru"><?= e($p['contenuto_ru'] ?? '') ?></textarea></label>
   </div>
   <div class="salva-barra">
     <button class="bottone" name="azione" value="salva">💾 Salva</button>

@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $banner = $att['banner'];
             if (!empty($_POST['togli_banner'])) $banner = '';
             if ($b = salva_file('banner', 'cover', TIPI_IMMAGINE, 8 * 1024 * 1024)) $banner = $b;
-            $dati = ['nome' => $nome, 'slug' => slug_unico('collane', trim($_POST['slug'] ?? '') ?: $nome, $cid), 'descrizione' => trim($_POST['descrizione'] ?? ''),
+            $dati = ['nome' => $nome, 'slug' => slug_unico('collane', trim($_POST['slug'] ?? '') ?: $nome, $cid), 'descrizione' => trim($_POST['descrizione'] ?? ''), 'nome_ru' => trim($_POST['nome_ru'] ?? ''), 'descrizione_ru' => trim($_POST['descrizione_ru'] ?? ''),
                      'banner' => $banner, 'visibile' => empty($_POST['visibile']) ? 0 : 1, 'ordine' => (int)($_POST['ordine'] ?? 0)];
             if ($cid) {
                 $set = implode(', ', array_map(fn($k) => "$k = :$k", array_keys($dati))); $dati['id'] = $cid;
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $c = null;
 if ($id) { $c = db()->query("SELECT * FROM collane WHERE id = $id")->fetch(); if (!$c) torna('collane.php'); }
-elseif ($nuova) $c = ['id' => 0, 'nome' => '', 'slug' => '', 'descrizione' => '', 'banner' => '', 'visibile' => 1, 'ordine' => 0];
+elseif ($nuova) $c = ['id' => 0, 'nome' => '', 'slug' => '', 'descrizione' => '', 'nome_ru' => '', 'descrizione_ru' => '', 'banner' => '', 'visibile' => 1, 'ordine' => 0];
 
 admin_testata($c ? ($id ? 'Modifica collana' : 'Nuova collana') : 'Collane', 'collane');
 
@@ -78,6 +78,8 @@ if ($c): ?>
     <label>Ordine <input type="number" name="ordine" value="<?= (int)$c['ordine'] ?>"></label>
     <label><span>Visibilità</span><span><input type="checkbox" name="visibile" value="1" <?= $c['visibile'] ? 'checked' : '' ?>> Mostra la collana nel sito</span></label>
     <label class="largo">Descrizione <textarea name="descrizione" rows="5"><?= e($c['descrizione']) ?></textarea></label>
+    <label>🇷🇺 Название (nome in russo) <input type="text" name="nome_ru" value="<?= e($c['nome_ru'] ?? '') ?>" lang="ru"></label>
+    <label class="largo">🇷🇺 Описание (descrizione in russo) <textarea name="descrizione_ru" rows="5" lang="ru"><?= e($c['descrizione_ru'] ?? '') ?></textarea></label>
     <div class="largo"><?php if ($c['banner']): ?><img class="anteprima-cop" style="max-width:260px" src="<?= e(con_prefisso(miniatura($c['banner'], 400), '../')) ?>" alt=""><br>
       <label style="font-weight:400"><span><input type="checkbox" name="togli_banner" value="1"> Togli l'immagine</span></label><?php endif; ?>
       <label>Immagine della collana (opzionale) <input type="file" name="banner" accept="image/*"></label>

@@ -93,6 +93,11 @@ db()->exec("UPDATE libri SET pubblicato = 1, pubblica_il = '2999-01-01 00:00:00'
 db()->exec("UPDATE libri SET pubblicato = 1 WHERE slug = 'b'");
 prova('programmato non visibile', ['b'], db()->query('SELECT slug FROM libri l WHERE ' . sql_visibile('l'))->fetchAll(PDO::FETCH_COLUMN));
 
+// traduzioni russe complete
+exec('php ' . escapeshellarg(__DIR__ . '/chiavi_ru.php'), $outRu, $rcRu);
+prova('traduzioni russe complete', 0, $rcRu);
+if ($rcRu) echo implode("\n", $outRu) . "\n";
+
 echo "unit: OK=$ok KO=$ko\n";
 exec('rm -rf ' . escapeshellarg($tmp));
 

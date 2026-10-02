@@ -69,7 +69,7 @@ const fisso = (s, fx, fy) => Math.abs((fx - s.tx) / s.z - fx) < 2.5 && Math.abs(
   chk('desktop: segnalibro in elenco', /Pagina \d+/.test(await page.textContent('#tab-segnalibri')));
   await page.click('[data-tab=cerca]');
   await page.fill('#testo-cerca', 'Vlad'); await page.press('#testo-cerca', 'Enter');
-  await page.waitForFunction(() => /risultati|Nessun/.test(document.getElementById('stato-cerca').textContent), null, { timeout: 60000 });
+  await page.waitForFunction(() => /isultati|Nessun/.test(document.getElementById('stato-cerca').textContent), null, { timeout: 60000 });
   chk('desktop: la ricerca trova risultati', (await page.locator('#risultati li').count()) > 0);
   await page.click('#risultati li >> nth=3'); await page.waitForTimeout(1500);
   chk('desktop: il risultato porta alla pagina giusta', (await pagina(page)) > 1);

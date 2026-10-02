@@ -143,4 +143,6 @@ body.lettore.scuro .pagina-pdf canvas { filter:invert(1) hue-rotate(180deg); }
 .recensione p { margin:4px 0; }
 details { margin:10px 0; } details summary { cursor:pointer; font-weight:bold; }
 .account .griglia { margin-bottom:8px; }
+.lingue { margin-left:16px; white-space:nowrap; } .lingue a { margin:0 !important; padding:2px 7px; border:1px solid #f3e7c655; font-size:.85rem; } .lingue a + a { border-left:0; }
+.lingue a.att { background:var(--oro); color:#0b1a36; border-color:var(--oro); }
 .lingua-lettore { display:inline-flex; align-items:center; justify-content:center; min-width:40px; height:40px; border:1px solid #8886; border-radius:6px; text-decoration:none; font-weight:bold; color:inherit; }

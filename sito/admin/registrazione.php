@@ -8,7 +8,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach (['titolare_nome', 'titolare_email', 'titolare_indirizzo'] as $k) imposta($k, trim($_POST[$k] ?? ''));
         imposta('recensioni_moderate', empty($_POST['recensioni_moderate']) ? '0' : '1');
         $testo = trim(str_replace("\r\n", "\n", $_POST['privacy_testo'] ?? ''));
-        imposta('privacy_testo', $testo === trim(PRIVACY_MODELLO) ? '' : $testo);       // uguale al modello = resta il modello (si aggiorna da solo)
+        imposta('privacy_testo', $testo === trim(PRIVACY_MODELLO) ? '' : $testo);
+        $testo_ru = trim(str_replace("\r\n", "\n", $_POST['privacy_testo_ru'] ?? ''));
+        imposta('privacy_testo_ru', $testo_ru === trim(PRIVACY_MODELLO_RU) ? '' : $testo_ru);       // uguale al modello = resta il modello (si aggiorna da solo)
         $apri = !empty($_POST['registrazione_attiva']);
         if ($apri && !titolare_compilato()) { $apri = false; flash('Per aprire le registrazioni scrivi nome e email del titolare del trattamento.', 'errore'); }
         elseif ($apri && !smtp_configurato()) { $apri = false; flash('Per aprire le registrazioni configura prima le email (menu Email).', 'errore'); }
@@ -52,6 +54,8 @@ $n_let = (int)db()->query('SELECT COUNT(*) FROM lettori')->fetchColumn();
 <div class="pannello"><h2 style="margin-top:0">Testo dell'informativa privacy</h2>
   <p class="muto">Si vede in <a href="../privacy.php" target="_blank">privacy.php</a>. Puoi usare **grassetto**, ## titoli, elenchi con «- » e i segnaposto <code>{sito} {titolare} {indirizzo} {email_titolare} {versione} {giorni}</code>. Versione attuale: <b><?= e(privacy_versione()) ?></b>.</p>
   <textarea name="privacy_testo" rows="22" style="width:100%;font-family:inherit"><?= e(trim(impost('privacy_testo')) !== '' ? impost('privacy_testo') : PRIVACY_MODELLO) ?></textarea>
+  <h3>🇷🇺 Версия на русском (testo in russo)</h3>
+  <textarea name="privacy_testo_ru" rows="22" lang="ru" style="width:100%;font-family:inherit"><?= e(trim(impost('privacy_testo_ru')) !== '' ? impost('privacy_testo_ru') : PRIVACY_MODELLO_RU) ?></textarea>
 </div>
 <div class="salva-barra"><button class="bottone">💾 Salva</button></div>
 </form>

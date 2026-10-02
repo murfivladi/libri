@@ -268,6 +268,59 @@ Tk=$(tok admin/login.php)
 chk "blocco dopo 5 errori" "$(curl -s -b "$J" -c "$J" -d "csrf=$Tk&password=ultimapassword1" "$B/admin/login.php" | conta 'Troppi tentativi')" 1
 
 
+
+# ---------- sito bilingue: italiano e russo ----------
+JL="$T/cookie-lingua"; : > "$JL"
+sql "DELETE FROM tentativi" >/dev/null; nuova_sessione
+Tk=$(tok admin/login.php); post admin/login.php -d "csrf=$Tk&password=ultimapassword1" >/dev/null
+php -r 'require "inc/bootstrap.php"; imposta("slogan_ru", "Истории фэнтези и научной фантастики"); imposta("footer_ru", "Таормина · Сицилия");'
+Tk=$(tok "admin/libro.php?id=1")
+post "admin/libro.php?id=1" -F csrf=$Tk -F titolo='Il Custode dell Etna' -F collana_id=1 -F numero=1 -F stato=pubblicato -F titolo_ru='Хранитель Этны' -F genere_ru='Фэнтези' -F trama_ru='Влад учится во втором классе средней школы.' -F dopo=resta >/dev/null
+chk "admin: campi in russo salvati" "$(sql "SELECT titolo_ru FROM libri WHERE id = 1")" 'Хранитель Этны'
+rus() { curl -s -b "$JL" -c "$JL" "$B/$1"; }
+chk "lingua predefinita: italiano" "$(curl -s "$B/index.php" | conta '<html lang="it">')" 1
+chk "?lang=ru: pagina in russo" "$(rus 'index.php?lang=ru' | conta '<html lang="ru">')" 1
+chk "russo: menu Каталог" "$(rus 'index.php' | conta '<a href="index.php">Каталог</a>')" 1
+chk "il cookie «lingua» ricorda la scelta" "$(grep -c lingua "$JL")" 1
+chk "russo: titolo del libro tradotto (3 schede)" "$(rus 'index.php' | conta 'class="titolo">Хранитель')" 3
+chk "russo: titolo grande in home" "$(rus 'index.php' | conta 'Истории фэнтези')" 1
+chk "russo: piede di pagina" "$(rus 'index.php' | conta 'Таормина · Сицилия')" 1
+chk "russo: interruttore IT/RU" "$(rus 'index.php' | conta 'hreflang="it" lang="it">IT</a>')" 1
+chk "russo: hreflang alternativi" "$(rus 'index.php' | conta 'rel="alternate" hreflang="')" 3
+chk "russo: canonico con lang=ru" "$(rus 'index.php' | conta 'rel="canonical" href="[^"]*lang=ru"')" 1
+chk "italiano esplicito: cookie cambia" "$(curl -s -b "$JL" -c "$JL" "$B/index.php?lang=it" | conta '<html lang="it">')" 1
+chk "italiano: ancora Catalogo" "$(rus 'index.php' | conta '<a href="index.php">Catalogo</a>')" 1
+rus 'index.php?lang=ru' >/dev/null
+chk "libro in russo: trama" "$(rus "libro.php?s=il-custode-dell-etna" | conta 'class="trama">Влад учится во втором классе средней школы')" 1
+chk "libro in russo: pulsante" "$(rus "libro.php?s=il-custode-dell-etna" | conta 'Читать онлайн')" 1
+chk "libro in russo: JSON-LD in russo" "$(rus "libro.php?s=il-custode-dell-etna" | conta '"name":"Хранитель Этны"')" 1
+chk "collana in russo" "$(rus 'collana.php?s=il-custode-dell-etna' | conta 'class="trama"><p>Серия\|class="trama">Серия')" 1
+chk "collana in russo: «Начать с книги»" "$(rus 'collana.php?s=il-custode-dell-etna' | conta 'Начать с книги')" 1
+chk "elenco collane in russo" "$(rus 'collane.php' | conta '>Серии<')" 2
+chk "pagina Chi siamo in russo" "$(rus 'pagina.php?s=chi-siamo' | conta 'издательство, основанное Владом')" 1
+chk "pagina senza traduzione: resta in italiano" "$(rus 'pagina.php?s=contatti' | conta '<strong>Scrivici</strong>')" 1
+chk "privacy in russo" "$(rus 'privacy.php' | conta 'Это политика обработки персональных данных')" 1
+chk "feed in russo" "$(rus 'feed.php' | conta '<language>ru</language>')" 1
+chk "404 in russo" "$(rus 'collana.php?s=non-esiste' | conta 'Страница не найдена')" 1
+chk "lettore in russo: etichette" "$(rus 'leggi.php?s=il-custode-dell-etna' | conta '>Оглавление</button>')" 1
+chk "lettore in russo: testi per il JavaScript" "$(rus 'leggi.php?s=il-custode-dell-etna' | conta '"Impossibile aprire il PDF.":"Не удалось открыть PDF."')" 1
+chk "ricerca in russo trova per titolo russo" "$(rus 'index.php?q=%D0%A5%D1%80%D0%B0%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C' | conta 'class="scheda"')" 3
+chk "sitemap non cambia" "$(curl -s "$B/sitemap.php" | conta '<loc>')" "$(curl -s -H 'Accept-Language: ru' "$B/sitemap.php" | conta '<loc>')"
+chk "Accept-Language ru: sito in russo" "$(curl -s -H 'Accept-Language: ru-RU,ru;q=0.9' "$B/index.php" | conta '<html lang="ru">')" 1
+chk "Accept-Language it: sito in italiano" "$(curl -s -H 'Accept-Language: it-IT,it;q=0.9' "$B/index.php" | conta '<html lang="it">')" 1
+chk "lingua non valida ignorata" "$(curl -s "$B/index.php?lang=xx" | conta '<html lang="it">')" 1
+# nessuna scritta italiana dell'interfaccia nelle pagine russe
+IT_RESIDUO=0
+for pg in index.php "libro.php?s=il-custode-dell-etna" collane.php "collana.php?s=il-custode-dell-etna" privacy.php "leggi.php?s=il-custode-dell-etna" "account.php?a=accedi" "account.php?a=dimenticata"; do
+  rus "$pg$( [[ $pg == *\?* ]] && echo '&' || echo '?' )lang=ru" > "$T/ru.html"
+  for w in 'Catalogo' 'Leggi online' 'Nella stessa collana' 'Recensioni' 'Torna al' 'Cerca' 'Segnalibr' 'Tutte le collane' 'Password dimenticata' 'Email o nome'; do
+    if grep -q "$w" "$T/ru.html"; then IT_RESIDUO=$((IT_RESIDUO+1)); echo "  (italiano residuo in $pg: $w)"; fi
+  done
+done
+chk "pagine russe senza testi italiani dell'interfaccia" "$IT_RESIDUO" 0
+# l'admin resta in italiano anche con il cookie russo
+chk "admin in italiano anche con lingua russa" "$(curl -s -b "$J" -H 'Accept-Language: ru' "$B/admin/libri.php" | conta 'Cerca un libro')" 1
+
 # ---------- lettori: email, registrazione, accesso, liste, recensioni, privacy ----------
 MAIL="$T/mail"; SPORTA=${SMTP_PORTA:-2599}
 python3 "$REPO/sito/tests/smtp_sink.py" $SPORTA "$MAIL" >/dev/null 2>&1 & SINK=$!
@@ -509,6 +562,24 @@ Tr=$(rtok account.php); rpost 'account.php?a=elimina' -d "csrf=$Tr&password_attu
 for t in lettori liste progressi segnalibri recensioni consensi token_lettori; do chk "cancellato: $t vuota" "$(sql "SELECT COUNT(*) FROM $t")" 0; done
 chk "cancellato: email di conferma" "$(oggetto $(nmail) | conta 'Account cancellato')" 1
 chk "dopo la cancellazione non si entra" "$(rget account.php -o /dev/null | conta '<h1>La mia libreria</h1>')" 0
+
+# registrazione in russo: email in russo e lingua salvata
+JRU="$T/cookie-ru"; : > "$JRU"
+Tr=$(curl -s -b "$JRU" -c "$JRU" "$B/account.php?a=registrati&lang=ru" | grep -o 'name="csrf" value="[^"]*"' | head -1 | cut -d'"' -f4); sleep 3.3
+chk "registrazione in russo: pagina" "$(curl -s -b "$JRU" -c "$JRU" "$B/account.php?a=registrati" | conta 'Создать аккаунт')" 1
+Tr=$(curl -s -b "$JRU" -c "$JRU" "$B/account.php?a=registrati" | grep -o 'name="csrf" value="[^"]*"' | head -1 | cut -d'"' -f4); sleep 3.3
+curl -s -b "$JRU" -c "$JRU" -o /dev/null -d "csrf=$Tr&email=ru@prova.it&nick=Russo1&password=passwordlunga99&password2=passwordlunga99&privacy=1&eta=1" "$B/account.php?a=registrati"
+chk "registrazione in russo: lingua salvata" "$(sql "SELECT lingua FROM lettori WHERE email='ru@prova.it'")" ru
+N=$(nmail); chk "registrazione in russo: email in russo" "$(oggetto $N | conta 'Подтвердите вашу почту')" 1
+chk "registrazione in russo: testo dell'email" "$(python3 - "$MAIL/$N.eml" <<'PY'
+import email, sys
+m = email.message_from_binary_file(open(sys.argv[1], "rb"))
+t = "".join(p.get_payload(decode=True).decode("utf-8") for p in m.walk() if p.get_content_type() == "text/plain")
+print("Здравствуйте, Russo1!" in t and "Подтвердить мою почту" in t)
+PY
+)" True
+chk "registrazione in russo: errori in russo" "$(Tr=$(curl -s -b "$JRU" -c "$JRU" "$B/account.php?a=accedi" | grep -o 'name="csrf" value="[^"]*"' | head -1 | cut -d'"' -f4); curl -s -b "$JRU" -c "$JRU" -d "csrf=$Tr&id=nessuno&password=boh" "$B/account.php?a=accedi" | conta 'Неверная почта, имя или пароль')" 1
+sql "DELETE FROM lettori" >/dev/null
 kill $SINK 2>/dev/null; SINK=""
 
 # ---------- nessun errore PHP nel registro del server ----------

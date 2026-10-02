@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/_admin.php';
 
-$campi_testo = ['nome_sito', 'slogan', 'sottoslogan', 'footer', 'email', 'autore_predefinito', 'messaggio_manutenzione'];
+$campi_testo = ['nome_sito', 'slogan', 'sottoslogan', 'footer', 'email', 'autore_predefinito', 'messaggio_manutenzione', 'slogan_ru', 'sottoslogan_ru', 'footer_ru', 'messaggio_manutenzione_ru'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verifica();
     foreach ($campi_testo as $k) imposta($k, trim($_POST[$k] ?? ''));
@@ -22,6 +22,9 @@ admin_testata('Impostazioni', 'impostazioni');
   <label class="largo">Titolo grande in home <input type="text" name="slogan" value="<?= e(impost('slogan')) ?>"></label>
   <label class="largo">Frase sotto il titolo <input type="text" name="sottoslogan" value="<?= e(impost('sottoslogan')) ?>"></label>
   <label>Testo in fondo alla pagina <input type="text" name="footer" value="<?= e(impost('footer')) ?>"></label>
+  <label class="largo">🇷🇺 Заголовок на главной (titolo grande in russo) <input type="text" name="slogan_ru" value="<?= e(impost('slogan_ru')) ?>" lang="ru"></label>
+  <label class="largo">🇷🇺 Фраза под заголовком (frase sotto il titolo in russo) <input type="text" name="sottoslogan_ru" value="<?= e(impost('sottoslogan_ru')) ?>" lang="ru"></label>
+  <label>🇷🇺 Текст внизу страницы (testo in fondo in russo) <input type="text" name="footer_ru" value="<?= e(impost('footer_ru')) ?>" lang="ru"></label>
   <label>Email di contatto <small>(compare in fondo; vuota = nascosta)</small><input type="email" name="email" value="<?= e(impost('email')) ?>"></label>
 </div></div>
 
@@ -38,6 +41,7 @@ admin_testata('Impostazioni', 'impostazioni');
 <div class="pannello"><h2 style="margin-top:0">Manutenzione</h2>
   <label><span><input type="checkbox" name="manutenzione" value="1" <?= impost('manutenzione') === '1' ? 'checked' : '' ?>> Metti il sito offline (tu, da loggato, lo vedi comunque)</span></label>
   <label>Messaggio per i visitatori <input type="text" name="messaggio_manutenzione" value="<?= e(impost('messaggio_manutenzione')) ?>"></label>
+  <label>🇷🇺 Сообщение для посетителей (messaggio in russo) <input type="text" name="messaggio_manutenzione_ru" value="<?= e(impost('messaggio_manutenzione_ru')) ?>" lang="ru"></label>
 </div>
 <div class="salva-barra"><button class="bottone">💾 Salva impostazioni</button></div>
 </form>

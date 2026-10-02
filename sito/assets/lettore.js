@@ -11,6 +11,7 @@
 
   function leggi(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
   function scrivi(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function T(s) { return (window.TR && window.TR[s]) || s; }
   function el(t, c, txt) { var x = document.createElement(t); if (c) x.className = c; if (txt !== undefined) x.textContent = txt; return x; }
   function norm(s) { return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
   function limita(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -102,7 +103,7 @@
   pdfjsLib.getDocument(url).promise.then(function (d) {
     doc = d; N = d.numPages;
     return d.getPage(1).then(function (p) { base = p.getViewport({ scale: 1 }); });
-  }).then(function () { return pStato; }).then(function (st) { srv = st && st.loggato ? st : null; if (srv) fondiSegnalibri(); avvia(); }).catch(function (e) { stato.textContent = 'Impossibile aprire il PDF.'; if (window.console) console.log(e); });
+  }).then(function () { return pStato; }).then(function (st) { srv = st && st.loggato ? st : null; if (srv) fondiSegnalibri(); avvia(); }).catch(function (e) { stato.textContent = T('Impossibile aprire il PDF.'); if (window.console) console.log(e); });
 
   function avvia() {
     var frag = document.createDocumentFragment();
@@ -353,7 +354,7 @@
     }).catch(function () { griglia(box); });
   }
   function griglia(box) {
-    box.appendChild(el('p', 'muto', 'Questo libro non ha un indice: vai direttamente a una pagina.'));
+    box.appendChild(el('p', 'muto', T('Questo libro non ha un indice: vai direttamente a una pagina.')));
     var g = el('div', 'griglia-pagine');
     for (var i = 1; i <= N; i++) (function (i) { var b = el('button', '', String(i)); b.addEventListener('click', function () { vaiDaPannello(i); }); g.appendChild(b); })(i);
     box.appendChild(g);
@@ -367,13 +368,13 @@
   function mostraSegnalibri() {
     var box = document.getElementById('tab-segnalibri'); box.textContent = '';
     var l = segnalibri();
-    box.appendChild(el('p', 'muto', l.length ? 'Tocca per tornare a una pagina.' : 'Nessun segnalibro. Premi ☆ nella barra per aggiungerne uno.'));
-    if (!srv && body.dataset.accedi) { var nota = el('p', 'muto'); nota.appendChild(document.createTextNode('Con un account ritrovi pagina e segnalibri su ogni dispositivo. ')); var aa = el('a', '', 'Accedi'); aa.href = body.dataset.accedi; nota.appendChild(aa); box.appendChild(nota); }
+    box.appendChild(el('p', 'muto', l.length ? T('Tocca per tornare a una pagina.') : T('Nessun segnalibro. Premi ☆ nella barra per aggiungerne uno.')));
+    if (!srv && body.dataset.accedi) { var nota = el('p', 'muto'); nota.appendChild(document.createTextNode(T('Con un account ritrovi pagina e segnalibri su ogni dispositivo.') + ' ')); var aa = el('a', '', T('Accedi')); aa.href = body.dataset.accedi; nota.appendChild(aa); box.appendChild(nota); }
     var ul = el('ul', 'elenco-pannello');
     l.forEach(function (p) {
-      var li = el('li', 'riga-segn'), b = el('button', 'voce', 'Pagina ' + p);
+      var li = el('li', 'riga-segn'), b = el('button', 'voce', T('Pagina') + ' ' + p);
       b.addEventListener('click', function () { vaiDaPannello(p); });
-      var x = el('button', 'x', '✕'); x.setAttribute('aria-label', 'Togli segnalibro');
+      var x = el('button', 'x', '✕'); x.setAttribute('aria-label', T('Togli segnalibro'));
       x.addEventListener('click', function () { salvaSegn(segnalibri().filter(function (q) { return q !== p; })); invia({ azione: 'segnalibro', pagina: p, presente: 0 }); });
       li.appendChild(b); li.appendChild(x); ul.appendChild(li);
     });
@@ -392,18 +393,18 @@
     var q = document.getElementById('testo-cerca').value.trim();
     var st = document.getElementById('stato-cerca'), ul = document.getElementById('risultati');
     ul.textContent = ''; termine = ''; ridisegnaTutte();
-    if (q.length < 2) { st.textContent = 'Scrivi almeno 2 lettere.'; return; }
+    if (q.length < 2) { st.textContent = T('Scrivi almeno 2 lettere.'); return; }
     if (!doc) return;
     testi = testi || {}; var nq = norm(q), trovati = 0, i = 1;
     (function passo() {
-      if (i > N || trovati >= 200) { st.textContent = trovati ? trovati + ' risultati' : 'Nessun risultato.'; return; }
-      st.textContent = 'Cerco… pagina ' + i + ' di ' + N;
+      if (i > N || trovati >= 200) { st.textContent = trovati ? T('Risultati:') + ' ' + trovati : T('Nessun risultato.'); return; }
+      st.textContent = T('Cerco…') + ' ' + i + ' / ' + N;
       testoPagina(i).then(function (t) {
         var nt = norm(t), pos = nt.indexOf(nq), pagina = i;
         while (pos >= 0 && trovati < 200) {
           var a = Math.max(0, pos - 30), frase = t.substring(a, pos + q.length + 40).replace(/\s+/g, ' ');
           var li = el('li'), b = el('button', 'voce');
-          b.appendChild(el('b', '', 'p. ' + pagina + ' '));
+          b.appendChild(el('b', '', T('p.') + ' ' + pagina + ' '));
           b.appendChild(document.createTextNode('…' + frase + '…'));
           b.addEventListener('click', function (p) { return function () { termine = q; ridisegnaTutte(); vaiDaPannello(p); }; }(pagina));
           li.appendChild(b); ul.appendChild(li); trovati++;
