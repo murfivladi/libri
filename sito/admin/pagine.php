@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/_admin.php';
+require __DIR__ . '/../inc/libri.php';
 
 $id = (int)($_GET['id'] ?? 0);
 $nuova = isset($_GET['nuova']);
@@ -8,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verifica();
     $az = $_POST['azione'] ?? '';
     $pid = (int)($_POST['id'] ?? 0);
+    if ($az === 'salva_ordine') { riordina_tabella('pagine', $_POST['ids'] ?? []); registra('Pagine riordinate (trascinamento)'); http_response_code(204); exit; }
     if ($az === 'salva') {
         $titolo = trim($_POST['titolo'] ?? '');
         if ($titolo === '') { flash('Il titolo è obbligatorio.', 'errore'); torna('pagine.php' . ($pid ? "?id=$pid" : '?nuova=1')); }
@@ -51,9 +53,10 @@ if ($p): ?>
 <?php else:
 $pagine = db()->query('SELECT * FROM pagine ORDER BY ordine, id')->fetchAll(); ?>
 <p><a class="bottone" href="pagine.php?nuova=1">+ Nuova pagina</a></p>
-<table class="tabella"><tr><th>Titolo</th><th>Indirizzo</th><th>Visibile</th><th>Menu</th><th>Azioni</th></tr>
+<?php if (count($pagine) > 1): ?><p class="muto">☰ Trascina la maniglia per cambiare l'ordine delle pagine nel menu (anche col dito).</p><?php endif; ?>
+<table class="tabella" data-ordina="pagine" data-csrf="<?= e(csrf()) ?>"><thead><tr><th></th><th>Titolo</th><th>Indirizzo</th><th>Visibile</th><th>Menu</th><th>Azioni</th></tr></thead><tbody>
 <?php foreach ($pagine as $x): $pid = (int)$x['id']; ?>
-<tr><td><a href="pagine.php?id=<?= $pid ?>"><b><?= e($x['titolo']) ?></b></a></td><td class="muto">pagina.php?s=<?= e($x['slug']) ?></td>
+<tr data-id="<?= $pid ?>"><td class="maniglia" title="Trascina per riordinare">⠿</td><td><a href="pagine.php?id=<?= $pid ?>"><b><?= e($x['titolo']) ?></b></a></td><td class="muto">pagina.php?s=<?= e($x['slug']) ?></td>
   <td><span class="stato <?= $x['visibile'] ? 'pub' : 'bozza' ?>"><?= $x['visibile'] ? 'sì' : 'no' ?></span></td>
   <td><span class="stato <?= $x['nel_menu'] ? 'pub' : 'bozza' ?>"><?= $x['nel_menu'] ? 'sì' : 'no' ?></span></td>
   <td><form method="post" class="azioni-riga"><?= csrf_campo() ?><input type="hidden" name="id" value="<?= $pid ?>">
@@ -61,5 +64,5 @@ $pagine = db()->query('SELECT * FROM pagine ORDER BY ordine, id')->fetchAll(); ?
     <button class="mini" name="azione" value="visibile"><?= $x['visibile'] ? 'Nascondi' : 'Mostra' ?></button>
     <button class="mini" name="azione" value="menu"><?= $x['nel_menu'] ? 'Togli dal menu' : 'Metti nel menu' ?></button>
     <button class="mini" name="azione" value="elimina" data-conferma="Eliminare la pagina «<?= e($x['titolo']) ?>»?">🗑</button></form></td></tr>
-<?php endforeach; ?></table>
+<?php endforeach; ?></tbody></table>
 <?php endif; admin_piede();

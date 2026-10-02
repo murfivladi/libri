@@ -58,6 +58,60 @@
       else { prompt('Copia il link:', t); }
     });
   });
+  // riordino trascinando (mouse, penna e dita): tabelle con data-ordina
+  function avviso(testo, errore) {
+    var t = document.getElementById('toast');
+    if (!t) { t = document.createElement('div'); t.id = 'toast'; document.body.appendChild(t); }
+    t.textContent = testo; t.className = errore ? 'errore' : 'ok'; t.style.opacity = 1;
+    clearTimeout(t._t); t._t = setTimeout(function () { t.style.opacity = 0; }, 2200);
+  }
+  document.querySelectorAll('table[data-ordina]').forEach(function (tab) {
+    var corpo = tab.tBodies[0];
+    tab.querySelectorAll('.maniglia').forEach(function (h) {
+      h.addEventListener('pointerdown', function (ev) {
+        if (ev.pointerType === 'mouse' && ev.button !== 0) return;
+        ev.preventDefault();
+        var riga = h.closest('tr'), ordineIniziale = idRighe(), ultimoY = ev.clientY, timer = null;
+        var r0 = riga.getBoundingClientRect(), presa = ev.clientY - r0.top;
+        try { h.setPointerCapture(ev.pointerId); } catch (e) {}
+        riga.classList.add('trascina');
+        function idRighe() { return Array.prototype.map.call(corpo.rows, function (r) { return r.getAttribute('data-id'); }).join(','); }
+        function posiziona() {
+          // Si spostano le righe vicine, non quella trascinata: se la riga uscisse dal DOM il browser
+          // perderebbe il dito/mouse che la sta trascinando (succedeva col touch).
+          riga.style.transform = 'none';
+          var voluto = ultimoY - presa, centro = voluto + riga.offsetHeight / 2;
+          function mezzo(r) { var q = r.getBoundingClientRect(); return q.top + q.height / 2; }
+          for (var giri = 0; giri < 200; giri++) {
+            var dopo = riga.nextElementSibling, prima = riga.previousElementSibling;
+            if (dopo && centro > mezzo(dopo)) { corpo.insertBefore(dopo, riga); continue; }
+            if (prima && centro < mezzo(prima)) { corpo.insertBefore(prima, dopo); continue; }
+            break;
+          }
+          riga.style.transform = 'translateY(' + (voluto - riga.getBoundingClientRect().top) + 'px)';
+        }
+        function muovi(e) { ultimoY = e.clientY; posiziona(); }
+        function scorri() {                          // scorre la pagina quando trascini vicino al bordo
+          if (ultimoY < 90) window.scrollBy(0, -14); else if (ultimoY > window.innerHeight - 90) window.scrollBy(0, 14); else return;
+          posiziona();
+        }
+        timer = setInterval(scorri, 30);
+        function fine() {
+          clearInterval(timer);
+          h.removeEventListener('pointermove', muovi); h.removeEventListener('pointerup', fine); h.removeEventListener('pointercancel', fine);
+          riga.style.transform = ''; riga.classList.remove('trascina');
+          if (idRighe() === ordineIniziale) return;
+          var fd = new FormData(); fd.append('csrf', tab.getAttribute('data-csrf')); fd.append('azione', 'salva_ordine');
+          Array.prototype.forEach.call(corpo.rows, function (r) { fd.append('ids[]', r.getAttribute('data-id')); });
+          fetch(location.pathname + location.search, { method: 'POST', body: fd, headers: { 'X-Requested-With': 'fetch' }, credentials: 'same-origin' })
+            .then(function (r) { if (!r.ok) throw 0; avviso('Ordine salvato ✓'); })
+            .catch(function () { avviso('Non sono riuscito a salvare l\'ordine', true); });
+        }
+        h.addEventListener('pointermove', muovi); h.addEventListener('pointerup', fine); h.addEventListener('pointercancel', fine);
+      });
+    });
+  });
+
   // scorciatoie
   var g = false;
   document.addEventListener('keydown', function (ev) {

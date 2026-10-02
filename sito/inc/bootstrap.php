@@ -6,7 +6,14 @@ date_default_timezone_set('Europe/Rome');
 session_set_cookie_params(['httponly' => true, 'samesite' => 'Lax', 'secure' => !empty($_SERVER['HTTPS'])]);
 session_start();
 
-const VERSIONE_DB = 3;
+const VERSIONE_DB = 4;
+
+// Testo iniziale della pagina Privacy (modificabile dall'admin). È un modello: va controllato da un adulto.
+const TESTO_PRIVACY = "Questo sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti.\n\n"
+    . "## Cookie tecnici\n\nIl sito usa un solo cookie tecnico di sessione. Serve per l'area riservata e per contare una sola volta le letture e i download di un libro. Si cancella chiudendo il browser e non richiede consenso.\n\n"
+    . "## Dati salvati nel tuo dispositivo\n\nIl lettore ricorda la pagina, i segnalibri, il tema e lo zoom nel tuo browser. Questi dati restano solo sul tuo dispositivo: non vengono inviati a noi.\n\n"
+    . "## Registri del server\n\nIl servizio di hosting può registrare l'indirizzo IP dei visitatori per motivi di sicurezza, secondo la propria informativa.\n\n"
+    . "## Contatti\n\nPer qualsiasi domanda sui tuoi dati puoi scrivere all'indirizzo email indicato in fondo alla pagina.";
 
 function db(): PDO {
     static $pdo = null;
@@ -65,6 +72,15 @@ function migra(PDO $p): void {
         'chi-siamo', 'Chi siamo',
         "**Vlad Editore** è la casa editrice fondata da Vlad a Taormina - Trappitello, in Sicilia.\n\nPubblichiamo libri di fantascienza e fantasy, scritti da Vlad con l'aiuto dell'intelligenza artificiale.",
     ]);
+    $p->prepare('INSERT OR IGNORE INTO pagine (slug,titolo,contenuto,visibile,nel_menu,ordine) VALUES (?,?,?,1,0,20)')->execute([
+        'privacy', 'Privacy', TESTO_PRIVACY,
+    ]);
+
+    // sicurezza dell'account: codice di recupero e verifica in due passaggi
+    $nuoveAdmin = ['recupero' => "TEXT NOT NULL DEFAULT ''", 'totp_segreto' => "TEXT NOT NULL DEFAULT ''", 'totp_attivo' => 'INTEGER NOT NULL DEFAULT 0', 'codici_backup' => "TEXT NOT NULL DEFAULT '[]'"];
+    $colAdmin = array_column($p->query('PRAGMA table_info(admin)')->fetchAll(), 'name');
+    foreach ($nuoveAdmin as $c => $def) if (!in_array($c, $colAdmin, true)) $p->exec("ALTER TABLE admin ADD COLUMN $c $def");
+
     $p->exec('PRAGMA user_version = ' . VERSIONE_DB);
 }
 
@@ -89,6 +105,7 @@ const IMPOSTAZIONI_PREDEFINITE = [
     'per_pagina' => '12', 'ordine_catalogo' => 'numero', 'contatori_pubblici' => '0',
     'manutenzione' => '0', 'messaggio_manutenzione' => 'Il sito è in manutenzione. Torna presto!',
     'mostra_evidenza' => '1',
+    'colore_blu' => '#0b1a36', 'colore_oro' => '#c9a14a', 'logo_emblema' => '', 'logo_grande' => '', 'banner_home' => '',
 ];
 function impost(string $k): string {
     static $cache = null;
@@ -175,14 +192,28 @@ if (impost('manutenzione') === '1' && empty($_SESSION['admin']) && strpos($_SERV
 }
 
 // ---------- parti comuni del sito pubblico ----------
-function intestazione(string $titolo, string $prefisso = '', string $descrizione = ''): void {
+// $og: ['immagine' => 'uploads/cover/x.jpg', 'tipo' => 'book', 'canonico' => 'libro.php?s=...'] per le anteprime sui social.
+function intestazione(string $titolo, string $prefisso = '', string $descrizione = '', array $og = []): void {
     $nome = impost('nome_sito');
     $t = e($titolo) . ' · ' . e($nome);
-    $d = $descrizione ? '<meta name="description" content="' . e(mb_substr($descrizione, 0, 160)) . '">' : '';
+    $descr = mb_substr(trim(preg_replace('/\s+/', ' ', $descrizione)), 0, 200);
+    $extra = '';
+    if (!$prefisso) {                                  // anteprime social (Open Graph) solo sul sito pubblico
+        $base = percorso_pubblico();
+        $url = $base . ($og['canonico'] ?? ltrim(basename($_SERVER['SCRIPT_NAME']) . (($_SERVER['QUERY_STRING'] ?? '') !== '' ? '?' . $_SERVER['QUERY_STRING'] : ''), '/'));
+        $img = $base . ($og['immagine'] ?? asset_banner());
+        $extra = '<meta property="og:site_name" content="' . e($nome) . '"><meta property="og:locale" content="it_IT">'
+               . '<meta property="og:type" content="' . e($og['tipo'] ?? 'website') . '"><meta property="og:title" content="' . e($titolo) . '">'
+               . ($descr ? '<meta property="og:description" content="' . e($descr) . '">' : '')
+               . '<meta property="og:url" content="' . e($url) . '"><meta property="og:image" content="' . e($img) . '">'
+               . '<meta name="twitter:card" content="summary_large_image"><link rel="canonical" href="' . e($url) . '">'
+               . '<link rel="alternate" type="application/rss+xml" title="Novità" href="feed.php"><link rel="sitemap" type="application/xml" href="sitemap.php">';
+    }
+    $d = $descr ? '<meta name="description" content="' . e($descr) . '">' : '';
     echo "<!doctype html><html lang=\"it\"><head><meta charset=\"utf-8\">
 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-<title>$t</title>$d<link rel=\"icon\" type=\"image/png\" href=\"{$prefisso}assets/favicon.png\"><link rel=\"stylesheet\" href=\"{$prefisso}assets/stile.css\"></head><body>
-<header class=\"testata\"><a class=\"marchio\" href=\"{$prefisso}index.php\"><img src=\"{$prefisso}assets/emblema.png\" alt=\"\" width=\"44\" height=\"44\"><span>" . e(strtoupper($nome)) . "</span></a><nav><a href=\"{$prefisso}index.php\">Catalogo</a>";
+<title>$t</title>$d$extra<link rel=\"icon\" type=\"image/png\" href=\"" . e(asset_emblema($prefisso)) . "\"><link rel=\"stylesheet\" href=\"{$prefisso}assets/stile.css\">" . stile_tema($prefisso) . "</head><body>
+<header class=\"testata\"><a class=\"marchio\" href=\"{$prefisso}index.php\"><img src=\"" . e(asset_emblema($prefisso)) . "\" alt=\"\" width=\"44\" height=\"44\"><span>" . e(strtoupper($nome)) . "</span></a><nav><a href=\"{$prefisso}index.php\">Catalogo</a>";
     if (!$prefisso) {
         foreach (db()->query('SELECT slug, titolo FROM pagine WHERE visibile = 1 AND nel_menu = 1 ORDER BY ordine, id') as $p)
             echo '<a href="pagina.php?s=' . e($p['slug']) . '">' . e($p['titolo']) . '</a>';
@@ -191,9 +222,29 @@ function intestazione(string $titolo, string $prefisso = '', string $descrizione
 }
 function piede(): void {
     $mail = impost('email');
+    $priv = db()->query("SELECT 1 FROM pagine WHERE slug = 'privacy' AND visibile = 1")->fetchColumn();
     echo '</main><footer class="piede">© ' . date('Y') . ' ' . e(impost('nome_sito')) . ' · ' . e(impost('footer'))
-       . ($mail ? ' · <a href="mailto:' . e($mail) . '">' . e($mail) . '</a>' : '') . '</footer></body></html>';
+       . ($mail ? ' · <a href="mailto:' . e($mail) . '">' . e($mail) . '</a>' : '')
+       . ($priv ? ' · <a href="pagina.php?s=privacy">Privacy</a>' : '') . '</footer></body></html>';
 }
+
+// Aspetto personalizzabile dall'admin: emblema, logo, banner e colori.
+function asset_personalizzato(string $chiave, string $predefinito, int $larghezza, string $prefisso): string {
+    $f = impost($chiave);
+    if ($f !== '' && is_file(RADICE . '/uploads/cover/' . basename($f))) return $prefisso . miniatura(basename($f), $larghezza);
+    return $prefisso . $predefinito;
+}
+function asset_emblema(string $prefisso = ''): string { return asset_personalizzato('logo_emblema', 'assets/emblema.png', 256, $prefisso); }
+function asset_logo(string $prefisso = ''): string { return asset_personalizzato('logo_grande', 'assets/logo.png', 900, $prefisso); }
+function asset_banner(string $prefisso = ''): string { return asset_personalizzato('banner_home', 'assets/hero.jpg', 1920, $prefisso); }
+function colore_valido(string $c, string $default): string { return preg_match('/^#[0-9a-fA-F]{6}$/', $c) ? $c : $default; }
+function stile_tema(string $prefisso = ''): string {
+    $blu = colore_valido(impost('colore_blu'), '#0b1a36');
+    $oro = colore_valido(impost('colore_oro'), '#c9a14a');
+    return '<style>:root{--blu:' . $blu . ';--oro:' . $oro . ';--hero:url("' . e(asset_banner($prefisso)) . '")}</style>';
+}
+
+require_once __DIR__ . '/file.php';
 
 function percorso_pubblico(): string {
     $schema = (!empty($_SERVER['HTTPS']) || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https') ? 'https' : 'http';

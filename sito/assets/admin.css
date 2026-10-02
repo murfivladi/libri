@@ -65,6 +65,11 @@ kbd { background:#0002; border-radius:4px; padding:0 5px; font-size:12px; }
 #aiuto[hidden] { display:none; }
 pre.codice { background:#0002; padding:10px; border-radius:6px; overflow:auto; font-size:13px; }
 .barra-prog { height:10px; background:var(--linea); border-radius:5px; overflow:hidden; } .barra-prog i { display:block; height:100%; background:var(--oro); }
+.maniglia { cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none; width:34px; text-align:center; font-size:20px; color:var(--muto); }
+.maniglia:hover { color:var(--acc); }
+.tabella tr.trascina td { background:var(--pannello); box-shadow:0 6px 18px #0005; position:relative; z-index:6; }
+.tabella tr.trascina { position:relative; z-index:6; cursor:grabbing; }
+#toast { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); padding:10px 18px; border-radius:20px; z-index:50; transition:opacity .3s; box-shadow:0 4px 14px #0004; }
 @media (max-width:820px) {
   .menu { position:fixed; left:-240px; z-index:30; transition:left .2s; } .menu.aperto { left:0; }
   .barra-alta #apri-menu { display:block; } .contenuto-adm { padding:12px; }

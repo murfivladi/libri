@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $in = implode(',', array_map('intval', $ids)) ?: '0';
         esporta_csv(db()->query("SELECT * FROM libri WHERE id IN ($in) ORDER BY ordine, numero, id")->fetchAll(), 'libri-selezionati.csv');
     }
+    if ($azione === 'salva_ordine') { riordina_libri($ids); registra('Libri riordinati (trascinamento)'); http_response_code(204); exit; }
     flash(azione_libri($azione, $ids, $_POST));
     torna($ritorno);
 }
@@ -110,18 +111,21 @@ admin_testata($stato === 'cestino' ? 'Cestino' : 'Libri', 'libri');
 
 <form method="post" id="lista">
 <?= csrf_campo() ?>
-<table class="tabella">
-<tr><th><input type="checkbox" data-tutti aria-label="Seleziona tutti"></th><th></th>
+<?php $ordina = $ord === 'manuale' && $dir === 'ASC' && $stato !== 'cestino'; ?>
+<?php if ($ordina && count($libri) > 1): ?><p class="muto">☰ Trascina la maniglia a sinistra per cambiare l'ordine dei libri (anche col dito).</p><?php endif; ?>
+<table class="tabella"<?= $ordina ? ' data-ordina="libri" data-csrf="' . e(csrf()) . '"' : '' ?>>
+<thead><tr><th></th><th><input type="checkbox" data-tutti aria-label="Seleziona tutti"></th><th></th>
   <?= th_ord('Titolo', 'titolo') ?><?= th_ord('Collana', 'collana') ?><?= th_ord('N.', 'numero') ?><?= th_ord('Stato', 'stato') ?>
-  <?= th_ord('👁', 'letture') ?><?= th_ord('⬇', 'download') ?><?= th_ord('Modificato', 'aggiornato') ?><th>Azioni</th></tr>
+  <?= th_ord('👁', 'letture') ?><?= th_ord('⬇', 'download') ?><?= th_ord('Modificato', 'aggiornato') ?><th>Azioni</th></tr></thead><tbody>
 <?php foreach ($libri as $l):
     $id = (int)$l['id'];
     $prog = $l['pubblicato'] && $l['pubblica_il'] > $ora;
     if ($l['eliminato']) { $cl = 'cest'; $tx = 'cestino'; } elseif ($prog) { $cl = 'prog'; $tx = 'dal ' . formatta_data($l['pubblica_il']); } elseif ($l['pubblicato']) { $cl = 'pub'; $tx = 'pubblicato'; } else { $cl = 'bozza'; $tx = 'bozza'; }
 ?>
-<tr>
+<tr data-id="<?= $id ?>">
+  <?= $ordina ? '<td class="maniglia" title="Trascina per riordinare">⠿</td>' : '<td></td>' ?>
   <td><input type="checkbox" name="ids[]" value="<?= $id ?>"></td>
-  <td><?php if ($l['copertina']): ?><img class="mini-cop" src="../uploads/cover/<?= e($l['copertina']) ?>" alt="" loading="lazy"><?php endif; ?></td>
+  <td><?php if ($l['copertina']): ?><img class="mini-cop" src="../<?= e(miniatura($l['copertina'], 120)) ?>" alt="" loading="lazy"><?php endif; ?></td>
   <td><a href="libro.php?id=<?= $id ?>"><b><?= e($l['titolo']) ?></b></a><?= $l['evidenza'] ? ' ⭐' : '' ?>
     <?php if ($l['sottotitolo']): ?><br><span class="muto"><?= e($l['sottotitolo']) ?></span><?php endif; ?>
     <br><span class="muto"><?= !$l['pdf'] ? '⚠ no PDF ' : '' ?><?= !$l['copertina'] ? '⚠ no copertina ' : '' ?><?= e(implode(' · ', tags_di($l['tags']))) ?></span></td>
@@ -146,9 +150,9 @@ admin_testata($stato === 'cestino' ? 'Cestino' : 'Libri', 'libri');
   </div></td>
 </tr>
 <?php endforeach; if (!$libri): ?>
-<tr><td colspan="10" class="muto">Nessun libro trovato. <a href="libro.php">Crea un libro</a>.</td></tr>
+<tr><td colspan="11" class="muto">Nessun libro trovato. <a href="libro.php">Crea un libro</a>.</td></tr>
 <?php endif; ?>
-</table>
+</tbody></table>
 
 <?php if ($libri): ?>
 <div class="barra-massa">

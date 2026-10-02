@@ -13,13 +13,14 @@ function admin_testata(string $titolo, string $voce = ''): void {
         'collane' => ['collane.php', '🗂 Collane'], 'pagine' => ['pagine.php', '📄 Pagine'],
         'media' => ['media.php', '🖼 File'], 'impostazioni' => ['impostazioni.php', '⚙️ Impostazioni'],
         'strumenti' => ['strumenti.php', '🧰 Strumenti'], 'log' => ['log.php', '📜 Attività'],
-        'password' => ['password.php', '🔑 Password'],
+        'password' => ['password.php', '🔑 Password'], 'sicurezza' => ['sicurezza.php', '🔐 Sicurezza'],
+        'aspetto' => ['aspetto.php', '🎨 Aspetto'],
     ];
     $bozze = (int)db()->query("SELECT COUNT(*) FROM libri WHERE pubblicato = 0 AND eliminato IS NULL")->fetchColumn();
     $cestino = (int)db()->query("SELECT COUNT(*) FROM libri WHERE eliminato IS NOT NULL")->fetchColumn();
     echo '<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
        . '<title>' . e($titolo) . ' · Admin</title><link rel="icon" href="../assets/favicon.png"><link rel="stylesheet" href="../assets/admin.css"></head><body class="adm">'
-       . '<aside class="menu" id="menu"><a class="logo" href="index.php"><img src="../assets/emblema.png" width="36" height="36" alt=""> ' . e(impost('nome_sito')) . '</a><nav>';
+       . '<aside class="menu" id="menu"><a class="logo" href="index.php"><img src="' . e(asset_emblema('../')) . '" width="36" height="36" alt=""> ' . e(impost('nome_sito')) . '</a><nav>';
     foreach ($voci as $k => [$url, $et]) {
         $badge = $k === 'libri' && $bozze ? " <span class=\"badge\">$bozze bozze</span>" : '';
         echo '<a href="' . $url . '"' . ($k === $voce ? ' class="att"' : '') . '>' . $et . $badge . '</a>';

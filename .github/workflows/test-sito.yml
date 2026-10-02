@@ -1,0 +1,72 @@
+name: Test del sito
+
+# Parte a ogni push e a ogni pull request che tocca il sito (o i libri usati dai test).
+on:
+  push:
+    paths:
+      - 'sito/**'
+      - 'libro-*/build/*.pdf'
+      - 'libro-*/immagini/copertina.jpg'
+      - '.github/workflows/test-sito.yml'
+  pull_request:
+    paths:
+      - 'sito/**'
+      - 'libro-*/build/*.pdf'
+      - '.github/workflows/test-sito.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-sito-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php:
+    name: PHP (sintassi, unit, end-to-end)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_sqlite, gd, curl, fileinfo, mbstring, iconv
+      - name: Sintassi PHP
+        run: find sito -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Test di unità
+        run: php sito/tests/unit.php
+      - name: Test end-to-end (admin e sito pubblico)
+        run: bash sito/tests/e2e.sh
+
+  php-minimo:
+    name: PHP 8.0 (versione minima supportata)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: pdo_sqlite, gd, curl, fileinfo, mbstring, iconv
+      - run: find sito -name '*.php' -print0 | xargs -0 -n1 php -l
+      - run: php sito/tests/unit.php
+      - run: bash sito/tests/e2e.sh
+
+  browser:
+    name: Browser (lettore PDF, trascinamento, telefono)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_sqlite, gd, curl, fileinfo, mbstring, iconv
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Installa Playwright e Chromium
+        run: |
+          npm install -g playwright
+          playwright install --with-deps chromium
+      - name: Test nel browser
+        run: bash sito/tests/browser.sh

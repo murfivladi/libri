@@ -3,7 +3,7 @@
 // Uso da terminale, dalla cartella del repository:  php sito/importa.php
 if (PHP_SAPI !== 'cli') exit('Solo da terminale.');
 require __DIR__ . '/inc/bootstrap.php';
-$repo = dirname(__DIR__);
+$repo = getenv('LIBRI_REPO') ?: dirname(__DIR__);
 $libri = [
   [1, "Il Custode dell'Etna", 'il-custode-dell-etna.pdf', 'Fantascienza / fantasy'],
   [2, 'Il Custode e il Fantasma del Teatro', 'il-custode-e-il-fantasma.pdf', 'Fantasy / mistero'],

@@ -9,7 +9,7 @@ intestazione($p['titolo']);
 ?>
 <article class="pagina-testo">
 <h1><?= e($p['titolo']) ?></h1>
-<?php if ($p['slug'] === 'chi-siamo'): ?><p class="centro"><img class="logo-grande" src="assets/logo.png" alt="Logo di <?= e(impost('nome_sito')) ?>" width="360"></p><?php endif; ?>
+<?php if ($p['slug'] === 'chi-siamo'): ?><p class="centro"><img class="logo-grande" src="<?= e(asset_logo()) ?>" alt="Logo di <?= e(impost('nome_sito')) ?>" width="360"></p><?php endif; ?>
 <?= md($p['contenuto']) ?>
 </article>
 <?php piede();

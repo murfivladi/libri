@@ -8,6 +8,8 @@ foreach (db()->query('SELECT id, titolo, copertina, pdf FROM libri') as $l) {
     if ($l['pdf']) $usati['pdf'][$l['pdf']][] = ['libro.php?id=' . $l['id'], 'Libro: ' . $l['titolo']];
 }
 foreach (db()->query("SELECT id, nome, banner FROM collane WHERE banner != ''") as $c) $usati['cover'][$c['banner']][] = ['collane.php?id=' . $c['id'], 'Collana: ' . $c['nome']];
+foreach (db()->query("SELECT chiave, valore FROM impostazioni WHERE chiave IN ('logo_emblema','logo_grande','banner_home') AND valore != ''") as $s)
+    $usati['cover'][$s['valore']][] = ['aspetto.php', 'Aspetto: ' . $s['chiave']];
 
 function elenco_file(string $cartella): array {
     $out = [];

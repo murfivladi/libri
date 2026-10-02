@@ -38,7 +38,42 @@ function elimina_file(string $cartella, string $nome): void {
         $st = db()->prepare("SELECT COUNT(*) FROM $t WHERE $c = ?"); $st->execute([$nome]);
         if ($st->fetchColumn() > 0) return;
     }
+    if ($cartella === 'cover') {        // immagini scelte nella pagina Aspetto (logo, banner)
+        $st = db()->prepare("SELECT COUNT(*) FROM impostazioni WHERE chiave IN ('logo_emblema','logo_grande','banner_home') AND valore = ?"); $st->execute([$nome]);
+        if ($st->fetchColumn() > 0) return;
+        foreach (glob(RADICE . '/uploads/thumb/*-' . pathinfo($nome, PATHINFO_FILENAME) . '.*') ?: [] as $t) @unlink($t);
+    }
     @unlink(percorso_file($cartella, $nome));
+}
+
+// Miniatura di una copertina (creata la prima volta e poi riusata). Se GD non c'è, restituisce l'originale.
+// Ritorna il percorso relativo alla radice del sito, es. "uploads/thumb/400-abc.jpg".
+function miniatura(string $nome, int $larghezza = 400): string {
+    $orig = 'uploads/cover/' . $nome;
+    if ($nome === '' || !function_exists('imagecreatetruecolor')) return $orig;
+    $src = RADICE . '/' . $orig;
+    if (!is_file($src)) return $orig;
+    $base = 'uploads/thumb/' . $larghezza . '-' . pathinfo($nome, PATHINFO_FILENAME);
+    foreach (['.jpg', '.png'] as $est) if (is_file(RADICE . '/' . $base . $est)) return $base . $est;
+    try {
+        $info = @getimagesize($src);
+        if (!$info || $info[0] <= $larghezza) return $orig;               // già piccola
+        if ($info[0] * $info[1] > 40_000_000) return $orig;                // troppo grande per la memoria
+        $img = match ($info[2]) { IMAGETYPE_JPEG => @imagecreatefromjpeg($src), IMAGETYPE_PNG => @imagecreatefrompng($src),
+                                  IMAGETYPE_WEBP => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($src) : false, default => false };
+        if (!$img) return $orig;
+        $png = $info[2] === IMAGETYPE_PNG;                                 // i PNG restano PNG (trasparenza dei loghi)
+        $h = (int)round($info[1] * $larghezza / $info[0]);
+        $out = imagecreatetruecolor($larghezza, $h);
+        if ($png) { imagealphablending($out, false); imagesavealpha($out, true); imagefill($out, 0, 0, imagecolorallocatealpha($out, 0, 0, 0, 127)); }
+        else imagefill($out, 0, 0, imagecolorallocate($out, 255, 255, 255));
+        imagecopyresampled($out, $img, 0, 0, 0, 0, $larghezza, $h, $info[0], $info[1]);
+        @mkdir(RADICE . '/uploads/thumb', 0755, true);
+        $rel = $base . ($png ? '.png' : '.jpg');
+        $ok = $png ? imagepng($out, RADICE . '/' . $rel, 6) : imagejpeg($out, RADICE . '/' . $rel, 82);
+        imagedestroy($img); imagedestroy($out);
+        return $ok ? $rel : $orig;
+    } catch (Throwable $e) { return $orig; }
 }
 
 // Copia fisica di un file (per duplicare un libro).

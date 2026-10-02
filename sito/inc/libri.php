@@ -52,6 +52,30 @@ function sposta_libro(int $id, int $verso): void {
     db()->commit();
 }
 
+// Riordino con il trascinamento: gli id arrivano nel nuovo ordine (anche solo quelli di una pagina filtrata);
+// vanno a occupare le stesse posizioni che avevano prima, così gli altri libri non si muovono.
+function riordina_libri(array $nuovo): void {
+    $nuovo = array_values(array_unique(array_map('intval', $nuovo)));
+    $tutti = array_map('intval', db()->query('SELECT id FROM libri WHERE eliminato IS NULL ORDER BY ordine, numero, id')->fetchAll(PDO::FETCH_COLUMN));
+    $posizioni = [];
+    foreach ($tutti as $i => $id) if (in_array($id, $nuovo, true)) $posizioni[] = $i;
+    if (count($posizioni) !== count($nuovo)) return;
+    foreach ($posizioni as $k => $i) $tutti[$i] = $nuovo[$k];
+    $up = db()->prepare('UPDATE libri SET ordine = ? WHERE id = ?');
+    db()->beginTransaction();
+    foreach ($tutti as $k => $id) $up->execute([$k + 1, $id]);
+    db()->commit();
+}
+
+// Salva l'ordine di una tabella semplice (collane, pagine): gli id arrivano nel nuovo ordine.
+function riordina_tabella(string $tabella, array $nuovo): void {
+    if (!in_array($tabella, ['collane', 'pagine'], true)) return;
+    $up = db()->prepare("UPDATE $tabella SET ordine = ? WHERE id = ?");
+    db()->beginTransaction();
+    foreach (array_values(array_map('intval', $nuovo)) as $k => $id) $up->execute([$k + 1, $id]);
+    db()->commit();
+}
+
 function tocca(int $id): void { db()->prepare('UPDATE libri SET aggiornato = ? WHERE id = ?')->execute([date('Y-m-d H:i:s'), $id]); }
 
 // Applica un'azione a una lista di libri. Restituisce il messaggio da mostrare.

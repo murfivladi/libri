@@ -113,7 +113,7 @@ if ($id && $l['eliminato']) echo '<p class="errore">Questo libro è nel cestino 
 <div class="pannello"><h2 style="margin-top:0">Copertina e PDF</h2>
 <div class="form-griglia">
   <div>
-    <?php if ($l['copertina']): ?><img class="anteprima-cop" src="../uploads/cover/<?= e($l['copertina']) ?>" alt=""><br>
+    <?php if ($l['copertina']): ?><img class="anteprima-cop" src="../<?= e(miniatura($l['copertina'], 300)) ?>" alt=""><br>
       <label style="font-weight:400"><span><input type="checkbox" name="togli_copertina" value="1"> Togli la copertina</span></label><?php endif; ?>
     <label>Copertina (JPG, PNG, WebP) <input type="file" name="copertina" accept="image/*"></label>
     <label>…oppure da URL <input type="text" name="copertina_url" placeholder="https://…/copertina.jpg"></label>

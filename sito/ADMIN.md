@@ -82,7 +82,16 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
 63. Tema chiaro/scuro e menu adatto al telefono
 64. Scorciatoie da tastiera (`/` cerca, `n` nuovo libro, `g` poi `l`/`c`/`d`/`p`/`s`)
 
+## Sicurezza e aspetto (aggiunte)
+70. **Recupero password**: un codice di recupero mostrato una volta sola («Password dimenticata?» nella pagina di accesso)
+71. **Verifica in due passaggi (2FA)** con app di autenticazione e QR code, più 8 codici di backup monouso
+72. Recupero d'emergenza via FTP: file `data/reset-password.txt` o `data/reset-2fa.txt`
+73. **Aspetto**: cambia emblema, logo e banner (da file o URL) e i due colori del sito, con anteprima; ripristino dell'originale
+74. **Riordino trascinando** (con mouse o con il dito) per libri, collane e pagine
+
 ## Lato pubblico (novità)
+- Miniature delle copertine (il catalogo carica immagini leggere), anteprime ricche quando condividi un link (Open Graph), pagina Privacy, `robots.txt`, pagina 404 con la grafica del sito, nessun servizio esterno (PDF.js è incluso)
+- **Lettore**: indice, segnalibri, ricerca nel testo con evidenziazione, vai a pagina, schermo intero, zoom (anche pizzicando), scorri per girare pagina, tema scuro, riprende dall'ultima pagina
 65. Ricerca nel catalogo, filtro per collana e per tag, paginazione
 66. Libri in evidenza, «Nella stessa collana»
 67. Contatore di letture e download

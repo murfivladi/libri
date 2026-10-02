@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verifica();
     $az = $_POST['azione'] ?? '';
     $cid = (int)($_POST['id'] ?? 0);
+    if ($az === 'salva_ordine') { riordina_tabella('collane', $_POST['ids'] ?? []); registra('Collane riordinate (trascinamento)'); http_response_code(204); exit; }
     try {
         if ($az === 'salva') {
             $nome = trim($_POST['nome'] ?? '');
@@ -90,10 +91,12 @@ $collane = db()->query('SELECT c.*, (SELECT COUNT(*) FROM libri l WHERE l.collan
 $senza = (int)db()->query('SELECT COUNT(*) FROM libri WHERE collana_id = 0 AND eliminato IS NULL')->fetchColumn();
 ?>
 <p><a class="bottone" href="collane.php?nuova=1">+ Nuova collana</a></p>
-<table class="tabella">
-<tr><th>Collana</th><th>Libri</th><th>Pubblicati</th><th>Visibile</th><th>Azioni</th></tr>
+<?php if (count($collane) > 1): ?><p class="muto">☰ Trascina la maniglia per cambiare l'ordine delle collane (anche col dito).</p><?php endif; ?>
+<table class="tabella" data-ordina="collane" data-csrf="<?= e(csrf()) ?>">
+<thead><tr><th></th><th>Collana</th><th>Libri</th><th>Pubblicati</th><th>Visibile</th><th>Azioni</th></tr></thead><tbody>
 <?php foreach ($collane as $x): $cid = (int)$x['id']; ?>
-<tr>
+<tr data-id="<?= $cid ?>">
+  <td class="maniglia" title="Trascina per riordinare">⠿</td>
   <td><a href="collane.php?id=<?= $cid ?>"><b><?= e($x['nome']) ?></b></a><br><span class="muto"><?= e(mb_substr($x['descrizione'], 0, 90)) ?></span></td>
   <td><a href="libri.php?collana=<?= $cid ?>"><?= (int)$x['n'] ?></a></td><td><?= (int)$x['np'] ?></td>
   <td><span class="stato <?= $x['visibile'] ? 'pub' : 'bozza' ?>"><?= $x['visibile'] ? 'sì' : 'no' ?></span></td>
@@ -107,7 +110,7 @@ $senza = (int)db()->query('SELECT COUNT(*) FROM libri WHERE collana_id = 0 AND e
     <button class="mini" name="azione" value="elimina" data-conferma="Eliminare la collana «<?= e($x['nome']) ?>»? I libri restano.">🗑</button>
   </form></td>
 </tr>
-<?php endforeach; if (!$collane): ?><tr><td colspan="5" class="muto">Nessuna collana ancora.</td></tr><?php endif; ?>
-</table>
+<?php endforeach; if (!$collane): ?><tr><td colspan="6" class="muto">Nessuna collana ancora.</td></tr><?php endif; ?>
+</tbody></table>
 <p class="muto">Libri senza collana: <a href="libri.php?collana=nessuna"><?= $senza ?></a></p>
 <?php endif; admin_piede();

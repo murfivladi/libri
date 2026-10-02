@@ -1,6 +1,7 @@
 <?php
 // Funzioni per le pagine pubbliche (catalogo, scheda libro, lettore).
 require_once __DIR__ . '/bootstrap.php';
+require_once __DIR__ . '/file.php';
 
 function ordine_catalogo(): string {
     return [
@@ -32,7 +33,7 @@ function pagina_non_trovata(): void {
 
 function scheda_libro(array $l): void {
     echo '<a class="scheda" href="libro.php?s=' . e($l['slug']) . '">';
-    if ($l['copertina']) echo '<img src="uploads/cover/' . e($l['copertina']) . '" alt="Copertina di ' . e($l['titolo']) . '" loading="lazy">';
+    if ($l['copertina']) echo '<img src="' . e(miniatura($l['copertina'], 400)) . '" alt="Copertina di ' . e($l['titolo']) . '" loading="lazy" width="400" height="600">';
     echo '<span class="titolo">' . e($l['titolo']) . '</span><span class="meta">' . e($l['nome_collana'] ?? '') . ($l['numero'] ? ' · n. ' . (int)$l['numero'] : '') . '</span></a>';
 }
 

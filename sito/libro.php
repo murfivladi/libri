@@ -13,10 +13,13 @@ if ($l['collana_id']) {
 }
 $suffisso = $l['anteprima'] ? '&anteprima=' . urlencode($token) : '';
 $descr = $l['meta'] !== '' ? $l['meta'] : $l['trama'];
-intestazione($l['titolo'], '', $descr);
+intestazione($l['titolo'], '', $descr, [
+    'tipo' => 'book', 'canonico' => 'libro.php?s=' . urlencode($l['slug']),
+    'immagine' => $l['copertina'] ? miniatura($l['copertina'], 800) : null,
+]);
 if ($l['anteprima']): ?><p class="avviso">👁 Anteprima privata: questo libro non è ancora visibile al pubblico.</p><?php endif; ?>
 <article class="libro">
-  <?php if ($l['copertina']): ?><img class="copertina" src="uploads/cover/<?= e($l['copertina']) ?>" alt="Copertina di <?= e($l['titolo']) ?>"><?php endif; ?>
+  <?php if ($l['copertina']): ?><a href="uploads/cover/<?= e($l['copertina']) ?>" target="_blank" title="Vedi la copertina intera"><img class="copertina" src="<?= e(miniatura($l['copertina'], 800)) ?>" alt="Copertina di <?= e($l['titolo']) ?>"></a><?php endif; ?>
   <div>
     <h1><?= e($l['titolo']) ?></h1>
     <?php if ($l['sottotitolo']): ?><p class="sottotitolo"><?= e($l['sottotitolo']) ?></p><?php endif; ?>
