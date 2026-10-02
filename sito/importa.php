@@ -11,14 +11,23 @@ $libri = [
   [4, "Il Custode e l'Isola dell'Immortale", 'il-custode-e-l-isola-dell-immortale.pdf', 'Fantasy / fiabe russe'],
   [5, "Il Custode e l'Inverno Eterno", 'il-custode-e-l-inverno-eterno.pdf', 'Fantasy / finale della serie'],
 ];
-$ins = db()->prepare('INSERT OR IGNORE INTO libri (slug,titolo,collana,numero,genere,copertina,pdf,pubblicato) VALUES (?,?,?,?,?,?,?,0)');
+require __DIR__ . '/inc/libri.php';
+@mkdir(RADICE . '/uploads/pdf', 0755, true);
+@mkdir(RADICE . '/uploads/cover', 0755, true);
+$cid = collana_id_per_nome("Il Custode dell'Etna");
+$esiste = db()->prepare('SELECT 1 FROM libri WHERE slug = ?');
+$ins = db()->prepare('INSERT INTO libri (slug,titolo,autore,collana,collana_id,numero,genere,lingua,anno,copertina,pdf,pagine_n,token,pubblicato,ordine,aggiornato) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?)');
 foreach ($libri as [$n, $titolo, $pdf, $genere]) {
+    $s = slug($titolo);
+    $esiste->execute([$s]);
+    if ($esiste->fetchColumn()) { echo "Già presente: $titolo\n"; continue; }
     $cartella = sprintf('%s/libro-%02d', $repo, $n);
     $nomePdf = bin2hex(random_bytes(8)) . '.pdf';
     $nomeCop = bin2hex(random_bytes(8)) . '.jpg';
     copy("$cartella/build/$pdf", RADICE . "/uploads/pdf/$nomePdf");
     copy("$cartella/immagini/copertina.jpg", RADICE . "/uploads/cover/$nomeCop");
-    $ins->execute([slug($titolo), $titolo, "Il Custode dell'Etna", $n, $genere, $nomeCop, $nomePdf]);
+    $ins->execute([$s, $titolo, impost('autore_predefinito'), "Il Custode dell'Etna", $cid, $n, $genere, 'it', 2026, $nomeCop, $nomePdf,
+                   conta_pagine_pdf(RADICE . "/uploads/pdf/$nomePdf"), nuovo_token(), $n, date('Y-m-d H:i:s')]);
     echo "Importato: $titolo\n";
 }
 echo "Fatto. I libri sono in bozza: pubblicali dall'admin (aggiungi anche la trama).\n";

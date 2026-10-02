@@ -54,3 +54,15 @@ body.lettore.scuro #tela { filter:invert(1) hue-rotate(180deg); }
 .scheda:hover { border-color:var(--oro); box-shadow:0 4px 14px #0003; }
 @media (max-width:640px) { .hero { min-height:220px; } }
 body:not(.lettore) { overflow-x:hidden; }
+/* Catalogo, ricerca, schede */
+.ricerca-pub { display:flex; gap:8px; max-width:520px; margin-bottom:12px; }
+.ricerca-pub input { flex:1; font:inherit; padding:9px 12px; border:1px solid var(--linea); border-radius:6px; background:var(--scheda); color:inherit; }
+.chips { display:flex; flex-wrap:wrap; gap:6px; }
+.chips a { padding:3px 12px; border:1px solid var(--linea); border-radius:16px; text-decoration:none; font-size:.9rem; background:var(--scheda); }
+.chips a.att, .chips a:hover { background:#0b1a36; color:#f3e7c6; border-color:var(--oro); }
+.pag-pub { display:flex; gap:6px; margin-top:20px; }
+.pag-pub a, .pag-pub span { padding:4px 11px; border:1px solid var(--linea); border-radius:5px; text-decoration:none; }
+.pag-pub span { background:#0b1a36; color:#f3e7c6; }
+.sottotitolo { font-size:1.2rem; margin:-6px 0 8px; font-style:italic; }
+.avviso { background:#fff3cd; color:#5c4400; padding:10px 14px; border-radius:6px; }
+.pagina-testo { max-width:720px; margin:0 auto; }
