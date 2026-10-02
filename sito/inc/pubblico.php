@@ -49,3 +49,5 @@ function conta_una_volta(string $tipo, int $id): void {
     $_SESSION["c_{$tipo}_$id"] = 1;
     db()->prepare("UPDATE libri SET $tipo = $tipo + 1 WHERE id = ?")->execute([$id]);
 }
+
+require_once __DIR__ . '/lettori.php';

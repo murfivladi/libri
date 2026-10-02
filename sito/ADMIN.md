@@ -97,6 +97,14 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
 79. Ritorno a SQLite con un clic (o cancellando `data/config.php` via FTP)
 80. Strumenti e File adattati: backup JSON per MySQL, controllo dei file sul principale, stato del database
 
+## Lettori, recensioni, email, privacy (aggiunte)
+81. **Email** (SMTP): server, porta, cifratura, utente e password (mai mostrata né nei backup JSON), mittente, **prova di invio**
+82. **Privacy e registrazione**: titolare del trattamento (maggiorenne), apri/chiudi le registrazioni (si aprono solo con titolare ed email a posto), testo dell'informativa modificabile con segnaposto, **nuova versione** che fa riaccettare a tutti
+83. **Lettori**: elenco con ricerca e filtro per stato; conferma a mano, sospendi/riattiva, manda il reset della password, elimina con tutti i dati, pulizia dei non confermati
+84. **Recensioni**: moderazione (in attesa, pubblicate, rifiutate), approva/rifiuta/elimina anche in massa; interruttore «solo dopo la mia approvazione»
+85. Dashboard con numero di lettori e recensioni da approvare; avviso con il numero nel menu
+86. **Collane pubbliche** (`collane.php`, `collana.php`) con menu «Collane» e sitemap
+
 ## Lato pubblico (novità)
 - Miniature delle copertine (il catalogo carica immagini leggere), anteprime ricche quando condividi un link (Open Graph), pagina Privacy, `robots.txt`, pagina 404 con la grafica del sito, nessun servizio esterno (PDF.js è incluso)
 - **Lettore a libro**: le pagine si girano davvero (con ombra e piega), a doppia pagina su schermi larghi e a pagina singola sul telefono; copertina e retro rigidi

@@ -4,7 +4,7 @@
 // Questo file contiene: configurazione, connessione, schema delle tabelle (uguale per i due motori) e piccole
 // funzioni che nascondono le differenze di linguaggio SQL.
 
-const VERSIONE_DB = 5;
+const VERSIONE_DB = 6;
 
 // Testo iniziale della pagina Privacy (modificabile dall'admin). È un modello: va controllato da un adulto.
 const TESTO_PRIVACY = "Questo sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti.\n\n"
@@ -138,6 +138,29 @@ function schema(): array {
         'log' => ['id' => 'pk', 'quando' => 'dt', 'azione' => 's', 'dettaglio' => 's', 'ip' => 'ip'],
         'tentativi' => ['ip' => 'ip', 'quando' => 'big'],
         'admin' => ['id' => 'idfisso', 'password' => 's', 'recupero' => 's', 'totp_segreto' => 's', 'totp_attivo' => 'int', 'codici_backup' => 'txt:[]'],
+        // Lettori registrati (stato: 0 da verificare, 1 attivo, 2 sospeso)
+        'lettori' => ['id' => 'pk', 'email' => 'slug', 'nick' => 'slug', 'password' => 's', 'stato' => 'int', 'creato' => 'creato',
+            'verificato' => 'dt', 'ultimo_accesso' => 'dt', 'privacy_versione' => 's', 'privacy_il' => 'dt', 'eta_ok' => 'int'],
+        'token_lettori' => ['id' => 'pk', 'lettore_id' => 'int', 'tipo' => 's', 'hash' => 's', 'scade' => 'dt', 'dato' => 's'],
+        'liste' => ['id' => 'pk', 'lettore_id' => 'int', 'libro_id' => 'int', 'lista' => 's', 'creato' => 'creato'],
+        'progressi' => ['id' => 'pk', 'lettore_id' => 'int', 'libro_id' => 'int', 'pagina' => 'int', 'totale' => 'int', 'aggiornato' => 'dt'],
+        'segnalibri' => ['id' => 'pk', 'lettore_id' => 'int', 'libro_id' => 'int', 'pagina' => 'int', 'creato' => 'creato'],
+        'recensioni' => ['id' => 'pk', 'lettore_id' => 'int', 'libro_id' => 'int', 'voto' => 'int', 'titolo' => 's', 'testo' => 'txt',
+            'stato' => 'int', 'creato' => 'creato', 'aggiornato' => 'dt'],
+        'consensi' => ['id' => 'pk', 'lettore_id' => 'int', 'tipo' => 's', 'versione' => 's', 'quando' => 'dt', 'esito' => 'int'],
+    ];
+}
+
+// Indici unici su più colonne (una sola riga per coppia) e indici di ricerca.
+function indici(): array {
+    return [
+        'u_liste' => ['liste', ['lettore_id', 'libro_id', 'lista'], true],
+        'u_progressi' => ['progressi', ['lettore_id', 'libro_id'], true],
+        'u_segnalibri' => ['segnalibri', ['lettore_id', 'libro_id', 'pagina'], true],
+        'u_recensioni' => ['recensioni', ['lettore_id', 'libro_id'], true],
+        'i_recensioni_libro' => ['recensioni', ['libro_id', 'stato'], false],
+        'i_token_hash' => ['token_lettori', ['hash'], false],
+        'i_consensi_lettore' => ['consensi', ['lettore_id'], false],
     ];
 }
 
@@ -182,6 +205,11 @@ function migra(PDO $p): void {
             try { $p->exec("ALTER TABLE `$tabella` ADD COLUMN `$nome` " . ddl_colonna($tipo, $driver)); }
             catch (Throwable $e) { /* un altro sito che usa lo stesso database l'ha appena aggiunta */ }
         }
+    }
+
+    foreach (indici() as $nome => [$tabella, $cols, $unico]) {
+        try { $p->exec('CREATE ' . ($unico ? 'UNIQUE ' : '') . "INDEX `$nome` ON `$tabella` (`" . implode('`,`', $cols) . '`)'); }
+        catch (Throwable $e) { /* esiste già */ }
     }
 
     // il vecchio campo testuale "collana" diventa una vera collana

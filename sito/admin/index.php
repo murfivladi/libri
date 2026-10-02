@@ -9,6 +9,8 @@ $n = [
     'Programmati' => [$q("SELECT COUNT(*) FROM libri WHERE pubblicato = 1 AND eliminato IS NULL AND pubblica_il > '$ora'"), 'libri.php?stato=programmati'],
     'Collane' => [$q('SELECT COUNT(*) FROM collane'), 'collane.php'],
     'Pagine' => [$q('SELECT COUNT(*) FROM pagine'), 'pagine.php'],
+    'Lettori' => [$q('SELECT COUNT(*) FROM lettori WHERE stato = 1'), 'lettori.php'],
+    'Recensioni da approvare' => [$q('SELECT COUNT(*) FROM recensioni WHERE stato = 0'), 'recensioni.php'],
     'Letture' => [$q('SELECT COALESCE(SUM(letture),0) FROM libri'), 'libri.php?ord=letture&dir=desc'],
 ];
 $piu_letti = db()->query('SELECT id, titolo, letture FROM libri WHERE eliminato IS NULL AND letture > 0 ORDER BY letture DESC LIMIT 5')->fetchAll();

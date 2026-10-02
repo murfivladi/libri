@@ -78,12 +78,31 @@
   }
   function ridisegnaTutte() { resa = {}; aggiornaPagine(); }
 
+  // ---------- account: pagina, segnalibri e liste sincronizzati (solo se il lettore è collegato) ----------
+  var api = body.dataset.api, csrf = body.dataset.csrf, srv = null, timerProg = null;
+  var pStato = api ? fetch(api + '?libro=' + encodeURIComponent(slug), { credentials: 'same-origin' }).then(function (r) { return r.json(); }).catch(function () { return null; }) : Promise.resolve(null);
+  function invia(dati) {
+    if (!srv) return;
+    dati.libro = slug;
+    var corpo = Object.keys(dati).map(function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(dati[k]); }).join('&');
+    try { fetch(api, { method: 'POST', credentials: 'same-origin', keepalive: true, headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRF': csrf }, body: corpo }).catch(function () {}); } catch (e) {}
+  }
+  function fondiSegnalibri() {            // unisce quelli di questo dispositivo con quelli dell'account
+    var loc = []; try { loc = JSON.parse(leggi('segn-' + slug, '[]')) || []; } catch (e) {}
+    var tutti = loc.slice(); (srv.segnalibri || []).forEach(function (p) { if (tutti.indexOf(p) < 0) tutti.push(p); });
+    tutti.sort(function (a, b) { return a - b; }); scrivi('segn-' + slug, JSON.stringify(tutti));
+    var nuovi = loc.filter(function (p) { return (srv.segnalibri || []).indexOf(p) < 0; });
+    if (nuovi.length) invia({ azione: 'segnalibri', pagine: nuovi.join(',') });
+  }
+  function inviaProgresso() { clearTimeout(timerProg); timerProg = null; invia({ azione: 'progresso', pagina: corrente + 1, totale: N }); }
+  window.addEventListener('pagehide', function () { if (timerProg) inviaProgresso(); });
+
   // ---------- avvio ----------
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'assets/vendor/pdf.worker.min.js';
   pdfjsLib.getDocument(url).promise.then(function (d) {
     doc = d; N = d.numPages;
     return d.getPage(1).then(function (p) { base = p.getViewport({ scale: 1 }); });
-  }).then(avvia).catch(function (e) { stato.textContent = 'Impossibile aprire il PDF.'; if (window.console) console.log(e); });
+  }).then(function () { return pStato; }).then(function (st) { srv = st && st.loggato ? st : null; if (srv) fondiSegnalibri(); avvia(); }).catch(function (e) { stato.textContent = 'Impossibile aprire il PDF.'; if (window.console) console.log(e); });
 
   function avvia() {
     var frag = document.createDocumentFragment();
@@ -93,7 +112,9 @@
       d.appendChild(c); pagine.push({ div: d, canvas: c }); frag.appendChild(d);
     }
     libro.appendChild(frag);
-    var salvata = Math.max(0, Math.min(N - 1, (parseInt(leggi('pag-' + slug, '1'), 10) || 1) - 1));
+    var richiesta = 0; try { richiesta = parseInt(new URLSearchParams(location.search).get('pagina'), 10) || 0; } catch (e) {}
+    var inizio = richiesta || (srv && srv.pagina) || parseInt(leggi('pag-' + slug, '1'), 10) || 1;       // indirizzo > account > questo dispositivo
+    var salvata = Math.max(0, Math.min(N - 1, inizio - 1));
     flip = new St.PageFlip(libro, {
       width: base.width, height: base.height, size: 'stretch', minWidth: 360, maxWidth: 1100, minHeight: 200, maxHeight: 2600,
       drawShadow: true, flippingTime: 700, usePortrait: true, autoSize: false, maxShadowOpacity: 0.45, showCover: true,
@@ -109,6 +130,7 @@
 
   function cambiata(i) {
     corrente = i; scrivi('pag-' + slug, i + 1);
+    if (srv) { clearTimeout(timerProg); timerProg = setTimeout(inviaProgresso, 1500); }
     aggiornaUI(); aggiornaPagine();
   }
 
@@ -340,18 +362,19 @@
   function segnalibri() { try { return JSON.parse(leggi('segn-' + slug, '[]')) || []; } catch (e) { return []; } }
   function salvaSegn(l) { l.sort(function (a, b) { return a - b; }); scrivi('segn-' + slug, JSON.stringify(l)); aggiornaStella(); mostraSegnalibri(); }
   function aggiornaStella() { var b = document.getElementById('b-segna'); var s = segnalibri().indexOf(corrente + 1) >= 0; b.textContent = s ? '★' : '☆'; b.classList.toggle('attivo', s); }
-  function commutaSegn() { var l = segnalibri(), p = corrente + 1, i = l.indexOf(p); if (i >= 0) l.splice(i, 1); else l.push(p); salvaSegn(l); }
+  function commutaSegn() { var l = segnalibri(), p = corrente + 1, i = l.indexOf(p); if (i >= 0) l.splice(i, 1); else l.push(p); salvaSegn(l); invia({ azione: 'segnalibro', pagina: p, presente: i >= 0 ? 0 : 1 }); }
   onId('b-segna', commutaSegn);
   function mostraSegnalibri() {
     var box = document.getElementById('tab-segnalibri'); box.textContent = '';
     var l = segnalibri();
     box.appendChild(el('p', 'muto', l.length ? 'Tocca per tornare a una pagina.' : 'Nessun segnalibro. Premi ☆ nella barra per aggiungerne uno.'));
+    if (!srv && body.dataset.accedi) { var nota = el('p', 'muto'); nota.appendChild(document.createTextNode('Con un account ritrovi pagina e segnalibri su ogni dispositivo. ')); var aa = el('a', '', 'Accedi'); aa.href = body.dataset.accedi; nota.appendChild(aa); box.appendChild(nota); }
     var ul = el('ul', 'elenco-pannello');
     l.forEach(function (p) {
       var li = el('li', 'riga-segn'), b = el('button', 'voce', 'Pagina ' + p);
       b.addEventListener('click', function () { vaiDaPannello(p); });
       var x = el('button', 'x', '✕'); x.setAttribute('aria-label', 'Togli segnalibro');
-      x.addEventListener('click', function () { salvaSegn(segnalibri().filter(function (q) { return q !== p; })); });
+      x.addEventListener('click', function () { salvaSegn(segnalibri().filter(function (q) { return q !== p; })); invia({ azione: 'segnalibro', pagina: p, presente: 0 }); });
       li.appendChild(b); li.appendChild(x); ul.appendChild(li);
     });
     box.appendChild(ul);

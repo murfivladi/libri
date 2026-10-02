@@ -31,11 +31,21 @@ Il sito può girare **due volte** con lo stesso codice e gli stessi dati:
 Senza `data/config.php` il sito usa SQLite (un solo sito, tutto in locale: va bene per provare).
 
 ## Struttura
-- `index.php` catalogo, `libro.php` scheda, `leggi.php` lettore (PDF.js incluso in `assets/vendor/`), `pagina.php` pagine, `sitemap.php`, `feed.php`
+- `index.php` catalogo, `libro.php` scheda, `leggi.php` lettore (PDF.js incluso in `assets/vendor/`), `collane.php`/`collana.php`, `account.php` area lettore, `privacy.php`, `pagina.php` pagine, `sitemap.php`, `feed.php`
 - `img.php` miniature, `pdf.php` PDF per il lettore, `api.php` API tra i siti (solo sul principale)
 - `admin/` area riservata; `inc/` funzioni (`db.php` = database e schema, `file.php` = file); `assets/` grafica e script; `tests/` test automatici
 - `inc/` e `data/` sono protetti da `.htaccess` (Apache). Su Nginx va bloccato l'accesso a mano.
 - Backup: Admin → Strumenti (SQLite: copia del file; MySQL: file JSON con tutte le tabelle). I file stanno in `uploads/` del principale: copiali via FTP.
+
+## Collane, lettori registrati, privacy
+- **Collane pubbliche**: `collane.php` (elenco) e `collana.php?s=…` (immagine, descrizione, libri in ordine, «Inizia dal libro 1»), con dati strutturati schema.org.
+- **I PDF non si scaricano**: si leggono solo online. Non c'è pulsante, `scarica.php` risponde 410, `uploads/*.pdf` è negato da `.htaccess` e `pdf.php` rifiuta le richieste che il browser fa per aprire il PDF in una scheda/frame. *Onestamente*: chi legge nel browser riceve comunque le pagine, quindi uno screenshot o uno strumento tecnico può sempre copiarle; qui si tolgono solo le strade comode.
+- **Lettori registrati** (`account.php`, `api-lettore.php`): registrazione con email, nome pubblico e password; due crocette obbligatorie (informativa privacy letta + 14 anni o consenso di un genitore, entrambe **non pre-spuntate** e registrate con data e versione); conferma dell'email con link a uso singolo (si apre una pagina con pulsante, così gli antispam non consumano il link), accesso con «ricordami» facoltativo, password dimenticata, cambio nome/email/password, **scarica i miei dati (JSON)**, **cancella il mio account** (sparisce tutto). Protezioni: password salvate con `password_hash`, token salvati solo come hash, limiti di tentativi, trappola per i bot e tempo minimo, nessuna informazione a chi prova email altrui, account non confermati cancellati dopo 7 giorni.
+- **Cosa fa l'account**: pagina e segnalibri del lettore sincronizzati su tutti i dispositivi, preferiti, «da leggere», «continua a leggere», voti a stelle e recensioni (moderate: compaiono dopo la tua approvazione; il voto medio entra nei dati strutturati del libro).
+- **Email**: server SMTP configurato in Admin → Email (libreria PHPMailer inclusa in `inc/vendor/phpmailer/`, nessun Composer). Solo email di servizio, nessuna newsletter.
+- **Privacy e titolare**: la registrazione si apre solo se in Admin → Privacy e registrazione ci sono **un titolare del trattamento maggiorenne** e le email funzionano. L'informativa (`privacy.php`) è un modello GDPR in italiano: va fatto leggere a un adulto. Se la cambi in modo importante, «Pubblica una nuova versione» fa riaccettare l'informativa a tutti.
+- I lettori vivono nel database condiviso (stessi account sui due siti), ma l'accesso è **per sito**: chi entra su un sito deve entrare anche sull'altro. I link nelle email puntano sempre all'indirizzo ufficiale.
+- La password SMTP sta nel database (serve per spedire) ed è esclusa dal backup JSON di MySQL; la copia del file SQLite la contiene: tienila privata.
 
 ## Messa online di un sito singolo (senza MySQL)
 1. Carica la cartella `sito/` (o lascia fare al deploy). Controlla che `data/` e `uploads/` siano scrivibili.
@@ -53,7 +63,8 @@ php sito/tests/unit.php                       # funzioni, TOTP (vettori ufficial
 bash sito/tests/e2e.sh                        # admin e sito pubblico con curl (SQLite)
 E2E_DB=mysql E2E_MYSQL_USER=… E2E_MYSQL_PASS=… bash sito/tests/e2e.sh     # lo stesso su MySQL/MariaDB
 E2E_MYSQL_USER=… E2E_MYSQL_PASS=… bash sito/tests/duesiti.sh              # due siti con un solo database, API e scrittura diretta
-bash sito/tests/browser.sh                    # lettore, trascinamento con mouse e dita, telefono (Node + Playwright)
+bash sito/tests/browser.sh                    # lettore, trascinamento con mouse e dita, telefono, area lettore (Node + Playwright)
+# e2e.sh avvia anche tests/smtp_sink.py: un server SMTP finto (Python) che salva le email, per provare registrazione e reset
 CON_BROWSER=1 … bash sito/tests/duesiti.sh    # in più: il secondario apre PDF e copertine del principale nel browser
 ```
 Su GitHub li esegue `.github/workflows/test-sito.yml` (PHP 8.3 e 8.0, MySQL 8 come servizio); il deploy parte solo se unit, end-to-end e due siti passano.

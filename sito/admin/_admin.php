@@ -2,6 +2,7 @@
 // Struttura comune delle pagine admin: menu laterale, ricerca, messaggi, scorciatoie.
 require_once __DIR__ . '/../inc/bootstrap.php';
 require_once __DIR__ . '/../inc/file.php';
+require_once __DIR__ . '/../inc/lettori.php';
 
 if (empty($_SESSION['admin'])) { header('Location: login.php'); exit; }
 if (time() - ($_SESSION['attivo'] ?? time()) > 8 * 3600) { $_SESSION = []; header('Location: login.php'); exit; }
@@ -14,15 +15,18 @@ function admin_testata(string $titolo, string $voce = ''): void {
         'media' => ['media.php', '🖼 File'], 'impostazioni' => ['impostazioni.php', '⚙️ Impostazioni'],
         'strumenti' => ['strumenti.php', '🧰 Strumenti'], 'log' => ['log.php', '📜 Attività'],
         'password' => ['password.php', '🔑 Password'], 'sicurezza' => ['sicurezza.php', '🔐 Sicurezza'],
+        'lettori' => ['lettori.php', '👥 Lettori'], 'recensioni' => ['recensioni.php', '💬 Recensioni'],
+        'registrazione' => ['registrazione.php', '🛡 Privacy e registrazione'], 'email' => ['email.php', '✉️ Email'],
         'aspetto' => ['aspetto.php', '🎨 Aspetto'], 'database' => ['database.php', '🗄 Database e file'],
     ];
     $bozze = (int)db()->query("SELECT COUNT(*) FROM libri WHERE pubblicato = 0 AND eliminato IS NULL")->fetchColumn();
+    $attesa = (int)db()->query('SELECT COUNT(*) FROM recensioni WHERE stato = 0')->fetchColumn();
     $cestino = (int)db()->query("SELECT COUNT(*) FROM libri WHERE eliminato IS NOT NULL")->fetchColumn();
     echo '<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
        . '<title>' . e($titolo) . ' · Admin</title><link rel="icon" href="../assets/favicon.png"><link rel="stylesheet" href="../assets/admin.css"></head><body class="adm">'
        . '<aside class="menu" id="menu"><a class="logo" href="index.php"><img src="' . e(asset_emblema('../')) . '" width="36" height="36" alt=""> ' . e(impost('nome_sito')) . '</a><nav>';
     foreach ($voci as $k => [$url, $et]) {
-        $badge = $k === 'libri' && $bozze ? " <span class=\"badge\">$bozze bozze</span>" : '';
+        $badge = $k === 'libri' && $bozze ? " <span class=\"badge\">$bozze bozze</span>" : ($k === 'recensioni' && $attesa ? " <span class=\"badge\">$attesa</span>" : '');
         echo '<a href="' . $url . '"' . ($k === $voce ? ' class="att"' : '') . '>' . $et . $badge . '</a>';
     }
     echo '<a href="libri.php?stato=cestino">🗑 Cestino' . ($cestino ? " <span class=\"badge\">$cestino</span>" : '') . '</a>'

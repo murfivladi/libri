@@ -124,3 +124,22 @@ body.lettore.scuro .pagina-pdf canvas { filter:invert(1) hue-rotate(180deg); }
 .collana-img { width:100%; height:auto; aspect-ratio:2/1; object-fit:cover; border-radius:8px; box-shadow:0 6px 20px #0003; }
 .griglia-collane { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); }
 @media (max-width:640px) { .collana-testa { grid-template-columns:1fr; } }
+/* Lettori: moduli, liste, recensioni */
+.form-pub { display:grid; gap:12px; max-width:460px; margin:14px 0; }
+.form-pub label { display:grid; gap:4px; font-weight:bold; }
+.form-pub input[type=text], .form-pub input[type=email], .form-pub input[type=password], .form-pub select, .form-pub textarea { font:inherit; padding:9px 11px; border:1px solid var(--linea); border-radius:6px; background:var(--scheda); color:inherit; width:100%; }
+.form-pub label.crocetta { display:flex; gap:10px; align-items:flex-start; font-weight:normal; }
+.form-pub label.crocetta input { margin-top:5px; width:18px; height:18px; flex:none; }
+.trappola { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+.ok-pub { background:#e3f4e1; color:#17421a; padding:10px 14px; border-radius:6px; }
+.bottone.pericolo { background:#8a1f14; border-color:#8a1f14; color:#fff; }
+.bottone.acceso { background:var(--blu); color:#f3e7c6; }
+.in-riga { display:inline; margin:0; }
+.elenco-account { padding-left:18px; } .elenco-account li { margin:6px 0; }
+.barra-perc { display:inline-block; width:90px; height:6px; background:var(--linea); border-radius:3px; vertical-align:middle; }
+.barra-perc i { display:block; height:100%; background:var(--oro); border-radius:3px; }
+.stelle { color:#c9a14a; letter-spacing:2px; text-decoration:none; }
+.recensione { border-bottom:1px solid var(--linea); padding:10px 0; }
+.recensione p { margin:4px 0; }
+details { margin:10px 0; } details summary { cursor:pointer; font-weight:bold; }
+.account .griglia { margin-bottom:8px; }

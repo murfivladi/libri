@@ -24,7 +24,8 @@ fi
 LIBRI_REPO="$REPO" php importa.php >/dev/null || { echo "importa.php non riuscito"; exit 1; }
 php -S 127.0.0.1:$PORT >"$LOG" 2>&1 &
 PID=$!
-trap 'kill $PID 2>/dev/null; [ -n "$DBNAME" ] && php "$REPO/sito/tests/mysql_db.php" elimina "$DBNAME"; rm -rf "$T"' EXIT
+SINK=""
+trap 'kill $PID $SINK 2>/dev/null; [ -n "$DBNAME" ] && php "$REPO/sito/tests/mysql_db.php" elimina "$DBNAME"; rm -rf "$T"' EXIT
 for i in $(seq 1 30); do curl -s -o /dev/null "$B/robots.txt" && break; sleep 0.2; done
 
 chk()  { if [ "$2" = "$3" ]; then ok=$((ok+1)); else ko=$((ko+1)); echo "FAIL: $1 (atteso '$3', ottenuto '$2')"; fi; }
@@ -101,8 +102,9 @@ chk "miniatura creata sul disco" "$([ -n "$(ls uploads/thumb 2>/dev/null)" ] && 
 chk "Open Graph: immagine" "$(curl -s "$B/libro.php?s=il-custode-dell-etna" | conta 'og:image" content="http://127.0.0.1:'$PORT'/uploads/thumb/800-')" 1
 chk "Open Graph: tipo book" "$(curl -s "$B/libro.php?s=il-custode-dell-etna" | conta 'og:type" content="book"')" 1
 chk "link canonico" "$(curl -s "$B/libro.php?s=il-custode-dell-etna" | conta 'rel="canonical"')" 1
-chk "pagina Privacy" "$(code 'pagina.php?s=privacy')" 200
-chk "link Privacy nel piede" "$(echo "$HOME" | conta 'pagina.php?s=privacy')" 1
+chk "pagina Privacy" "$(code 'privacy.php')" 200
+chk "vecchio indirizzo privacy: 301" "$(curl -s -o /dev/null -w '%{http_code}' "$B/pagina.php?s=privacy")" 301
+chk "link Privacy nel piede" "$(echo "$HOME" | conta 'privacy.php')" 1
 chk "robots.txt" "$(curl -s "$B/robots.txt" | conta 'Disallow: /admin/')" 1
 chk "404 con grafica" "$(curl -s "$B/404.php" | conta 'Pagina non trovata')" 1
 chk "lettore: usa PDF.js locale" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna" | conta 'assets/vendor/pdf.min.js')" 1
@@ -247,6 +249,250 @@ nuova_sessione
 for i in 1 2 3 4 5 6; do Tk=$(tok admin/login.php); post admin/login.php -d "csrf=$Tk&password=sbagliata" >/dev/null; done
 Tk=$(tok admin/login.php)
 chk "blocco dopo 5 errori" "$(curl -s -b "$J" -c "$J" -d "csrf=$Tk&password=ultimapassword1" "$B/admin/login.php" | conta 'Troppi tentativi')" 1
+
+
+# ---------- lettori: email, registrazione, accesso, liste, recensioni, privacy ----------
+MAIL="$T/mail"; SPORTA=${SMTP_PORTA:-2599}
+python3 "$REPO/sito/tests/smtp_sink.py" $SPORTA "$MAIL" >/dev/null 2>&1 & SINK=$!
+for i in $(seq 1 30); do [ -f "$MAIL/PRONTO" ] && break; sleep 0.2; done
+JR="$T/cookie-lettore"; : > "$JR"
+rtok()  { curl -s -b "$JR" -c "$JR" "$B/$1" | grep -o 'name="csrf" value="[^"]*"' | head -1 | cut -d'"' -f4; }
+rpost() { local p=$1; shift; curl -s -b "$JR" -c "$JR" -o "$T/rout.html" -w "%{http_code}" "$@" "$B/$p"; }
+rtesto() { rpost "$@" >/dev/null; cat "$T/rout.html"; }
+rget()  { curl -s -b "$JR" -c "$JR" "$B/$1"; }
+nmail() { ls "$MAIL"/*.eml 2>/dev/null | wc -l | tr -d ' '; }
+tokmail() { python3 - "$MAIL/$1.eml" <<'PY'
+import email, re, sys
+m = email.message_from_file(open(sys.argv[1], encoding="utf-8"))
+t = ""
+for p in m.walk():
+    if p.get_content_type() == "text/plain":
+        t = p.get_payload(decode=True).decode("utf-8")
+r = re.search(r"t=([0-9a-f]{48})", t)
+print(r.group(1) if r else "")
+PY
+}
+oggetto() { python3 - "$MAIL/$1.eml" <<'PY'
+import email, email.header, sys
+m = email.message_from_file(open(sys.argv[1], encoding="utf-8"))
+print(str(email.header.make_header(email.header.decode_header(m["Subject"]))))
+PY
+}
+LIBRO=il-custode-dell-etna
+
+# registrazioni chiuse finché non ci sono titolare ed email
+chk "registrazione chiusa: avviso" "$(rget 'account.php?a=registrati' | conta 'registrazioni sono chiuse')" 1
+chk "menu: nessun Accedi a registrazioni chiuse" "$(rget index.php | conta '>Accedi<')" 0
+chk "libro senza lettori: nessuna sezione recensioni" "$(rget "libro.php?s=$LIBRO" | conta 'id="recensioni"')" 0
+chk "api lettore da anonimo" "$(rget "api-lettore.php?libro=$LIBRO" | conta '"loggato":false')" 1
+
+nuova_sessione; sql "DELETE FROM tentativi" >/dev/null
+Tk=$(tok admin/login.php); post admin/login.php -d "csrf=$Tk&password=ultimapassword1" >/dev/null
+for pg in lettori.php recensioni.php registrazione.php email.php "lettori.php?stato=1&q=a" "recensioni.php?stato=tutte"; do chk "admin $pg risponde" "$(code admin/$pg)" 200; done
+Tk=$(tok admin/registrazione.php)
+post admin/registrazione.php -d "csrf=$Tk&azione=salva&registrazione_attiva=1&recensioni_moderate=1" >/dev/null
+chk "senza titolare ed email la registrazione non si apre" "$(sql "SELECT valore FROM impostazioni WHERE chiave='registrazione_attiva'")" 0
+Tk=$(tok admin/email.php)
+post admin/email.php -d "csrf=$Tk&azione=salva&smtp_host=127.0.0.1&smtp_porta=$SPORTA&smtp_cifratura=nessuna&smtp_utente=u&smtp_password=segreta&email_mittente=no-reply@prova.it&nome_mittente=Vlad+Editore" >/dev/null
+chk "password SMTP salvata" "$(sql "SELECT valore FROM impostazioni WHERE chiave='smtp_password'")" segreta
+Tk=$(tok admin/email.php); post admin/email.php -d "csrf=$Tk&azione=salva&smtp_host=127.0.0.1&smtp_porta=$SPORTA&smtp_cifratura=nessuna&smtp_utente=u&smtp_password=&email_mittente=no-reply@prova.it" >/dev/null
+chk "password SMTP vuota = non cambia" "$(sql "SELECT valore FROM impostazioni WHERE chiave='smtp_password'")" segreta
+Tk=$(tok admin/email.php); post admin/email.php -d "csrf=$Tk&azione=prova&prova_a=admin@prova.it" >/dev/null
+chk "email di prova arrivata" "$(nmail)" 1
+chk "email di prova: destinatario" "$(grep -c 'X-Sink-To: admin@prova.it' "$MAIL/1.eml")" 1
+chk "backup JSON senza password SMTP" "$(curl -s -b "$J" -c "$J" "$B/admin/strumenti.php" | conta 'smtp_password')" 0
+Tk=$(tok admin/registrazione.php)
+post admin/registrazione.php -d "csrf=$Tk&azione=salva&registrazione_attiva=1&recensioni_moderate=1&titolare_nome=Mario+Rossi&titolare_email=privacy@prova.it&titolare_indirizzo=Taormina" >/dev/null
+chk "registrazione aperta" "$(sql "SELECT valore FROM impostazioni WHERE chiave='registrazione_attiva'")" 1
+chk "privacy con il nome del titolare" "$(rget privacy.php | conta 'Mario Rossi')" 1
+chk "privacy: nessun segnaposto rimasto" "$(rget privacy.php | conta '{titolare}')" 0
+chk "privacy: elenco puntato" "$(rget privacy.php | conta '<ul><li>')" 1
+chk "menu: Accedi con registrazioni aperte" "$(rget index.php | conta '>Accedi<')" 1
+
+# registrazione: controlli
+reg() { # $1=email $2=nick $3=password $4=extra  (aspetta i 3 secondi minimi)
+  Tr=$(rtok 'account.php?a=registrati'); sleep 3.3
+  rpost 'account.php?a=registrati' -d "csrf=$Tr&email=$1&nick=$2&password=$3&password2=${5:-$3}&$4"
+}
+chk "form: casella privacy non spuntata di base" "$(rget 'account.php?a=registrati' | conta 'name="privacy" value="1" required>')" 1
+chk "form: casella età" "$(rget 'account.php?a=registrati' | conta 'name="eta" value="1" required>')" 1
+reg luca@prova.it Luca88 passwordlunga99 "eta=1" >/dev/null
+chk "senza privacy: nessun account" "$(sql "SELECT COUNT(*) FROM lettori")" 0
+reg luca@prova.it Luca88 passwordlunga99 "privacy=1" >/dev/null
+chk "senza età: nessun account" "$(sql "SELECT COUNT(*) FROM lettori")" 0
+reg luca@prova.it Luca88 corta "privacy=1&eta=1" >/dev/null
+chk "password corta: nessun account" "$(sql "SELECT COUNT(*) FROM lettori")" 0
+reg luca@prova.it Luca88 passwordlunga99 "privacy=1&eta=1" "diversa123456" >/dev/null
+chk "password diverse: nessun account" "$(sql "SELECT COUNT(*) FROM lettori")" 0
+reg luca@prova.it vlad passwordlunga99 "privacy=1&eta=1" >/dev/null
+chk "nome riservato: nessun account" "$(sql "SELECT COUNT(*) FROM lettori")" 0
+reg luca@prova.it Luca88 passwordlunga99 "privacy=1&eta=1&sito_web=http://spam" >/dev/null
+chk "trappola dei bot: nessun account" "$(sql "SELECT COUNT(*) FROM lettori")" 0
+Tr=$(rtok 'account.php?a=registrati')
+chk "troppo in fretta: rifiutato" "$(rtesto 'account.php?a=registrati' -d "csrf=$Tr&email=veloce@prova.it&nick=Veloce1&password=passwordlunga99&password2=passwordlunga99&privacy=1&eta=1" | conta 'troppo in fretta')" 1
+reg luca@prova.it Luca88 passwordlunga99 "privacy=1&eta=1" >/dev/null
+chk "registrazione: account creato (da confermare)" "$(sql "SELECT stato FROM lettori WHERE email='luca@prova.it'")" 0
+chk "registrazione: password cifrata" "$(sql "SELECT substr(password,1,4) FROM lettori WHERE email='luca@prova.it'")" '$2y$'
+chk "registrazione: due consensi registrati" "$(sql "SELECT COUNT(*) FROM consensi WHERE tipo IN ('privacy','eta')")" 2
+chk "registrazione: versione informativa salvata" "$(sql "SELECT privacy_versione FROM lettori WHERE email='luca@prova.it'")" 1
+chk "registrazione: email di conferma partita" "$(nmail)" 2
+chk "email di conferma: oggetto" "$(oggetto 2 | conta 'Conferma la tua email')" 1
+chk "email di conferma: destinatario" "$(grep -c 'X-Sink-To: luca@prova.it' "$MAIL/2.eml")" 1
+chk "token salvato solo come hash" "$(sql "SELECT COUNT(*) FROM token_lettori WHERE hash LIKE '$(tokmail 2)%'")" 0
+TV=$(tokmail 2)
+chk "token nell'email" "$(echo -n "$TV" | wc -c | tr -d ' ')" 48
+nuova_sessione_r() { : > "$JR"; }
+chk "accesso prima della conferma: rifiutato" "$(Tr=$(rtok 'account.php?a=accedi'); rtesto 'account.php?a=accedi' -d "csrf=$Tr&id=luca@prova.it&password=passwordlunga99" | conta 'prima confermare')" 1
+chk "conferma: pagina con pulsante (GET non consuma)" "$(rget "account.php?a=verifica&t=$TV" | conta 'name="t" value="'"$TV"'"')" 1
+chk "conferma: ancora da confermare dopo il GET" "$(sql "SELECT stato FROM lettori WHERE email='luca@prova.it'")" 0
+chk "conferma: token sbagliato" "$(rget "account.php?a=verifica&t=$(printf 'a%.0s' $(seq 1 48))" | conta 'non è valido')" 1
+Tr=$(rtok "account.php?a=verifica&t=$TV"); rpost 'account.php?a=verifica' -d "csrf=$Tr&t=$TV" >/dev/null
+chk "conferma: account attivo" "$(sql "SELECT stato FROM lettori WHERE email='luca@prova.it'")" 1
+Tr=$(rtok "account.php?a=verifica&t=$TV"); rpost 'account.php?a=verifica' -d "csrf=$Tr&t=$TV" >/dev/null
+chk "token a uso singolo" "$(rget "account.php?a=verifica&t=$TV" | conta 'non è valido')" 1
+sql "DELETE FROM tentativi" >/dev/null
+# email già registrata: stessa risposta, nessun doppione, avviso al proprietario
+reg luca@prova.it AltroNick1 passwordlunga99 "privacy=1&eta=1" >/dev/null
+chk "email già registrata: nessun secondo account" "$(sql "SELECT COUNT(*) FROM lettori")" 1
+chk "email già registrata: avviso al proprietario" "$(oggetto 3 | conta 'già un account')" 1
+reg altro@prova.it Luca88 passwordlunga99 "privacy=1&eta=1" >/dev/null
+chk "nome già usato: nessun secondo account" "$(sql "SELECT COUNT(*) FROM lettori")" 1
+
+# accesso
+Tr=$(rtok 'account.php?a=accedi'); chk "accesso con password sbagliata" "$(rtesto 'account.php?a=accedi' -d "csrf=$Tr&id=Luca88&password=sbagliata123" | conta 'non corretti')" 1
+Tr=$(rtok 'account.php?a=accedi'); chk "accesso con nome (maiuscole ignorate): 302" "$(rpost 'account.php?a=accedi' -d "csrf=$Tr&id=luca88&password=passwordlunga99&ricorda=1")" 302
+chk "profilo: La mia libreria" "$(rget account.php | conta '<h1>La mia libreria</h1>')" 1
+chk "menu: nome del lettore" "$(rget index.php | conta '👤 Luca88')" 1
+chk "cookie ricordami creato" "$(grep -c ricordami "$JR")" 1
+chk "ricordami: salvato solo l'hash" "$(sql "SELECT COUNT(*) FROM token_lettori WHERE tipo='ricorda'")" 1
+# la sessione cade ma il cookie «ricordami» riporta dentro
+sed -i '/PHPSESSID/d' "$JR"
+chk "ricordami: rientra senza sessione" "$(rget account.php | conta '<h1>La mia libreria</h1>')" 1
+
+# preferiti e da leggere
+Tr=$(rtok "libro.php?s=$LIBRO")
+chk "libro: pulsanti per il lettore" "$(rget "libro.php?s=$LIBRO" | conta 'Aggiungi ai preferiti')" 1
+rpost 'account.php?a=lista' -d "csrf=$Tr&libro=$LIBRO&lista=preferito" >/dev/null
+chk "preferito aggiunto" "$(sql "SELECT COUNT(*) FROM liste WHERE lista='preferito'")" 1
+Tr=$(rtok "libro.php?s=$LIBRO"); rpost 'account.php?a=lista' -d "csrf=$Tr&libro=$LIBRO&lista=da_leggere" >/dev/null
+chk "da leggere aggiunto" "$(sql "SELECT COUNT(*) FROM liste WHERE lista='da_leggere'")" 1
+chk "profilo mostra il preferito" "$(rget account.php | conta 'class="scheda"')" 2
+Tr=$(rtok "libro.php?s=$LIBRO"); rpost 'account.php?a=lista' -d "csrf=$Tr&libro=$LIBRO&lista=preferito" >/dev/null
+chk "preferito tolto" "$(sql "SELECT COUNT(*) FROM liste WHERE lista='preferito'")" 0
+Tr=$(rtok "libro.php?s=$LIBRO"); rpost 'account.php?a=lista' -d "csrf=$Tr&libro=$LIBRO&lista=strano" >/dev/null
+chk "lista non valida ignorata" "$(sql "SELECT COUNT(*) FROM liste")" 1
+chk "lista senza CSRF: rifiutata" "$(rpost 'account.php?a=lista' -d "libro=$LIBRO&lista=preferito")" 400
+
+# API del lettore: pagina e segnalibri sincronizzati
+CS=$(rget "leggi.php?s=$LIBRO" | grep -o 'data-csrf="[^"]*"' | cut -d'"' -f2)
+chk "lettore: api e csrf presenti per chi è collegato" "$([ -n "$CS" ] && echo si)" si
+api() { curl -s -b "$JR" -c "$JR" -H "X-CSRF: $CS" -d "$1" "$B/api-lettore.php"; }
+chk "api: stato" "$(rget "api-lettore.php?libro=$LIBRO" | conta '"loggato":true')" 1
+chk "api senza CSRF: 400" "$(curl -s -b "$JR" -c "$JR" -o /dev/null -w '%{http_code}' -d "libro=$LIBRO&azione=progresso&pagina=3&totale=20" "$B/api-lettore.php")" 400
+api "libro=$LIBRO&azione=progresso&pagina=7&totale=40" >/dev/null
+chk "api: progresso salvato" "$(sql "SELECT COUNT(*) FROM progressi WHERE pagina = 7 AND totale = 40")" 1
+api "libro=$LIBRO&azione=progresso&pagina=9&totale=40" >/dev/null
+chk "api: progresso aggiornato (una sola riga)" "$(sql "SELECT COUNT(*) FROM progressi WHERE pagina = 9")" 1
+api "libro=$LIBRO&azione=segnalibro&pagina=5&presente=1" >/dev/null; api "libro=$LIBRO&azione=segnalibro&pagina=5&presente=1" >/dev/null
+api "libro=$LIBRO&azione=segnalibri&pagine=2,3,3,9999" >/dev/null
+chk "api: segnalibri senza doppioni e pagine assurde ignorate" "$(sql "SELECT group_concat(pagina) FROM (SELECT pagina FROM segnalibri ORDER BY pagina) x")" "2,3,5"
+api "libro=$LIBRO&azione=segnalibro&pagina=3&presente=0" >/dev/null
+chk "api: segnalibro tolto" "$(sql "SELECT COUNT(*) FROM segnalibri")" 2
+chk "api: stato con pagina e segnalibri" "$(rget "api-lettore.php?libro=$LIBRO" | conta '"pagina":9,"segnalibri":\[2,5\]')" 1
+chk "api: libro inesistente: 404" "$(curl -s -b "$JR" -o /dev/null -w '%{http_code}' "$B/api-lettore.php?libro=non-esiste")" 404
+chk "lettore: apre alla pagina richiesta nell'indirizzo" "$(rget "leggi.php?s=$LIBRO&pagina=4" | conta 'data-api')" 1
+chk "profilo: continua a leggere" "$(rget account.php | conta 'pagina 9')" 1
+
+# recensioni
+Tr=$(rtok "libro.php?s=$LIBRO")
+chk "recensione senza voto: niente" "$(rpost 'account.php?a=recensione' -d "csrf=$Tr&libro=$LIBRO&voto=&titolo=Bello&testo=Mi+e+piaciuto" >/dev/null; sql "SELECT COUNT(*) FROM recensioni")" 0
+Tr=$(rtok "libro.php?s=$LIBRO"); rpost 'account.php?a=recensione' -d "csrf=$Tr&libro=$LIBRO&voto=5&titolo=Bellissimo&testo=Mi+e+piaciuto+tanto+<b>x</b>" >/dev/null
+chk "recensione salvata (in attesa)" "$(sql "SELECT stato FROM recensioni")" 0
+chk "recensione in attesa: non pubblica" "$(curl -s "$B/libro.php?s=$LIBRO" | conta 'Bellissimo')" 0
+chk "recensione in attesa: lo vede l'autore" "$(rget "libro.php?s=$LIBRO" | conta 'in attesa di verifica')" 1
+chk "nessun voto pubblico prima dell'approvazione" "$(curl -s "$B/libro.php?s=$LIBRO" | conta 'aggregateRating')" 0
+Tk=$(tok admin/recensioni.php); RID=$(sql "SELECT id FROM recensioni")
+chk "admin: approva" "$(post admin/recensioni.php -d "csrf=$Tk&azione=approva&id=$RID&stato=0")" 302
+chk "recensione pubblicata" "$(curl -s "$B/libro.php?s=$LIBRO" | conta 'Bellissimo')" 1
+chk "recensione: HTML neutralizzato" "$(curl -s "$B/libro.php?s=$LIBRO" | conta '<b>x</b>')" 0
+chk "recensione: nome pubblico, non l'email" "$(curl -s "$B/libro.php?s=$LIBRO" | conta 'luca@prova.it')" 0
+chk "schema.org: voto medio" "$(curl -s "$B/libro.php?s=$LIBRO" | conta '"ratingValue":5')" 1
+Tr=$(rtok "libro.php?s=$LIBRO"); rpost 'account.php?a=recensione' -d "csrf=$Tr&libro=$LIBRO&voto=4&titolo=Rivisto&testo=ok" >/dev/null
+chk "recensione modificata: una sola per lettore" "$(sql "SELECT COUNT(*) FROM recensioni")" 1
+chk "recensione modificata: torna in attesa" "$(sql "SELECT stato FROM recensioni")" 0
+Tk=$(tok admin/recensioni.php); post admin/recensioni.php -d "csrf=$Tk&azione=rifiuta&id=$RID&stato=0" >/dev/null
+chk "recensione rifiutata: non pubblica" "$(curl -s "$B/libro.php?s=$LIBRO" | conta 'Rivisto')" 0
+Tk=$(tok admin/impostazioni.php)
+
+# password dimenticata
+nuova_sessione_r
+Tr=$(rtok 'account.php?a=dimenticata'); rpost 'account.php?a=dimenticata' -d "csrf=$Tr&email=luca@prova.it" >/dev/null
+N=$(nmail); chk "reset: email partita" "$(oggetto $N | conta 'Reimposta')" 1
+TR=$(tokmail $N)
+Tr=$(rtok 'account.php?a=dimenticata'); rpost 'account.php?a=dimenticata' -d "csrf=$Tr&email=nessuno@prova.it" >/dev/null
+chk "reset per email sconosciuta: nessuna email" "$(nmail)" "$N"
+chk "reset: risposta uguale per email sconosciuta" "$(conta 'ti abbiamo scritto un link' < "$T/rout.html")" 1
+Tr=$(rtok "account.php?a=reimposta&t=$TR"); chk "reset: password debole rifiutata" "$(rtesto 'account.php?a=reimposta' -d "csrf=$Tr&t=$TR&password=corta&password2=corta" | conta 'class="errore">La password deve avere almeno 10')" 1
+Tr=$(rtok "account.php?a=reimposta&t=$TR"); rpost 'account.php?a=reimposta' -d "csrf=$Tr&t=$TR&password=nuovapassword77&password2=nuovapassword77" >/dev/null
+chk "reset: i «ricordami» cadono" "$(sql "SELECT COUNT(*) FROM token_lettori WHERE tipo='ricorda'")" 0
+chk "reset: avviso di sicurezza" "$(oggetto $(nmail) | conta 'password è cambiata')" 1
+Tr=$(rtok 'account.php?a=accedi'); chk "reset: vecchia password non vale più" "$(rtesto 'account.php?a=accedi' -d "csrf=$Tr&id=Luca88&password=passwordlunga99" | conta 'non corretti')" 1
+Tr=$(rtok 'account.php?a=accedi'); chk "reset: nuova password vale" "$(rpost 'account.php?a=accedi' -d "csrf=$Tr&id=Luca88&password=nuovapassword77")" 302
+
+# profilo: nome, email, password
+Tr=$(rtok account.php); rpost 'account.php?a=profilo' -d "csrf=$Tr&azione=nick&nick=Luca99" >/dev/null
+chk "cambio nome" "$(sql "SELECT nick FROM lettori")" Luca99
+Tr=$(rtok account.php); rpost 'account.php?a=profilo' -d "csrf=$Tr&azione=email&email=nuova@prova.it&password_attuale=sbagliata" >/dev/null
+chk "cambio email con password sbagliata: niente" "$(sql "SELECT email FROM lettori")" luca@prova.it
+Tr=$(rtok account.php); rpost 'account.php?a=profilo' -d "csrf=$Tr&azione=email&email=nuova@prova.it&password_attuale=nuovapassword77" >/dev/null
+chk "cambio email: finché non conferma resta la vecchia" "$(sql "SELECT email FROM lettori")" luca@prova.it
+N=$(nmail); chk "cambio email: conferma al NUOVO indirizzo" "$(grep -c 'X-Sink-To: nuova@prova.it' "$MAIL/$N.eml")" 1
+TE=$(tokmail $N)
+Tr=$(rtok "account.php?a=email&t=$TE"); rpost 'account.php?a=email' -d "csrf=$Tr&t=$TE" >/dev/null
+chk "cambio email confermato" "$(sql "SELECT email FROM lettori")" nuova@prova.it
+Tr=$(rtok account.php); rpost 'account.php?a=profilo' -d "csrf=$Tr&azione=password&password_attuale=nuovapassword77&password=ancorapiulunga55&password2=ancorapiulunga55" >/dev/null
+chk "cambio password dal profilo" "$(php -r 'require "inc/bootstrap.php"; echo password_verify("ancorapiulunga55", db()->query("SELECT password FROM lettori")->fetchColumn()) ? "si" : "no";')" si
+
+# esportazione dei dati
+Tr=$(rtok account.php)
+EXP=$(curl -s -b "$JR" -c "$JR" -d "csrf=$Tr" "$B/account.php?a=esporta")
+chk "esporta: JSON con l'account" "$(echo "$EXP" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d["account"]["nick"], len(d["progressi"]), len(d["segnalibri"]), len(d["consensi"]) >= 2, "password" in d["account"])')" "Luca99 1 2 True False"
+chk "esporta senza CSRF: rifiutato" "$(curl -s -b "$JR" -o /dev/null -w '%{http_code}' -X POST "$B/account.php?a=esporta")" 400
+
+# limiti di tentativi sul login
+sql "DELETE FROM tentativi" >/dev/null; nuova_sessione_r
+for i in 1 2 3 4 5 6 7; do Tr=$(rtok 'account.php?a=accedi'); rpost 'account.php?a=accedi' -d "csrf=$Tr&id=Luca99&password=sbagliatissima$i" >/dev/null; done
+chk "troppi tentativi di accesso: blocco" "$(conta 'Troppi tentativi' < "$T/rout.html")" 1
+Tr=$(rtok 'account.php?a=accedi'); chk "durante il blocco nemmeno la password giusta" "$(rpost 'account.php?a=accedi' -d "csrf=$Tr&id=Luca99&password=ancorapiulunga55")" 200
+sql "DELETE FROM tentativi" >/dev/null
+
+# admin: sospendi e riattiva, informativa nuova versione
+LID=$(sql "SELECT id FROM lettori")
+Tk=$(tok admin/lettori.php); post admin/lettori.php -d "csrf=$Tk&azione=sospendi&id=$LID" >/dev/null
+Tr=$(rtok 'account.php?a=accedi'); chk "sospeso: non entra" "$(rtesto 'account.php?a=accedi' -d "csrf=$Tr&id=Luca99&password=ancorapiulunga55" | conta 'sospeso')" 1
+Tk=$(tok admin/lettori.php); post admin/lettori.php -d "csrf=$Tk&azione=riattiva&id=$LID" >/dev/null
+Tr=$(rtok 'account.php?a=accedi'); chk "riattivato: entra" "$(rpost 'account.php?a=accedi' -d "csrf=$Tr&id=Luca99&password=ancorapiulunga55")" 302
+chk "admin: elenco lettori" "$(curl -s -b "$J" "$B/admin/lettori.php" | conta '<b>Luca99</b>')" 1
+Tk=$(tok admin/registrazione.php); post admin/registrazione.php -d "csrf=$Tk&azione=nuova_versione" >/dev/null
+chk "nuova versione informativa: va riaccettata" "$(rget account.php | conta '<h1>Informativa aggiornata</h1>')" 1
+chk "nuova versione: l'API chiede il consenso" "$(curl -s -b "$JR" -o /dev/null -w '%{http_code}' "$B/api-lettore.php?libro=$LIBRO")" 403
+Tr=$(rtok account.php); rpost account.php -d "csrf=$Tr&privacy=1" >/dev/null
+chk "informativa riaccettata e registrata" "$(sql "SELECT COUNT(*) FROM consensi WHERE tipo='privacy' AND versione='2'")" 1
+chk "dopo l'accettazione il profilo torna" "$(rget account.php | conta '<h1>La mia libreria</h1>')" 1
+
+# account non confermati vecchi: pulizia
+sql "INSERT INTO lettori (email,nick,password,stato,creato) VALUES ('vecchio@prova.it','Vecchio1','x',0,'2020-01-01 00:00:00')" >/dev/null
+Tk=$(tok admin/lettori.php); post admin/lettori.php -d "csrf=$Tk&azione=pulisci" >/dev/null
+chk "pulizia dei non confermati" "$(sql "SELECT COUNT(*) FROM lettori WHERE email='vecchio@prova.it'")" 0
+
+# cancellazione dell'account: sparisce tutto
+Tr=$(rtok account.php); rpost 'account.php?a=elimina' -d "csrf=$Tr&password_attuale=sbagliata&conferma=1" >/dev/null
+chk "cancella con password sbagliata: resta" "$(sql "SELECT COUNT(*) FROM lettori")" 1
+Tr=$(rtok account.php); rpost 'account.php?a=elimina' -d "csrf=$Tr&password_attuale=ancorapiulunga55&conferma=1" >/dev/null
+for t in lettori liste progressi segnalibri recensioni consensi token_lettori; do chk "cancellato: $t vuota" "$(sql "SELECT COUNT(*) FROM $t")" 0; done
+chk "cancellato: email di conferma" "$(oggetto $(nmail) | conta 'Account cancellato')" 1
+chk "dopo la cancellazione non si entra" "$(rget account.php -o /dev/null | conta '<h1>La mia libreria</h1>')" 0
+kill $SINK 2>/dev/null; SINK=""
 
 # ---------- nessun errore PHP nel registro del server ----------
 # (si ignorano gli avvisi di avvio di PHP, "in Unknown on line 0", come quello di JIT con Xdebug sui runner di GitHub)

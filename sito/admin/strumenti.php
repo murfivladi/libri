@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (db_driver() === 'mysql') {                // MySQL: tutte le tabelle in un file JSON
                 $dump = ['creato' => date('c'), 'versione' => VERSIONE_DB];
                 foreach (tabelle_sito() as $t) $dump[$t] = $pdo->query("SELECT * FROM `$t`")->fetchAll();
+                $dump['impostazioni'] = array_values(array_filter($dump['impostazioni'], fn($r) => $r['chiave'] !== 'smtp_password'));   // la password SMTP non esce nei backup
+                $dump['token_lettori'] = [];
                 registra('Backup scaricato (JSON)');
                 header('Content-Type: application/json; charset=utf-8');
                 header('Content-Disposition: attachment; filename="backup-' . date('Y-m-d-His') . '.json"');

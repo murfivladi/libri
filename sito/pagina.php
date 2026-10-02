@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/inc/pubblico.php';
 
+if (($_GET['s'] ?? '') === 'privacy') { header('Location: privacy.php', true, 301); exit; }
 $st = db()->prepare('SELECT * FROM pagine WHERE slug = ? AND visibile = 1');
 $st->execute([(string)($_GET['s'] ?? '')]);
 $p = $st->fetch();

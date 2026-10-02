@@ -5,6 +5,8 @@ $token = (string)($_GET['anteprima'] ?? '');
 $l = libro_per_slug((string)($_GET['s'] ?? ''), $token);
 if (!$l || $l['pdf'] === '') pagina_non_trovata();
 if (!$l['anteprima']) conta_una_volta('letture', (int)$l['id']);
+$lt = $l['anteprima'] ? null : lettore_corrente();
+$sync = $lt && $lt['privacy_versione'] === privacy_versione();
 $suffisso = $l['anteprima'] ? '&anteprima=' . urlencode($token) : '';
 ?><!doctype html><html lang="it"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
@@ -12,7 +14,7 @@ $suffisso = $l['anteprima'] ? '&anteprima=' . urlencode($token) : '';
 <title><?= e($l['titolo']) ?> · Lettura</title>
 <link rel="icon" type="image/png" href="<?= e(asset_emblema()) ?>">
 <link rel="stylesheet" href="assets/stile.css"><?= stile_tema() ?></head>
-<body class="lettore" data-pdf="<?= e(url_pdf_lettore($l['pdf'])) ?>" data-chiave="<?= e($l['slug']) ?>">
+<body class="lettore" data-pdf="<?= e(url_pdf_lettore($l['pdf'])) ?>" data-chiave="<?= e($l['slug']) ?>"<?php if ($sync): ?> data-api="api-lettore.php" data-csrf="<?= e(csrf()) ?>"<?php elseif (!$l['anteprima'] && registrazione_aperta()): ?> data-accedi="account.php?a=accedi&amp;ritorno=<?= e(urlencode('leggi.php?s=' . $l['slug'])) ?>"<?php endif; ?>>
 <div class="barra">
   <a class="indietro-libro" href="libro.php?s=<?= e($l['slug']) . $suffisso ?>" title="Torna alla scheda">←<span class="solo-pc"> <?= e($l['titolo']) ?></span></a>
   <span class="comandi">

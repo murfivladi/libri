@@ -4,3 +4,5 @@ Disallow: /data/
 Disallow: /inc/
 Disallow: /leggi.php
 Disallow: /scarica.php
+Disallow: /account.php
+Disallow: /api-lettore.php

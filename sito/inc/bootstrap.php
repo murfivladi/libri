@@ -35,9 +35,15 @@ const IMPOSTAZIONI_PREDEFINITE = [
     'manutenzione' => '0', 'messaggio_manutenzione' => 'Il sito è in manutenzione. Torna presto!',
     'mostra_evidenza' => '1',
     'colore_blu' => '#0b1a36', 'colore_oro' => '#c9a14a', 'logo_emblema' => '', 'logo_grande' => '', 'banner_home' => '',
+    // lettori registrati, email e privacy (la registrazione resta chiusa finché non sono compilati titolare ed email)
+    'registrazione_attiva' => '0', 'recensioni_moderate' => '1', 'privacy_versione' => '1', 'privacy_testo' => '',
+    'titolare_nome' => '', 'titolare_email' => '', 'titolare_indirizzo' => '',
+    'smtp_host' => '', 'smtp_porta' => '587', 'smtp_cifratura' => 'tls', 'smtp_utente' => '', 'smtp_password' => '',
+    'email_mittente' => '', 'nome_mittente' => '',
 ];
+function &impost_cache(): ?array { static $cache = null; return $cache; }
 function impost(string $k): string {
-    static $cache = null;
+    $cache =& impost_cache();
     if ($cache === null) {
         $cache = IMPOSTAZIONI_PREDEFINITE;
         foreach (db()->query('SELECT chiave, valore FROM impostazioni') as $r) $cache[$r['chiave']] = $r['valore'];
@@ -49,6 +55,8 @@ function imposta(string $k, string $v): void {
         ? 'INSERT INTO impostazioni (chiave, valore) VALUES (?,?) ON DUPLICATE KEY UPDATE valore = VALUES(valore)'
         : 'INSERT INTO impostazioni (chiave, valore) VALUES (?,?) ON CONFLICT(chiave) DO UPDATE SET valore = excluded.valore';
     db()->prepare($sql)->execute([$k, $v]);
+    $cache =& impost_cache();
+    if ($cache !== null) $cache[$k] = $v;              // nella stessa richiesta si legge subito il valore nuovo
 }
 
 // ---------- utilità ----------
@@ -76,6 +84,13 @@ function md(string $t): string {
         $b = preg_replace('/(?<!\*)\*(?!\*)(.+?)\*/s', '<em>$1</em>', $b);
         $b = preg_replace('/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/', '<a href="$2" rel="noopener">$1</a>', $b);
         if (preg_match('/^(#{1,3})\s+(.*)$/s', $b, $m)) { $n = strlen($m[1]) + 1; $out[] = "<h$n>{$m[2]}</h$n>"; }
+        elseif (preg_match('/(^|\n)- /', $b)) {                     // elenco puntato: righe che iniziano con "- "
+            $testo = []; $voci = [];
+            foreach (explode("\n", $b) as $riga) {
+                if (strncmp($riga, '- ', 2) === 0) $voci[] = '<li>' . substr($riga, 2) . '</li>'; else $testo[] = $riga;
+            }
+            $out[] = ($testo ? '<p>' . implode('<br>', $testo) . '</p>' : '') . '<ul>' . implode('', $voci) . '</ul>';
+        }
         else $out[] = '<p>' . nl2br($b) . '</p>';
     }
     return implode("\n", $out);
@@ -144,11 +159,11 @@ function intestazione(string $titolo, string $prefisso = '', string $descrizione
     $nome = impost('nome_sito');
     $t = e($titolo) . ' · ' . e($nome);
     $descr = mb_substr(trim(preg_replace('/\s+/', ' ', $descrizione)), 0, 200);
-    $extra = '';
+    $extra = !empty($og['noindex']) ? '<meta name="robots" content="noindex,nofollow">' : '';
     if (!$prefisso) {                                  // anteprime social (Open Graph) e indirizzo ufficiale solo sul sito pubblico
         $url = base_ufficiale() . ($og['canonico'] ?? ltrim(basename($_SERVER['SCRIPT_NAME']) . (($_SERVER['QUERY_STRING'] ?? '') !== '' ? '?' . $_SERVER['QUERY_STRING'] : ''), '/'));
         $img = assoluto($og['immagine'] ?? asset_banner());
-        $extra = '<meta property="og:site_name" content="' . e($nome) . '"><meta property="og:locale" content="it_IT">'
+        $extra .= '<meta property="og:site_name" content="' . e($nome) . '"><meta property="og:locale" content="it_IT">'
                . '<meta property="og:type" content="' . e($og['tipo'] ?? 'website') . '"><meta property="og:title" content="' . e($titolo) . '">'
                . ($descr ? '<meta property="og:description" content="' . e($descr) . '">' : '')
                . '<meta property="og:url" content="' . e($url) . '"><meta property="og:image" content="' . e($img) . '">'
@@ -164,6 +179,10 @@ function intestazione(string $titolo, string $prefisso = '', string $descrizione
         if (db()->query('SELECT 1 FROM collane WHERE visibile = 1 LIMIT 1')->fetchColumn()) echo '<a href="collane.php">Collane</a>';
         foreach (db()->query('SELECT slug, titolo FROM pagine WHERE visibile = 1 AND nel_menu = 1 ORDER BY ordine, id') as $p)
             echo '<a href="pagina.php?s=' . e($p['slug']) . '">' . e($p['titolo']) . '</a>';
+        if (function_exists('lettore_corrente')) {
+            if ($lt = lettore_corrente()) echo '<a href="account.php">👤 ' . e($lt['nick']) . '</a>';
+            elseif (registrazione_aperta()) echo '<a href="account.php?a=accedi">Accedi</a>';
+        }
     }
     echo "</nav></header><main class=\"contenuto\">";
 }
@@ -172,7 +191,7 @@ function piede(): void {
     $priv = db()->query("SELECT 1 FROM pagine WHERE slug = 'privacy' AND visibile = 1")->fetchColumn();
     echo '</main><footer class="piede">© ' . date('Y') . ' ' . e(impost('nome_sito')) . ' · ' . e(impost('footer'))
        . ($mail ? ' · <a href="mailto:' . e($mail) . '">' . e($mail) . '</a>' : '')
-       . ($priv ? ' · <a href="pagina.php?s=privacy">Privacy</a>' : '') . '</footer></body></html>';
+       . ' · <a href="privacy.php">Privacy</a>' . '</footer></body></html>';
 }
 
 // Aspetto personalizzabile dall'admin: emblema, logo, banner e colori.

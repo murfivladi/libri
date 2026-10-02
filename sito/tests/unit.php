@@ -22,6 +22,7 @@ prova('slug maiuscole', 'ciao-mondo', slug('  Ciao   MONDO  '));
 
 // md(): formattazione semplice e sicura
 prova('md grassetto', '<p><strong>ciao</strong></p>', md('**ciao**'));
+prova('md elenco puntato', '<p>Titolo</p><ul><li>uno</li><li>due</li></ul>', md("Titolo\n- uno\n- due"));
 prova('md corsivo', '<p><em>ciao</em></p>', md('*ciao*'));
 prova('md titolo', '<h2>Titolo</h2>', md('# Titolo'));
 prova('md paragrafi', 2, substr_count(md("uno\n\ndue"), '<p>'));
