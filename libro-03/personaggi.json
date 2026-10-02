@@ -29,6 +29,14 @@
       "descrizione": "Pippo, a 33-year-old Sicilian baker, stocky and friendly with a round face, short black hair, flour-dusted apron over a grey t-shirt, white baker's cap pushed back",
       "riferimento": "../libro-02/riferimenti/pippo.jpg"
     },
+    "giulio": {
+      "descrizione": "Giulio, a 33-year-old Sicilian lawyer, slim, neat short dark hair with a few early grey streaks, rimless glasses, now in a casual sailor sweater and chinos on a boat, still a little tense but kinder",
+      "riferimento": "../libro-02/riferimenti/giulio.jpg"
+    },
+    "carmela": {
+      "descrizione": "Carmela, a 33-year-old Sicilian pharmacist, shoulder-length wavy chestnut hair, round gentle face, a light jacket over a green blouse, a small first-aid bag on her shoulder, caring smile",
+      "riferimento": "../libro-02/riferimenti/carmela.jpg"
+    },
     "ettore": {
       "descrizione": "Ettore Marenzi, the ghost of a thin pale 13-year-old boy from twenty years ago, slicked-back dark hair, narrow face, pale eyes, white buttoned shirt and dark trousers, soft golden glow, peaceful",
       "riferimento": "../libro-02/riferimenti/ettore.jpg"
