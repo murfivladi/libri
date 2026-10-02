@@ -237,7 +237,9 @@ Tk=$(tok admin/login.php)
 chk "blocco dopo 5 errori" "$(curl -s -b "$J" -c "$J" -d "csrf=$Tk&password=ultimapassword1" "$B/admin/login.php" | conta 'Troppi tentativi')" 1
 
 # ---------- nessun errore PHP nel registro del server ----------
-if grep -qiE "PHP (Warning|Fatal|Notice|Deprecated)" "$LOG"; then ko=$((ko+1)); echo "FAIL: errori PHP nel log del server:"; grep -iE "PHP (Warning|Fatal|Notice|Deprecated)" "$LOG" | head -5; fi
+# (si ignorano gli avvisi di avvio di PHP, "in Unknown on line 0", come quello di JIT con Xdebug sui runner di GitHub)
+ERRPHP=$(grep -iE "PHP (Warning|Fatal|Notice|Deprecated)" "$LOG" | grep -v "in Unknown on line 0")
+if [ -n "$ERRPHP" ]; then ko=$((ko+1)); echo "FAIL: errori PHP nel log del server:"; echo "$ERRPHP" | head -5; fi
 
 echo "e2e: OK=$ok KO=$ko"
 [ "$ko" -eq 0 ]

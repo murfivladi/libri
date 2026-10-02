@@ -21,5 +21,7 @@ for i in $(seq 1 30); do curl -s -o /dev/null "http://127.0.0.1:$PORT/robots.txt
 export NODE_PATH="${NODE_PATH:-$(npm root -g 2>/dev/null)}"
 BASE="http://127.0.0.1:$PORT" PASSWORD="provaprova12" node "${NODE_SCRIPT:-$REPO/sito/tests/browser.js}"
 RIS=$?
-if grep -qiE "PHP (Warning|Fatal|Notice|Deprecated)" "$T/server.log"; then echo "FAIL: errori PHP nel log del server"; grep -iE "PHP (Warning|Fatal)" "$T/server.log" | head -5; RIS=1; fi
+# (si ignorano gli avvisi di avvio di PHP, "in Unknown on line 0", come quello di JIT con Xdebug sui runner di GitHub)
+ERRPHP=$(grep -iE "PHP (Warning|Fatal|Notice|Deprecated)" "$T/server.log" | grep -v "in Unknown on line 0")
+if [ -n "$ERRPHP" ]; then echo "FAIL: errori PHP nel log del server"; echo "$ERRPHP" | head -5; RIS=1; fi
 exit $RIS

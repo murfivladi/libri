@@ -218,7 +218,8 @@ fi
 
 # ---------- nessun errore PHP nei registri dei due server ----------
 for s in A B; do
-  if grep -qiE "PHP (Warning|Fatal|Notice|Deprecated)" "$T/server$s.log"; then ko=$((ko+1)); echo "FAIL: errori PHP nel registro del server $s:"; grep -iE "PHP (Warning|Fatal|Notice|Deprecated)" "$T/server$s.log" | head -5; fi
+  ERRPHP=$(grep -iE "PHP (Warning|Fatal|Notice|Deprecated)" "$T/server$s.log" | grep -v "in Unknown on line 0")   # niente avvisi di avvio (JIT/Xdebug sui runner)
+  if [ -n "$ERRPHP" ]; then ko=$((ko+1)); echo "FAIL: errori PHP nel registro del server $s:"; echo "$ERRPHP" | head -5; fi
 done
 
 echo "due siti: OK=$ok KO=$ko"
