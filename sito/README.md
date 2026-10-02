@@ -19,3 +19,5 @@ Catalogo, lettore online (PDF) e area admin. Serve PHP 8+ con `pdo_sqlite` e `fi
 ## Deploy automatico
 Ogni push sul branch `claude/laughing-hamilton-4o6jud` che cambia `sito/` avvia `.github/workflows/deploy-sito.yml`, che carica il sito via FTP.
 Secrets richiesti: `FTP_HOST`, `FTP_PORT`, `FTP_USER`, `FTP_PASS`. Variabili opzionali: `FTP_PROTOCOL` (`ftps` di default, oppure `ftp`) e `FTP_DIR` (cartella di destinazione).
+
+Esempio per un sottodominio (es. libri.vladinc.ru): imposta `FTP_DIR` con la cartella radice del sottodominio sull'hosting.
