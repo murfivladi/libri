@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/../inc/bootstrap.php';
+require __DIR__ . '/../inc/scarica.php';
 admin_richiesto();
 $id = (int)($_GET['id'] ?? 0);
 $l = ['titolo'=>'','collana'=>'','numero'=>0,'genere'=>'','trama'=>'','copertina'=>'','pdf'=>'','pubblicato'=>0,'slug'=>''];
@@ -9,15 +10,25 @@ if ($id) {
 }
 $errore = '';
 
+// Salva il file caricato oppure, se c'è un URL, lo scarica da lì.
 function salva_file(string $campo, string $cartella, array $tipi_ok, int $max): ?string {
-    if (empty($_FILES[$campo]['name'])) return null;
-    $f = $_FILES[$campo];
-    if ($f['error'] !== UPLOAD_ERR_OK) throw new RuntimeException('Caricamento fallito (codice ' . $f['error'] . '). Controlla upload_max_filesize su PHP.');
-    if ($f['size'] > $max) throw new RuntimeException('File troppo grande.');
-    $mime = (new finfo(FILEINFO_MIME_TYPE))->file($f['tmp_name']);
-    if (!isset($tipi_ok[$mime])) throw new RuntimeException('Tipo di file non ammesso (' . $mime . ').');
+    $url = trim($_POST[$campo . '_url'] ?? '');
+    if (!empty($_FILES[$campo]['name'])) {
+        $f = $_FILES[$campo];
+        if ($f['error'] !== UPLOAD_ERR_OK) throw new RuntimeException('Caricamento fallito (codice ' . $f['error'] . '). Controlla upload_max_filesize su PHP.');
+        if ($f['size'] > $max) throw new RuntimeException('File troppo grande.');
+        $tmp = $f['tmp_name']; $caricato = true;
+    } elseif ($url !== '') {
+        $tmp = scarica_url($url, $max); $caricato = false;
+    } else {
+        return null;
+    }
+    $mime = (new finfo(FILEINFO_MIME_TYPE))->file($tmp);
+    if (!isset($tipi_ok[$mime])) { if (!$caricato) @unlink($tmp); throw new RuntimeException('Tipo di file non ammesso (' . $mime . ').'); }
     $nome = bin2hex(random_bytes(8)) . '.' . $tipi_ok[$mime];
-    if (!move_uploaded_file($f['tmp_name'], RADICE . "/uploads/$cartella/$nome")) throw new RuntimeException('Non riesco a salvare il file.');
+    $dest = RADICE . "/uploads/$cartella/$nome";
+    $ok = $caricato ? move_uploaded_file($tmp, $dest) : rename($tmp, $dest);
+    if (!$ok) throw new RuntimeException('Non riesco a salvare il file.');
     return $nome;
 }
 
@@ -52,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql = 'INSERT INTO libri (titolo,collana,numero,genere,trama,pubblicato,copertina,pdf,slug) VALUES (:titolo,:collana,:numero,:genere,:trama,:pubblicato,:copertina,:pdf,:slug)';
         }
         db()->prepare($sql)->execute($dati);
+        if (!empty($_POST['resta'])) { header('Location: libro.php?id=' . ($id ?: db()->lastInsertId())); exit; }
         header('Location: index.php'); exit;
     } catch (RuntimeException $ex) {
         $errore = $ex->getMessage();
@@ -71,8 +83,10 @@ intestazione($id ? 'Modifica libro' : 'Nuovo libro', '../');
   <label>Genere <input type="text" name="genere" value="<?= e($l['genere']) ?>"></label>
   <label>Trama <textarea name="trama" rows="6"><?= e($l['trama']) ?></textarea></label>
   <label>Copertina (JPG/PNG/WebP) <input type="file" name="copertina" accept="image/*"></label>
+  <label>…oppure da URL <span class="riga"><input type="text" name="copertina_url" placeholder="https://…/copertina.jpg"> <button class="bottone secondario" name="resta" value="1">Scarica da URL</button></span></label>
   <?php if ($l['copertina']): ?><img src="../uploads/cover/<?= e($l['copertina']) ?>" alt="" width="120"><?php endif; ?>
   <label>PDF del libro <input type="file" name="pdf" accept="application/pdf"></label>
+  <label>…oppure da URL <span class="riga"><input type="text" name="pdf_url" placeholder="https://…/libro.pdf"> <button class="bottone secondario" name="resta" value="1">Scarica da URL</button></span></label>
   <?php if ($l['pdf']): ?><p class="meta">PDF attuale: <?= e($l['pdf']) ?> (lascia vuoto per tenerlo)</p><?php endif; ?>
   <label><span><input type="checkbox" name="pubblicato" value="1" <?= $l['pubblicato'] ? 'checked' : '' ?>> Pubblicato (visibile nel catalogo)</span></label>
   <p class="azioni"><button class="bottone">Salva</button> <a class="bottone secondario" href="index.php">Annulla</a></p>

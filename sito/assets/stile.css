@@ -38,3 +38,4 @@ body.lettore.scuro #tela { filter:invert(1) hue-rotate(180deg); }
 .admin th, .admin td { text-align:left; padding:8px; border-bottom:1px solid var(--linea); }
 .avviso { background:#fff3cd; color:#5c4400; padding:10px 14px; border-radius:6px; }
 .errore { background:#fde2e0; color:#7a1a12; padding:10px 14px; border-radius:6px; }
+.admin .riga { display:flex; gap:8px; } .admin .riga input { flex:1; } .admin .riga button { white-space:nowrap; }
