@@ -48,9 +48,10 @@ if (!$l['anteprima']): ?><script type="application/ld+json"><?= json_encode($ld,
     <?php if ($l['trama']): ?><div class="trama"><?= nl2br(e($l['trama'])) ?></div><?php endif; ?>
     <?php if ($l['tags']): ?><p class="chips"><?php foreach (tags_di($l['tags']) as $t): ?><a href="index.php?tag=<?= urlencode($t) ?>">#<?= e($t) ?></a><?php endforeach; ?></p><?php endif; ?>
     <?php if ($voti['n'] > 0): ?><p class="meta"><a href="#recensioni" class="stelle" title="Media dei voti"><?= stelle($voti['media']) ?></a> <?= number_format($voti['media'], 1, ',', '') ?> su 5 · <?= $voti['n'] ?> <?= $voti['n'] === 1 ? 'voto' : 'voti' ?></p><?php endif; ?>
-    <?php if ($l['pdf']): ?>
+    <?php if ($l['pdf'] || $l['pdf_ru']): ?>
     <p class="azioni">
-      <a class="bottone" href="leggi.php?s=<?= e($l['slug']) . $suffisso ?>">Leggi online</a>
+      <?php if ($l['pdf']): ?><a class="bottone" href="leggi.php?s=<?= e($l['slug']) . $suffisso ?>"><?= $l['pdf_ru'] ? 'Leggi online · Italiano' : 'Leggi online' ?></a><?php endif; ?>
+      <?php if ($l['pdf_ru']): ?><a class="bottone" lang="ru" href="leggi.php?s=<?= e($l['slug']) ?>&amp;lingua=ru<?= $suffisso ?>"><?= $l['pdf'] ? 'Читать онлайн · Русский' : 'Читать онлайн' ?></a><?php endif; ?>
       <?php if (!$l['anteprima'] && ($lt || registrazione_aperta())):
         foreach (['preferito' => ['❤', 'Aggiungi ai preferiti', 'Nei preferiti'], 'da_leggere' => ['🔖', 'Da leggere', 'Nella lista da leggere']] as $k => [$ic, $no, $si]):
           $dentro = $lt && in_lista((int)$lt['id'], (int)$l['id'], $k); ?>

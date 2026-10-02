@@ -22,7 +22,7 @@ if [ "${E2E_DB:-sqlite}" = "mysql" ]; then
   php "$REPO/sito/tests/mysql_db.php" crea "$LIBRI_CONFIG" "$DBNAME" || { echo "MySQL non raggiungibile"; exit 1; }
 fi
 LIBRI_REPO="$REPO" php importa.php >/dev/null || { echo "importa.php non riuscito"; exit 1; }
-php -S 127.0.0.1:$PORT >"$LOG" 2>&1 &
+php -d post_max_size=100M -d upload_max_filesize=100M -S 127.0.0.1:$PORT >"$LOG" 2>&1 &
 PID=$!
 SINK=""
 trap 'kill $PID $SINK 2>/dev/null; [ -n "$DBNAME" ] && php "$REPO/sito/tests/mysql_db.php" elimina "$DBNAME"; rm -rf "$T"' EXIT
@@ -114,6 +114,23 @@ chk "lettore: niente CDN" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna" | con
 chk "PDF.js servito" "$(code assets/vendor/pdf.worker.min.js)" 200
 chk "scarica.php: il download non esiste (410)" "$(curl -s -o /dev/null -w '%{http_code}' "$B/scarica.php?s=il-custode-dell-etna")" 410
 chk "libro: nessun pulsante Scarica" "$(curl -s "$B/libro.php?s=il-custode-dell-etna" | conta '[Ss]carica')" 0
+# versione in russo: un secondo PDF (facoltativo)
+PDFRU="$T/copia.pdf"; cp "$(ls "$S"/uploads/pdf/*.pdf | head -1)" "$PDFRU"
+Tk=$(tok admin/libro.php?id=1)
+chk "salva libro con PDF in russo" "$(post "admin/libro.php?id=1" -F csrf=$Tk -F titolo='Il Custode dell Etna' -F collana_id=1 -F numero=1 -F stato=pubblicato -F pdf_ru=@"$PDFRU" -F dopo=resta)" 302
+chk "PDF in russo salvato" "$(sql "SELECT pdf_ru != '' FROM libri WHERE id = 1")" 1
+chk "libro: due pulsanti di lettura" "$(curl -s "$B/libro.php?s=il-custode-dell-etna" | conta 'Читать онлайн')" 1
+chk "lettore in russo: chiave separata" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna&lingua=ru" | conta 'data-chiave="il-custode-dell-etna-ru"')" 1
+chk "lettore in italiano: chiave normale" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna" | conta 'data-chiave="il-custode-dell-etna"')" 1
+chk "lettore: interruttore di lingua" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna" | conta 'class="lingua-lettore"')" 1
+Tk=$(tok admin/libro.php?id=1)
+chk "togli il PDF italiano: resta il russo" "$(post "admin/libro.php?id=1" -F csrf=$Tk -F titolo='Il Custode dell Etna' -F collana_id=1 -F numero=1 -F stato=pubblicato -F togli_pdf=1 -F dopo=resta)" 302
+chk "solo russo: il lettore apre il russo" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna" | conta 'data-chiave="il-custode-dell-etna-ru"')" 1
+chk "solo russo: un solo pulsante" "$(curl -s "$B/libro.php?s=il-custode-dell-etna" | conta 'Leggi online')" 0
+chk "il file del russo non è stato cancellato" "$(sql "SELECT pdf_ru != '' FROM libri WHERE id = 1")" 1
+Tk=$(tok admin/libro.php?id=1)       # ripristino: di nuovo solo l'italiano
+post "admin/libro.php?id=1" -F csrf=$Tk -F titolo='Il Custode dell Etna' -F collana_id=1 -F numero=1 -F stato=pubblicato -F pdf=@"$PDFRU" -F togli_pdf_ru=1 -F dopo=resta >/dev/null
+chk "ripristino: italiano sì, russo no" "$(sql "SELECT (pdf != '') * 10 + (pdf_ru != '') FROM libri WHERE id = 1")" 10
 chk "pdf.php: aperto come pagina -> 403" "$(curl -s -o /dev/null -H 'Sec-Fetch-Dest: document' -w '%{http_code}' "$B/pdf.php?f=$(basename "$(sql "SELECT pdf FROM libri WHERE slug = 'il-custode-dell-etna'")")")" 403
 chk "contatori: le letture da visitatori diversi si sommano" "$(sql "SELECT letture >= 2 FROM libri WHERE slug = 'il-custode-dell-etna'")" 1
 

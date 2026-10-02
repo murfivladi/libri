@@ -143,3 +143,4 @@ body.lettore.scuro .pagina-pdf canvas { filter:invert(1) hue-rotate(180deg); }
 .recensione p { margin:4px 0; }
 details { margin:10px 0; } details summary { cursor:pointer; font-weight:bold; }
 .account .griglia { margin-bottom:8px; }
+.lingua-lettore { display:inline-flex; align-items:center; justify-content:center; min-width:40px; height:40px; border:1px solid #8886; border-radius:6px; text-decoration:none; font-weight:bold; color:inherit; }

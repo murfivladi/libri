@@ -105,6 +105,8 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
 85. Dashboard con numero di lettori e recensioni da approvare; avviso con il numero nel menu
 86. **Collane pubbliche** (`collane.php`, `collana.php`) con menu «Collane» e sitemap
 
+87. **PDF in russo (facoltativo)**: nella scheda del libro un secondo PDF, da file o da URL; si può avere solo l'italiano, solo il russo o entrambi. Il sito mostra due pulsanti («Leggi online · Italiano» / «Читать онлайн · Русский») e nel lettore un interruttore IT/RU. Pagina e segnalibri del russo restano sul dispositivo del lettore (la numerazione delle pagine può essere diversa)
+
 ## Lato pubblico (novità)
 - Miniature delle copertine (il catalogo carica immagini leggere), anteprime ricche quando condividi un link (Open Graph), pagina Privacy, `robots.txt`, pagina 404 con la grafica del sito, nessun servizio esterno (PDF.js è incluso)
 - **Lettore a libro**: le pagine si girano davvero (con ombra e piega), a doppia pagina su schermi larghi e a pagina singola sul telefono; copertina e retro rigidi

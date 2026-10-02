@@ -95,8 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // controlli
 $problemi = [];
 $controllati = 0;
-foreach ($pdo->query('SELECT id, titolo, copertina, pdf FROM libri WHERE eliminato IS NULL') as $l) {
-    foreach ([['pdf', $l['pdf'], 'PDF'], ['cover', $l['copertina'], 'copertina']] as [$cart, $val, $et]) {
+foreach ($pdo->query('SELECT id, titolo, copertina, pdf, pdf_ru FROM libri WHERE eliminato IS NULL') as $l) {
+    foreach ([['pdf', $l['pdf'], 'PDF'], ['pdf', $l['pdf_ru'], 'PDF in russo'], ['cover', $l['copertina'], 'copertina']] as [$cart, $val, $et]) {
         if ($val === '') continue;
         if (dir_uploads() !== null && e_nostro($val)) { if (file_locale($val, $cart) === null) $problemi[] = [$l['id'], $l['titolo'], "$et mancante sul server"]; }
         elseif ($controllati++ < 40 && !file_raggiungibile(url_file($val, $cart))) $problemi[] = [$l['id'], $l['titolo'], "$et non raggiungibile (" . url_file($val, $cart) . ')'];

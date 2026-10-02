@@ -12,8 +12,9 @@ if ($dir === null) {                    // sito secondario senza accesso diretto
 
 // Mappa: nome del file → a chi appartiene (i valori nel database possono essere indirizzi interi o nomi)
 $usati = ['pdf' => [], 'cover' => []];
-foreach (db()->query('SELECT id, titolo, copertina, pdf FROM libri') as $l) {
+foreach (db()->query('SELECT id, titolo, copertina, pdf, pdf_ru FROM libri') as $l) {
     if ($l['copertina']) $usati['cover'][nome_file($l['copertina'])][] = ['libro.php?id=' . $l['id'], 'Libro: ' . $l['titolo']];
+    if ($l['pdf_ru']) $usati['pdf'][nome_file($l['pdf_ru'])][] = ['libro.php?id=' . $l['id'], 'Libro (russo): ' . $l['titolo']];
     if ($l['pdf']) $usati['pdf'][nome_file($l['pdf'])][] = ['libro.php?id=' . $l['id'], 'Libro: ' . $l['titolo']];
 }
 foreach (db()->query("SELECT id, nome, banner FROM collane WHERE banner != ''") as $c) $usati['cover'][nome_file($c['banner'])][] = ['collane.php?id=' . $c['id'], 'Collana: ' . $c['nome']];

@@ -3,10 +3,14 @@ require __DIR__ . '/inc/pubblico.php';
 
 $token = (string)($_GET['anteprima'] ?? '');
 $l = libro_per_slug((string)($_GET['s'] ?? ''), $token);
-if (!$l || $l['pdf'] === '') pagina_non_trovata();
+if (!$l || ($l['pdf'] === '' && $l['pdf_ru'] === '')) pagina_non_trovata();
+// lingua: ?lingua=ru apre la versione russa (se c'è); se c'è un solo PDF si apre quello
+$ru = $l['pdf_ru'] !== '' && (($_GET['lingua'] ?? '') === 'ru' || $l['pdf'] === '');
+$file_pdf = $ru ? $l['pdf_ru'] : $l['pdf'];
+$altra = $l['pdf'] !== '' && $l['pdf_ru'] !== '';
 if (!$l['anteprima']) conta_una_volta('letture', (int)$l['id']);
 $lt = $l['anteprima'] ? null : lettore_corrente();
-$sync = $lt && $lt['privacy_versione'] === privacy_versione();
+$sync = !$ru && $lt && $lt['privacy_versione'] === privacy_versione();
 $suffisso = $l['anteprima'] ? '&anteprima=' . urlencode($token) : '';
 ?><!doctype html><html lang="it"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
@@ -14,10 +18,11 @@ $suffisso = $l['anteprima'] ? '&anteprima=' . urlencode($token) : '';
 <title><?= e($l['titolo']) ?> · Lettura</title>
 <link rel="icon" type="image/png" href="<?= e(asset_emblema()) ?>">
 <link rel="stylesheet" href="assets/stile.css"><?= stile_tema() ?></head>
-<body class="lettore" data-pdf="<?= e(url_pdf_lettore($l['pdf'])) ?>" data-chiave="<?= e($l['slug']) ?>"<?php if ($sync): ?> data-api="api-lettore.php" data-csrf="<?= e(csrf()) ?>"<?php elseif (!$l['anteprima'] && registrazione_aperta()): ?> data-accedi="account.php?a=accedi&amp;ritorno=<?= e(urlencode('leggi.php?s=' . $l['slug'])) ?>"<?php endif; ?>>
+<body class="lettore" data-pdf="<?= e(url_pdf_lettore($file_pdf)) ?>" data-chiave="<?= e($l['slug'] . ($ru ? '-ru' : '')) ?>"<?php if ($sync): ?> data-api="api-lettore.php" data-csrf="<?= e(csrf()) ?>"<?php elseif (!$l['anteprima'] && registrazione_aperta()): ?> data-accedi="account.php?a=accedi&amp;ritorno=<?= e(urlencode('leggi.php?s=' . $l['slug'])) ?>"<?php endif; ?>>
 <div class="barra">
   <a class="indietro-libro" href="libro.php?s=<?= e($l['slug']) . $suffisso ?>" title="Torna alla scheda">←<span class="solo-pc"> <?= e($l['titolo']) ?></span></a>
   <span class="comandi">
+    <?php if ($altra): ?><a class="lingua-lettore" href="leggi.php?s=<?= e($l['slug']) ?><?= $ru ? '' : '&amp;lingua=ru' ?><?= $suffisso ?>" title="<?= $ru ? 'Leggi in italiano' : 'Читать на русском' ?>"><?= $ru ? 'IT' : 'RU' ?></a><?php endif; ?>
     <button id="b-pannello" aria-label="Indice, segnalibri e ricerca" title="Indice, segnalibri, ricerca">☰</button>
     <button id="indietro" aria-label="Pagina precedente">‹</button>
     <span class="pos"><input id="vai" type="number" min="1" value="1" aria-label="Numero di pagina"><span id="coppia"></span> / <span id="tot">…</span></span>

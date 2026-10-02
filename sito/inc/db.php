@@ -4,7 +4,7 @@
 // Questo file contiene: configurazione, connessione, schema delle tabelle (uguale per i due motori) e piccole
 // funzioni che nascondono le differenze di linguaggio SQL.
 
-const VERSIONE_DB = 6;
+const VERSIONE_DB = 7;
 
 // Testo iniziale della pagina Privacy (modificabile dall'admin). È un modello: va controllato da un adulto.
 const TESTO_PRIVACY = "Questo sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti.\n\n"
@@ -127,7 +127,7 @@ function schema(): array {
     return [
         'libri' => [
             'id' => 'pk', 'slug' => 'slug', 'titolo' => 's', 'collana' => 's', 'numero' => 'int', 'genere' => 's', 'trama' => 'txt',
-            'copertina' => 'url', 'pdf' => 'url', 'pubblicato' => 'int', 'creato' => 'creato',
+            'copertina' => 'url', 'pdf' => 'url', 'pdf_ru' => 'url', 'pubblicato' => 'int', 'creato' => 'creato',
             'sottotitolo' => 's', 'autore' => 's', 'lingua' => 's:it', 'anno' => 'int', 'pagine_n' => 'int', 'isbn' => 's',
             'tags' => 'txt', 'collana_id' => 'int', 'evidenza' => 'int', 'pubblica_il' => 'dt', 'ordine' => 'int',
             'note' => 'txt', 'meta' => 'txt', 'token' => 's', 'letture' => 'int', 'download' => 'int', 'eliminato' => 'dtnull', 'aggiornato' => 'dt',

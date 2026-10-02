@@ -43,7 +43,7 @@ switch ($stato) {
     case 'bozze': $dove[] = 'l.pubblicato = 0'; break;
     case 'programmati': $dove[] = "l.pubblicato = 1 AND l.pubblica_il > '$ora'"; break;
     case 'evidenza': $dove[] = 'l.evidenza = 1'; break;
-    case 'senza_pdf': $dove[] = "l.pdf = ''"; break;
+    case 'senza_pdf': $dove[] = "l.pdf = '' AND l.pdf_ru = ''"; break;
     case 'senza_copertina': $dove[] = "l.copertina = ''"; break;
     case 'senza_trama': $dove[] = "l.trama = ''"; break;
 }
@@ -73,7 +73,7 @@ $conta = fn(string $w) => (int)db()->query("SELECT COUNT(*) FROM libri l WHERE $
 $schede = [
     'tutti' => ['Tutti', $conta('l.eliminato IS NULL')], 'pubblicati' => ['Pubblicati', $conta('l.eliminato IS NULL AND ' . sql_visibile('l'))],
     'bozze' => ['Bozze', $conta('l.eliminato IS NULL AND l.pubblicato = 0')], 'programmati' => ['Programmati', $conta("l.eliminato IS NULL AND l.pubblicato = 1 AND l.pubblica_il > '$ora'")],
-    'evidenza' => ['In evidenza', $conta('l.eliminato IS NULL AND l.evidenza = 1')], 'senza_pdf' => ['Senza PDF', $conta("l.eliminato IS NULL AND l.pdf = ''")],
+    'evidenza' => ['In evidenza', $conta('l.eliminato IS NULL AND l.evidenza = 1')], 'senza_pdf' => ['Senza PDF', $conta("l.eliminato IS NULL AND l.pdf = '' AND l.pdf_ru = ''")],
     'senza_copertina' => ['Senza copertina', $conta("l.eliminato IS NULL AND l.copertina = ''")], 'senza_trama' => ['Senza trama', $conta("l.eliminato IS NULL AND l.trama = ''")],
     'cestino' => ['🗑 Cestino', $conta('l.eliminato IS NOT NULL')],
 ];
@@ -128,7 +128,7 @@ admin_testata($stato === 'cestino' ? 'Cestino' : 'Libri', 'libri');
   <td><?php if ($l['copertina']): ?><img class="mini-cop" src="<?= e(con_prefisso(miniatura($l['copertina'], 120), '../')) ?>" alt="" loading="lazy"><?php endif; ?></td>
   <td><a href="libro.php?id=<?= $id ?>"><b><?= e($l['titolo']) ?></b></a><?= $l['evidenza'] ? ' ⭐' : '' ?>
     <?php if ($l['sottotitolo']): ?><br><span class="muto"><?= e($l['sottotitolo']) ?></span><?php endif; ?>
-    <br><span class="muto"><?= !$l['pdf'] ? '⚠ no PDF ' : '' ?><?= !$l['copertina'] ? '⚠ no copertina ' : '' ?><?= e(implode(' · ', tags_di($l['tags']))) ?></span></td>
+    <br><span class="muto"><?= !$l['pdf'] && !$l['pdf_ru'] ? '⚠ no PDF ' : '' ?><?= !$l['copertina'] ? '⚠ no copertina ' : '' ?><?= e(implode(' · ', tags_di($l['tags']))) ?></span></td>
   <td><?= e($l['nome_collana'] ?? '') ?></td>
   <td><?= $l['numero'] ? (int)$l['numero'] : '' ?></td>
   <td><span class="stato <?= $cl ?>"><?= e($tx) ?></span></td>

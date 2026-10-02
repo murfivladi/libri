@@ -30,7 +30,7 @@ $json = ['@context' => 'https://schema.org', '@type' => 'CollectionPage', 'name'
     <h1><?= e($c['nome']) ?></h1>
     <p class="meta"><?= count($libri) ?> <?= count($libri) === 1 ? 'libro' : 'libri' ?></p>
     <?php if ($c['descrizione'] !== ''): ?><div class="trama"><?= nl2br(e($c['descrizione'])) ?></div><?php endif; ?>
-    <?php if ($primo && $primo['pdf'] !== ''): ?><p class="azioni"><a class="bottone" href="leggi.php?s=<?= e($primo['slug']) ?>">Inizia dal libro <?= $primo['numero'] ? (int)$primo['numero'] : 1 ?> · <?= e($primo['titolo']) ?></a></p><?php endif; ?>
+    <?php if ($primo && ($primo['pdf'] !== '' || $primo['pdf_ru'] !== '')): ?><p class="azioni"><a class="bottone" href="leggi.php?s=<?= e($primo['slug']) ?>">Inizia dal libro <?= $primo['numero'] ? (int)$primo['numero'] : 1 ?> · <?= e($primo['titolo']) ?></a></p><?php endif; ?>
   </div>
 </section>
 <?php if (!$libri): ?><p>Per ora non ci sono libri pubblicati in questa collana.</p><?php endif; ?>

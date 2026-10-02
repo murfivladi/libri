@@ -125,7 +125,7 @@ function salva_file(string $campo, string $cartella, array $tipi_ok, int $max): 
 // Un file è "usato" se un libro, una collana o l'aspetto del sito lo richiama (anche con un altro formato di indirizzo).
 function file_usato(string $cartella, string $valore): bool {
     $nome = nome_file($valore);
-    $campi = ['cover' => [['libri', 'copertina'], ['collane', 'banner']], 'pdf' => [['libri', 'pdf']]][$cartella] ?? [];
+    $campi = ['cover' => [['libri', 'copertina'], ['collane', 'banner']], 'pdf' => [['libri', 'pdf'], ['libri', 'pdf_ru']]][$cartella] ?? [];
     foreach ($campi as [$t, $c]) {
         $st = db()->prepare("SELECT COUNT(*) FROM $t WHERE $c = ? OR $c = ? OR $c LIKE ?"); $st->execute([$valore, $nome, '%/' . $nome]);
         if ($st->fetchColumn() > 0) return true;

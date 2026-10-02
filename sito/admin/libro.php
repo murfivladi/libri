@@ -4,7 +4,7 @@ require __DIR__ . '/../inc/libri.php';
 
 $id = (int)($_GET['id'] ?? 0);
 $vuoto = ['titolo' => '', 'sottotitolo' => '', 'slug' => '', 'autore' => impost('autore_predefinito'), 'collana_id' => (int)($_GET['collana'] ?? 0), 'numero' => 0, 'genere' => '',
-          'lingua' => 'it', 'anno' => (int)date('Y'), 'pagine_n' => 0, 'isbn' => '', 'tags' => '', 'trama' => '', 'meta' => '', 'note' => '', 'copertina' => '', 'pdf' => '',
+          'lingua' => 'it', 'anno' => (int)date('Y'), 'pagine_n' => 0, 'isbn' => '', 'tags' => '', 'trama' => '', 'meta' => '', 'note' => '', 'copertina' => '', 'pdf' => '', 'pdf_ru' => '',
           'pubblicato' => 0, 'evidenza' => 0, 'pubblica_il' => '', 'token' => '', 'letture' => 0, 'download' => 0, 'creato' => '', 'aggiornato' => '', 'eliminato' => null];
 $l = $id ? carica_libro($id) : $vuoto;
 if (!$l) { flash('Libro non trovato.', 'errore'); torna('libri.php'); }
@@ -25,11 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($titolo === '') throw new RuntimeException('Il titolo è obbligatorio.');
         $cop = salva_file('copertina', 'cover', TIPI_IMMAGINE, 8 * 1024 * 1024);
         $pdf = salva_file('pdf', 'pdf', TIPI_PDF, 100 * 1024 * 1024);
-        $copertina = $l['copertina']; $pdf_att = $l['pdf'];
+        $pdf_ru = salva_file('pdf_ru', 'pdf', TIPI_PDF, 100 * 1024 * 1024);
+        $copertina = $l['copertina']; $pdf_att = $l['pdf']; $pdf_ru_att = $l['pdf_ru'];
         if (!empty($_POST['togli_copertina'])) $copertina = '';
         if (!empty($_POST['togli_pdf'])) $pdf_att = '';
         if ($cop) $copertina = $cop;
         if ($pdf) $pdf_att = $pdf;
+        if (!empty($_POST['togli_pdf_ru'])) $pdf_ru_att = '';
+        if ($pdf_ru) $pdf_ru_att = $pdf_ru;
 
         $cid = (int)($_POST['collana_id'] ?? 0);
         if (trim($_POST['nuova_collana'] ?? '') !== '') $cid = collana_id_per_nome($_POST['nuova_collana']);
@@ -47,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'numero' => (int)($_POST['numero'] ?? 0), 'genere' => trim($_POST['genere'] ?? ''), 'lingua' => trim($_POST['lingua'] ?? 'it'),
             'anno' => (int)($_POST['anno'] ?? 0), 'pagine_n' => $pagine_n, 'isbn' => trim($_POST['isbn'] ?? ''),
             'tags' => normalizza_tags($_POST['tags'] ?? ''), 'trama' => trim($_POST['trama'] ?? ''), 'meta' => trim($_POST['meta'] ?? ''),
-            'note' => trim($_POST['note'] ?? ''), 'copertina' => $copertina, 'pdf' => $pdf_att,
+            'note' => trim($_POST['note'] ?? ''), 'copertina' => $copertina, 'pdf' => $pdf_att, 'pdf_ru' => $pdf_ru_att,
             'pubblicato' => ($_POST['stato'] ?? '') === 'pubblicato' ? 1 : 0, 'evidenza' => empty($_POST['evidenza']) ? 0 : 1,
             'pubblica_il' => $pubblica_il, 'aggiornato' => date('Y-m-d H:i:s'),
         ];
@@ -57,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare("UPDATE libri SET $set WHERE id = :id")->execute($dati);
             if ($copertina !== $l['copertina']) elimina_file('cover', $l['copertina']);
             if ($pdf_att !== $l['pdf']) elimina_file('pdf', $l['pdf']);
+            if ($pdf_ru_att !== $l['pdf_ru']) elimina_file('pdf', $l['pdf_ru']);
             registra('Libro modificato', $titolo);
         } else {
             $dati['token'] = nuovo_token();
@@ -80,6 +84,7 @@ $collane = db()->query('SELECT id, nome FROM collane ORDER BY ordine, nome')->fe
 $generi = db()->query("SELECT DISTINCT genere FROM libri WHERE genere != '' ORDER BY genere")->fetchAll(PDO::FETCH_COLUMN);
 $anteprima_url = $id ? base_ufficiale() . 'libro.php?s=' . urlencode($l['slug']) . '&anteprima=' . $l['token'] : '';
 $dim_pdf = $l['pdf'] ? dimensione_file($l['pdf'], 'pdf') : 0;          // null = il file sta sul sito principale e da qui non si legge
+$dim_ru = $l['pdf_ru'] ? dimensione_file($l['pdf_ru'], 'pdf') : 0;
 $pdf_remoto_ok = $l['pdf'] && $dim_pdf === null ? file_raggiungibile(url_file($l['pdf'], 'pdf')) : true;
 $pubblico = $id && $l['pubblicato'] && !$l['eliminato'] && ($l['pubblica_il'] === '' || $l['pubblica_il'] <= date('Y-m-d H:i:s'));
 
@@ -125,6 +130,15 @@ if ($id && $l['eliminato']) echo '<p class="errore">Questo libro è nel cestino 
       <label style="font-weight:400"><span><input type="checkbox" name="togli_pdf" value="1"> Togli il PDF</span></label><?php endif; ?>
     <label>PDF del libro <input type="file" name="pdf" accept="application/pdf"></label>
     <label>…oppure da URL <input type="text" name="pdf_url" placeholder="https://…/libro.pdf"></label>
+  </div>
+  <div>
+    <h3 style="margin-top:0">🇷🇺 Versione in russo <small class="muto">(facoltativa)</small></h3>
+    <?php if ($l['pdf_ru']): ?><p>📄 PDF in russo<?= $dim_ru ? ': <b>' . e(formatta_byte($dim_ru)) . '</b>' : '' ?>
+      <?= ($dim_ru === 0) ? ' <span class="errore">(file mancante sul server!)</span>' : '' ?>
+      <br><a href="<?= e(con_prefisso(url_file($l['pdf_ru'], 'pdf'), '../')) ?>" target="_blank">Apri il PDF ↗</a></p>
+      <label style="font-weight:400"><span><input type="checkbox" name="togli_pdf_ru" value="1"> Togli il PDF in russo</span></label><?php endif; ?>
+    <label>PDF in russo <input type="file" name="pdf_ru" accept="application/pdf"></label>
+    <label>…oppure da URL <input type="text" name="pdf_ru_url" placeholder="https://…/kniga.pdf"></label>
   </div>
 </div>
 <p class="muto">Se carichi un nuovo file, sostituisce quello attuale. Se scegli sia un file sia un URL, vince il file.</p></div>

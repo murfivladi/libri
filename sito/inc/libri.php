@@ -20,7 +20,7 @@ function duplica_libro(int $id): ?int {
         'collana' => $l['collana'], 'collana_id' => $l['collana_id'], 'numero' => $l['numero'], 'genere' => $l['genere'],
         'lingua' => $l['lingua'], 'anno' => $l['anno'], 'pagine_n' => $l['pagine_n'], 'isbn' => '', 'tags' => $l['tags'],
         'trama' => $l['trama'], 'meta' => $l['meta'], 'note' => $l['note'],
-        'copertina' => $l['copertina'], 'pdf' => $l['pdf'],      // lo stesso file: viene cancellato solo quando nessun libro lo usa più
+        'copertina' => $l['copertina'], 'pdf' => $l['pdf'], 'pdf_ru' => $l['pdf_ru'],      // lo stesso file: viene cancellato solo quando nessun libro lo usa più
         'pubblicato' => 0, 'evidenza' => 0, 'pubblica_il' => '', 'token' => nuovo_token(), 'aggiornato' => date('Y-m-d H:i:s'),
         'ordine' => $l['ordine'],
     ];
@@ -36,6 +36,7 @@ function elimina_libro_definitivo(int $id): void {
     db()->prepare('DELETE FROM libri WHERE id = ?')->execute([$id]);
     elimina_file('cover', $l['copertina']);
     elimina_file('pdf', $l['pdf']);
+    elimina_file('pdf', $l['pdf_ru']);
 }
 
 // Rinumera l'ordine manuale e sposta un libro su (-1) o giù (+1).
