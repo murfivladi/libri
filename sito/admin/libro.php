@@ -26,6 +26,7 @@ function salva_file(string $campo, string $cartella, array $tipi_ok, int $max): 
     $mime = (new finfo(FILEINFO_MIME_TYPE))->file($tmp);
     if (!isset($tipi_ok[$mime])) { if (!$caricato) @unlink($tmp); throw new RuntimeException('Tipo di file non ammesso (' . $mime . ').'); }
     $nome = bin2hex(random_bytes(8)) . '.' . $tipi_ok[$mime];
+    @mkdir(RADICE . "/uploads/$cartella", 0755, true);
     $dest = RADICE . "/uploads/$cartella/$nome";
     $ok = $caricato ? move_uploaded_file($tmp, $dest) : rename($tmp, $dest);
     if (!$ok) throw new RuntimeException('Non riesco a salvare il file.');

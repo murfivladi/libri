@@ -9,6 +9,7 @@ session_start();
 function db(): PDO {
     static $pdo = null;
     if ($pdo) return $pdo;
+    @mkdir(RADICE . '/data', 0755, true);
     $pdo = new PDO('sqlite:' . RADICE . '/data/sito.sqlite');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
