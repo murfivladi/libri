@@ -37,6 +37,11 @@
 - Soluzione: la nona corda e' fatta delle voci della classe (la "corda di voci"); la Piuma torna a Vlad. Arione, ricordato dai bambini, diventa alleato: il Custode della Notte.
 - Gancio per il Libro 4: nonna Tanya riceve una lettera dalla Russia: "L'uovo si e' incrinato." Koschei l'Immortale (il cattivo delle fiabe russe) si sta svegliando.
 
+## Libro 4 (scelte dell'AI, da approvare)
+- Vacanze di Natale in Russia (Mare Bianco, isola di Kamenny, villaggio di Ostrovnoye). Vlad, Ludovica e nonna Tanya; Zinaida, Baba Yaga, Lupo Grigio (Sery).
+- Koschei si chiamava Kirill, un ragazzo che perse tutti e scelse di non perdere mai piu' niente. Vlad e Ludovica gli restituiscono il nome; Koschei dorme con una promessa (Vlad lo visita ogni Natale).
+- Gancio per il Libro 5: a Capodanno nevica sull'Etna e si sentono campanelli di slitta (Ded Moroz / inverno).
+
 ## Indizi da piantare nel Libro 1 (la professoressa e' posseduta)
 1. A volte parla con una voce diversa o dice parole strane e antiche.
 2. Dopo certi momenti non ricorda cosa ha fatto ("ho avuto un vuoto").
