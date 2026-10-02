@@ -42,6 +42,12 @@
 - Koschei si chiamava Kirill, un ragazzo che perse tutti e scelse di non perdere mai piu' niente. Vlad e Ludovica gli restituiscono il nome; Koschei dorme con una promessa (Vlad lo visita ogni Natale).
 - Gancio per il Libro 5: a Capodanno nevica sull'Etna e si sentono campanelli di slitta (Ded Moroz / inverno).
 
+## Libro 5 - FINALE (scelte dell'AI, da approvare)
+- Titolo: "Il Custode e l'Inverno Eterno". Arrivano Ded Moroz (ferito, senza bastone) e Snegurochka. La nemica e' Marena (Marzanna), la Signora dell'Inverno, stanca di essere bruciata ogni primavera.
+- Il gelo di Marena spacca l'Etna e sveglia Tifeo (figlio di Gea). Il Libro dei Custodi contiene una ninna nanna in tre lingue: Giorno (russo), Notte (greco), Inverno (lingua dei boschi).
+- Soluzione: tutta la classe canta, ognuno nella lingua di sua nonna; Marena canta la strofa mancante; Tifeo dorme. Nasce la Festa della Cioccolata (ultimo giorno d'inverno) al posto del fantoccio bruciato.
+- Epilogo: ultimo giorno di seconda media a giugno. Vlad scrive l'ultima pagina: "Il Custode non e' mai uno solo."
+
 ## Indizi da piantare nel Libro 1 (la professoressa e' posseduta)
 1. A volte parla con una voce diversa o dice parole strane e antiche.
 2. Dopo certi momenti non ricorda cosa ha fatto ("ho avuto un vuoto").

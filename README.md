@@ -11,7 +11,7 @@ Libri di fantascienza e fantasy, scritti da Vlad con l'aiuto dell'AI.
 | 2  | Il Custode e il Fantasma del Teatro | fantasy / mistero | completo (10 capitoli, PDF in `libro-02/build/`) |
 | 3  | Il Custode e la Lira del Mare | fantasy / mistero | completo (10 capitoli, PDF in `libro-03/build/`) |
 | 4  | Il Custode e l'Isola dell'Immortale | fantasy / fiabe russe | completo (10 capitoli, PDF in `libro-04/build/`) |
-| 5  | da decidere | fantasy | da scrivere ("arriva l'inverno": neve sull'Etna, campanelli di slitta) |
+| 5  | Il Custode e l'Inverno Eterno | fantasy / finale della serie | completo (10 capitoli, PDF in `libro-05/build/`) |
 
 ## Come lavoriamo
 
