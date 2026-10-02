@@ -58,8 +58,8 @@ function intestazione(string $titolo, string $prefisso = ''): void {
     $t = e($titolo) . ' · ' . SITO_NOME;
     echo "<!doctype html><html lang=\"it\"><head><meta charset=\"utf-8\">
 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-<title>$t</title><link rel=\"stylesheet\" href=\"{$prefisso}assets/stile.css\"></head><body>
-<header class=\"testata\"><a class=\"marchio\" href=\"{$prefisso}index.php\">✦ " . SITO_NOME . "</a>
+<title>$t</title><link rel=\"icon\" type=\"image/png\" href=\"{$prefisso}assets/favicon.png\"><link rel=\"stylesheet\" href=\"{$prefisso}assets/stile.css\"></head><body>
+<header class=\"testata\"><a class=\"marchio\" href=\"{$prefisso}index.php\"><img src=\"{$prefisso}assets/emblema.png\" alt=\"\" width=\"44\" height=\"44\"><span>VLAD <b>EDITORE</b></span></a>
 <nav><a href=\"{$prefisso}index.php\">Catalogo</a><a href=\"{$prefisso}chi-siamo.php\">Chi siamo</a></nav></header><main class=\"contenuto\">";
 }
 function piede(): void {
