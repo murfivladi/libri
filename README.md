@@ -9,7 +9,8 @@ Libri di fantascienza e fantasy, scritti da Vlad con l'aiuto dell'AI.
 |----|--------|--------|-------|
 | 1  | Il Custode dell'Etna | fantascienza / fantasy | completo (10 capitoli, PDF in `libro-01/build/`) |
 | 2  | Il Custode e il Fantasma del Teatro | fantasy / mistero | completo (10 capitoli, PDF in `libro-02/build/`) |
-| 3  | da decidere | fantasy / mistero | da scrivere ("il secondo atto comincia") |
+| 3  | Il Custode e la Lira del Mare | fantasy / mistero | completo (10 capitoli, PDF in `libro-03/build/`) |
+| 4  | da decidere | fantasy | da scrivere ("l'uovo si apre") |
 
 ## Come lavoriamo
 
