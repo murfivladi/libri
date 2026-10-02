@@ -28,6 +28,15 @@
 - Vlad scopre di piu' sulla "cosa antica" della sua famiglia e perche' e' il prescelto.
 - Finale: Ettore trova pace (perdono), ma un gancio per il Libro 3.
 
+## Libro 3 (scelte dell'AI, da approvare)
+- Titolo provvisorio: "Il Custode e la Lira del Mare".
+- Lo straniero con odore di incenso e sale di mare e musica di corde e' **Arione**, un bardo greco di 2500 anni fa, "Custode della Notte". Fu lasciato dai coloni greci di Naxos a cantare ogni notte per tenere addormentato Tifeo, con una lira. Quando arrivo' la Piuma russa (Custode del Giorno), la gente si dimentico' di lui.
+- Tifeo ha bisogno di DUE custodi: il Giorno (la Piuma di fuoco) e la Notte (la Lira del mare). Una corda della lira si e' spezzata: ecco perche' le scosse sono piu' forti di notte. Mancano 7 notti alla luna nuova.
+- Per riparare la lira servono tre canti (pietra, vento, mare) trovati dalla Squadra Etna in luoghi veri della zona: Gole dell'Alcantara, Castelmola, il mare di Giardini Naxos.
+- Colpo di scena: Arione aveva aperto la porta a Ettore sperando che prendesse la Piuma, per prenderla poi lui. Vuole la Piuma come nona corda: cosi' comanderebbe Tifeo e non verrebbe piu' dimenticato. Vlad, fiducioso, gliela da' e perde l'armatura.
+- Soluzione: la nona corda e' fatta delle voci della classe (la "corda di voci"); la Piuma torna a Vlad. Arione, ricordato dai bambini, diventa alleato: il Custode della Notte.
+- Gancio per il Libro 4: nonna Tanya riceve una lettera dalla Russia: "L'uovo si e' incrinato." Koschei l'Immortale (il cattivo delle fiabe russe) si sta svegliando.
+
 ## Indizi da piantare nel Libro 1 (la professoressa e' posseduta)
 1. A volte parla con una voce diversa o dice parole strane e antiche.
 2. Dopo certi momenti non ricorda cosa ha fatto ("ho avuto un vuoto").
