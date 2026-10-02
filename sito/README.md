@@ -15,3 +15,7 @@ Catalogo, lettore online (PDF) e area admin. Serve PHP 8+ con `pdo_sqlite` e `fi
 - `admin/` login, elenco, modifica libro
 - `inc/` e `data/` sono protetti da `.htaccess` (Apache). Su Nginx va bloccato l'accesso a mano.
 - Il database è `data/sito.sqlite`: fai un backup ogni tanto.
+
+## Deploy automatico
+Ogni push sul branch `claude/laughing-hamilton-4o6jud` che cambia `sito/` avvia `.github/workflows/deploy-sito.yml`, che carica il sito via FTP.
+Secrets richiesti: `FTP_HOST`, `FTP_PORT`, `FTP_USER`, `FTP_PASS`. Variabili opzionali: `FTP_PROTOCOL` (`ftps` di default, oppure `ftp`) e `FTP_DIR` (cartella di destinazione).
