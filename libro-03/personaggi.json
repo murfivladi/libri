@@ -1,0 +1,49 @@
+{
+  "stile": "digital oil painting, fantasy storybook illustration, rich warm colors, soft cinematic lighting, painterly brush strokes, no text, no letters, no watermark",
+  "personaggi": {
+    "vlad": {
+      "descrizione": "Vlad, a 13-year-old boy with short messy dark brown hair, brown eyes, light freckles, slim build, friendly curious face; he wears a small dark metal feather-shaped pendant on a thin chain around his neck",
+      "riferimento": "../libro-01/riferimenti/vlad.jpg"
+    },
+    "vlad_armatura": {
+      "descrizione": "Vlad in his magical golden armor: polished golden plates with glowing golden runes, a glowing firebird feather emblem on the chest, golden helmet with a crest of orange fire feathers, warm orange glow between the plates; armor design may change with the situation but always golden with the firebird feather emblem",
+      "riferimento": "../libro-01/riferimenti/vlad_armatura.jpg"
+    },
+    "ludovica": {
+      "descrizione": "Ludovica, a 13-year-old girl with long wavy light brown hair, big expressive eyes, brave and quick, casual summer clothes",
+      "riferimento": "../libro-01/riferimenti/ludovica.jpg"
+    },
+    "prof_siligato": {
+      "descrizione": "Professor Marcella Siligato, a friendly woman aged about 57 with short curly white hair (a pencil tucked into it), round glasses, kind lined face, warm smile, light shirt and long blue skirt",
+      "riferimento": "../libro-01/riferimenti/prof_siligato.jpg"
+    },
+    "nonna_tanya": {
+      "descrizione": "Nonna Tatiana (Tanya), Vlad's grandmother, around 70, kind and mysterious, grey hair in a bun under a colorful Russian headscarf, warm amber eyes, embroidered dark cardigan, orange skirt, gentle smile",
+      "riferimento": "../libro-01/riferimenti/nonna_tanya.jpg"
+    },
+    "turi": {
+      "descrizione": "Turi, a 33-year-old Sicilian mountain guide, strong, short dark beard and short dark hair, sunburned face, kind but troubled eyes, green outdoor jacket, a yellow safety helmet clipped to his belt",
+      "riferimento": "../libro-02/riferimenti/turi.jpg"
+    },
+    "pippo": {
+      "descrizione": "Pippo, a 33-year-old Sicilian baker, stocky and friendly with a round face, short black hair, flour-dusted apron over a grey t-shirt, white baker's cap pushed back",
+      "riferimento": "../libro-02/riferimenti/pippo.jpg"
+    },
+    "giulio": {
+      "descrizione": "Giulio, a 33-year-old Sicilian lawyer, slim, neat short dark hair with a few early grey streaks, rimless glasses, now in a casual sailor sweater and chinos on a boat, still a little tense but kinder",
+      "riferimento": "../libro-02/riferimenti/giulio.jpg"
+    },
+    "carmela": {
+      "descrizione": "Carmela, a 33-year-old Sicilian pharmacist, shoulder-length wavy chestnut hair, round gentle face, a light jacket over a green blouse, a small first-aid bag on her shoulder, caring smile",
+      "riferimento": "../libro-02/riferimenti/carmela.jpg"
+    },
+    "ettore": {
+      "descrizione": "Ettore Marenzi, the ghost of a thin pale 13-year-old boy from twenty years ago, slicked-back dark hair, narrow face, pale eyes, white buttoned shirt and dark trousers, soft golden glow, peaceful",
+      "riferimento": "../libro-02/riferimenti/ettore.jpg"
+    },
+    "arione": {
+      "descrizione": "Arione, an ancient Greek bard and ghost, about 30 years old in appearance, tall and lean with long wavy dark hair and a short salt-crusted beard threaded with tiny seaweed, sea-green eyes, a ragged white linen tunic and a deep midnight-blue cloak that shimmers like the night sea, holding a silver-blue ancient lyre with eight strings (one string missing), a faint moonlit glow around him, sad and gentle but with a hidden sharpness",
+      "riferimento": "riferimenti/arione.jpg"
+    }
+  }
+}
