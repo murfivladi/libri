@@ -1,0 +1,5 @@
+data/*.sqlite
+uploads/pdf/*
+uploads/cover/*
+!uploads/pdf/.gitkeep
+!uploads/cover/.gitkeep
