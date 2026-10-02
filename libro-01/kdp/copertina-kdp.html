@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Il Custode dell'Etna - Copertina KDP (retro + dorso + fronte)</title>
+<style>
+  /* Misure in pollici. Gabbia 5,83 x 8,27; abbondanza 0,125 su ogni lato.
+     Dorso: 82 pagine x 0,0032 (carta premium a colori) = 0,262.
+     Totale: 0,125 + 5,83 + 0,262 + 5,83 + 0,125 = 12,172 x 8,52 */
+  @page { size: 12.172in 8.52in; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #0d0b0a; }
+  .copertina { position: relative; width: 12.172in; height: 8.52in; overflow: hidden; font-family: Georgia, "Times New Roman", serif; color: #fff7e0; }
+
+  .retro  { position: absolute; left: 0; top: 0; width: 5.955in; height: 8.52in; overflow: hidden; }
+  .dorso  { position: absolute; left: 5.955in; top: 0; width: 0.262in; height: 8.52in; background: #0b1230; }
+  .fronte { position: absolute; left: 6.217in; top: 0; width: 5.955in; height: 8.52in; overflow: hidden; }
+  .retro img, .fronte img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* Fronte (stesso testo della copertina interna) */
+  .fronte .testo { position: absolute; top: 0.62in; left: 0; right: 0.125in; text-align: center; padding: 0 0.4in;
+    text-shadow: 0 0.04in 0.12in rgba(0,0,0,.85), 0 0 0.08in rgba(0,0,0,.9); }
+  .fronte h1 { margin: 0; font-size: 30pt; line-height: 1.1; font-weight: normal; letter-spacing: .04em; }
+  .fronte .autore { margin: .16in 0 0; font-size: 12pt; letter-spacing: .3em; text-transform: uppercase; }
+  .fronte .editore { position: absolute; bottom: .4in; left: 0; right: .125in; text-align: center; font-size: 8.5pt; letter-spacing: .3em; text-transform: uppercase; text-shadow: 0 0 .08in rgba(0,0,0,.95); }
+
+  /* Dorso: testo che si legge dall'alto verso il basso */
+  .dorso { display: flex; justify-content: center; padding-top: 0.55in; }
+  .dorso .testo { writing-mode: vertical-rl; white-space: nowrap; font-size: 12pt; letter-spacing: .08em; line-height: 1; }
+  .dorso .testo b { font-weight: normal; letter-spacing: .1em; }
+  .dorso .autore-dorso { position: absolute; left: 50%; bottom: .5in; transform: translateX(-50%); font-size: 8pt; letter-spacing: .25em; text-transform: uppercase; writing-mode: vertical-rl; }
+
+  /* Retro: testo nella zona di cielo scuro */
+  .retro .blocco { position: absolute; left: .55in; right: .5in; top: .6in; text-shadow: 0 0 .1in rgba(0,0,0,.95), 0 0 .04in rgba(0,0,0,.95); }
+  .retro .gancio { margin: 0 0 .14in; font-size: 14.5pt; line-height: 1.25; font-style: italic; text-align: center; }
+  .retro .trama { margin: 0 0 .1in; font-size: 9.6pt; line-height: 1.38; text-align: left; }
+  .retro .eta { margin: .14in 0 0; font-size: 8.5pt; letter-spacing: .12em; text-transform: uppercase; text-align: center; color: #ffd98a; }
+  .retro .editore { position: absolute; left: .55in; bottom: .5in; font-size: 8pt; letter-spacing: .3em; text-transform: uppercase; text-shadow: 0 0 .08in rgba(0,0,0,.95); }
+
+  /* Spazio per il codice a barre ISBN (KDP lo inserisce da solo: 2" x 1,2") */
+  .barcode { position: absolute; right: .625in; bottom: .5in; width: 2in; height: 1.2in; background: #fff; }
+</style>
+</head>
+<body>
+<div class="copertina">
+  <section class="retro">
+    <img src="../immagini/retro.jpg" alt="Vlad e Ludovica sulla spiaggia guardano una stella cadere in mare">
+    <div class="blocco">
+      <p class="gancio">Una stella cade in mare.<br>Un vulcano comincia a tremare.</p>
+      <p class="trama">Vlad ha tredici anni, è nato in Russia e vive in Sicilia, ai piedi dell'Etna. Una sera, sulla spiaggia di Giardini Naxos, una luce viva cade in acqua e si lega al medaglione di sua nonna. Da quel momento Vlad può indossare un'armatura d'oro e volare con ali di fuoco.</p>
+      <p class="trama">Ma sotto l'Etna qualcosa di antichissimo si sta svegliando. E la professoressa di italiano, la più simpatica della scuola, comincia a comportarsi in modo molto, molto strano&hellip;</p>
+      <p class="eta">Per lettori dai 10 ai 14 anni</p>
+    </div>
+    <p class="editore">Vlad Editore</p>
+    <div class="barcode"></div>
+  </section>
+
+  <section class="dorso">
+    <div class="testo"><b>IL CUSTODE DELL'ETNA</b> &nbsp;·&nbsp; VLAD</div>
+  </section>
+
+  <section class="fronte">
+    <img src="../immagini/copertina.jpg" alt="Vlad in armatura dorata davanti all'Etna in eruzione">
+    <div class="testo">
+      <h1>Il Custode<br>dell'Etna</h1>
+      <p class="autore">Vlad</p>
+    </div>
+    <p class="editore">Vlad Editore</p>
+  </section>
+</div>
+</body>
+</html>
