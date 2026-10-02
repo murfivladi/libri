@@ -2,7 +2,7 @@
 // Feed RSS dei libri pubblicati più di recente.
 require __DIR__ . '/inc/pubblico.php';
 header('Content-Type: application/rss+xml; charset=utf-8');
-$b = percorso_pubblico();
+$b = base_ufficiale();
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 ?>
 <rss version="2.0"><channel>

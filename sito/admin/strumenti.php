@@ -8,6 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $az = $_POST['azione'] ?? '';
     switch ($az) {
         case 'backup':     // scarica una copia del database
+            if (db_driver() === 'mysql') {                // MySQL: tutte le tabelle in un file JSON
+                $dump = ['creato' => date('c'), 'versione' => VERSIONE_DB];
+                foreach (tabelle_sito() as $t) $dump[$t] = $pdo->query("SELECT * FROM `$t`")->fetchAll();
+                registra('Backup scaricato (JSON)');
+                header('Content-Type: application/json; charset=utf-8');
+                header('Content-Disposition: attachment; filename="backup-' . date('Y-m-d-His') . '.json"');
+                echo json_encode($dump, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE); exit;
+            }
             $tmp = tempnam(sys_get_temp_dir(), 'bk');
             @unlink($tmp);
             try { $pdo->exec("VACUUM INTO '" . str_replace("'", "''", $tmp) . "'"); }
@@ -62,7 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($ids as $i) elimina_libro_definitivo((int)$i);
             registra('Cestino svuotato', count($ids) . ' libri'); flash(count($ids) . ' libri eliminati per sempre.'); break;
         case 'ottimizza':
-            $pdo->exec('VACUUM'); registra('Database ottimizzato'); flash('Database ottimizzato.'); break;
+            if (db_driver() === 'mysql') foreach (tabelle_sito() as $t) $pdo->query("OPTIMIZE TABLE `$t`")->fetchAll();
+            else $pdo->exec('VACUUM');
+            registra('Database ottimizzato'); flash('Database ottimizzato.'); break;
         case 'azzera_tutti':
             $pdo->exec('UPDATE libri SET letture = 0, download = 0'); registra('Contatori azzerati (tutti)'); flash('Tutti i contatori sono a zero.'); break;
         case 'nuovi_token':
@@ -71,7 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'conta_pagine':
             $n = 0;
             foreach ($pdo->query("SELECT id, pdf FROM libri WHERE pdf != '' AND pagine_n = 0")->fetchAll() as $l) {
-                $p = conta_pagine_pdf(percorso_file('pdf', $l['pdf']));
+                $loc = file_locale($l['pdf'], 'pdf');            // solo i PDF che questo sito può leggere dal disco
+                $p = $loc !== null ? conta_pagine_pdf($loc) : 0;
                 if ($p) { $pdo->prepare('UPDATE libri SET pagine_n = ? WHERE id = ?')->execute([$p, $l['id']]); $n++; }
             }
             flash("Pagine calcolate per $n libri."); break;
@@ -81,23 +92,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // controlli
 $problemi = [];
+$controllati = 0;
 foreach ($pdo->query('SELECT id, titolo, copertina, pdf FROM libri WHERE eliminato IS NULL') as $l) {
-    if ($l['pdf'] && !is_file(percorso_file('pdf', $l['pdf']))) $problemi[] = [$l['id'], $l['titolo'], 'PDF mancante sul server'];
-    if ($l['copertina'] && !is_file(percorso_file('cover', $l['copertina']))) $problemi[] = [$l['id'], $l['titolo'], 'copertina mancante sul server'];
+    foreach ([['pdf', $l['pdf'], 'PDF'], ['cover', $l['copertina'], 'copertina']] as [$cart, $val, $et]) {
+        if ($val === '') continue;
+        if (dir_uploads() !== null && e_nostro($val)) { if (file_locale($val, $cart) === null) $problemi[] = [$l['id'], $l['titolo'], "$et mancante sul server"]; }
+        elseif ($controllati++ < 40 && !file_raggiungibile(url_file($val, $cart))) $problemi[] = [$l['id'], $l['titolo'], "$et non raggiungibile (" . url_file($val, $cart) . ')'];
+    }
 }
+$dim_db = db_driver() === 'mysql'
+    ? (int)$pdo->query('SELECT COALESCE(SUM(data_length + index_length), 0) FROM information_schema.tables WHERE table_schema = DATABASE()')->fetchColumn()
+    : (int)@filesize(RADICE . '/data/sito.sqlite');
 $sal = [
     ['PHP', PHP_VERSION, version_compare(PHP_VERSION, '8.0', '>=')],
-    ['SQLite', $pdo->query('SELECT sqlite_version()')->fetchColumn(), true],
+    db_driver() === 'mysql' ? ['MySQL/MariaDB (' . (config()['db_host'] ?? '') . ')', $pdo->query('SELECT VERSION()')->fetchColumn(), true]
+                            : ['SQLite (un solo sito: per due siti passa a MySQL da Admin → Database)', $pdo->query('SELECT sqlite_version()')->fetchColumn(), true],
+    ['Ruolo di questo sito', sito_principale() ? 'principale (ospita i file)' : 'secondario (i file stanno su ' . file_base() . ')', true],
     ['Estensione curl (download da URL)', extension_loaded('curl') ? 'sì' : 'NO', extension_loaded('curl')],
     ['Estensione fileinfo (controllo file)', extension_loaded('fileinfo') ? 'sì' : 'NO', extension_loaded('fileinfo')],
     ['Limite upload (upload_max_filesize)', ini_get('upload_max_filesize'), true],
     ['Limite POST (post_max_size)', ini_get('post_max_size'), true],
     ['Memoria PHP', ini_get('memory_limit'), true],
     ['Cartella data/ scrivibile', is_writable(RADICE . '/data') ? 'sì' : 'NO', is_writable(RADICE . '/data')],
-    ['Cartella uploads/ scrivibile', is_writable(RADICE . '/uploads') ? 'sì' : 'NO', is_writable(RADICE . '/uploads')],
+    ['Salvataggio dei file', dir_uploads() !== null ? 'diretto in ' . dir_uploads() : 'tramite l\'API del sito principale', dir_uploads() !== null ? is_writable(dir_uploads()) : true],
     ['HTTPS', !empty($_SERVER['HTTPS']) ? 'attivo' : 'non attivo', !empty($_SERVER['HTTPS'])],
     ['Spazio libero sul disco', ($d = @disk_free_space(RADICE)) ? formatta_byte((int)$d) : 'sconosciuto', true],
-    ['Dimensione database', formatta_byte((int)@filesize(RADICE . '/data/sito.sqlite')), true],
+    ['Dimensione database', formatta_byte($dim_db), true],
 ];
 admin_testata('Strumenti', 'strumenti');
 ?>

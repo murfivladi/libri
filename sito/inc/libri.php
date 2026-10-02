@@ -20,7 +20,7 @@ function duplica_libro(int $id): ?int {
         'collana' => $l['collana'], 'collana_id' => $l['collana_id'], 'numero' => $l['numero'], 'genere' => $l['genere'],
         'lingua' => $l['lingua'], 'anno' => $l['anno'], 'pagine_n' => $l['pagine_n'], 'isbn' => '', 'tags' => $l['tags'],
         'trama' => $l['trama'], 'meta' => $l['meta'], 'note' => $l['note'],
-        'copertina' => copia_file('cover', $l['copertina']), 'pdf' => copia_file('pdf', $l['pdf']),
+        'copertina' => $l['copertina'], 'pdf' => $l['pdf'],      // lo stesso file: viene cancellato solo quando nessun libro lo usa più
         'pubblicato' => 0, 'evidenza' => 0, 'pubblica_il' => '', 'token' => nuovo_token(), 'aggiornato' => date('Y-m-d H:i:s'),
         'ordine' => $l['ordine'],
     ];

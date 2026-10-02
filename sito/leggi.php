@@ -12,7 +12,7 @@ $suffisso = $l['anteprima'] ? '&anteprima=' . urlencode($token) : '';
 <title><?= e($l['titolo']) ?> · Lettura</title>
 <link rel="icon" type="image/png" href="<?= e(asset_emblema()) ?>">
 <link rel="stylesheet" href="assets/stile.css"><?= stile_tema() ?></head>
-<body class="lettore" data-pdf="uploads/pdf/<?= e($l['pdf']) ?>" data-chiave="<?= e($l['slug']) ?>">
+<body class="lettore" data-pdf="<?= e(url_pdf_lettore($l['pdf'])) ?>" data-chiave="<?= e($l['slug']) ?>">
 <div class="barra">
   <a class="indietro-libro" href="libro.php?s=<?= e($l['slug']) . $suffisso ?>" title="Torna alla scheda">←<span class="solo-pc"> <?= e($l['titolo']) ?></span></a>
   <span class="comandi">

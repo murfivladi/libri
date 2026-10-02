@@ -78,7 +78,7 @@ if ($c): ?>
     <label>Ordine <input type="number" name="ordine" value="<?= (int)$c['ordine'] ?>"></label>
     <label><span>Visibilità</span><span><input type="checkbox" name="visibile" value="1" <?= $c['visibile'] ? 'checked' : '' ?>> Mostra la collana nel sito</span></label>
     <label class="largo">Descrizione <textarea name="descrizione" rows="5"><?= e($c['descrizione']) ?></textarea></label>
-    <div class="largo"><?php if ($c['banner']): ?><img class="anteprima-cop" style="max-width:260px" src="../uploads/cover/<?= e($c['banner']) ?>" alt=""><br>
+    <div class="largo"><?php if ($c['banner']): ?><img class="anteprima-cop" style="max-width:260px" src="<?= e(con_prefisso(miniatura($c['banner'], 400), '../')) ?>" alt=""><br>
       <label style="font-weight:400"><span><input type="checkbox" name="togli_banner" value="1"> Togli l'immagine</span></label><?php endif; ?>
       <label>Immagine della collana (opzionale) <input type="file" name="banner" accept="image/*"></label>
       <label>…oppure da URL <input type="text" name="banner_url"></label></div>

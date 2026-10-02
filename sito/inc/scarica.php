@@ -9,11 +9,12 @@ function scarica_url(string $url, int $max): string {
         if (!in_array($schema, ['http', 'https'], true) || empty($p['host'])) throw new RuntimeException('URL non valido: usa http o https.');
         if (isset($p['user']) || isset($p['pass'])) throw new RuntimeException('URL con credenziali non ammesso.');
         $porta = $p['port'] ?? ($schema === 'https' ? 443 : 80);
-        if (!in_array($porta, [80, 443, 8080, 8443], true)) throw new RuntimeException('Porta non ammessa.');
+        if (empty(config()['scarica_locale']) && !in_array($porta, [80, 443, 8080, 8443], true)) throw new RuntimeException('Porta non ammessa.');
         $ips = gethostbynamel($p['host']) ?: [];
         if (!$ips) throw new RuntimeException('Indirizzo non trovato: ' . $p['host']);
         foreach ($ips as $ip) {
-            if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE))
+            // "scarica_locale" in data/config.php serve solo ai test automatici (download da 127.0.0.1)
+            if (empty(config()['scarica_locale']) && !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE))
                 throw new RuntimeException('Indirizzo non ammesso.');
         }
         $f = fopen($tmp, 'wb');

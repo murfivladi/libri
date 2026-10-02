@@ -94,4 +94,10 @@ prova('programmato non visibile', ['b'], db()->query('SELECT slug FROM libri l W
 
 echo "unit: OK=$ok KO=$ko\n";
 exec('rm -rf ' . escapeshellarg($tmp));
+
+// file come indirizzi interi, indirizzo ufficiale e differenze tra i due database (un processo per modo)
+foreach (['sqlite', 'mysql'] as $modo) {
+    passthru(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(__DIR__ . '/unit_file.php') . ' ' . $modo, $codice);
+    if ($codice !== 0) $ko++;
+}
 exit($ko ? 1 : 0);

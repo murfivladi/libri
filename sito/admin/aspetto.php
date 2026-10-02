@@ -38,7 +38,7 @@ admin_testata('Aspetto del sito', 'aspetto');
   </div>
   <div id="anteprima-tema" style="margin-top:12px;border:1px solid var(--linea);border-radius:8px;overflow:hidden">
     <div id="an-testata" style="background:<?= e(colore_valido(impost('colore_blu'), '#0b1a36')) ?>;color:#f3e7c6;padding:12px 16px;border-bottom:3px solid <?= e(colore_valido(impost('colore_oro'), '#c9a14a')) ?>;display:flex;gap:10px;align-items:center">
-      <img src="../<?= e(asset_emblema()) ?>" width="32" height="32" alt="" style="border-radius:50%"> <b style="letter-spacing:.12em"><?= e(strtoupper(impost('nome_sito'))) ?></b>
+      <img src="<?= e(asset_emblema('../')) ?>" width="32" height="32" alt="" style="border-radius:50%"> <b style="letter-spacing:.12em"><?= e(strtoupper(impost('nome_sito'))) ?></b>
       <span style="margin-left:auto">Catalogo · Chi siamo</span></div>
     <div style="padding:14px"><span id="an-bottone" style="display:inline-block;background:<?= e(colore_valido(impost('colore_blu'), '#0b1a36')) ?>;color:#f3e7c6;border:1px solid <?= e(colore_valido(impost('colore_oro'), '#c9a14a')) ?>;border-radius:6px;padding:8px 14px">Leggi online</span> <span class="muto">← anteprima</span></div>
   </div>

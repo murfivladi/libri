@@ -12,7 +12,7 @@ $dove = [sql_visibile('l')]; $par = [];
 $dove[] = '(l.collana_id = 0 OR c.visibile = 1)';
 if ($q !== '') { $dove[] = '(l.titolo LIKE :q OR l.sottotitolo LIKE :q OR l.autore LIKE :q OR l.tags LIKE :q OR l.genere LIKE :q OR l.trama LIKE :q)'; $par[':q'] = "%$q%"; }
 if ($sc !== '') { $dove[] = 'c.slug = :sc'; $par[':sc'] = $sc; }
-if ($tag !== '') { $dove[] = "(',' || l.tags || ',') LIKE :tag"; $par[':tag'] = "%,$tag,%"; }
+if ($tag !== '') { $dove[] = sql_concat("','", 'l.tags', "','") . ' LIKE :tag'; $par[':tag'] = "%,$tag,%"; }
 $where = implode(' AND ', $dove);
 $base = 'FROM libri l LEFT JOIN collane c ON c.id = l.collana_id WHERE ' . $where;
 

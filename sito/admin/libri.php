@@ -28,8 +28,8 @@ $stato = $_GET['stato'] ?? 'tutti';
 $collana = $_GET['collana'] ?? '';
 $tag = trim($_GET['tag'] ?? '');
 $ora = date('Y-m-d H:i:s');
-$ordini = ['manuale' => 'l.ordine, l.numero, l.id', 'titolo' => 'l.titolo COLLATE NOCASE', 'numero' => 'l.numero', 'creato' => 'l.creato', 'aggiornato' => 'l.aggiornato',
-           'letture' => 'l.letture', 'download' => 'l.download', 'stato' => 'l.pubblicato', 'collana' => 'c.nome COLLATE NOCASE'];
+$ordini = ['manuale' => 'l.ordine, l.numero, l.id', 'titolo' => sql_nocase('l.titolo'), 'numero' => 'l.numero', 'creato' => 'l.creato', 'aggiornato' => 'l.aggiornato',
+           'letture' => 'l.letture', 'download' => 'l.download', 'stato' => 'l.pubblicato', 'collana' => sql_nocase('c.nome')];
 $ord = isset($ordini[$_GET['ord'] ?? '']) ? $_GET['ord'] : 'manuale';
 $dir = ($_GET['dir'] ?? 'asc') === 'desc' ? 'DESC' : 'ASC';
 $per = (int)($_GET['per'] ?? 25);
@@ -53,7 +53,7 @@ if ($q !== '') {
 }
 if ($collana === 'nessuna') $dove[] = 'l.collana_id = 0';
 elseif ((int)$collana > 0) { $dove[] = 'l.collana_id = :col'; $par[':col'] = (int)$collana; }
-if ($tag !== '') { $dove[] = "(',' || l.tags || ',') LIKE :tag"; $par[':tag'] = "%,$tag,%"; }
+if ($tag !== '') { $dove[] = sql_concat("','", 'l.tags', "','") . ' LIKE :tag'; $par[':tag'] = "%,$tag,%"; }
 $where = implode(' AND ', $dove);
 
 $st = db()->prepare("SELECT COUNT(*) FROM libri l WHERE $where"); $st->execute($par);
@@ -125,7 +125,7 @@ admin_testata($stato === 'cestino' ? 'Cestino' : 'Libri', 'libri');
 <tr data-id="<?= $id ?>">
   <?= $ordina ? '<td class="maniglia" title="Trascina per riordinare">⠿</td>' : '<td></td>' ?>
   <td><input type="checkbox" name="ids[]" value="<?= $id ?>"></td>
-  <td><?php if ($l['copertina']): ?><img class="mini-cop" src="../<?= e(miniatura($l['copertina'], 120)) ?>" alt="" loading="lazy"><?php endif; ?></td>
+  <td><?php if ($l['copertina']): ?><img class="mini-cop" src="<?= e(con_prefisso(miniatura($l['copertina'], 120), '../')) ?>" alt="" loading="lazy"><?php endif; ?></td>
   <td><a href="libro.php?id=<?= $id ?>"><b><?= e($l['titolo']) ?></b></a><?= $l['evidenza'] ? ' ⭐' : '' ?>
     <?php if ($l['sottotitolo']): ?><br><span class="muto"><?= e($l['sottotitolo']) ?></span><?php endif; ?>
     <br><span class="muto"><?= !$l['pdf'] ? '⚠ no PDF ' : '' ?><?= !$l['copertina'] ? '⚠ no copertina ' : '' ?><?= e(implode(' · ', tags_di($l['tags']))) ?></span></td>

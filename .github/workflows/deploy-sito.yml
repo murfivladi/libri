@@ -1,5 +1,11 @@
 name: Pubblica il sito su FTP
 
+# Carica lo stesso codice nelle due cartelle dell'hosting (stesse credenziali FTP):
+#   ./vladinc.ru/www/libri   -> sito principale (ha la cartella uploads con i file)
+#   ./libri.vladinc.ru/www   -> sito secondario (stesso database, i file stanno sul principale)
+# Le cartelle si possono cambiare con le variabili del repository FTP_DIR_PRINCIPALE e FTP_DIR_SECONDARIO.
+# Il file data/config.php (database e ruolo di ciascun sito) e la cartella uploads non vengono mai toccati.
+
 on:
   push:
     branches: [claude/laughing-hamilton-4o6jud]
@@ -18,23 +24,43 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=30
+    env:
+      E2E_MYSQL_HOST: 127.0.0.1
+      E2E_MYSQL_USER: root
+      E2E_MYSQL_PASS: root
     steps:
       - uses: actions/checkout@v4
+
+      - name: MySQL - password leggibile anche da PHP senza TLS
+        run: mysql -h127.0.0.1 -uroot -proot -e "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root'"
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: pdo_sqlite, gd, curl, fileinfo, mbstring, iconv
+          extensions: pdo_sqlite, pdo_mysql, gd, curl, fileinfo, mbstring, iconv
 
       # Se un test fallisce il sito NON viene caricato.
       - name: Controllo sintassi PHP
         run: find sito -name '*.php' -print0 | xargs -0 -n1 php -l
       - name: Test di unità
         run: php sito/tests/unit.php
-      - name: Test end-to-end
+      - name: Test end-to-end (SQLite)
         run: bash sito/tests/e2e.sh
+      - name: Test end-to-end (MySQL)
+        run: E2E_DB=mysql bash sito/tests/e2e.sh
+      - name: Test con due siti che condividono il database
+        run: bash sito/tests/duesiti.sh
 
-      - name: Carica sul server FTP
+      - name: Carica sul sito principale (vladinc.ru/libri)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -44,14 +70,37 @@ jobs:
           # ftps = FTP cifrato (consigliato). Se il tuo hosting non lo supporta,
           # crea la variabile del repository FTP_PROTOCOL con valore "ftp".
           protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
-          # Cartella di destinazione sul server (variabile FTP_DIR, es. "public_html/"). Default: cartella di login.
-          server-dir: ${{ vars.FTP_DIR || './' }}
+          server-dir: ${{ vars.FTP_DIR_PRINCIPALE || './vladinc.ru/www/libri/' }}
           local-dir: ./sito/
-          # Non toccare mai database e file caricati dall'admin
           exclude: |
             **/.git*
             **/.git*/**
             data/*.sqlite
+            data/config.php
+            data/reset-*.txt
+            uploads/pdf/**
+            uploads/cover/**
+            uploads/thumb/**
+            tests/**
+            README.md
+            ADMIN.md
+            importa.php
+
+      - name: Carica sul sito secondario (libri.vladinc.ru)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          port: ${{ secrets.FTP_PORT }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          server-dir: ${{ vars.FTP_DIR_SECONDARIO || './libri.vladinc.ru/www/' }}
+          local-dir: ./sito/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            data/*.sqlite
+            data/config.php
             data/reset-*.txt
             uploads/pdf/**
             uploads/cover/**

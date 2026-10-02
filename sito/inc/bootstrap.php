@@ -1,88 +1,16 @@
 <?php
-// Avvio comune: sessione, database SQLite (con migrazioni), impostazioni, funzioni di aiuto.
-define('RADICE', dirname(__DIR__));
+// Avvio comune: sessione, database (SQLite o MySQL), impostazioni, funzioni di aiuto.
+if (!defined('RADICE')) define('RADICE', dirname(__DIR__));
 date_default_timezone_set('Europe/Rome');
 
-session_set_cookie_params(['httponly' => true, 'samesite' => 'Lax', 'secure' => !empty($_SERVER['HTTPS'])]);
-session_start();
-
-const VERSIONE_DB = 4;
-
-// Testo iniziale della pagina Privacy (modificabile dall'admin). È un modello: va controllato da un adulto.
-const TESTO_PRIVACY = "Questo sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti.\n\n"
-    . "## Cookie tecnici\n\nIl sito usa un solo cookie tecnico di sessione. Serve per l'area riservata e per contare una sola volta le letture e i download di un libro. Si cancella chiudendo il browser e non richiede consenso.\n\n"
-    . "## Dati salvati nel tuo dispositivo\n\nIl lettore ricorda la pagina, i segnalibri, il tema e lo zoom nel tuo browser. Questi dati restano solo sul tuo dispositivo: non vengono inviati a noi.\n\n"
-    . "## Registri del server\n\nIl servizio di hosting può registrare l'indirizzo IP dei visitatori per motivi di sicurezza, secondo la propria informativa.\n\n"
-    . "## Contatti\n\nPer qualsiasi domanda sui tuoi dati puoi scrivere all'indirizzo email indicato in fondo alla pagina.";
-
-function db(): PDO {
-    static $pdo = null;
-    if ($pdo) return $pdo;
-    @mkdir(RADICE . '/data', 0755, true);
-    $pdo = new PDO('sqlite:' . RADICE . '/data/sito.sqlite');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    $pdo->exec('PRAGMA busy_timeout = 5000');
-    if ((int)$pdo->query('PRAGMA user_version')->fetchColumn() < VERSIONE_DB) migra($pdo);
-    return $pdo;
+// Gli endpoint di servizio (immagini, PDF, API) non hanno bisogno della sessione: così non mandano cookie.
+if (!defined('SENZA_SESSIONE')) {
+    session_set_cookie_params(['httponly' => true, 'samesite' => 'Lax', 'secure' => !empty($_SERVER['HTTPS'])]);
+    session_start();
 }
 
-function migra(PDO $p): void {
-    $p->exec('CREATE TABLE IF NOT EXISTS libri (
-        id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT UNIQUE NOT NULL, titolo TEXT NOT NULL,
-        collana TEXT NOT NULL DEFAULT "", numero INTEGER NOT NULL DEFAULT 0, genere TEXT NOT NULL DEFAULT "",
-        trama TEXT NOT NULL DEFAULT "", copertina TEXT NOT NULL DEFAULT "", pdf TEXT NOT NULL DEFAULT "",
-        pubblicato INTEGER NOT NULL DEFAULT 0, creato TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)');
-    $p->exec('CREATE TABLE IF NOT EXISTS admin (id INTEGER PRIMARY KEY, password TEXT NOT NULL)');
-    $p->exec('CREATE TABLE IF NOT EXISTS collane (
-        id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT UNIQUE NOT NULL, nome TEXT NOT NULL,
-        descrizione TEXT NOT NULL DEFAULT "", banner TEXT NOT NULL DEFAULT "",
-        visibile INTEGER NOT NULL DEFAULT 1, ordine INTEGER NOT NULL DEFAULT 0)');
-    $p->exec('CREATE TABLE IF NOT EXISTS pagine (
-        id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT UNIQUE NOT NULL, titolo TEXT NOT NULL,
-        contenuto TEXT NOT NULL DEFAULT "", visibile INTEGER NOT NULL DEFAULT 1,
-        nel_menu INTEGER NOT NULL DEFAULT 0, ordine INTEGER NOT NULL DEFAULT 0)');
-    $p->exec('CREATE TABLE IF NOT EXISTS impostazioni (chiave TEXT PRIMARY KEY, valore TEXT NOT NULL DEFAULT "")');
-    $p->exec('CREATE TABLE IF NOT EXISTS log (id INTEGER PRIMARY KEY AUTOINCREMENT, quando TEXT NOT NULL, azione TEXT NOT NULL, dettaglio TEXT NOT NULL DEFAULT "", ip TEXT NOT NULL DEFAULT "")');
-    $p->exec('CREATE TABLE IF NOT EXISTS tentativi (ip TEXT NOT NULL, quando INTEGER NOT NULL)');
-
-    $nuove = [
-        'sottotitolo' => "TEXT NOT NULL DEFAULT ''", 'autore' => "TEXT NOT NULL DEFAULT ''",
-        'lingua' => "TEXT NOT NULL DEFAULT 'it'", 'anno' => 'INTEGER NOT NULL DEFAULT 0',
-        'pagine_n' => 'INTEGER NOT NULL DEFAULT 0', 'isbn' => "TEXT NOT NULL DEFAULT ''",
-        'tags' => "TEXT NOT NULL DEFAULT ''", 'collana_id' => 'INTEGER NOT NULL DEFAULT 0',
-        'evidenza' => 'INTEGER NOT NULL DEFAULT 0', 'pubblica_il' => "TEXT NOT NULL DEFAULT ''",
-        'ordine' => 'INTEGER NOT NULL DEFAULT 0', 'note' => "TEXT NOT NULL DEFAULT ''",
-        'meta' => "TEXT NOT NULL DEFAULT ''", 'token' => "TEXT NOT NULL DEFAULT ''",
-        'letture' => 'INTEGER NOT NULL DEFAULT 0', 'download' => 'INTEGER NOT NULL DEFAULT 0',
-        'eliminato' => 'TEXT', 'aggiornato' => "TEXT NOT NULL DEFAULT ''",
-    ];
-    $esistenti = array_column($p->query('PRAGMA table_info(libri)')->fetchAll(), 'name');
-    foreach ($nuove as $c => $def) if (!in_array($c, $esistenti, true)) $p->exec("ALTER TABLE libri ADD COLUMN $c $def");
-
-    // il vecchio campo testuale "collana" diventa una vera collana
-    $st = $p->query('SELECT DISTINCT collana FROM libri WHERE collana != "" AND collana_id = 0');
-    foreach ($st->fetchAll(PDO::FETCH_COLUMN) as $nome) {
-        $id = collana_id_per_nome($nome, $p);
-        $p->prepare('UPDATE libri SET collana_id = ? WHERE collana = ? AND collana_id = 0')->execute([$id, $nome]);
-    }
-    $p->exec('UPDATE libri SET aggiornato = creato WHERE aggiornato = ""');
-
-    $p->prepare('INSERT OR IGNORE INTO pagine (slug,titolo,contenuto,visibile,nel_menu,ordine) VALUES (?,?,?,1,1,10)')->execute([
-        'chi-siamo', 'Chi siamo',
-        "**Vlad Editore** è la casa editrice fondata da Vlad a Taormina - Trappitello, in Sicilia.\n\nPubblichiamo libri di fantascienza e fantasy, scritti da Vlad con l'aiuto dell'intelligenza artificiale.",
-    ]);
-    $p->prepare('INSERT OR IGNORE INTO pagine (slug,titolo,contenuto,visibile,nel_menu,ordine) VALUES (?,?,?,1,0,20)')->execute([
-        'privacy', 'Privacy', TESTO_PRIVACY,
-    ]);
-
-    // sicurezza dell'account: codice di recupero e verifica in due passaggi
-    $nuoveAdmin = ['recupero' => "TEXT NOT NULL DEFAULT ''", 'totp_segreto' => "TEXT NOT NULL DEFAULT ''", 'totp_attivo' => 'INTEGER NOT NULL DEFAULT 0', 'codici_backup' => "TEXT NOT NULL DEFAULT '[]'"];
-    $colAdmin = array_column($p->query('PRAGMA table_info(admin)')->fetchAll(), 'name');
-    foreach ($nuoveAdmin as $c => $def) if (!in_array($c, $colAdmin, true)) $p->exec("ALTER TABLE admin ADD COLUMN $c $def");
-
-    $p->exec('PRAGMA user_version = ' . VERSIONE_DB);
-}
+require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/file.php';
 
 function collana_id_per_nome(string $nome, ?PDO $p = null): int {
     $p = $p ?: db();
@@ -93,7 +21,8 @@ function collana_id_per_nome(string $nome, ?PDO $p = null): int {
     $base = $s = slug($nome); $i = 2;
     $chk = $p->prepare('SELECT 1 FROM collane WHERE slug = ?');
     while ($chk->execute([$s]) && $chk->fetchColumn()) $s = $base . '-' . $i++;
-    $p->prepare('INSERT INTO collane (slug, nome, ordine) VALUES (?,?,(SELECT COALESCE(MAX(ordine),0)+1 FROM collane))')->execute([$s, $nome]);
+    $ordine = (int)$p->query('SELECT COALESCE(MAX(ordine), 0) + 1 FROM collane')->fetchColumn();
+    $p->prepare('INSERT INTO collane (slug, nome, ordine) VALUES (?,?,?)')->execute([$s, $nome, $ordine]);
     return (int)$p->lastInsertId();
 }
 
@@ -116,7 +45,10 @@ function impost(string $k): string {
     return (string)($cache[$k] ?? '');
 }
 function imposta(string $k, string $v): void {
-    db()->prepare('INSERT INTO impostazioni (chiave, valore) VALUES (?,?) ON CONFLICT(chiave) DO UPDATE SET valore = excluded.valore')->execute([$k, $v]);
+    $sql = db_driver() === 'mysql'
+        ? 'INSERT INTO impostazioni (chiave, valore) VALUES (?,?) ON DUPLICATE KEY UPDATE valore = VALUES(valore)'
+        : 'INSERT INTO impostazioni (chiave, valore) VALUES (?,?) ON CONFLICT(chiave) DO UPDATE SET valore = excluded.valore';
+    db()->prepare($sql)->execute([$k, $v]);
 }
 
 // ---------- utilità ----------
@@ -184,24 +116,38 @@ function formatta_byte(int $b): string {
 function formatta_data(?string $d): string { return $d ? date('d/m/Y H:i', strtotime($d)) : '—'; }
 
 // Manutenzione: i visitatori vedono un avviso, l'admin loggato no.
-if (impost('manutenzione') === '1' && empty($_SESSION['admin']) && strpos($_SERVER['SCRIPT_NAME'] ?? '', '/admin/') === false && PHP_SAPI !== 'cli') {
+if (!defined('SENZA_SESSIONE') && !defined('SENZA_DB') && impost('manutenzione') === '1' && empty($_SESSION['admin']) && strpos($_SERVER['SCRIPT_NAME'] ?? '', '/admin/') === false && PHP_SAPI !== 'cli') {
     http_response_code(503); header('Retry-After: 3600');
     echo '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . e(impost('nome_sito')) . '</title>'
        . '<body style="font:18px Georgia,serif;background:#0b1a36;color:#f3e7c6;display:grid;place-items:center;min-height:100vh;text-align:center;margin:0"><div><h1>' . e(impost('nome_sito')) . '</h1><p>' . e(impost('messaggio_manutenzione')) . '</p></div>';
     exit;
 }
 
+// ---------- indirizzi ----------
+// Indirizzo di questo sito (con la barra finale), anche quando si è nell'admin.
+function percorso_pubblico(): string {
+    $schema = (!empty($_SERVER['HTTPS']) || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https') ? 'https' : 'http';
+    $cartella = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+    $cartella = preg_replace('#/admin$#', '', $cartella);
+    return $schema . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . $cartella . '/';
+}
+// Indirizzo "ufficiale" (per Google, sitemap, link condivisi): se due siti mostrano gli stessi dati, uno solo è l'originale.
+function base_ufficiale(): string {
+    $u = rtrim((string)(config()['url_ufficiale'] ?? ''), '/');
+    return $u !== '' ? $u . '/' : percorso_pubblico();
+}
+function assoluto(string $url): string { return e_assoluto($url) ? $url : base_ufficiale() . ltrim($url, '/'); }
+
 // ---------- parti comuni del sito pubblico ----------
-// $og: ['immagine' => 'uploads/cover/x.jpg', 'tipo' => 'book', 'canonico' => 'libro.php?s=...'] per le anteprime sui social.
+// $og: ['immagine' => indirizzo, 'tipo' => 'book', 'canonico' => 'libro.php?s=...'] per le anteprime sui social.
 function intestazione(string $titolo, string $prefisso = '', string $descrizione = '', array $og = []): void {
     $nome = impost('nome_sito');
     $t = e($titolo) . ' · ' . e($nome);
     $descr = mb_substr(trim(preg_replace('/\s+/', ' ', $descrizione)), 0, 200);
     $extra = '';
-    if (!$prefisso) {                                  // anteprime social (Open Graph) solo sul sito pubblico
-        $base = percorso_pubblico();
-        $url = $base . ($og['canonico'] ?? ltrim(basename($_SERVER['SCRIPT_NAME']) . (($_SERVER['QUERY_STRING'] ?? '') !== '' ? '?' . $_SERVER['QUERY_STRING'] : ''), '/'));
-        $img = $base . ($og['immagine'] ?? asset_banner());
+    if (!$prefisso) {                                  // anteprime social (Open Graph) e indirizzo ufficiale solo sul sito pubblico
+        $url = base_ufficiale() . ($og['canonico'] ?? ltrim(basename($_SERVER['SCRIPT_NAME']) . (($_SERVER['QUERY_STRING'] ?? '') !== '' ? '?' . $_SERVER['QUERY_STRING'] : ''), '/'));
+        $img = assoluto($og['immagine'] ?? asset_banner());
         $extra = '<meta property="og:site_name" content="' . e($nome) . '"><meta property="og:locale" content="it_IT">'
                . '<meta property="og:type" content="' . e($og['tipo'] ?? 'website') . '"><meta property="og:title" content="' . e($titolo) . '">'
                . ($descr ? '<meta property="og:description" content="' . e($descr) . '">' : '')
@@ -231,7 +177,7 @@ function piede(): void {
 // Aspetto personalizzabile dall'admin: emblema, logo, banner e colori.
 function asset_personalizzato(string $chiave, string $predefinito, int $larghezza, string $prefisso): string {
     $f = impost($chiave);
-    if ($f !== '' && is_file(RADICE . '/uploads/cover/' . basename($f))) return $prefisso . miniatura(basename($f), $larghezza);
+    if ($f !== '') return con_prefisso(miniatura($f, $larghezza), $prefisso);
     return $prefisso . $predefinito;
 }
 function asset_emblema(string $prefisso = ''): string { return asset_personalizzato('logo_emblema', 'assets/emblema.png', 256, $prefisso); }
@@ -241,12 +187,10 @@ function colore_valido(string $c, string $default): string { return preg_match('
 function stile_tema(string $prefisso = ''): string {
     $blu = colore_valido(impost('colore_blu'), '#0b1a36');
     $oro = colore_valido(impost('colore_oro'), '#c9a14a');
-    return '<style>:root{--blu:' . $blu . ';--oro:' . $oro . ';--hero:url("' . e(asset_banner($prefisso)) . '")}</style>';
-}
-
-require_once __DIR__ . '/file.php';
-
-function percorso_pubblico(): string {
-    $schema = (!empty($_SERVER['HTTPS']) || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https') ? 'https' : 'http';
-    return $schema . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\') . '/';
+    // dentro <style> le entità HTML non vengono lette: l'indirizzo va protetto in modo da CSS
+    // Un url() dentro una variabile CSS viene letto rispetto al file stile.css (assets/), non alla pagina: serve un indirizzo completo.
+    $b = asset_banner('');
+    $b = e_assoluto($b) ? $b : percorso_pubblico() . ltrim($b, '/');
+    $img = str_replace(['"', '\\', '<', '>', "\n", "\r"], ['%22', '%5C', '%3C', '%3E', '', ''], $b);
+    return '<style>:root{--blu:' . $blu . ';--oro:' . $oro . ';--hero:url("' . $img . '")}</style>';
 }

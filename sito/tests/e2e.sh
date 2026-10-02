@@ -14,10 +14,17 @@ LOG="$T/server.log"
 ok=0; ko=0
 
 cd "$S" || exit 1
+# E2E_DB=mysql: usa un database MySQL/MariaDB vero (credenziali in E2E_MYSQL_*, vedi tests/mysql_db.php)
+DBNAME=""
+if [ "${E2E_DB:-sqlite}" = "mysql" ]; then
+  DBNAME="libri_e2e_$$"
+  export LIBRI_CONFIG="$T/config.php"
+  php "$REPO/sito/tests/mysql_db.php" crea "$LIBRI_CONFIG" "$DBNAME" || { echo "MySQL non raggiungibile"; exit 1; }
+fi
 LIBRI_REPO="$REPO" php importa.php >/dev/null || { echo "importa.php non riuscito"; exit 1; }
 php -S 127.0.0.1:$PORT >"$LOG" 2>&1 &
 PID=$!
-trap 'kill $PID 2>/dev/null; rm -rf "$T"' EXIT
+trap 'kill $PID 2>/dev/null; [ -n "$DBNAME" ] && php "$REPO/sito/tests/mysql_db.php" elimina "$DBNAME"; rm -rf "$T"' EXIT
 for i in $(seq 1 30); do curl -s -o /dev/null "$B/robots.txt" && break; sleep 0.2; done
 
 chk()  { if [ "$2" = "$3" ]; then ok=$((ok+1)); else ko=$((ko+1)); echo "FAIL: $1 (atteso '$3', ottenuto '$2')"; fi; }
@@ -69,10 +76,10 @@ chk "CSRF mancante rifiutato" "$(post admin/libri.php -d "azione=pubblica&ids[]=
 curl -s -b "$J" "$B/admin/libri.php" | grep -q 'data-ordina="libri"' && ok=$((ok+1)) || { ko=$((ko+1)); echo "FAIL: maniglie di trascinamento assenti"; }
 Tk=$(tok admin/libri.php)
 chk "salva_ordine libri: 204" "$(post admin/libri.php -d "csrf=$Tk&azione=salva_ordine&ids[]=5&ids[]=4&ids[]=3&ids[]=2&ids[]=1")" 204
-chk "ordine libri salvato" "$(sql "SELECT group_concat(id) FROM (SELECT id FROM libri ORDER BY ordine)")" "5,4,3,2,1"
+chk "ordine libri salvato" "$(sql "SELECT group_concat(id ORDER BY ordine) FROM libri")" "5,4,3,2,1"
 Tk=$(tok admin/collane.php)
 chk "salva_ordine collane: 204" "$(post admin/collane.php -d "csrf=$Tk&azione=salva_ordine&ids[]=2&ids[]=1")" 204
-chk "ordine collane salvato" "$(sql "SELECT group_concat(id) FROM (SELECT id FROM collane ORDER BY ordine)")" "2,1"
+chk "ordine collane salvato" "$(sql "SELECT group_concat(id ORDER BY ordine) FROM collane")" "2,1"
 Tk=$(tok admin/pagine.php)
 chk "salva_ordine pagine: 204" "$(post admin/pagine.php -d "csrf=$Tk&azione=salva_ordine&ids[]=2&ids[]=1")" 204
 chk "salva_ordine senza CSRF" "$(post admin/pagine.php -d "azione=salva_ordine&ids[]=1&ids[]=2")" 400
@@ -102,7 +109,8 @@ chk "lettore: usa PDF.js locale" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna
 chk "lettore: niente CDN" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna" | conta 'cdnjs')" 0
 chk "PDF.js servito" "$(code assets/vendor/pdf.worker.min.js)" 200
 chk "scarica pdf" "$(curl -s -b "$J" -c "$J" -o /dev/null -w '%{http_code}:%{content_type}' "$B/scarica.php?s=il-custode-dell-etna")" "200:application/pdf"
-chk "contatori incrementati (2 letture da visitatori diversi, 1 download)" "$(sql "SELECT letture || '-' || download FROM libri WHERE slug = 'il-custode-dell-etna'")" "2-1"
+chk "contatori: 2 letture da visitatori diversi" "$(sql "SELECT letture FROM libri WHERE slug = 'il-custode-dell-etna'")" 2
+chk "contatori: 1 download" "$(sql "SELECT download FROM libri WHERE slug = 'il-custode-dell-etna'")" 1
 
 # ---------- collane e pagine ----------
 Tk=$(tok admin/collane.php)
@@ -121,6 +129,9 @@ chk "aspetto: colori applicati" "$(curl -s "$B/" | conta '\-\-blu:#112233;\-\-or
 Tk=$(tok admin/aspetto.php); post admin/aspetto.php -F csrf=$Tk -F ripristina_logo_emblema=1 -F colori_originali=1 >/dev/null
 chk "aspetto: ripristino emblema" "$(curl -s "$B/" | conta 'src="assets/emblema.png"')" 1
 chk "aspetto: ripristino colori" "$(curl -s "$B/" | conta '\-\-blu:#0b1a36')" 1
+HERO=$(curl -s "$B/" | grep -o '\-\-hero:url("[^"]*")' | sed 's/.*url("//; s/")$//')
+chk "banner: indirizzo completo (le variabili CSS si leggono rispetto a stile.css)" "$(echo "$HERO" | conta "^$B/assets/hero.jpg$")" 1
+chk "banner: il file si scarica" "$(curl -s -o /dev/null -w '%{http_code}' "$HERO")" 200
 Tk=$(tok admin/aspetto.php); post admin/aspetto.php -F csrf=$Tk -F colore_blu='rosso;}body{display:none' >/dev/null
 chk "aspetto: colore non valido scartato" "$(curl -s "$B/" | conta 'display:none')" 0
 
@@ -135,7 +146,11 @@ chk "slogan nuovo in home" "$(curl -s "$B/" | conta 'Slogan Nuovo')" 1
 
 # ---------- strumenti ----------
 Tk=$(tok admin/strumenti.php)
-chk "backup" "$(curl -s -b "$J" -d "csrf=$Tk&azione=backup" $B/admin/strumenti.php | head -c 15)" "SQLite format 3"
+if [ -n "$DBNAME" ]; then
+  chk "backup (JSON con tutte le tabelle)" "$(curl -s -b "$J" -d "csrf=$Tk&azione=backup" $B/admin/strumenti.php | conta '"libri": \[')" 1
+else
+  chk "backup" "$(curl -s -b "$J" -d "csrf=$Tk&azione=backup" $B/admin/strumenti.php | head -c 15)" "SQLite format 3"
+fi
 curl -s -b "$J" -d "csrf=$Tk&azione=csv" $B/admin/strumenti.php > "$T/cat.csv"
 chk "csv esportato" "$(conta 'il-custode-dell-etna' < "$T/cat.csv")" 1
 echo 'x;Libro Importato;;Vlad;Serie CSV;3;Fantasy;it;2026;0;;uno,due;Trama;0;;0' >> "$T/cat.csv"

@@ -1,4 +1,6 @@
 data/*.sqlite
+data/config.php
+data/config.php.tmp*
 uploads/pdf/*
 uploads/cover/*
 uploads/thumb/*

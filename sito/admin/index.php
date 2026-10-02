@@ -15,7 +15,7 @@ $n = [
 $piu_letti = db()->query('SELECT id, titolo, letture, download FROM libri WHERE eliminato IS NULL AND (letture > 0 OR download > 0) ORDER BY letture + download DESC LIMIT 5')->fetchAll();
 $recenti = db()->query('SELECT id, titolo, aggiornato, pubblicato FROM libri WHERE eliminato IS NULL ORDER BY aggiornato DESC, id DESC LIMIT 6')->fetchAll();
 $spazio = 0;
-foreach (['pdf', 'cover'] as $c) foreach (glob(RADICE . "/uploads/$c/*") ?: [] as $f) if (is_file($f) && basename($f)[0] !== '.') $spazio += filesize($f);
+if (dir_uploads() !== null) foreach (['pdf', 'cover'] as $c) foreach (glob(dir_uploads() . "/$c/*") ?: [] as $f) if (is_file($f) && basename($f)[0] !== '.') $spazio += filesize($f);
 
 // avvisi utili
 $avvisi = [];

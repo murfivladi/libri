@@ -101,7 +101,8 @@ intestazione('Accesso', '../');
     <label>Password <input type="password" name="password" required autofocus autocomplete="<?= $primo ? 'new-password' : 'current-password' ?>"></label>
     <?php if ($primo): ?><label>Ripeti la password <input type="password" name="password2" required autocomplete="new-password"></label><?php endif; ?>
     <button class="bottone"><?= $primo ? 'Crea' : 'Entra' ?></button>
-    <?php if (!$primo): ?><p><a href="login.php?recupero=1">Password dimenticata?</a></p><?php endif; ?>
+    <?php if (!$primo): ?><p><a href="login.php?recupero=1">Password dimenticata?</a></p>
+    <?php else: ?><p class="muto">Hai due siti che devono mostrare gli stessi libri? Prima <a href="database.php">collega il database MySQL condiviso</a>, poi crea la password.</p><?php endif; ?>
   <?php endif; ?>
 </form>
 <?php endif; ?>

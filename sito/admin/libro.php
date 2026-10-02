@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pubblica_il = '';
         if (trim($_POST['pubblica_il'] ?? '') !== '' && ($ts = strtotime($_POST['pubblica_il']))) $pubblica_il = date('Y-m-d H:i:s', $ts);
         $pagine_n = (int)($_POST['pagine_n'] ?? 0);
-        if ($pdf && $pagine_n === 0) $pagine_n = conta_pagine_pdf(percorso_file('pdf', $pdf));
+        if ($pdf && $pagine_n === 0) $pagine_n = (int)($GLOBALS['ultimo_upload']['pagine'] ?? 0);   // contate da chi ha salvato il file
 
         $slugVoluto = trim($_POST['slug'] ?? '') !== '' ? $_POST['slug'] : $titolo;
         $dati = [
@@ -78,9 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $collane = db()->query('SELECT id, nome FROM collane ORDER BY ordine, nome')->fetchAll();
 $generi = db()->query("SELECT DISTINCT genere FROM libri WHERE genere != '' ORDER BY genere")->fetchAll(PDO::FETCH_COLUMN);
-$anteprima = $id && $l['token'] ? percorso_pubblico() : '';
-$anteprima_url = $id ? str_replace('/admin/', '/', $anteprima) . 'libro.php?s=' . urlencode($l['slug']) . '&anteprima=' . $l['token'] : '';
-$dim_pdf = $l['pdf'] && is_file(percorso_file('pdf', $l['pdf'])) ? filesize(percorso_file('pdf', $l['pdf'])) : 0;
+$anteprima_url = $id ? base_ufficiale() . 'libro.php?s=' . urlencode($l['slug']) . '&anteprima=' . $l['token'] : '';
+$dim_pdf = $l['pdf'] ? dimensione_file($l['pdf'], 'pdf') : 0;          // null = il file sta sul sito principale e da qui non si legge
+$pdf_remoto_ok = $l['pdf'] && $dim_pdf === null ? file_raggiungibile(url_file($l['pdf'], 'pdf')) : true;
 $pubblico = $id && $l['pubblicato'] && !$l['eliminato'] && ($l['pubblica_il'] === '' || $l['pubblica_il'] <= date('Y-m-d H:i:s'));
 
 admin_testata($id ? 'Modifica libro' : 'Nuovo libro', 'libri');
@@ -113,15 +113,15 @@ if ($id && $l['eliminato']) echo '<p class="errore">Questo libro è nel cestino 
 <div class="pannello"><h2 style="margin-top:0">Copertina e PDF</h2>
 <div class="form-griglia">
   <div>
-    <?php if ($l['copertina']): ?><img class="anteprima-cop" src="../<?= e(miniatura($l['copertina'], 300)) ?>" alt=""><br>
+    <?php if ($l['copertina']): ?><img class="anteprima-cop" src="<?= e(con_prefisso(miniatura($l['copertina'], 300), '../')) ?>" alt=""><br>
       <label style="font-weight:400"><span><input type="checkbox" name="togli_copertina" value="1"> Togli la copertina</span></label><?php endif; ?>
     <label>Copertina (JPG, PNG, WebP) <input type="file" name="copertina" accept="image/*"></label>
     <label>…oppure da URL <input type="text" name="copertina_url" placeholder="https://…/copertina.jpg"></label>
   </div>
   <div>
-    <?php if ($l['pdf']): ?><p>📄 PDF attuale: <b><?= e(formatta_byte($dim_pdf)) ?></b>
-      <?= $dim_pdf ? '' : ' <span class="errore">(file mancante sul server!)</span>' ?>
-      <br><a href="../uploads/pdf/<?= e($l['pdf']) ?>" target="_blank">Apri il PDF ↗</a></p>
+    <?php if ($l['pdf']): ?><p>📄 PDF attuale<?= $dim_pdf ? ': <b>' . e(formatta_byte($dim_pdf)) . '</b>' : '' ?>
+      <?= ($dim_pdf === 0 || !$pdf_remoto_ok) ? ' <span class="errore">(file mancante sul server!)</span>' : '' ?>
+      <br><a href="<?= e(con_prefisso(url_file($l['pdf'], 'pdf'), '../')) ?>" target="_blank">Apri il PDF ↗</a></p>
       <label style="font-weight:400"><span><input type="checkbox" name="togli_pdf" value="1"> Togli il PDF</span></label><?php endif; ?>
     <label>PDF del libro <input type="file" name="pdf" accept="application/pdf"></label>
     <label>…oppure da URL <input type="text" name="pdf_url" placeholder="https://…/libro.pdf"></label>

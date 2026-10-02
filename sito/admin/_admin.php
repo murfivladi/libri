@@ -14,7 +14,7 @@ function admin_testata(string $titolo, string $voce = ''): void {
         'media' => ['media.php', '🖼 File'], 'impostazioni' => ['impostazioni.php', '⚙️ Impostazioni'],
         'strumenti' => ['strumenti.php', '🧰 Strumenti'], 'log' => ['log.php', '📜 Attività'],
         'password' => ['password.php', '🔑 Password'], 'sicurezza' => ['sicurezza.php', '🔐 Sicurezza'],
-        'aspetto' => ['aspetto.php', '🎨 Aspetto'],
+        'aspetto' => ['aspetto.php', '🎨 Aspetto'], 'database' => ['database.php', '🗄 Database e file'],
     ];
     $bozze = (int)db()->query("SELECT COUNT(*) FROM libri WHERE pubblicato = 0 AND eliminato IS NULL")->fetchColumn();
     $cestino = (int)db()->query("SELECT COUNT(*) FROM libri WHERE eliminato IS NOT NULL")->fetchColumn();

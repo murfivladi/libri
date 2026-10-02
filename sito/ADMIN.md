@@ -89,6 +89,14 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
 73. **Aspetto**: cambia emblema, logo e banner (da file o URL) e i due colori del sito, con anteprima; ripristino dell'originale
 74. **Riordino trascinando** (con mouse o con il dito) per libri, collane e pagine
 
+## Due siti, un database (aggiunte)
+75. **Database e file** (procedura guidata): collega il sito a un MySQL condiviso (anche su un VPS), con connessione cifrata TLS, prova della connessione e messaggi che spiegano cosa controllare
+76. Ruolo del sito: **principale** (ospita i file) o **secondario** (usa quelli del principale), indirizzo dei file e indirizzo ufficiale
+77. Copertine, PDF, banner e logo salvati come **indirizzi interi** nel database
+78. Caricamento dal secondario verso il principale: scrittura diretta nella cartella `uploads` o **API firmata**; prova del salvataggio dei file
+79. Ritorno a SQLite con un clic (o cancellando `data/config.php` via FTP)
+80. Strumenti e File adattati: backup JSON per MySQL, controllo dei file sul principale, stato del database
+
 ## Lato pubblico (novità)
 - Miniature delle copertine (il catalogo carica immagini leggere), anteprime ricche quando condividi un link (Open Graph), pagina Privacy, `robots.txt`, pagina 404 con la grafica del sito, nessun servizio esterno (PDF.js è incluso)
 - **Lettore**: indice, segnalibri, ricerca nel testo con evidenziazione, vai a pagina, schermo intero, zoom (anche pizzicando), scorri per girare pagina, tema scuro, riprende dall'ultima pagina

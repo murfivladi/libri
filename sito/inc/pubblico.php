@@ -6,7 +6,7 @@ require_once __DIR__ . '/file.php';
 function ordine_catalogo(): string {
     return [
         'numero' => 'c.ordine, c.nome, l.numero, l.id', 'manuale' => 'l.ordine, l.numero, l.id',
-        'recenti' => 'l.creato DESC, l.id DESC', 'titolo' => 'l.titolo COLLATE NOCASE',
+        'recenti' => 'l.creato DESC, l.id DESC', 'titolo' => sql_nocase('l.titolo'),
     ][impost('ordine_catalogo')] ?? 'l.numero, l.id';
 }
 
@@ -35,6 +35,13 @@ function scheda_libro(array $l): void {
     echo '<a class="scheda" href="libro.php?s=' . e($l['slug']) . '">';
     if ($l['copertina']) echo '<img src="' . e(miniatura($l['copertina'], 400)) . '" alt="Copertina di ' . e($l['titolo']) . '" loading="lazy" width="400" height="600">';
     echo '<span class="titolo">' . e($l['titolo']) . '</span><span class="meta">' . e($l['nome_collana'] ?? '') . ($l['numero'] ? ' · n. ' . (int)$l['numero'] : '') . '</span></a>';
+}
+
+// Indirizzo del PDF per il lettore: passa da pdf.php del sito principale (CORS e lettura a pezzi garantiti).
+function url_pdf_lettore(string $valore): string {
+    if (!e_nostro($valore)) return $valore;
+    $b = file_base();
+    return ($b !== '' ? $b . '/' : '') . 'pdf.php?f=' . rawurlencode(nome_file($valore));
 }
 
 function conta_una_volta(string $tipo, int $id): void {
