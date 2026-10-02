@@ -23,11 +23,31 @@
     },
     "ettore": {
       "descrizione": "Ettore Marenzi, the ghost of a thin pale 13-year-old boy from twenty years ago, slicked-back dark hair, narrow face, pale cold eyes, white buttoned shirt and dark trousers in early-2000s style, faint blue frost glow around him, sad and lonely rather than evil; he carries an old sketchbook",
-      "riferimento": null
+      "riferimento": "riferimenti/ettore.jpg"
+    },
+    "turi": {
+      "descrizione": "Turi, a 33-year-old Sicilian mountain guide, strong, short dark beard and short dark hair, sunburned face, kind but troubled eyes, green outdoor jacket, a yellow safety helmet clipped to his belt",
+      "riferimento": "riferimenti/turi.jpg"
+    },
+    "carmela": {
+      "descrizione": "Carmela, a 33-year-old Sicilian pharmacist, shoulder-length wavy chestnut hair, round gentle face, white pharmacist coat over a green blouse, nervous hands",
+      "riferimento": "riferimenti/carmela.jpg"
+    },
+    "pippo": {
+      "descrizione": "Pippo, a 33-year-old Sicilian baker, stocky and friendly with a round face, short black hair, flour-dusted apron over a grey t-shirt, white baker's cap pushed back",
+      "riferimento": "riferimenti/pippo.jpg"
+    },
+    "giulio": {
+      "descrizione": "Giulio, a 33-year-old Sicilian lawyer, slim, neat short dark hair with a few early grey streaks, rimless glasses, dark suit with a loosened tie, tense serious expression",
+      "riferimento": "riferimenti/giulio.jpg"
+    },
+    "signor_marenzi": {
+      "descrizione": "Signor Marenzi, Ettore's elderly father, about 72, thin, white hair and a neat white mustache, tweed jacket and flat cap, gentle sad eyes, walking stick",
+      "riferimento": "riferimenti/signor_marenzi.jpg"
     },
     "ivan": {
       "descrizione": "Ivan, a ragged orphan boy of about 13 in a Russian village three centuries ago, messy dark hair, brown eyes, linen shirt and wool vest, holding a glowing golden feather; he looks a bit like Vlad but in old-fashioned peasant clothes",
-      "riferimento": null
+      "riferimento": "riferimenti/ivan.jpg"
     }
   }
 }
