@@ -25,7 +25,7 @@ if ($l['anteprima']): ?><p class="avviso">👁 Anteprima privata: questo libro n
     <?php if ($l['sottotitolo']): ?><p class="sottotitolo"><?= e($l['sottotitolo']) ?></p><?php endif; ?>
     <p class="meta">
       <?php if ($l['autore']): ?>di <b><?= e($l['autore']) ?></b><?php endif; ?>
-      <?php if ($l['nome_collana'] && $l['collana_visibile']): ?> · <a href="index.php?collana=<?= e($l['slug_collana']) ?>"><?= e($l['nome_collana']) ?></a><?= $l['numero'] ? ' (libro ' . (int)$l['numero'] . ')' : '' ?><?php endif; ?>
+      <?php if ($l['nome_collana'] && $l['collana_visibile']): ?> · <a href="collana.php?s=<?= e($l['slug_collana']) ?>"><?= e($l['nome_collana']) ?></a><?= $l['numero'] ? ' (libro ' . (int)$l['numero'] . ')' : '' ?><?php endif; ?>
     </p>
     <p class="meta"><?= e(implode(' · ', array_filter([$l['genere'], $l['anno'] ? (string)$l['anno'] : '', $l['pagine_n'] ? $l['pagine_n'] . ' pagine' : '', strtoupper($l['lingua']), $l['isbn'] ? 'ISBN ' . $l['isbn'] : '']))) ?></p>
     <?php if ($l['trama']): ?><div class="trama"><?= nl2br(e($l['trama'])) ?></div><?php endif; ?>

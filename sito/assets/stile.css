@@ -119,3 +119,8 @@ body.lettore.scuro .pagina-pdf canvas { filter:invert(1) hue-rotate(180deg); }
 #form-cerca button { font:inherit; padding:0 12px; border:1px solid #8886; border-radius:6px; background:transparent; color:inherit; }
 .solo-pc { display:inline; }
 @media (max-width:640px) { .solo-pc { display:none; } .comandi button { min-width:36px; height:36px; font-size:18px; } .barra { gap:4px; } #progresso { top:53px; } }
+/* Collane */
+.collana-testa { display:grid; grid-template-columns:minmax(0,420px) 1fr; gap:24px; align-items:start; margin-bottom:24px; }
+.collana-img { width:100%; height:auto; aspect-ratio:2/1; object-fit:cover; border-radius:8px; box-shadow:0 6px 20px #0003; }
+.griglia-collane { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); }
+@media (max-width:640px) { .collana-testa { grid-template-columns:1fr; } }

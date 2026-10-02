@@ -119,6 +119,15 @@ chk "contatori: le letture da visitatori diversi si sommano" "$(sql "SELECT lett
 Tk=$(tok admin/collane.php)
 chk "salva collana" "$(post admin/collane.php -F csrf=$Tk -F azione=salva -F id=0 -F nome='Collana Nuova' -F descrizione=Ciao -F visibile=1 -F ordine=5)" 302
 chk "collana nel catalogo" "$(curl -s "$B/index.php?collana=il-custode-dell-etna" | conta 'class="scheda"')" 3
+chk "pagina collana: 200" "$(code collana.php?s=il-custode-dell-etna)" 200
+chk "pagina collana: 3 libri" "$(curl -s "$B/collana.php?s=il-custode-dell-etna" | conta 'class="scheda"')" 3
+chk "pagina collana: JSON-LD" "$(curl -s "$B/collana.php?s=il-custode-dell-etna" | conta 'CollectionPage')" 1
+chk "pagina collana: inizia dal libro 1" "$(curl -s "$B/collana.php?s=il-custode-dell-etna" | conta 'Inizia dal libro 1')" 1
+chk "pagina collana inesistente: 404" "$(code collana.php?s=non-esiste)" 404
+chk "elenco collane: 200" "$(code collane.php)" 200
+chk "elenco collane: link alla collana" "$(curl -s "$B/collane.php" | conta 'collana.php?s=il-custode-dell-etna')" 1
+chk "menu con Collane" "$(curl -s "$B/index.php" | conta '>Collane<')" 1
+chk "sitemap con la collana" "$(curl -s "$B/sitemap.php" | conta 'collana.php?s=il-custode')" 1
 Tk=$(tok admin/pagine.php)
 chk "salva pagina" "$(post admin/pagine.php -d "csrf=$Tk&azione=salva&id=0&titolo=Contatti&contenuto=**Scrivici**+a+ciao&visibile=1&nel_menu=1")" 302
 chk "pagina con grassetto" "$(curl -s "$B/pagina.php?s=contatti" | conta '<strong>Scrivici</strong>')" 1
