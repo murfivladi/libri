@@ -1,6 +1,6 @@
 # Nuova collana «Il popolo nel barattolo» — domande e risposte di Vlad
 
-(Raccolte a gruppi di 4. Provvisorio: da rivedere con Vlad.)
+(Raccolte a gruppi di 4 il 3 ottobre 2026, risposte 1–28 complete. Il nome vero del popolo nella loro lingua è ancora da inventare.)
 
 ## Idea scelta (3 ottobre 2026)
 Fantascienza ambientata **oggi**, senza viaggi nel passato. Per il progetto di scienze, Nico chiude un pugno di terra in un barattolo. Dentro nasce una civiltà minuscola che vive mille anni in un giorno. Per loro Nico è il cielo. Inventano la musica, la radio e i razzi, e il loro sogno è arrivare al coperchio.
@@ -42,7 +42,7 @@ Fantascienza ambientata **oggi**, senza viaggi nel passato. Per il progetto di s
 24. Colori della collana: **viola spazio e argento razzo**
 
 ## Ultimi dettagli (25–28)
-25. Il paese: *in attesa*
-26. Nome del professore: *in attesa*
-27. Il papà di Nico: *in attesa*
-28. Nome del popolo (come lo storpia Nico): *in attesa*
+25. Il paese: **Tropea** (reale; bar, scuola e persone del paese restano inventati)
+26. Nome del professore: **Prof. Ugo Lupetti** (nome piccolo per un uomo che si crede enorme)
+27. Il papà di Nico: **lavora lontano su una nave**, chiama in video e manda cartoline
+28. Nome del popolo (come lo storpia Nico): **i Brillini** (i loro primi segnali sono lucine)
