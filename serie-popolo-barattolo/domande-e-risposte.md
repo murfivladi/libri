@@ -36,7 +36,13 @@ Fantascienza ambientata **oggi**, senza viaggi nel passato. Per il progetto di s
 20. Da dove viene la terra del barattolo: **la spiaggia**, dopo una notte di stelle cadenti
 
 ## Mamma, carattere, libri, colori (21–24)
-21. Lavoro della mamma: *in attesa*
-22. Carattere di Nico: *in attesa*
-23. Come si dividono i 5 libri: *in attesa*
-24. Colori della collana: *in attesa*
+21. Lavoro della mamma: **gestisce un bar sul lungomare** (tutto il paese passa di lì)
+22. Carattere di Nico: **preciso**, ansioso e ordinato, annota tutto su un quaderno
+23. Come si dividono i 5 libri: **un'epoca per libro** (fuoco e villaggi, regni, invenzioni, radio, razzi)
+24. Colori della collana: **viola spazio e argento razzo**
+
+## Ultimi dettagli (25–28)
+25. Il paese: *in attesa*
+26. Nome del professore: *in attesa*
+27. Il papà di Nico: *in attesa*
+28. Nome del popolo (come lo storpia Nico): *in attesa*
