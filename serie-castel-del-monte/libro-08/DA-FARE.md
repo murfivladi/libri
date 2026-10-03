@@ -1,0 +1,5 @@
+# Libro 8 · La Torre del Silenzio (finale) — cosa manca
+- **Illustrazioni**: solo la copertina (una prova, 5 RUB). Nessuna tavola interna.
+- **Da approvare (inventato — GRANDE)**: il Primo è il bambino scalzo di Palermo, cioè il ricordo dimenticato di Federico (Federico Ruggero), nato nell'Oblio quando la prima Alessia glielo ha tolto; il Custos Vacuus è Rainaldo, il servo che lo lasciò in strada; la prima Alessia e il bambino vanno via insieme «dove la stella non si muove» (con Rainaldo); la chiave dell'ottava porta = pendente di Chiara + anello di Rosa; Ailessa resta come una di famiglia; Lucerna vive nella lanterna; i genitori tornano a casa; il papà insegnava storia; la neve tiepida; la visita di Greco e Vito (24 dicembre); le tre arance mature.
+- **Versione in russo**: tradotta (capitoli-ru/, appendice-ru.html); `python3 build.py --ru` → build/bashnya-molchaniya.pdf (78 pagine). Da far rileggere a un madrelingua.
+- **Serie completa**: 8 libri. Eventuali lavori futuri: allungare i libri 2 e 3, tavole interne, mettere tutto sul sito.
