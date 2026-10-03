@@ -12,7 +12,7 @@ html, body {
 }
 
 body {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, "Times New Roman", "Liberation Serif", "DejaVu Serif", serif;
   font-size: 11.5pt;
   line-height: 1.5;
   color: #1c1a17;

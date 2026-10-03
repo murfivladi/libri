@@ -11,7 +11,7 @@ I capitoli stanno in capitoli/NN-*.md. Formato (semplice):
   || testo                                 (iscrizione)
   [[tavola:cap03|didascalia]]              (illustrazione a tutta pagina: immagini/cap03.jpg)
 
-Uso:  python3 serie-castel-del-monte/libro-01/build.py
+Uso:  python3 serie-castel-del-monte/libro-01/build.py [--ru]   (--ru: versione russa)
 Output: serie-castel-del-monte/libro-01/build/la-pietra-al-contrario.pdf
 """
 import glob
@@ -25,11 +25,28 @@ QUI = os.path.dirname(os.path.abspath(__file__))
 RADICE = os.path.normpath(os.path.join(QUI, "..", ".."))
 BUILD = os.path.join(QUI, "build")
 HTML_UNITO = os.path.join(BUILD, "libro-unito.html")
-PDF = os.path.join(BUILD, "la-pietra-al-contrario.pdf")
 LOGO = "../../../grafica/emblema-700.png"
-SERIE = "La Porta di Castel del Monte"
-TITOLO = "La Pietra al Contrario"
 ANNO = 2026
+RU = "--ru" in sys.argv            # versione russa: capitoli-ru/, appendice-ru.html, PDF a parte
+PDF = os.path.join(BUILD, "kamen-naoborot.pdf" if RU else "la-pietra-al-contrario.pdf")
+CAPITOLI = "capitoli-ru" if RU else "capitoli"
+APPENDICE = "appendice-ru.html" if RU else "appendice.html"
+L = {
+    "serie": "Врата Кастель-дель-Монте" if RU else "La Porta di Castel del Monte",
+    "titolo": "Камень наоборот" if RU else "La Pietra al Contrario",
+    "titolo2": "Камень<br>наоборот" if RU else "La Pietra<br>al Contrario",
+    "libro1": "Книга 1" if RU else "Libro 1",
+    "motto": "Восемь дверей, одна тайна" if RU else "Otto porte, un solo segreto",
+    "autore": "Влад" if RU else "Vlad",
+    "editore": "Издательство Vlad Editore" if RU else "Vlad Editore",
+    "luogo": "Таормина · Сицилия" if RU else "Taormina · Sicilia",
+    "capitolo": "Глава" if RU else "Capitolo",
+    "nella_collana": "В той же серии" if RU else "Nella stessa collana",
+    "continua": "Продолжение следует…" if RU else "Continua…",
+    "lang": "ru" if RU else "it",
+}
+SERIE = L["serie"]
+TITOLO = L["titolo"]
 
 
 def trova_chromium():
@@ -73,7 +90,7 @@ def capitolo(path, numero):
             corrente.append(r.strip())
     if corrente: blocchi.append(" ".join(corrente))
     out = [f'<section class="capitolo {mondo}">', '<div class="capitolo-testa">',
-           f'<p class="titolo-libro">{html.escape(SERIE)}</p>', f'<p class="numero-cap">Capitolo {numero}</p>',
+           f'<p class="titolo-libro">{html.escape(SERIE)}</p>', f'<p class="numero-cap">{L["capitolo"]} {numero}</p>',
            f'<h2 class="titolo-cap">{inline(titolo)}</h2>']
     if dove: out.append(f'<p class="dove">{html.escape(dove)}</p>')
     out.append('<p class="ornamento">' + {"oblio": "◇ ◇ ◇", "duecento": "✦ ✦ ✦"}.get(mondo, "• • •") + '</p></div>')
@@ -108,17 +125,23 @@ def tavola(nome, didascalia, larga=False):
 def copertina():
     img = os.path.join(QUI, "immagini", "copertina.jpg")
     stile = ' style="background-image:url(\'../immagini/copertina.jpg\')"' if os.path.exists(img) else ""
-    return (f'<section class="pagina-fissa copertina"{stile}><div class="testo-copertina"><p class="serie-c">{SERIE} · Libro 1</p>'
-            f'<h1>La Pietra<br>al Contrario</h1><p class="autore">Vlad</p></div><p class="editore">Vlad Editore</p></section>')
+    return (f'<section class="pagina-fissa copertina"{stile}><div class="testo-copertina"><p class="serie-c">{SERIE} · {L["libro1"]}</p>'
+            f'<h1>{L["titolo2"]}</h1><p class="autore">{L["autore"]}</p></div><p class="editore">Vlad Editore</p></section>')
 
 
 def frontespizio():
-    return (f'<section class="pagina-fissa frontespizio"><p class="serie">{SERIE} · Libro 1</p>'
-            f'<h1>La Pietra<br>al Contrario<small>Otto porte, un solo segreto</small></h1><p class="ornamento">✦ ✦ ✦</p><p class="autore">Vlad</p>'
-            f'<img class="emblema" src="{LOGO}" alt="Marchio di Vlad Editore"><p class="editore">Vlad Editore<span>Taormina · Sicilia</span></p></section>')
+    return (f'<section class="pagina-fissa frontespizio"><p class="serie">{SERIE} · {L["libro1"]}</p>'
+            f'<h1>{L["titolo2"]}<small>{L["motto"]}</small></h1><p class="ornamento">✦ ✦ ✦</p><p class="autore">{L["autore"]}</p>'
+            f'<img class="emblema" src="{LOGO}" alt="Marchio di Vlad Editore"><p class="editore">Vlad Editore<span>{L["luogo"]}</span></p></section>')
 
 
 def colophon():
+    if RU:
+        return (f'<section class="pagina-fissa colophon"><p class="titolo-col">{TITOLO}</p><p>Книга 1 серии <em>{SERIE}</em>.</p>'
+                f'<p>Первое цифровое издание, {ANNO}.</p><p>© {ANNO} Влад. Все права защищены.</p><p>Издательство Vlad Editore, Таормина (Сицилия).</p>'
+                '<p>Текст Влада, написанный с помощью искусственного интеллекта. Иллюстрация на обложке создана с помощью инструментов искусственного интеллекта. Перевод на русский язык выполнен с помощью искусственного интеллекта.</p>'
+                '<p>Персонажи и события вымышлены; любое сходство с реальными людьми случайно. Фридрих II Швабский, Микеле Скотт и Кастель-дель-Монте существовали на самом деле, но то, что они делают в этой книге, придумано: в исторических заметках в конце сказано, что правда.</p>'
+                f'<img class="emblema-piccolo" src="{LOGO}" alt=""><p class="isbn">ISBN: ожидает присвоения</p></section>')
     return (f'<section class="pagina-fissa colophon"><p class="titolo-col">{TITOLO}</p><p>Libro 1 della collana <em>{SERIE}</em>.</p>'
             f'<p>Prima edizione digitale, {ANNO}.</p><p>© {ANNO} Vlad. Tutti i diritti riservati.</p><p>Pubblicato da Vlad Editore, Taormina (Sicilia).</p>'
             '<p>Testo di Vlad, scritto con l’aiuto dell’intelligenza artificiale. Le illustrazioni e la copertina sono state create con strumenti di intelligenza artificiale.</p>'
@@ -127,8 +150,8 @@ def colophon():
 
 
 def ultima():
-    return (f'<section class="pagina-fissa nella-collana"><p class="titolo-libro">{SERIE}</p><h2>Nella stessa collana</h2>'
-            '<p class="motto">Otto porte, un solo segreto</p><p><b>1.</b> La Pietra al Contrario</p><p style="color:#8c5a2b;margin-top:4mm"><em>Continua…</em></p>'
+    return (f'<section class="pagina-fissa nella-collana"><p class="titolo-libro">{SERIE}</p><h2>{L["nella_collana"]}</h2>'
+            f'<p class="motto">{L["motto"]}</p><p><b>1.</b> {TITOLO}</p><p style="color:#8c5a2b;margin-top:4mm"><em>{L["continua"]}</em></p>'
             f'<img class="emblema" src="{LOGO}" alt=""><p class="editore">Vlad Editore</p></section>')
 
 
@@ -140,7 +163,7 @@ def segmento(html_corpo, nome, fisso, pagina_iniziale=1):
     else:
         regole = ("@page { size: A5; margin: 17mm 15mm 20mm; @bottom-center { content: counter(page); font-family: Georgia, serif; font-size: 9pt; color: #8c5a2b; } }"
                   f" html {{ counter-reset: page {pagina_iniziale - 1}; }}")
-    doc = ('<!doctype html>\n<html lang="it">\n<head>\n<meta charset="utf-8">\n<link rel="stylesheet" href="../stile.css">\n'
+    doc = (f'<!doctype html>\n<html lang="{L["lang"]}">\n<head>\n<meta charset="utf-8">\n<link rel="stylesheet" href="../stile.css">\n'
            f"<style>{regole}</style>\n</head>\n<body>\n{html_corpo}\n</body>\n</html>\n")
     f_html = os.path.join(BUILD, nome + ".html")
     f_pdf = os.path.join(BUILD, nome + ".pdf")
@@ -166,9 +189,9 @@ def main():
         os.remove(vecchio)
     pezzi = []                                  # (html, fisso)
     pezzi += [(copertina(), True), (frontespizio(), True), (colophon(), True)]
-    files = sorted(glob.glob(os.path.join(QUI, "capitoli", "*.md")))
+    files = sorted(glob.glob(os.path.join(QUI, CAPITOLI, "*.md")))
     if not files:
-        sys.exit("Nessun capitolo in capitoli/")
+        sys.exit("Nessun capitolo in " + CAPITOLI)
     for i, f in enumerate(files, 1):
         pezzi.append((capitolo(f, i), False))
         extra = os.path.join(QUI, "capitoli", os.path.basename(f)[:-3] + ".tavola")
@@ -176,7 +199,7 @@ def main():
             nome, did = open(extra, encoding="utf-8").read().strip().split("|", 1)
             t = tavola(nome, did)
             if t: pezzi.append((t, True))
-    app = os.path.join(QUI, "appendice.html")
+    app = os.path.join(QUI, APPENDICE)
     if os.path.exists(app):
         pezzi.append((open(app, encoding="utf-8").read(), False))
     pezzi.append((ultima(), True))
