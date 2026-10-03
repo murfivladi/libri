@@ -107,8 +107,8 @@ def tavola(nome, didascalia, larga=False):
 
 def copertina():
     img = os.path.join(QUI, "immagini", "copertina.jpg")
-    sfondo = '<img class="sfondo" src="../immagini/copertina.jpg" alt="">' if os.path.exists(img) else ""
-    return (f'<section class="pagina-fissa copertina">{sfondo}<div class="testo-copertina"><p class="serie-c">{SERIE} · Libro 1</p>'
+    stile = ' style="background-image:url(\'../immagini/copertina.jpg\')"' if os.path.exists(img) else ""
+    return (f'<section class="pagina-fissa copertina"{stile}><div class="testo-copertina"><p class="serie-c">{SERIE} · Libro 1</p>'
             f'<h1>La Pietra<br>al Contrario</h1><p class="autore">Vlad</p></div><p class="editore">Vlad Editore</p></section>')
 
 
@@ -132,30 +132,62 @@ def ultima():
             f'<img class="emblema" src="{LOGO}" alt=""><p class="editore">Vlad Editore</p></section>')
 
 
+def segmento(html_corpo, nome, fisso, pagina_iniziale=1):
+    """Stampa un pezzo di libro in un PDF a parte. Le pagine fisse (copertina, tavole…) sono a margini zero;
+    il testo ha i margini e il numero di pagina, che parte da pagina_iniziale."""
+    if fisso:
+        regole = "@page { size: A5; margin: 0; } html, body { height: 210mm; overflow: hidden; }"
+    else:
+        regole = ("@page { size: A5; margin: 17mm 15mm 20mm; @bottom-center { content: counter(page); font-family: Georgia, serif; font-size: 9pt; color: #8c5a2b; } }"
+                  f" html {{ counter-reset: page {pagina_iniziale - 1}; }}")
+    doc = ('<!doctype html>\n<html lang="it">\n<head>\n<meta charset="utf-8">\n<link rel="stylesheet" href="../stile.css">\n'
+           f"<style>{regole}</style>\n</head>\n<body>\n{html_corpo}\n</body>\n</html>\n")
+    f_html = os.path.join(BUILD, nome + ".html")
+    f_pdf = os.path.join(BUILD, nome + ".pdf")
+    with open(f_html, "w", encoding="utf-8") as fh:
+        fh.write(doc)
+    subprocess.run([trova_chromium(), "--headless", "--no-sandbox", "--disable-gpu", "--no-pdf-header-footer",
+                    "--print-to-pdf=" + f_pdf, "file://" + f_html], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if fisso:        # una sola pagina: scarta un'eventuale pagina vuota in più
+        sola = os.path.join(BUILD, nome + "-1.pdf")
+        subprocess.run(["pdfseparate", "-f", "1", "-l", "1", f_pdf, sola], check=True)
+        return sola
+    return f_pdf
+
+
+def pagine(pdf):
+    r = subprocess.run(["pdfinfo", pdf], capture_output=True, text=True, check=True).stdout
+    return int(re.search(r"Pages:\s+(\d+)", r).group(1))
+
+
 def main():
     os.makedirs(BUILD, exist_ok=True)
-    pezzi = [copertina(), frontespizio(), colophon()]
+    for vecchio in glob.glob(os.path.join(BUILD, "seg-*")):
+        os.remove(vecchio)
+    pezzi = []                                  # (html, fisso)
+    pezzi += [(copertina(), True), (frontespizio(), True), (colophon(), True)]
     files = sorted(glob.glob(os.path.join(QUI, "capitoli", "*.md")))
     if not files:
         sys.exit("Nessun capitolo in capitoli/")
     for i, f in enumerate(files, 1):
-        pezzi.append(capitolo(f, i))
+        pezzi.append((capitolo(f, i), False))
         extra = os.path.join(QUI, "capitoli", os.path.basename(f)[:-3] + ".tavola")
         if os.path.exists(extra):
             nome, did = open(extra, encoding="utf-8").read().strip().split("|", 1)
-            pezzi.append(tavola(nome, did))
+            t = tavola(nome, did)
+            if t: pezzi.append((t, True))
     app = os.path.join(QUI, "appendice.html")
     if os.path.exists(app):
-        pezzi.append(open(app, encoding="utf-8").read())
-    pezzi.append(ultima())
-    doc = ('<!doctype html>\n<html lang="it">\n<head>\n<meta charset="utf-8">\n'
-           f"<title>{TITOLO}</title>\n"
-           '<link rel="stylesheet" href="../stile.css">\n</head>\n<body>\n' + "\n".join(pezzi) + "\n</body>\n</html>\n")
-    with open(HTML_UNITO, "w", encoding="utf-8") as fh:
-        fh.write(doc)
-    subprocess.run([trova_chromium(), "--headless", "--no-sandbox", "--disable-gpu", "--no-pdf-header-footer",
-                    "--print-to-pdf=" + PDF, "file://" + HTML_UNITO], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    print("Capitoli:", len(files), "| PDF creato:", PDF)
+        pezzi.append((open(app, encoding="utf-8").read(), False))
+    pezzi.append((ultima(), True))
+
+    segmenti, totale = [], 0
+    for n, (corpo_html, fisso) in enumerate(pezzi, 1):
+        pdf = segmento(corpo_html, f"seg-{n:02d}", fisso, totale + 1)
+        segmenti.append(pdf)
+        totale += pagine(pdf)
+    subprocess.run(["pdfunite"] + segmenti + [PDF], check=True)
+    print("Capitoli:", len(files), "| pagine:", totale, "| PDF creato:", PDF)
 
 
 if __name__ == "__main__":

@@ -2,22 +2,6 @@
    A5 verticale. Il testo scorre da solo di pagina in pagina; frontespizio, tavole e appendici sono pagine fisse.
    Colori della collana: verde antico e bronzo. */
 
-@page {
-  size: A5;
-  margin: 17mm 15mm 20mm;
-  @bottom-center {
-    content: counter(page);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 9pt;
-    color: #8c5a2b;
-  }
-}
-
-/* pagine senza numero (copertina, frontespizio, colophon, tavole) */
-@page libera {
-  margin: 0;
-  @bottom-center { content: none; }
-}
 
 * { box-sizing: border-box; }
 
@@ -67,31 +51,30 @@ em { font-style: italic; }
 .iscrizione { margin: 3mm 0; text-indent: 0; text-align: center; letter-spacing: 0.18em; font-size: 10.5pt; color: #24402f; }
 
 /* ---------- pagine fisse ---------- */
-.pagina-fissa { page: libera; width: 148mm; height: 210mm; break-before: page; break-after: page; overflow: hidden; position: relative; }
+.pagina-fissa { width: 148mm; height: 210mm; break-before: page; break-after: page; overflow: hidden; }
 
-.copertina { background: #0d140f; color: #fff4d6; text-align: center; padding: 0; }
-.copertina img.sfondo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.copertina .testo-copertina { position: absolute; top: 12mm; left: 0; right: 0; padding: 0 10mm; text-shadow: 0 1mm 3mm rgba(0,0,0,0.85), 0 0 2mm rgba(0,0,0,0.9); }
+.copertina { background: #0d140f center / cover no-repeat; color: #fff4d6; text-align: center; padding: 12mm 10mm 0; }
+.copertina .testo-copertina { margin: -12mm -10mm 0; padding: 12mm 10mm 14mm; background: linear-gradient(rgba(5,12,8,0.78), rgba(5,12,8,0)); text-shadow: 0 1mm 3mm rgba(0,0,0,0.85), 0 0 2mm rgba(0,0,0,0.9); }
 .copertina .serie-c { margin: 0 0 3mm; text-indent: 0; font-size: 8.5pt; letter-spacing: 0.3em; text-transform: uppercase; color: #e6c27a; }
 .copertina h1 { margin: 0; font-size: 28pt; line-height: 1.1; font-weight: normal; letter-spacing: 0.04em; }
 .copertina h1 small { display: block; margin-top: 3mm; font-size: 13pt; font-style: italic; letter-spacing: 0.06em; color: #f2dca6; }
 .copertina .autore { margin: 4mm 0 0; text-indent: 0; font-size: 12pt; letter-spacing: 0.3em; text-transform: uppercase; }
-.copertina .editore { position: absolute; bottom: 8mm; left: 0; right: 0; text-indent: 0; font-size: 8.5pt; letter-spacing: 0.3em; text-transform: uppercase; text-shadow: 0 0 2mm rgba(0,0,0,0.95); }
+.copertina .editore { margin-top: 128mm; text-indent: 0; font-size: 8.5pt; letter-spacing: 0.3em; text-transform: uppercase; text-shadow: 0 0 2mm rgba(0,0,0,0.95); }
 
-.frontespizio { display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 24mm 14mm 16mm; text-align: center; background: #fbf9f1; }
+.frontespizio { padding: 24mm 14mm 16mm; text-align: center; background: #fbf9f1; }
 .frontespizio .serie { margin: 0; text-indent: 0; font-size: 9pt; letter-spacing: 0.3em; text-transform: uppercase; color: #8c5a2b; }
-.frontespizio h1 { margin: 0; font-size: 26pt; line-height: 1.2; font-weight: normal; letter-spacing: 0.05em; text-transform: uppercase; color: #24402f; }
+.frontespizio h1 { margin: 22mm 0 0; font-size: 26pt; line-height: 1.2; font-weight: normal; letter-spacing: 0.05em; text-transform: uppercase; color: #24402f; }
 .frontespizio h1 small { display: block; margin-top: 5mm; font-size: 12pt; font-style: italic; letter-spacing: 0.08em; text-transform: none; color: #8c5a2b; }
-.frontespizio .ornamento { margin: 0; letter-spacing: 0.6em; color: #b07d3a; }
-.frontespizio .autore { margin: 0; text-indent: 0; font-size: 15pt; letter-spacing: 0.35em; text-transform: uppercase; }
-.frontespizio img.emblema { width: 34mm; height: 34mm; margin: 4mm 0 2mm; }
+.frontespizio .ornamento { margin: 10mm 0 0; letter-spacing: 0.6em; color: #b07d3a; }
+.frontespizio .autore { margin: 7mm 0 0; text-indent: 0; font-size: 15pt; letter-spacing: 0.35em; text-transform: uppercase; }
+.frontespizio img.emblema { display: block; width: 34mm; height: 34mm; margin: 22mm auto 4mm; }
 .frontespizio .editore { margin: 0; text-indent: 0; font-size: 10pt; letter-spacing: 0.3em; text-transform: uppercase; color: #24402f; }
 .frontespizio .editore span { display: block; margin-top: 1mm; font-size: 7.5pt; letter-spacing: 0.25em; color: #8c5a2b; }
 
-.colophon { display: flex; flex-direction: column; justify-content: flex-end; padding: 16mm 20mm 20mm; font-size: 8.5pt; line-height: 1.55; text-align: left; hyphens: manual; }
+.colophon { padding: 78mm 20mm 14mm; font-size: 8.5pt; line-height: 1.55; text-align: left; hyphens: manual; }
 .colophon p { margin: 0 0 3mm; text-indent: 0; }
 .colophon .titolo-col { font-size: 10pt; font-style: italic; }
-.colophon img.emblema-piccolo { width: 14mm; height: 14mm; margin: 2mm 0 4mm; }
+.colophon img.emblema-piccolo { display: block; width: 14mm; height: 14mm; margin: 2mm 0 4mm; }
 .colophon .isbn { letter-spacing: 0.04em; color: #6b6358; }
 
 /* tavola: illustrazione a tutta pagina */
@@ -114,9 +97,9 @@ em { font-style: italic; }
 .soluzione { margin-top: 5mm; padding: 3mm 4mm; border: 0.3mm dashed #b07d3a; font-size: 10.5pt; }
 
 /* ultima pagina: la collana */
-.nella-collana { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: #fbf9f1; }
+.nella-collana { padding: 45mm 14mm 0; text-align: center; background: #fbf9f1; }
 .nella-collana h2 { margin: 8mm 0; font-size: 15pt; font-weight: normal; letter-spacing: 0.12em; text-transform: uppercase; color: #24402f; }
 .nella-collana p { text-indent: 0; text-align: center; }
 .nella-collana .motto { font-style: italic; color: #8c5a2b; margin-bottom: 8mm; }
-.nella-collana img.emblema { width: 20mm; height: 20mm; margin-top: 12mm; }
+.nella-collana img.emblema { display: block; width: 20mm; height: 20mm; margin: 12mm auto 0; }
 .nella-collana .editore { margin-top: 3mm; font-size: 8.5pt; letter-spacing: 0.3em; text-transform: uppercase; color: #8c5a2b; }
