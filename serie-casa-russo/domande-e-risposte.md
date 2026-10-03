@@ -11,3 +11,9 @@ Nota sul folklore: per tradizione il domovoj si trasloca in una vecchia scarpa d
 2. Pubblico: **ragazzi 10–14 anni**, come le altre due collane
 3. Tono: **commedia con un cuore serio**
 4. Numero di libri: **4, come le stagioni** (una festa italiana e una russa per libro)
+
+## Vera e la famiglia (5–8)
+5. Narrazione: **Vera in prima persona al passato**
+6. Carattere di Vera: **ironica e testarda, con la battuta pronta**
+7. Fratelli: **entrambi**: un fratellino piccolo che quasi vede gli spiriti e una sorella più grande che non ci crede per niente
+8. Nonne: **nonna siciliana viva e vicina, rivale della babuška**
