@@ -30,7 +30,13 @@ Fantascienza ambientata **oggi**, senza viaggi nel passato. Per il progetto di s
 16. Finale della collana: **partono**: superano il coperchio e il loro razzo vola verso le stelle vere
 
 ## Famiglia, regione, scienziato, inizio (17–20)
-17. Famiglia di Nico: *in attesa*
-18. Regione del paese: *in attesa*
-19. Lo scienziato: *in attesa*
-20. Da dove viene la terra del barattolo: *in attesa*
+17. Famiglia di Nico: **piccola**: solo mamma e Nico, casa tranquilla
+18. Regione del paese: **Calabria**
+19. Lo scienziato: **un professore universitario** strambo e vanitoso
+20. Da dove viene la terra del barattolo: **la spiaggia**, dopo una notte di stelle cadenti
+
+## Mamma, carattere, libri, colori (21–24)
+21. Lavoro della mamma: *in attesa*
+22. Carattere di Nico: *in attesa*
+23. Come si dividono i 5 libri: *in attesa*
+24. Colori della collana: *in attesa*
