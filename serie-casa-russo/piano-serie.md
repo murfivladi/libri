@@ -24,7 +24,7 @@ La casa sta bene finché gli spiriti vanno d'accordo. Se litigano troppo, la cas
 3. **Primavera, «La moglie del domovoj».** Feste: Maslenica (frittelle e fine dell'inverno) e la Pasqua siciliana con la «Giunta» (l'incontro di Maria e Gesù risorto in processione). Ospite offeso: **la Kikimora**, che in alcune tradizioni è la moglie del domovoj e lo raggiunge gelosa. Intanto anche mamma e papà litigano davvero.
 4. **Estate, «Il fiore della felce».** Feste: Ivan Kupala (notte del 6–7 luglio, il fiore magico della felce) e Ferragosto. Ospite offeso: **Colapesce**, il ragazzo della leggenda che regge la Sicilia sott'acqua, stanco perché nessuno pensa più a lui. Giulia vede gli spiriti. Finale: la babuška decide di restare per sempre e le due case diventano una.
 
-## Da approvare (inventato)
+## Approvato da Vlad il 3 ottobre 2026 (era «Da approvare»)
 - Tutti i nomi: Vera, Mattia, Giulia, Irina, Salvo, Galina, Concetta, Nonno Fomà, Donna Rosalia, Nina e Tina.
 - I lavori dei genitori (guida turistica, bar sul Corso).
 - I titoli dei quattro libri.
