@@ -18,7 +18,13 @@ Fantascienza ambientata **oggi**, senza viaggi nel passato. Per il progetto di s
 8. Chi altro conosce il segreto: **il migliore amico o amica**, che aiuta e prende in giro Nico
 
 ## Amico, scienza, guai e regole (9–12)
-9. Il migliore amico: *in attesa*
-10. Perché nel barattolo il tempo corre: *in attesa*
-11. Chi mette in pericolo il barattolo: *in attesa*
-12. Nico può aiutare il popolo: *in attesa*
+9. Il migliore amico: **un'amica sveglia**, pratica e sarcastica, il contrario di Nico
+10. Perché nel barattolo il tempo corre: **un sassolino di meteorite** nella terra (mistero da svelare nei libri)
+11. Chi mette in pericolo il barattolo: **uno scienziato strambo** che vuole portarlo via
+12. Nico può aiutare il popolo: **ci prova**, ma ogni aiuto ha effetti buffi e imprevisti
+
+## Nomi, titolo e finale (13–16)
+13. Nome dell'amica: *in attesa*
+14. Nome del popolo: *in attesa*
+15. Titolo della collana: *in attesa*
+16. Finale della collana: *in attesa*
