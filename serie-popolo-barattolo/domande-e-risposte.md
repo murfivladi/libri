@@ -24,7 +24,13 @@ Fantascienza ambientata **oggi**, senza viaggi nel passato. Per il progetto di s
 12. Nico può aiutare il popolo: **ci prova**, ma ogni aiuto ha effetti buffi e imprevisti
 
 ## Nomi, titolo e finale (13–16)
-13. Nome dell'amica: *in attesa*
-14. Nome del popolo: *in attesa*
-15. Titolo della collana: *in attesa*
-16. Finale della collana: *in attesa*
+13. Nome dell'amica: **Ginevra**, detta **Gin** (odia il suo nome lungo)
+14. Nome del popolo: **lo scelgono loro** nella loro lingua, e Nico lo storpia (nome da inventare)
+15. Titolo della collana: **Il popolo nel barattolo**
+16. Finale della collana: **partono**: superano il coperchio e il loro razzo vola verso le stelle vere
+
+## Famiglia, regione, scienziato, inizio (17–20)
+17. Famiglia di Nico: *in attesa*
+18. Regione del paese: *in attesa*
+19. Lo scienziato: *in attesa*
+20. Da dove viene la terra del barattolo: *in attesa*
