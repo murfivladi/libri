@@ -1,0 +1,45 @@
+{
+  "stili": {
+    "presente": "digital painting, fantasy storybook illustration, natural warm Italian light, soft cinematic lighting, painterly brush strokes, no text, no letters, no watermark",
+    "oblio": "digital painting, dreamlike muted palette of grey, ash green and pale bronze, desaturated colors, floating inverted architecture, misty cinematic atmosphere, painterly, no text, no letters, no watermark",
+    "duecento": "illuminated medieval manuscript miniature style mixed with a painterly storybook illustration, gold leaf details, warm ochre, deep green and bronze palette, flat decorative perspective, thirteenth century Apulia, no text, no letters, no watermark"
+  },
+  "personaggi": {
+    "alessia": {
+      "descrizione": "Alessia, a 13-year-old Italian girl with a chin-length dark brown bob haircut, pale skin, large observant dark eyes, serious thoughtful expression, wearing a green hooded sweatshirt and jeans (in the thirteenth century scenes a simple sand-colored linen gown with a rope belt over the green sweatshirt); she often carries a small bronze lantern with green glass panes",
+      "riferimento": "riferimenti/alessia.jpg"
+    },
+    "sofia": {
+      "descrizione": "Sofia, a 13-year-old Italian girl with long light brown hair tied back, round glasses, a black hardcover notebook with taped corners always in her hands, curious determined face, denim jacket",
+      "riferimento": "riferimenti/sofia.jpg"
+    },
+    "nonna_nunzia": {
+      "descrizione": "Nonna Nunzia, a small 73-year-old Apulian grandmother with short grey hair, strong small hands, warm intense gaze, dark cardigan, plain apron",
+      "riferimento": "riferimenti/nonna_nunzia.jpg"
+    },
+    "ruggero": {
+      "descrizione": "Ruggero, a 14-year-old thirteenth-century stonemason's apprentice, thin, tanned skin, messy upright black hair, big light brown eyes, a wide crooked smile, short rough linen tunic dusted with white lime, leather sandals",
+      "riferimento": "riferimenti/ruggero.jpg"
+    },
+    "michele_scoto": {
+      "descrizione": "Michele Scoto, an elderly eccentric thirteenth-century astrologer and scholar, long lean face, big hooked nose, bushy white eyebrows (one slightly singed), pale blue sharp eyes, long dark blue robe stained with ink, wearing three hats stacked on his head, with a grey cat with a white-tipped ear on his shoulder",
+      "riferimento": "riferimenti/michele_scoto.jpg"
+    },
+    "federico": {
+      "descrizione": "Emperor Frederick II of Swabia, about 55 years old, medium height, slightly stooped shoulders, sparse reddish-blond hair going grey, wide tired thoughtful face, half-closed grey eyes, plain dark green robe with a single gold ring and no crown",
+      "riferimento": "riferimenti/federico.jpg"
+    },
+    "lucerna": {
+      "descrizione": "Lucerna, a tiny moth made of warm amber light with delicate tissue-paper wings, a faint shadow shaped like a small clay oil lamp around its body",
+      "riferimento": "riferimenti/lucerna.jpg"
+    },
+    "ailessa": {
+      "descrizione": "Ailessa, the mirror double of Alessia: identical face and chin-length dark bob and green hooded sweatshirt, but upside down, hair falling upward, calm unsettling gentle smile, holding a cracked shard of mirror",
+      "riferimento": "riferimenti/ailessa.jpg"
+    },
+    "prof_greco": {
+      "descrizione": "Professor Greco, a 50-year-old Italian teacher with very short grey hair, grey eyes, a loosely knotted scarf, severe but caring face",
+      "riferimento": "riferimenti/prof_greco.jpg"
+    }
+  }
+}
