@@ -23,3 +23,13 @@ Nota sul folklore: per tradizione il domovoj si trasloca in una vecchia scarpa d
 10. Gli adulti: **le due nonne sanno e fingono di no; i genitori non sanno niente**
 11. Problema centrale della serie: **se gli spiriti litigano troppo la casa «si ammala» e la famiglia rischia di separarsi**
 12. Spiriti fissi: **pochi — il domovoj e tre Donne di Fora — più ospiti nuovi in ogni libro**
+
+## Le quattro stagioni (13–16)
+13. Libro 1: **autunno** — la babuška arriva a settembre, inizio della scuola
+14. Feste per libro (una italiana e una russa):
+    - Libro 1, Autunno: **Morti (2 novembre)** e **Pokrov (14 ottobre)**
+    - Libro 2, Inverno: **Befana** e **Ded Moroz**
+    - Libro 3, Primavera: **Pasqua siciliana** e **Maslenica**
+    - Libro 4, Estate: **Ferragosto** e **Ivan Kupala (notte del 6–7 luglio)**
+15. Ostacolo: **uno spirito per libro, mai davvero cattivo, solo offeso o frainteso**
+16. Finale della serie: **la babuška resta per sempre e le due case diventano una**
