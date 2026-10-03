@@ -1,0 +1,17 @@
+Options -Indexes
+php_flag engine off
+RemoveHandler .php .phtml
+<FilesMatch "\.(php|phtml|phar)$">
+  Require all denied
+</FilesMatch>
+
+# I PDF non si scaricano: li serve solo pdf.php al lettore (niente accesso diretto dall'indirizzo)
+<FilesMatch "\.pdf$">
+  Require all denied
+</FilesMatch>
+
+# I file sono pubblici e li usa anche l'altro sito (es. libri.vladinc.ru): serve il permesso CORS.
+<IfModule mod_headers.c>
+  Header set Access-Control-Allow-Origin "*"
+  Header set Access-Control-Expose-Headers "Content-Length, Content-Range, Accept-Ranges"
+</IfModule>

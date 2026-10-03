@@ -176,6 +176,171 @@ figure.illustrazione figcaption {
   text-shadow: 0 0 2mm rgba(0, 0, 0, 0.95);
 }
 
+/* Frontespizio: titolo, autore e marchio della casa editrice */
+.pagina.frontespizio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24mm 14mm 16mm;
+  text-align: center;
+  background: #fffdf7;
+}
+
+.frontespizio .serie {
+  margin: 0;
+  font-size: 9pt;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-indent: 0;
+  color: #8a6a2f;
+}
+
+.frontespizio h1 {
+  margin: 0;
+  font-size: 27pt;
+  line-height: 1.2;
+  font-weight: normal;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #14213d;
+}
+
+.frontespizio .ornamento {
+  margin: 0;
+  text-indent: 0;
+  letter-spacing: 0.6em;
+  color: #c9a14a;
+}
+
+.frontespizio .autore {
+  margin: 0;
+  text-indent: 0;
+  font-size: 15pt;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+}
+
+.frontespizio img.emblema {
+  width: 34mm;
+  height: 34mm;
+  margin: 4mm 0 2mm;
+}
+
+.frontespizio .editore {
+  margin: 0;
+  text-indent: 0;
+  font-size: 10pt;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #14213d;
+}
+
+.frontespizio .editore span {
+  display: block;
+  margin-top: 1mm;
+  font-size: 7.5pt;
+  letter-spacing: 0.25em;
+  color: #8a6a2f;
+}
+
+/* Colophon: dati dell'edizione, sul retro del frontespizio */
+.pagina.colophon {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16mm 20mm 20mm;
+  font-size: 8.5pt;
+  line-height: 1.55;
+  text-align: left;
+  hyphens: manual;
+}
+
+.colophon p {
+  margin: 0 0 3mm;
+  text-indent: 0;
+}
+
+.colophon .titolo-col {
+  font-size: 10pt;
+  font-style: italic;
+}
+
+.colophon img.emblema-piccolo {
+  width: 14mm;
+  height: 14mm;
+  margin: 2mm 0 4mm;
+}
+
+.colophon .isbn {
+  letter-spacing: 0.04em;
+  color: #6b6358;
+}
+
+/* Ultima pagina: elenco dei libri della collana */
+.pagina.nella-collana {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #fffdf7;
+}
+
+.nella-collana h2 {
+  margin: 8mm 0 8mm;
+  font-size: 16pt;
+  font-weight: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #14213d;
+}
+
+.nella-collana ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.nella-collana li {
+  margin: 0 0 4mm;
+  font-size: 12pt;
+}
+
+.nella-collana li .n {
+  display: inline-block;
+  width: 8mm;
+  color: #c9a14a;
+}
+
+.nella-collana li.questo {
+  font-weight: bold;
+}
+
+.nella-collana li.questo::after {
+  content: "  ← questo libro";
+  font-weight: normal;
+  font-size: 8.5pt;
+  font-style: italic;
+  color: #8a6a2f;
+}
+
+.nella-collana img.emblema {
+  width: 20mm;
+  height: 20mm;
+  margin-top: 12mm;
+}
+
+.nella-collana .editore {
+  margin-top: 3mm;
+  text-indent: 0;
+  font-size: 8.5pt;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #8a6a2f;
+}
+
 /* Fine capitolo */
 .fine-capitolo {
   margin-top: 8mm;

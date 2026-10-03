@@ -1,0 +1,96 @@
+name: Test del sito
+
+# Parte a ogni push e a ogni pull request che tocca il sito (o i libri usati dai test).
+on:
+  push:
+    paths:
+      - 'sito/**'
+      - 'libro-*/build/*.pdf'
+      - 'libro-*/immagini/copertina.jpg'
+      - '.github/workflows/test-sito.yml'
+  pull_request:
+    paths:
+      - 'sito/**'
+      - 'libro-*/build/*.pdf'
+      - '.github/workflows/test-sito.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-sito-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  E2E_MYSQL_HOST: 127.0.0.1
+  E2E_MYSQL_USER: root
+  E2E_MYSQL_PASS: root
+
+jobs:
+  php:
+    name: PHP ${{ matrix.php }} (sintassi, unit, end-to-end SQLite e MySQL, due siti)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.0']          # 8.0 = versione minima supportata
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=30
+    steps:
+      - uses: actions/checkout@v4
+      - name: MySQL - password leggibile anche da PHP 8.0 senza TLS
+        run: mysql -h127.0.0.1 -uroot -proot -e "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root'"
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: pdo_sqlite, pdo_mysql, gd, curl, fileinfo, mbstring, iconv
+      - name: Sintassi PHP
+        run: find sito -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Test di unità
+        run: php sito/tests/unit.php
+      - name: Test end-to-end (SQLite)
+        run: bash sito/tests/e2e.sh
+      - name: Test end-to-end (MySQL)
+        run: E2E_DB=mysql bash sito/tests/e2e.sh
+      - name: Test con due siti che condividono il database
+        run: bash sito/tests/duesiti.sh
+
+  browser:
+    name: Browser (lettore PDF, trascinamento, telefono, secondo sito)
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=30
+    steps:
+      - uses: actions/checkout@v4
+      - name: MySQL - password leggibile anche da PHP senza TLS
+        run: mysql -h127.0.0.1 -uroot -proot -e "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root'"
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_sqlite, pdo_mysql, gd, curl, fileinfo, mbstring, iconv
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Installa Playwright e Chromium
+        run: |
+          npm install -g playwright
+          playwright install --with-deps chromium
+      - name: Test nel browser (un sito)
+        run: bash sito/tests/browser.sh
+      - name: Test nel browser (due siti, PDF e copertine da un altro indirizzo)
+        run: CON_BROWSER=1 bash sito/tests/duesiti.sh

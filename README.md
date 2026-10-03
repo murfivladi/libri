@@ -23,5 +23,8 @@ Libri di fantascienza e fantasy, scritti da Vlad con l'aiuto dell'AI.
 - `libro-NN/riferimenti/` e `personaggi.json`: schede dei personaggi per avere immagini coerenti
 - `libro-01/genera.py --libro libro-NN`: genera le immagini con Polza usando i riferimenti
 - `libro-NN/build.py`: crea il PDF in `libro-NN/build/` (anche il PDF va su git)
+- `libro-01/frontespizi.py`: crea frontespizio, colophon e pagina «Nella stessa collana» di tutti i libri (poi rifai i PDF)
+- `grafica/`: logo, emblema e banner di Vlad Editore (originali ad alta risoluzione)
+- `sito/`: il sito web (catalogo, lettore, admin), vedi `sito/README.md`; `.github/workflows/`: test e deploy FTP
 - `serie-custode-etna.md`: i segreti della serie (non mostrare prima di leggere i libri)
 - Vlad decide idee e scelte; l'AI scrive bozze e propone miglioramenti.

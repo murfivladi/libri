@@ -1,0 +1,3 @@
+Options -Indexes
+# Pagina 404 con la grafica del sito (funziona se il sito è nella radice del dominio, es. libri.vladinc.ru)
+ErrorDocument 404 /404.php
