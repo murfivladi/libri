@@ -17,3 +17,9 @@ Nota sul folklore: per tradizione il domovoj si trasloca in una vecchia scarpa d
 6. Carattere di Vera: **ironica e testarda, con la battuta pronta**
 7. Fratelli: **entrambi**: un fratellino piccolo che quasi vede gli spiriti e una sorella più grande che non ci crede per niente
 8. Nonne: **nonna siciliana viva e vicina, rivale della babuška**
+
+## Gli spiriti e le regole (9–12)
+9. Perché solo Vera li vede: **è metà e metà, appartiene a tutte e due le case**
+10. Gli adulti: **le due nonne sanno e fingono di no; i genitori non sanno niente**
+11. Problema centrale della serie: **se gli spiriti litigano troppo la casa «si ammala» e la famiglia rischia di separarsi**
+12. Spiriti fissi: **pochi — il domovoj e tre Donne di Fora — più ospiti nuovi in ogni libro**
