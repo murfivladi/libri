@@ -12,7 +12,13 @@ Fantascienza ambientata **oggi**, senza viaggi nel passato. Per il progetto di s
 4. Tono: **comico e leggero**
 
 ## Nico, il popolo e il segreto (5–8)
-5. Dove vive Nico: *in attesa*
-6. Com'è il popolo: *in attesa*
-7. Come parlano con Nico: *in attesa*
-8. Chi altro conosce il segreto: *in attesa*
+5. Dove vive Nico: **un paese di mare del Sud** (tutti sanno tutto di tutti)
+6. Com'è il popolo: **omini minuscoli**, alti come un granello di sabbia
+7. Come parlano con Nico: **prima segnali** (lucine, disegni nella terra), **poi una radio minuscola**
+8. Chi altro conosce il segreto: **il migliore amico o amica**, che aiuta e prende in giro Nico
+
+## Amico, scienza, guai e regole (9–12)
+9. Il migliore amico: *in attesa*
+10. Perché nel barattolo il tempo corre: *in attesa*
+11. Chi mette in pericolo il barattolo: *in attesa*
+12. Nico può aiutare il popolo: *in attesa*
