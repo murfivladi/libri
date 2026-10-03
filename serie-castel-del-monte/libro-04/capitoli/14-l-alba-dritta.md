@@ -40,7 +40,7 @@ Si fece scura in viso.
 
 — E cosa ti ha detto?
 
-Le raccontai tutto. Del pozzo, della voce stanca, del compito più vecchio del mondo. Del nome dimenticato, di quello che l'aveva legato. Di quella cosa, in fondo, che mi aveva detto: *per ricordare quel nome dovresti dimenticare il tuo*.
+Le raccontai tutto. Del pozzo, della voce stanca, del compito più vecchio del mondo. Del nome dimenticato, di quello che l'aveva legato. Di quella cosa, in fondo, che mi aveva detto: *per ricordare quel nome dovresti dimenticare il tuo*. Della scarpina di lana. Di come, quando gli avevo detto *non devi portare tutto da solo*, aveva abbassato la testa.
 
 Ailessa ascoltò senza interrompermi. Quando finii, rimase in silenzio per un lungo momento. Lucerna, sulla sua spalla, aveva le ali abbassate.
 
@@ -116,8 +116,24 @@ Mi guardò. Io le porsi il sacchetto.
 
 La nonna li guardò a lungo. Poi, piano, sorrise. Un sorriso che le tirava gli occhi, come quello della mattina in cui ero partita per la gita, tanto tempo prima.
 
-— Allora li piantiamo — disse. — Domani. Al sole.
+— Allora li piantiamo — disse. — Subito. Al sole.
 
-Mi prese la mano. Sofia mi prese l'altra. E nel cortile, mentre il sole saliva dritto sopra le otto torri, una piccola voce, dentro la lanterna, ridacchiò come un bambino appena nato.
+Tornammo ad Andria nella Panda, con Tonino sul sedile dietro, che cantava piano una canzone di sua madre. Il signor Vito ci seguiva con la sua macchina, a distanza di sicurezza. In cucina, la nonna prese il vaso di terracotta, quello che aveva preparato la sera prima senza dire per cosa, e lo mise sul davanzale, al sole.
+
+— Un posto — disse, guardandomi. — Te l'avevo detto.
+
+Piantai i semi uno a uno, con il dito, in fila. Sofia li annaffiò con un cucchiaino. Tonino, che non aveva capito niente ma voleva partecipare, ci mise sopra un po' di terra con grande solennità. Il signor Vito, sulla porta, disse che era un'idea da matti, che l'arancio non nasce in vaso, e poi non se ne andò per due ore.
+
+La nonna ci fece il caffè con due cucchiaini di zucchero.
+
+— Per Tonino — disse.
+
+Lui la guardò. Aprì la bocca, e la richiuse. Poi, piano, sorrise.
+
+— Anche mia madre lo faceva così.
+
+— Lo so — disse la nonna. — Si sente dal modo in cui lo bevi.
+
+Sul davanzale, il sole saliva dritto sopra le otto torri lontane. Dentro la lanterna, appoggiata accanto al vaso, una piccola voce ridacchiò come un bambino appena nato.
 
 *Fine del libro 4*

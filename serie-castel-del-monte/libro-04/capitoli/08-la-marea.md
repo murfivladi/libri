@@ -1,10 +1,10 @@
-# Quelli che dimenticano
+# La marea
 @mondo: duecento
 @dove: Jesi, la piazza, il pomeriggio
 
 Fu come una marea, e non ce ne accorgemmo finché non era già alta.
 
-Il primo a dimenticare fu un mercante di stoffe. Si fermò a metà di una frase, con il braccio sollevato, e rimase così, a guardare un punto nel vuoto, finché la moglie non gli tirò la manica. Poi toccò a una donna con un cesto di uova, e a un ragazzo con un mulo, e a due vecchi che giocavano a dadi su una cassa. Uno dopo l'altro, in tutta la piazza, la gente smetteva di parlare, e guardava la tenda con la stessa espressione smarrita: *perché sono qui?*
+Il primo a dimenticare fu un mercante di stoffe. Si fermò a metà di una frase, con il braccio sollevato, e rimase così, a guardare un punto nel vuoto, finché la moglie non gli tirò la manica. Poi toccò a una donna con un cesto di uova, e a un ragazzo con un mulo, e a due vecchi che giocavano a dadi su una cassa. Uno dopo l'altro, in tutta la piazza, la gente smetteva di parlare e guardava la tenda con la stessa espressione smarrita: *perché sono qui?*
 
 — Andate a casa — disse qualcuno, vicino a me. — Non c'è niente da vedere.
 
@@ -43,6 +43,24 @@ Il vecchio lo guardava. Gli occhi gli si fecero lucidi.
 — Sono qui, papà.
 
 La ragazza si fece avanti, e il vecchio la abbracciò. Intorno a loro, qualcuno cominciò a ricordare, e il ricordo, come una fiamma, passò di mano in mano. Un uomo disse a un altro: *tu sei Pietro, il calzolaio*. E Pietro rispose: *e tu sei Luca, quello della bottega accanto*. Una donna riconobbe la sorella dopo vent'anni. Un bambino ritrovò la madre e le saltò al collo.
+
+Io andai verso il fabbro, quello dal nome gentile. Era fermo in mezzo alla piazza, con le mani nere alzate e un'espressione smarrita.
+
+— Fiorenzo — dissi.
+
+— Chi?
+
+— Tu. Ti chiami Fiorenzo. Fai ferri di cavallo. Hai le mani nere e il cuore tenero. Stamattina hai detto a mia amica che quando sentì cantare la regina, nei giorni scorsi, ti si è fermato il martello.
+
+L'uomo mi guardò. Una lacrima gli scese sulla guancia sporca.
+
+— È vero — disse. — Mi si è fermato il martello. — Si tastò il petto. — Dio mio. Stavo per andarmene. Non sapevo più neanche dove ero.
+
+— Adesso sa dove è.
+
+— Sì. — Si guardò le mani. — Sì. Adesso lo so.
+
+Fece un passo, poi un altro, e andò dritto da un gruppo di uomini che si stavano allontanando, e li fermò per il braccio, uno a uno, ripetendo il loro nome. La catena correva da sola.
 
 La folla si fermò. Poi tornò.
 

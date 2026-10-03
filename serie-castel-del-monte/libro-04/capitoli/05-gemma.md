@@ -1,4 +1,4 @@
-# La tenda in piazza
+# Gemma
 @mondo: duecento
 @dove: Jesi, la piazza
 
@@ -22,6 +22,8 @@ Sofia mi diede una gomitata.
 
 — Lo so.
 
+La ciambella era dolce, con l'anice, e mi sciolse qualcosa nel petto. Avevo dimenticato quanto fosse bello mangiare una cosa preparata da qualcuno che ti guarda mentre la mangi.
+
 Gemma continuò a parlare. Ci raccontò che la regina Costanza era arrivata dalla Sicilia con pochi cavalieri, che suo marito, l'imperatore Enrico, era lontano, che nessuno sapeva quando sarebbe tornato. Che la regina aveva fatto montare la tenda di notte, con le sue mani, perché non voleva che nessun uomo la toccasse. E che da allora un gruppo di donne di Jesi, dalle più giovani alle più vecchie, si alternava all'ingresso, a turni, per assicurarsi che tutto fosse in regola.
 
 — Come, in regola? — chiesi.
@@ -32,9 +34,23 @@ Gemma continuò a parlare. Ci raccontò che la regina Costanza era arrivata dall
 
 — Sì. Perché sono la più brava a tenere i segreti. Non lo dico a nessuno.
 
-Sofia e io ci guardammo.
+— Neanche a noi? — chiese Sofia.
 
-— E se ci fosse un modo — dissi, piano — per farci entrare anche noi?
+— A voi sì. — Gemma strizzò un occhio. — Voi non siete di qui. Non conta.
+
+Rise di nuovo, e io mi accorsi che una piccola ruga, tra le sopracciglia, le si formava ogni volta che aveva paura di qualcosa e non voleva dirlo. La guardai meglio. Aveva le unghie rosicchiate. Guardava ogni tanto, di sbieco, verso il pozzo.
+
+— Cosa c'è, laggiù? — chiesi, piano.
+
+— Niente.
+
+— Gemma.
+
+— Va bene. — Si morse il labbro. — Ci sono tre uomini. Stanno lì da stamattina. Non mangiano, non parlano, non si muovono. La gente ci passa vicino e poi si ferma a metà di una frase. Mia madre dice che sono pellegrini stanchi. Ma io ho visto che i cani non gli si avvicinano.
+
+Io e Sofia ci guardammo.
+
+— E se ci fosse un modo — dissi, piano — per farci entrare nella tenda?
 
 Gemma ci studiò con gli occhi stretti. Poi, lentamente, un sorriso.
 
@@ -52,7 +68,7 @@ Gemma ci studiò con gli occhi stretti. Poi, lentamente, un sorriso.
 
 Sua madre si chiamava Giovanna, e capì tutto in tre secondi.
 
-Aveva la faccia di Gemma, solo più dura, e due braccia larghe come un barile. Ci guardò, ci annusò, ci fece girare davanti a lei come se fossimo due pani da infornare. Poi, senza una parola, ci mise in mano due cuffie bianche, di quelle che portano le ragazze delle famiglie di Jesi.
+Aveva la faccia di Gemma, solo più dura, e due braccia larghe come un barile. Stava impastando su un banco, dietro la bottega, e non si fermò neanche quando ci vide arrivare. Ci guardò, ci annusò, ci fece girare davanti a lei come se fossimo due pani da infornare. Poi, senza una parola, ci mise in mano due cuffie bianche, di quelle che portano le ragazze delle famiglie di Jesi.
 
 — Mettetele — disse. — Non dite niente. Io sono di turno alle dieci. Siete mie nipoti, venute da Fabriano. Mi servite per portare l'acqua.
 
@@ -60,16 +76,10 @@ Aveva la faccia di Gemma, solo più dura, e due braccia larghe come un barile. C
 
 — Non ringraziate. — Ci guardò, e per un attimo la sua faccia dura si ammorbidì. — Non so chi siete, né cosa volete. Ma ho un presentimento. Che oggi nasce qualcuno di importante. E che serve qualcuno di cui fidarsi.
 
+— Perché lo pensa? — chiese Sofia.
+
+— Perché stanotte ho sognato. — Giovanna girò la pasta con un colpo secco. — Una cosa che non sognavo da vent'anni. Un campo di grano e un uomo che mi chiamava. Mio marito, buonanima. Ci ho pensato tutto il giorno, e mi sono chiesta *perché proprio oggi*. Poi ho visto che anche Gemma, stamattina, si è svegliata contenta senza sapere perché. E allora ho capito. Quando qualcuno sta per nascere, tutto si smuove: i morti, i sogni. Come quando passa il carro, e le foglie sulla strada si alzano.
+
+Mi venne la pelle d'oca. Sofia scrisse qualcosa sul quaderno. Gemma, in un angolo, mangiava una ciambella con aria soddisfatta, come chi ha avuto ragione.
+
 Alle dieci ci presentammo all'ingresso della tenda, con una brocca d'acqua e una pila di panni. Le guardie, vedendo Giovanna, si fecero da parte. Un lembo di stoffa si sollevò. E dentro, nella penombra calda, c'era un letto di paglia, un braciere, e una donna.
-
-Era seduta, con la schiena appoggiata a dei cuscini. Aveva i capelli grigi sciolti sulle spalle, il viso bianco e affilato, la pancia grande, e le mani sulle ginocchia, strette, con le nocche bianche. Quando entrammo, alzò gli occhi.
-
-Occhi scuri, profondi, che avevano visto troppe cose.
-
-— Chi sono? — disse, in un italiano un po' strano, con una cadenza normanna.
-
-— Mie nipoti, Maestà — disse Giovanna, inchinandosi. — Portano l'acqua.
-
-Costanza ci guardò. A lungo. Non era una donna che si lasciava ingannare facilmente. Si fermò un attimo di più su me. Poi su Sofia. Poi sulla lanterna, che tenevo nascosta sotto il mantello, ma che, in quel momento, brillava appena attraverso la stoffa.
-
-— Venite — disse, a bassa voce. — Più vicino.

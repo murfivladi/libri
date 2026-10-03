@@ -1,4 +1,4 @@
-# Il Custos Vacuus
+# Il pozzo
 @mondo: oblio
 @dove: Jesi, il pozzo, la sera
 
@@ -8,7 +8,7 @@ Non lo vidi arrivare. Fu il silenzio a dirmelo: la piazza, che per ore aveva bru
 
 Io ero sola.
 
-Non lo avevo deciso. Era successo. Sofia, con Gemma e Tommaso, era rimasta davanti alla tenda, a tenere insieme la folla con una catena di nomi. Le avevo detto: *non lasciate che si spenga*. Avevo preso la lanterna e mi ero allontanata, senza sapere perché, verso il pozzo.
+Non lo avevo deciso. Era successo. Scesa dal campanile, avevo lasciato Gemma e Tommaso con fra Anselmo, a raccontare ai vicini cosa era successo, e avevo attraversato la piazza senza sapere dove andavo. Sofia, davanti alla tenda, teneva insieme la folla con una catena di nomi. Le avevo detto: *non lasciate che si spenga*. Avevo preso la lanterna e mi ero avvicinata, senza motivo, al pozzo.
 
 Il pozzo, nella luce verde, era nero.
 
@@ -68,7 +68,7 @@ Il Custos rimase fermo. Il vuoto sotto il cappuccio sembrò *ascoltare*.
 
 — Chi?
 
-— Non lo so. — Mi parve, per un attimo, vedere nel vuoto del cappuccio una luce, sottile, fredda. — Non ricordo il suo nome. Questa è la mia pena. Ho il compito di custodire tutte le cose dimenticate, e ho dimenticato la prima.
+— Non lo so. — Mi parve, per un attimo, di vedere nel vuoto del cappuccio una luce, sottile, fredda. — Non ricordo il suo nome. Questa è la mia pena. Ho il compito di custodire tutte le cose dimenticate, e ho dimenticato la prima.
 
 Rimasi senza fiato.
 
@@ -80,12 +80,30 @@ Rimasi senza fiato.
 
 — Perché per ricordare quel nome — disse il Custos, piano — dovresti dimenticare il tuo.
 
+Rimasi lì, con la lanterna alzata. Il vento si era fermato. Dalle migliaia di piccole forme che fluttuavano intorno a noi, una scese piano e si posò sulla mia mano: una scarpina da bambino, di lana, con un nodo rosso sulla punta.
+
+— Questa — disse il Custos — me l'hanno data stanotte. Una donna che non sa più di chi fosse. È di un bambino che non è mai nato. Lo vedi? Non riesco a metterla da nessuna parte. È troppo piccola, e nessuno la vuole.
+
+Stringevo la scarpina. Mi tremavano le dita.
+
+— La voglio io — dissi.
+
+Il vuoto sotto il cappuccio si piegò, appena, verso di me.
+
+— Tu?
+
+— Se me la dai, la tengo. E se ne hai altre, ne tengo altre. Non tutte. Non sono capace di tutte. Ma qualcuna. — Respirai. — Non devi portare tutto da solo. Non l'ha detto nessuno, ma lo dico io.
+
+Per un lungo momento il Custos non si mosse. Poi, lentamente, con un fruscio di carta, abbassò il capo. Non so cosa fosse: un inchino, un cedimento, una stanchezza che si scioglieva. Dal fondo del cappuccio venne un suono soffocato, che poteva essere una risata o un singhiozzo.
+
+— Nessuno me l'aveva mai detto — sussurrò.
+
 Dietro di me, dalla piazza, si levò un grido.
 
 Non era un grido di paura. Era un grido lungo, acuto, che veniva dalla tenda. Un grido di dolore e di vittoria insieme.
 
 Il Custos si voltò.
 
-— È ora — disse. — Vai. Poi, se vorrai, torna a cercarmi.
+— È ora — disse. — Vai. E poi, se vorrai, torna a cercarmi.
 
 E, senza rumore, tornò nel pozzo.

@@ -4,7 +4,7 @@
 
 Il compito di Sofia fu di contare.
 
-Lo decise lei, appena uscimmo dalla tenda, con il quaderno nero aperto sul braccio e la penna d'oca che le sporcava già il polso. «Se qualcuno deve ricordare chi c'era», disse, «devo scrivere tutti i nomi.» E si mise a fare il giro della piazza, con Gemma che le trotterellava dietro, a chiedere a ogni persona come si chiamava, da dove veniva e perché era lì.
+Lo decise lei, appena uscimmo dalla tenda a mezzogiorno, con il quaderno nero aperto sul braccio e la penna d'oca che le sporcava già il polso. «Se qualcuno deve ricordare chi c'era», disse, «devo scrivere tutti i nomi.» E si mise a fare il giro della piazza, con Gemma che le trotterellava dietro, a chiedere a ogni persona come si chiamava, da dove veniva e perché era lì.
 
 — Sono Guglielmo, da Cingoli — disse un vecchio con la barba bianca. — Sono venuto con mia figlia. Per vedere con i miei occhi.
 
@@ -22,7 +22,7 @@ Il vecchio la guardò per un attimo. Poi, lentamente, sorrise.
 
 — Scriva anche il nome del mio cane — disse. — Si chiama Barbarossa.
 
-Alle undici avevamo duecento nomi. A mezzogiorno, quattrocento. Un frate di Assisi, tre mercanti di Ancona, un gruppo di pastori scesi dagli Appennini, due ragazzi che facevano gli studenti a Bologna, una nonna con undici nipoti. Sofia scriveva senza smettere, con la lingua tra i denti, e ogni volta che finiva una pagina, la strappava e la consegnava a Gemma.
+Alle undici avevamo duecento nomi. A mezzogiorno, quattrocento. Un frate di Assisi, tre mercanti di Ancona, un gruppo di pastori scesi dagli Appennini, due ragazzi che facevano gli studenti a Bologna, una nonna con undici nipoti. Un fabbro con le braccia nere e un nome gentile, Fiorenzo. Una donna incinta anche lei, di sei mesi, che si chiamava Agata e voleva che Sofia scrivesse anche il nome che avrebbe dato al figlio, se fosse stato maschio. Sofia scriveva senza smettere, con la lingua tra i denti, e ogni volta che finiva una pagina, la strappava e la consegnava a Gemma.
 
 — Cosa ne faccio? — chiese Gemma, alla quinta.
 
@@ -48,9 +48,13 @@ Gemma si morse il labbro. Poi, con una gravità comica, giurò sul panno.
 
 Io, intanto, facevo un'altra cosa. Camminavo lungo il bordo della piazza, con la lanterna sotto il mantello, e controllavo che le persone che avevamo contato fossero ancora lì. Il sole, a quell'ora, era un disco pallido dietro le nuvole, e la luce verde, sotto la stoffa, era l'unica cosa calda. Di tanto in tanto la sentivo vibrare, come un animale che fiuta.
 
-Alle due del pomeriggio vibrò più forte.
+Passai davanti al pozzo, con il cuore in gola. I tre incappucciati stavano ancora lì, immobili, appoggiati al bordo di pietra. Da vicino, non avevano ombra. Sul ciottolato, la luce li attraversava come se non ci fossero. Mi fermai a dieci passi. Uno di loro girò appena il cappuccio, e io sentii, nell'orecchio, un sussurro sottile: *non ti fermare*.
 
-Mi voltai. Vicino al pozzo, i tre incappucciati non si erano mossi. Ma intorno a loro, nella piazza, il silenzio era cambiato. Un uomo, davanti a una bancarella di castagne, aveva smesso di parlare a metà frase. Una donna teneva in mano un secchio e non sapeva più dove metterlo. Il frate, in prima fila, guardava il rosario con una faccia perplessa.
+Andai avanti, senza voltarmi.
+
+Alle due del pomeriggio la lanterna vibrò più forte.
+
+Mi voltai. Vicino al pozzo, i tre non si erano mossi. Ma intorno a loro, nella piazza, il silenzio era cambiato. Un uomo, davanti a una bancarella di castagne, aveva smesso di parlare a metà frase. Una donna teneva in mano un secchio e non sapeva più dove metterlo. Il frate, in prima fila, guardava il rosario con una faccia perplessa.
 
 Corsi verso Sofia.
 

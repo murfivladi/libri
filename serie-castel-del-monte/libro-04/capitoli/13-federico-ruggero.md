@@ -36,13 +36,39 @@ Costanza chiuse gli occhi. Una lacrima le scese lungo la tempia.
 
 * * *
 
-Tutta la notte, la piazza di Jesi rimase accesa.
+Il nome glielo diedero ad alta voce, davanti a tutti.
 
-I fuochi si moltiplicarono. Qualcuno portò del vino, qualcun altro delle focacce. Gemma, seduta su una cassa con il suo pane in grembo, raccontava a chiunque volesse ascoltarla la storia del nome nel pane. Tommaso, con i suoi nomi, gironzolava tra la folla come una piccola luce. Sofia, in un angolo, con una candela, scriveva. Non sul quaderno nero: su un rotolo di carta che le aveva dato un frate, con una calligrafia nitida e dritta.
+Costanza lo volle. Fece portare il bambino sulla soglia della tenda, avvolto nella fascia bianca, e sollevare il lembo di stoffa. Poi, con la voce stanca ma ferma di chi ha deciso, disse a Giovanna di annunciare:
 
-— Cosa scrivi? — chiesi, sedendomi accanto a lei.
+— Il figlio dell'imperatore Enrico e di Costanza d'Altavilla. Si chiama Federico Ruggero.
 
-— Tutto. — Alzò gli occhi. Aveva le guance rosse, e i capelli pieni di paglia. — Il giorno in cui è nato Federico II. Non come lo raccontano i libri. Come è stato. Con Gemma. Con Tommaso. Con Giovanna. Con la gente che ha ricordato.
+Fuori, nel silenzio, la piazza intera ripeté.
+
+*Federico Ruggero.*
+
+Era un coro di mille voci, grave, lento, come un'onda che torna. Un vecchio gridò: *lo ricorderemo!* Una donna rise. Fra Anselmo suonò la campana una volta sola, un colpo profondo che sembrò chiudere un conto. E Sofia, accanto a me, che non aveva smesso un attimo di scrivere, posò la penna.
+
+— Ho finito la pagina — disse, con un filo di voce.
+
+— Quale?
+
+— Quella in cui è scritto chi c'era. — Mi mostrò il rotolo di carta, fitto di nomi e di righe. — E ho aggiunto un'ultima riga, in fondo. Vuoi sentirla?
+
+— Sì.
+
+— *Tutti insieme. Nessuno da solo.*
+
+Rimasi a guardarla. Non trovai niente da dire.
+
+Tutta la notte la piazza di Jesi rimase accesa.
+
+I fuochi si moltiplicarono. Qualcuno portò del vino, qualcun altro delle focacce. Gemma, seduta su una cassa con il suo pane in grembo, raccontava a chiunque volesse ascoltarla la storia del nome nel pane. Tommaso, con i suoi nomi, gironzolava tra la folla come una piccola luce. Fiorenzo il fabbro, con le mani ancora nere, aveva improvvisato una canzone con un martello e un'incudine. Agata, la donna incinta, ballava piano con un vecchio.
+
+Io e Sofia ci sedemmo in un angolo, su un gradino, con una ciambella ciascuna.
+
+— Cosa scrivi? — chiesi.
+
+— Tutto. — Alzò gli occhi. Aveva le guance rosse e i capelli pieni di paglia. — Il giorno in cui è nato Federico II. Non come lo raccontano i libri. Come è stato. Con Gemma. Con Tommaso. Con Giovanna. Con la gente che ha ricordato.
 
 — Lo leggeranno?
 
@@ -85,3 +111,27 @@ Mi tremavano le mani. Chiusi il sacchetto nel pugno.
 — Non vi dimenticheremo — dissi.
 
 — Lo so. — Costanza richiuse gli occhi. — Per questo vi ho lasciate entrare.
+
+Fuori, la luce dell'alba cominciava a salire. Gemma e Tommaso ci aspettavano sulla soglia.
+
+— Andate via? — disse Tommaso, con la faccia stropicciata.
+
+— Sì.
+
+— Tornate?
+
+— Non lo so — dissi.
+
+— Io vi ricordo — disse. — Io ricordo tutto. Anche voi.
+
+Mi inginocchiai, e lo abbracciai. Era piccolo e caldo e puzzava di fumo e di pane. Gemma ci fece il giuramento del pane: tre volte, con la mano sul panno. Poi ci accompagnò fino al vicolo, dove, tra due case, una striscia di luce dorata saliva dritta dal selciato.
+
+— È lì — disse Sofia.
+
+— Lo vedo.
+
+— Addio, Gemma.
+
+— Non si dice *addio* — disse lei, con gli occhi lucidi. — Si dice *a ottocento anni*.
+
+Ridemmo, piangendo. E passammo.

@@ -4,7 +4,7 @@
 
 La prima cosa che sentii fu il gelo, e la seconda un coro di galline.
 
-Aprii gli occhi. Ero in ginocchio sul fondo di un carretto di paglia, sotto un cielo bianco e basso, che prometteva neve. L'aria sapeva di legna bruciata, di stalla e di pane. Dietro di me, qualcuno borbottava in dialetto marchigiano. Accanto a me, Sofia si stava sedendo, con gli occhiali storti e un filo di paglia nei capelli.
+Aprii gli occhi. Ero in ginocchio sul fondo di un carretto di paglia, sotto un cielo bianco e basso, che prometteva neve. L'aria sapeva di legna bruciata, di stalla e di pane. Dietro di me, qualcuno borbottava in dialetto marchigiano. Accanto a me, Sofia si stava mettendo seduta, con gli occhiali storti e un filo di paglia nei capelli.
 
 — Siamo in un carro — sussurrò.
 
@@ -18,7 +18,7 @@ Il carro si fermò con un sobbalzo. Il carrettiere, un uomo con un cappello di f
 
 — Dio mio — disse. — Da dove spuntate, voialtre?
 
-— Siamo pellegrine — disse Sofia, con un'incredibile prontezza. — Veniamo da lontano. Ci siamo addormentate. Perdoni.
+— Siamo pellegrine — disse Sofia, con una prontezza incredibile. — Veniamo da lontano. Ci siamo addormentate. Perdoni.
 
 — Pellegrine. — Il carrettiere si grattò la nuca. — In dicembre. Con quei vestiti. Voi siete matte.
 
@@ -30,13 +30,23 @@ Io e Sofia ci scambiammo un'occhiata.
 
 — Ci porta? — chiesi.
 
-— Vi porto. Ma fate in fretta, perché la gente si è già messa in coda dall'alba. — Scosse la testa. — Mai vista una cosa simile. Una regina che partorisce in mezzo alla piazza. Mia moglie dice che è una vergogna. Mio suocero dice che è un miracolo. Io non so cosa dire. Fa freddo e basta.
+— Vi porto. Ma fate in fretta, perché la gente è già in coda dall'alba. — Scosse la testa. — Mai vista una cosa simile. Una regina che partorisce in mezzo alla piazza. Mia moglie dice che è una vergogna. Mio suocero dice che è un miracolo. Io non so cosa dire. Fa freddo e basta.
 
-Il carro ripartì. Sulla strada, sempre più fitta, camminavano uomini, donne, bambini, preti, mercanti, tutti nella stessa direzione. Parlavano a bassa voce, con un'eccitazione strana, mezza curiosità e mezza paura. Passammo sotto un'arcata, e la strada si aprì su una piazza.
+Il carro ripartì. Era un viaggio breve, ma io lo ricordo lunghissimo, perché ogni cosa che vedevo era nuova e antica insieme. Case di pietra con i tetti spioventi e il fumo che saliva dritto. Donne con le brocche sulla testa. Un frate che portava un agnello sulle spalle. Un cane magro che trottava dietro il carro, con aria di chi sa dove va. Sulla strada, sempre più fitta, camminavano uomini, donne, bambini, preti, mercanti, tutti nella stessa direzione. Parlavano a bassa voce, con un'eccitazione strana, mezza curiosità e mezza paura.
 
-Era piccola, in confronto a quelle che conoscevo: un rettangolo di ciottoli, circondato da case di pietra con i tetti spioventi e un campanile storto. Il cielo, sopra, era pesante e immobile. In mezzo alla piazza, montata su pali di legno, c'era una tenda.
+— Guarda — sussurrò Sofia, indicando una fila di persone ferme davanti a una bottega. — Hanno tutti qualcosa in mano.
 
-Una grande tenda di stoffa bianca e rossa, alta come una casa, con un lembo aperto che guardava la folla. Due guardie in cotta di maglia erano ferme ai lati. Intorno, a distanza rispettosa, stavano centinaia di persone. Alcuni pregavano. Altri mangiavano. Un gruppo di bambini giocava a rincorrersi tra le gambe degli adulti, e una vecchia, seduta su una cassa, sgranava un rosario.
+— Cosa?
+
+— Un dono. Per il bambino. Un pezzo di stoffa, una candela, un uovo. Non sono arrivati a mani vuote.
+
+Mi si strinse la gola. Pensai a quanta gente, quella mattina, si era alzata al buio per portare un uovo a un bambino che non era ancora nato.
+
+Passammo sotto un'arcata, e la strada si aprì su una piazza.
+
+Era piccola, in confronto a quelle che conoscevo: un rettangolo di ciottoli, circondato da case di pietra e da un campanile storto. Il cielo, sopra, era pesante e immobile. In mezzo alla piazza, montata su pali di legno, c'era una tenda.
+
+Una grande tenda di stoffa bianca e rossa, alta come una casa, con un lembo aperto che guardava la folla. Due guardie in cotta di maglia stavano ai lati. Intorno, a distanza rispettosa, c'erano centinaia di persone. Alcuni pregavano. Altri mangiavano. Un gruppo di bambini giocava a rincorrersi tra le gambe degli adulti, e una vecchia, seduta su una cassa, sgranava un rosario.
 
 — Eccola — sussurrò Sofia.
 
@@ -78,6 +88,6 @@ Scendemmo. Il carro se ne andò. Rimanemmo in mezzo alla piazza, con la folla ch
 
 — Cosa facciamo? — sussurrò Sofia.
 
-Tirai fuori la lanterna dal giaccone. Il vetro verde, nel gelo, mandava una luce sottile.
+Tirai fuori la lanterna dalla giacca. Il vetro verde, nel gelo, mandava una luce sottile.
 
 — Troviamo qualcuno che ci aiuti — dissi. — E poi andiamo a conoscere una regina.

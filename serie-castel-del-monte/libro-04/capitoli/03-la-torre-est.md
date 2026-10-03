@@ -1,4 +1,4 @@
-# Svegliare qualcuno
+# La torre Est
 @mondo: presente
 @dove: Castel del Monte, torre Est
 
@@ -8,7 +8,23 @@ Lo capisco appena entro. La scala a chiocciola, di solito, gira a sinistra o a d
 
 — Ci siamo — dice Sofia, dietro di me.
 
-La nonna è rimasta in basso, con il signor Vito e Tonino, che sta spiegando a tutti il suo sogno con le mani. Io e Sofia saliamo da sole. A ogni passo il pavimento si fa più caldo.
+La nonna è rimasta in basso, con il signor Vito e Tonino, che sta spiegando a tutti il suo sogno con le mani e, a ogni frase, ricomincia da capo. Io e Sofia saliamo da sole. A ogni passo, il pavimento si fa più caldo.
+
+Sono trentatré gradini. Li conto, perché contare mi tiene lontana dalla paura. Al ventunesimo, Sofia si ferma.
+
+— Ale.
+
+— Dimmi.
+
+— Hai sentito cosa hai detto, giù, a Tonino? — Non mi guarda. — Hai detto che per quattro anni non hai detto a nessuno che non stavi bene. A parte a me.
+
+— Sì.
+
+— Perché non me l'avevi mai detto così? Senza tutti quei giri.
+
+— Perché non l'avevo mai detto neanche a me.
+
+Sofia annuisce. Poi, senza una parola, mi prende la mano e riprende a salire. Mi basta. Sono quel genere di silenzio che diventano regali.
 
 In cima c'è una stanza rotonda con otto finestre, tutte rivolte a oriente. Il sole, appena spuntato, entra da ognuna e si incontra al centro, in un cerchio di luce così pieno che sembra solido. Nel cerchio, appoggiate a terra, ci sono due figure.
 
@@ -90,8 +106,8 @@ Prendo la mano di Sofia. Lei prende quella di Ailessa. E Ailessa prende quella d
 
 — Lo so.
 
-— Lo so che lo sai. — Sorride. — Ma ve lo dico lo stesso. Perché quando qualcuno nasce, tutti vorrebbero metterci le mani.
+— So che lo sai. — Sorride. — Ma ve lo dico lo stesso. Perché quando qualcuno nasce, tutti vorrebbero metterci le mani.
 
-La luce, al centro della stanza, si fa più forte. Chiudo gli occhi. Sento il sole sulla faccia, e per la prima volta, dentro il caldo, una voce piccolissima, nuova, lontanissima, che ride.
+La luce, al centro della stanza, si fa più forte. Chiudo gli occhi. Sento il sole sulla faccia e, per la prima volta, dentro il caldo, una voce piccolissima, nuova, lontanissima, che ride.
 
 È un bambino.
