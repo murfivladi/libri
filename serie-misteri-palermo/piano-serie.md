@@ -49,3 +49,6 @@ Narratrice: Costanza, in prima persona al passato. Ogni libro ha un caso chiuso 
 
 ## Nota (libro 2)
 Il libro 2 è ambientato ad agosto 1150, cinque settimane dopo il libro 1; Costanza ha ancora 12 anni. Il codice di Elena (A=1…Z=23) porta alla chiesa dell'Ammiraglio (libro 3).
+
+## Nota (libro 3)
+Il libro 3 è ambientato a maggio 1151; Costanza ha appena compiuto 13 anni. Costanza scopre che la mamma è viva; il codice MVNDVS ARGENTEVS porta al planisfero di al-Idrisi (libro 4).
