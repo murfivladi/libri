@@ -92,12 +92,36 @@ function slug_da(string $s): string {
     return $s !== '' ? $s : 'libro';
 }
 
+// Invio via SMTP (impostazioni in admin → Impostazioni). Ritorna '' se ok, altrimenti il messaggio d'errore.
+function invia_mail(string $a, string $oggetto, string $testo, string $replyTo = ''): string {
+    require_once __DIR__ . '/vendor/phpmailer/Exception.php';
+    require_once __DIR__ . '/vendor/phpmailer/PHPMailer.php';
+    require_once __DIR__ . '/vendor/phpmailer/SMTP.php';
+    $host = impost('smtp_host');
+    if ($host === '') return 'SMTP non configurato.';
+    try {
+        $m = new PHPMailer\PHPMailer\PHPMailer(true);
+        $m->isSMTP(); $m->Host = $host; $m->Port = (int)impost('smtp_porta', '587'); $m->CharSet = 'UTF-8'; $m->Timeout = 15;
+        $cif = impost('smtp_cifratura', 'tls');
+        $m->SMTPSecure = $cif === 'ssl' ? PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS : ($cif === 'tls' ? PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS : '');
+        $m->SMTPAutoTLS = $cif !== 'nessuna';
+        if (impost('smtp_utente') !== '') { $m->SMTPAuth = true; $m->Username = impost('smtp_utente'); $m->Password = impost('smtp_password'); }
+        $da = impost('smtp_da') ?: impost('smtp_utente');
+        $m->setFrom($da, impost('nome_sito', 'Vlad Editore'));
+        $m->addAddress($a);
+        if ($replyTo !== '' && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) $m->addReplyTo($replyTo);
+        $m->Subject = $oggetto; $m->Body = $testo;
+        $m->send();
+        return '';
+    } catch (Throwable $x) { return $x->getMessage(); }
+}
+
 function invia_notifica(array $o): void {
     $to = impost('email');
-    if ($to === '' || !function_exists('mail')) return;
+    if ($to === '') return;
     $righe = ["Nuovo ordine #{$o['id']}", '', "Libro: {$o['titolo_libro']} × {$o['quantita']}", "Nome: {$o['nome']}", "Email: {$o['email']}",
-              "Telefono: {$o['telefono']}", "Indirizzo: {$o['indirizzo']}, {$o['cap']} {$o['citta']} ({$o['paese']})", "Note: {$o['note']}"];
-    $schiva = fn($s) => str_replace(["\r", "\n"], ' ', $s);
-    @mail($to, '=?UTF-8?B?' . base64_encode("Nuovo ordine #{$o['id']} – {$o['titolo_libro']}") . '?=', implode("\n", $righe),
-          "Content-Type: text/plain; charset=UTF-8\r\nReply-To: " . $schiva($o['email']));
+              "Telefono: {$o['telefono']}", "Indirizzo: {$o['indirizzo']}, {$o['cap']} {$o['citta']} ({$o['paese']})", "Note: {$o['note']}", '',
+              'Gestisci l\'ordine nell\'admin.'];
+    $err = invia_mail($to, "Nuovo ordine #{$o['id']} – {$o['titolo_libro']}", implode("\n", $righe), $o['email']);
+    if ($err !== '') error_log('ordini-libri: invio mail fallito: ' . $err);
 }
