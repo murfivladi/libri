@@ -27,7 +27,7 @@ admin_testata('Impostazioni', 'impostazioni');
 ?>
 <form method="post" class="pannello" style="display:grid;gap:12px;max-width:520px"><?= csrf_campo() ?>
 <label>Nome del sito <input type="text" name="nome_sito" value="<?= e(impost('nome_sito', 'Vlad Editore')) ?>"></label>
-<label>Email per le notifiche <small>(riceverai una mail a ogni nuovo ordine, via SMTP; vuoto = nessuna)</small><input type="email" name="email" value="<?= e(impost('email')) ?>"></label>
+<label>Email per le notifiche <small>(riceverai una mail a ogni nuova richiesta, via SMTP; vuoto = nessuna)</small><input type="email" name="email" value="<?= e(impost('email')) ?>"></label>
 <button class="bottone">Salva</button></form>
 <form method="post" class="pannello" style="display:grid;gap:12px;max-width:520px"><?= csrf_campo() ?><input type="hidden" name="azione" value="smtp"><h2 style="margin:0">Invio email (SMTP)</h2>
 <label>Server SMTP <input type="text" name="smtp_host" placeholder="smtp.esempio.com" value="<?= e(impost('smtp_host')) ?>"></label>

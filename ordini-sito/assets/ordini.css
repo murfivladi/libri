@@ -7,3 +7,8 @@
 .form-pub small { font-weight:normal; color:#8a7f72; }
 .ok-pub h1 { margin-top:0; }
 .piccolo-nota { color:#8a7f72; font-size:.85rem; }
+.passi { padding-left:22px; } .passi li { margin:8px 0; }
+.form-pub h3 { margin:10px 0 0; border-bottom:1px solid var(--linea); padding-bottom:4px; }
+.ordina-box { max-width:640px; } .ordina-box .form-pub { max-width:none; }
+#spedizione[hidden] { display:none; }
+#spedizione { display:grid; gap:12px; }
