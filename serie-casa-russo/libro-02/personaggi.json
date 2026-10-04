@@ -1,0 +1,28 @@
+{
+  "stili": {
+    "presente": "digital painting, whimsical storybook illustration for children, warm Sicilian evening light mixed with cool blue moonlight, rich colors of cherry red and majolica blue, painterly brush strokes, gentle humor, no text, no letters, no watermark"
+  },
+  "personaggi": {
+    "vera": {
+      "descrizione": "Vera, a 12-year-old girl, half Italian and half Russian, long straight light-brown hair in a loose braid, freckles, clear grey eyes, ironic determined half-smile, wearing a cherry-red hoodie and jeans"
+    },
+    "foma": {
+      "descrizione": "Foma, a tiny old Russian house spirit (domovoj) as tall as a water bottle, very long grey beard reaching his bare hairy feet, messy grey hair, body covered in soft grey fur like an old cat, big red nose, small shiny black eyes, red peasant shirt with a rope belt, grumpy but lovable expression; he rides in an old woven bast-bark shoe (lapot)"
+    },
+    "donne_di_fora": {
+      "descrizione": "three elegant translucent Sicilian fairy ladies made of glowing white mist, nineteenth-century long gowns: the tallest stern and beautiful in wine-red with a tortoiseshell comb and a closed fan, a round chatty one in green with a pearl necklace, and a young curious one in pale blue with loose hair"
+    },
+    "babuska": {
+      "descrizione": "Babuska Galina, a small 74-year-old Russian grandmother, kind grey eyes with many wrinkles, a flowered headscarf tied under the chin, a green wool coat"
+    },
+    "nonna_concetta": {
+      "descrizione": "Nonna Concetta, a small 71-year-old Sicilian grandmother with teased grey curly hair, a bright fuchsia dressing gown, holding a battered aluminium moka pot"
+    },
+    "befana": {
+      "descrizione": "La Befana, a tiny hunched old Sicilian woman with a walnut-wrinkled face, long crooked nose, pointed chin, small lively black bird-like eyes, dark headscarf knotted under the chin, a black shawl covered in colorful mismatched patches (red, green, checkered, flowered), long black skirt, huge men's boots, riding an old straw broom with a jute sack on her shoulder"
+    },
+    "baba_jaga": {
+      "descrizione": "Baba Yaga, a very tall thin crooked old Russian witch, grey wrinkled face, very long hooked nose almost touching her chin, small bright green eyes, wild grey hair under a red flowered headscarf, an old moth-eaten fur coat, one leg made of white bone, standing in a big flying wooden mortar holding a long pestle and a birch-twig broom"
+    }
+  }
+}
