@@ -43,7 +43,7 @@ CSS = '''.p img{width:100%;border-radius:6mm;margin-bottom:7mm;box-shadow:0 2mm 
 .p{width:148mm;height:210mm;box-sizing:border-box;padding:18mm 16mm;page-break-after:always;display:flex;flex-direction:column;justify-content:center;background:#fffaf5;position:relative}
 .p svg{width:100%;max-height:80mm;margin-bottom:8mm}.t{font-size:15.5pt;line-height:1.6;text-align:left}
 .n{position:absolute;bottom:9mm;left:0;right:0;text-align:center;font-size:9pt;color:#c98bb0}
-.cov{background:#fde6f1;text-align:center;justify-content:flex-start;padding-top:12mm}.cov h1{white-space:nowrap;font-size:20pt !important;text-shadow:0 0 6px #fff,0 0 12px #fff;font-size:25pt;color:#a8437a;margin:4mm 0}.cov .s{color:#8c5a2b;letter-spacing:2px;font-size:10pt}
+.cov{background:#fde6f1;text-align:center;justify-content:flex-start;padding-top:12mm}.cov h1{font-size:19pt !important;text-shadow:0 0 6px #fff,0 0 12px #fff;font-size:25pt;color:#a8437a;margin:4mm 0}.cov .s{color:#8c5a2b;letter-spacing:2px;font-size:10pt}
 .cov svg{max-height:110mm;margin:6mm 0}.c{text-align:center}.c h2{color:#a8437a;font-size:20pt}.c p{font-size:14pt;line-height:1.7}'''
 def build(l):
     d=T[l]; h=[f'<div class="p cov" style="background:url(../immagini/cover.jpg) center/cover"><div class="s">{d["serie"].upper()}</div><h1>{d["titolo"]}</h1><div style="flex:1"></div><div class="s" style="background:#fffc;border-radius:8px;padding:2mm">{d["autore"]} · {d["edit"]}</div></div>',
@@ -56,3 +56,13 @@ def build(l):
     f.write_text(f'<!doctype html><meta charset=utf-8><style>{CSS}</style>'+''.join(h))
     subprocess.run(['/opt/pw-browsers/chromium-1194/chrome-linux/chrome','--headless','--no-sandbox','--no-pdf-header-footer',f'--print-to-pdf=build/{d["file"]}.pdf',f.resolve().as_uri()],check=True,capture_output=True)
 for l in T: build(l)
+# copertina come immagine unica: il titolo appare uguale in ogni lettore PDF
+for l,d in T.items():
+    p=f'build/{d["file"]}.pdf'
+    subprocess.run(['pdftoppm','-r','250','-f','1','-l','1','-jpeg','-singlefile',p,'build/cov'],check=True)
+    pathlib.Path('build/cov.html').write_text('<!doctype html><style>@page{size:148mm 210mm;margin:0}body{margin:0}img{width:148mm;height:210mm;display:block}</style><img src="cov.jpg">')
+    subprocess.run(['/opt/pw-browsers/chromium-1194/chrome-linux/chrome','--headless','--no-sandbox','--no-pdf-header-footer','--print-to-pdf=build/cov.pdf',pathlib.Path('build/cov.html').resolve().as_uri()],check=True,capture_output=True)
+    subprocess.run(['pdfseparate','-f','2',p,'build/s-%03d.pdf'],check=True)
+    s=sorted(pathlib.Path('build').glob('s-*.pdf'))
+    subprocess.run(['pdfunite','build/cov.pdf',*map(str,s),p],check=True)
+    for f in s+[pathlib.Path(x) for x in ('build/cov.pdf','build/cov.jpg','build/cov.html')]: f.unlink()
