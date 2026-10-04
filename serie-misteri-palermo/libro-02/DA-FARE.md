@@ -1,7 +1,7 @@
 # Libro 2 · Il Mantello Rubato — da fare / da approvare
 
 ## Stato
-- Italiano: 15 capitoli, circa 16.600 parole, 85 pagine A5. Appendice IT (sezione del tiraz, chi è chi, messaggio cifrato di Elena, vero/inventato).
+- Italiano: 15 capitoli, circa 17.400 parole, 85 pagine A5. Appendice IT (sezione del tiraz, chi è chi, messaggio cifrato di Elena, vero/inventato).
 - Russo: 15 capitoli + appendice, 88 pagine. **Traduzione fatta dall'IA: va controllata da un madrelingua.**
 - Copertina generata una sola volta (≈ 5 RUB) con il riferimento di Costanza. L'IA aveva scritto una riga di testo senza senso in fondo all'immagine: l'ho **tagliata** (originale in `riferimenti/copertina-originale.jpg`). Nessuna illustrazione interna.
 - PDF e copertine JPG pronti in `../per-il-sito/`.

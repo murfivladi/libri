@@ -21,9 +21,9 @@ Narratrice: Costanza, in prima persona al passato. Ogni libro ha un caso chiuso 
 | N. | Titolo provvisorio | Anno | Luogo | Caso |
 |---|---|---|---|---|
 | 1 | Il Veleno della Cappella | 1150 | Cappella Palatina | Un canonico si sente male durante una festa; la medicina veniva dalla bottega di Karim, che viene arrestato. Costanza deve provare che il papà è innocente. Il canonico guarisce. Prima piuma nera e un anello della mamma. |
-| 2 | Il Mantello Rubato | 1151 | Tiraz, il laboratorio reale della seta | Il mantello d'incoronazione del re (oro e perle, leoni e cammelli) sparisce prima di una cerimonia. Inseguimenti sui tetti della Kalsa. Si scopre che la mamma ricamava messaggi nelle iscrizioni. |
-| 3 | Il Mosaico Muto | 1152 | Santa Maria dell'Ammiraglio (Martorana) | Dopo la morte del vecchio ammiraglio Giorgio d'Antiochia scompare il suo testamento. Una tessera mancante nel mosaico nasconde un codice. Costanza capisce che la mamma è viva. |
-| 4 | La Mappa d'Argento | 1153 | Laboratorio del geografo al-Idrisi | Un pezzo del grande planisfero d'argento del re viene rubato. Spie straniere, una nave nel porto, una fuga di notte. Il Corvo parla con Costanza per la prima volta. |
+| 2 | Il Mantello Rubato | agosto 1150 | Tiraz, il laboratorio reale della seta | Il mantello d'incoronazione del re (oro e perle, leoni e cammelli) sparisce prima di una cerimonia. Inseguimenti sui tetti della Kalsa. Si scopre che la mamma ricamava messaggi nelle iscrizioni. |
+| 3 | Il Mosaico Muto | 1151 | Santa Maria dell'Ammiraglio (Martorana) | Dopo la morte del vecchio ammiraglio Giorgio d'Antiochia scompare il suo testamento. Una tessera mancante nel mosaico nasconde un codice. Costanza capisce che la mamma è viva. |
+| 4 | La Mappa d'Argento | 1152–1153 | Laboratorio del geografo al-Idrisi | Un pezzo del grande planisfero d'argento del re viene rubato. Spie straniere, una nave nel porto, una fuga di notte. Il Corvo parla con Costanza per la prima volta. |
 | 5 | Il Corvo del Re | 1154 | Palazzo Reale, San Giovanni degli Eremiti | Il re Ruggero sta morendo e il Corvo prepara il suo colpo. Costanza scopre chi è il Corvo e ritrova la mamma. Fine della serie. |
 
 ## Il mistero grande (bibbia segreta)
@@ -46,3 +46,6 @@ Narratrice: Costanza, in prima persona al passato. Ogni libro ha un caso chiuso 
 4. Il furto del mantello, il testamento dell'ammiraglio e il pezzo del planisfero rubato sono inventati.
 5. Nel libro 1 il canonico non muore: nessuna morte violenta in tutta la serie (le morti dell'ammiraglio e del re sono naturali e storiche).
 6. Titoli provvisori e motto.
+
+## Nota (libro 2)
+Il libro 2 è ambientato ad agosto 1150, cinque settimane dopo il libro 1; Costanza ha ancora 12 anni. Il codice di Elena (A=1…Z=23) porta alla chiesa dell'Ammiraglio (libro 3).
