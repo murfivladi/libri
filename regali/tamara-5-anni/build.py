@@ -43,7 +43,7 @@ CSS = '''.p img{width:100%;border-radius:6mm;margin-bottom:7mm;box-shadow:0 2mm 
 .p{width:148mm;height:210mm;box-sizing:border-box;padding:18mm 16mm;page-break-after:always;display:flex;flex-direction:column;justify-content:center;background:#fffaf5;position:relative}
 .p svg{width:100%;max-height:80mm;margin-bottom:8mm}.t{font-size:15.5pt;line-height:1.6;text-align:left}
 .n{position:absolute;bottom:9mm;left:0;right:0;text-align:center;font-size:9pt;color:#c98bb0}
-.cov{background:#fde6f1;text-align:center;justify-content:flex-start;padding-top:12mm}.cov h1{text-shadow:0 0 6px #fff,0 0 12px #fff;font-size:25pt;color:#a8437a;margin:4mm 0}.cov .s{color:#8c5a2b;letter-spacing:2px;font-size:10pt}
+.cov{background:#fde6f1;text-align:center;justify-content:flex-start;padding-top:12mm}.cov h1{white-space:nowrap;font-size:20pt !important;text-shadow:0 0 6px #fff,0 0 12px #fff;font-size:25pt;color:#a8437a;margin:4mm 0}.cov .s{color:#8c5a2b;letter-spacing:2px;font-size:10pt}
 .cov svg{max-height:110mm;margin:6mm 0}.c{text-align:center}.c h2{color:#a8437a;font-size:20pt}.c p{font-size:14pt;line-height:1.7}'''
 def build(l):
     d=T[l]; h=[f'<div class="p cov" style="background:url(../immagini/cover.jpg) center/cover"><div class="s">{d["serie"].upper()}</div><h1>{d["titolo"]}</h1><div style="flex:1"></div><div class="s" style="background:#fffc;border-radius:8px;padding:2mm">{d["autore"]} · {d["edit"]}</div></div>',
