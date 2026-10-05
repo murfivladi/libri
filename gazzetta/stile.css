@@ -1,42 +1,102 @@
-/* La Gazzetta di Vlad · stile comune (A4, colorata e allegra) */
-@page { size: A4; margin: 14mm 14mm 16mm; }
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; background: #fff; }
-body { font-family: "DejaVu Sans", "Liberation Sans", Arial, sans-serif; font-size: 11pt; line-height: 1.45; color: #1f2430; }
-h1, h2, h3 { font-family: Georgia, "DejaVu Serif", serif; margin: 0 0 3mm; }
-p { margin: 0 0 2.5mm; }
-.pagina { break-before: page; }
-.testata { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 3px solid #e84a5f; padding-bottom: 2mm; margin-bottom: 6mm; font-size: 9pt; color: #555; }
-.testata b { font-family: Georgia, serif; font-size: 13pt; color: #e84a5f; }
-.rubrica { display: inline-block; background: #2a9d8f; color: #fff; font-weight: bold; border-radius: 20px; padding: 1mm 5mm; font-size: 10pt; margin-bottom: 3mm; }
-.rubrica.rosa { background: #e84a5f; } .rubrica.giallo { background: #f4a261; } .rubrica.blu { background: #457b9d; } .rubrica.viola { background: #7b5ea7; }
-.box { border-radius: 4mm; padding: 4mm 5mm; margin-bottom: 4mm; background: #fff6e5; }
-.box.verde { background: #e7f6f3; } .box.blu { background: #e8f1f8; } .box.rosa { background: #fdecef; } .box.viola { background: #f1ecf8; }
-.fonte { font-size: 8.5pt; color: #666; font-style: italic; }
-.due { columns: 2; column-gap: 7mm; } .due .box { break-inside: avoid; }
+/* La Gazzetta di Vlad · grafica comune
+   A4, stile quotidiano: testata grande, colonne con filetti, occhiello/titolo/sommario,
+   didascalie sotto le immagini. Colori allegri solo negli accenti (rosso Etna, blu mare, giallo limone). */
 
-/* copertina */
-.copertina { height: 265mm; display: flex; flex-direction: column; background: linear-gradient(160deg, #ffe9a8, #ffc3c9 55%, #b8e3dc); border-radius: 6mm; padding: 12mm; }
-.copertina .nome { font-family: Georgia, serif; font-size: 48pt; line-height: 1; color: #c1121f; margin: 0; }
-.copertina .info { display: flex; justify-content: space-between; border-top: 2px solid #c1121f; border-bottom: 2px solid #c1121f; padding: 2mm 0; margin: 4mm 0 10mm; font-weight: bold; color: #333; }
-.copertina .mascotte { font-size: 110pt; text-align: center; margin: 4mm 0; }
-.copertina .lancio { font-size: 15pt; margin: 2mm 0; }
-.copertina .lancio b { color: #c1121f; }
-.copertina .piede { margin-top: auto; display: flex; align-items: center; gap: 4mm; font-size: 10pt; }
-.copertina .piede img { height: 18mm; }
+@font-face { font-family: "Testata"; src: url("font/PlayfairDisplay.ttf"); font-weight: 400 900; }
+@font-face { font-family: "Titoli"; src: url("font/Oswald.ttf"); font-weight: 200 700; }
+@font-face { font-family: "Testo"; src: url("font/PT_Serif-Web-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "Testo"; src: url("font/PT_Serif-Web-Italic.ttf"); font-style: italic; }
+@font-face { font-family: "Testo"; src: url("font/PT_Serif-Web-Bold.ttf"); font-weight: 700; }
+
+:root { --rosso: #c8102e; --blu: #1d5c8a; --giallo: #f5c400; --verde: #2f7d4f; --inchiostro: #1b1b1b; --carta: #fbf8f1; --grigio: #6b6b6b; }
+
+@page { size: A4; margin: 12mm 13mm 14mm; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: #fff; font-family: "Testo", Georgia, serif; font-size: 10.2pt; line-height: 1.42; color: var(--inchiostro); hyphens: auto; -webkit-hyphens: auto; }
+p { margin: 0 0 2mm; text-align: justify; }
+.pagina { break-before: page; position: relative; height: 268mm; overflow: hidden; }
+.prima { height: 268mm; position: relative; overflow: hidden; }
+
+/* testatina delle pagine interne */
+.testatina { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2.5pt solid var(--inchiostro); padding-bottom: 1mm; margin-bottom: 1mm; font-family: "Titoli"; text-transform: uppercase; letter-spacing: .06em; font-size: 8.5pt; }
+.testatina .nome { font-family: "Testata"; font-weight: 900; font-size: 13pt; text-transform: none; letter-spacing: 0; }
+.filetto { border-top: .6pt solid var(--inchiostro); margin-bottom: 5mm; }
+.sezione { display: inline-block; font-family: "Titoli"; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #fff; background: var(--rosso); padding: .6mm 3mm; font-size: 9pt; }
+.sezione.blu { background: var(--blu); } .sezione.verde { background: var(--verde); } .sezione.giallo { background: var(--giallo); color: var(--inchiostro); } .sezione.nero { background: var(--inchiostro); }
+
+/* articolo */
+.occhiello { font-family: "Titoli"; text-transform: uppercase; letter-spacing: .05em; font-size: 9pt; color: var(--rosso); margin: 2mm 0 .5mm; }
+h1, h2, h3 { font-family: "Testata"; font-weight: 800; line-height: 1.05; margin: 0 0 2mm; }
+h1 { font-size: 27pt; } h2 { font-size: 18pt; } h3 { font-size: 13pt; }
+.sommario { font-style: italic; font-size: 11.5pt; line-height: 1.35; margin-bottom: 3mm; color: #333; }
+.firma { font-family: "Titoli"; font-size: 8pt; text-transform: uppercase; letter-spacing: .05em; color: var(--grigio); margin-bottom: 2mm; }
+.luogo { font-family: "Titoli"; font-weight: 600; text-transform: uppercase; font-size: 8.5pt; }
+.col2 { column-count: 2; column-gap: 6mm; column-rule: .5pt solid #bbb; }
+.col3 { column-count: 3; column-gap: 5mm; column-rule: .5pt solid #bbb; }
+.capolettera::first-letter { font-family: "Testata"; font-weight: 900; float: left; font-size: 34pt; line-height: .85; padding: 1mm 1.5mm 0 0; color: var(--rosso); }
+.fonte { font-family: "Titoli"; font-size: 7.5pt; color: var(--grigio); text-transform: uppercase; letter-spacing: .04em; margin-top: 1mm; }
+.fonte a { color: var(--grigio); }
+.stacco { border-top: .6pt solid var(--inchiostro); margin: 4mm 0; }
+.griglia { display: grid; gap: 5mm; }
+.g-2-1 { grid-template-columns: 2fr 1fr; } .g-1-1 { grid-template-columns: 1fr 1fr; } .g-1-2 { grid-template-columns: 1fr 2fr; }
+.riga-v { border-left: .5pt solid #bbb; padding-left: 5mm; }
+
+/* immagini: se il file non c'è (immagini non ancora generate), resta un riquadro con la descrizione */
+figure { margin: 0 0 3mm; break-inside: avoid; }
+.img { position: relative; background: repeating-linear-gradient(45deg, #efe9dc 0 6px, #f7f2e8 6px 12px); border: .5pt solid #d6cfc0; overflow: hidden; }
+.img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.img .manca { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4mm; font-family: "Titoli"; font-size: 8pt; color: #9a907c; text-transform: uppercase; letter-spacing: .05em; }
+figcaption { font-family: "Titoli"; font-size: 8pt; color: #444; padding-top: 1mm; border-bottom: .5pt solid #bbb; padding-bottom: 1mm; }
+
+/* box */
+.box { background: var(--carta); border-top: 3pt solid var(--blu); padding: 3mm 4mm; margin-bottom: 4mm; break-inside: avoid; }
+.box.giallo { border-top-color: var(--giallo); background: #fff9db; } .box.rosso { border-top-color: var(--rosso); } .box.verde { border-top-color: var(--verde); }
+.box h3 { font-size: 12pt; }
+.box .titoletto { font-family: "Titoli"; text-transform: uppercase; font-weight: 600; letter-spacing: .06em; font-size: 9pt; margin-bottom: 1.5mm; }
+
+/* PRIMA PAGINA */
+.prima .barra { display: flex; justify-content: space-between; font-family: "Titoli"; font-size: 8.5pt; text-transform: uppercase; letter-spacing: .06em; border-top: .6pt solid var(--inchiostro); border-bottom: 2.5pt solid var(--inchiostro); padding: 1mm 0; margin-bottom: 4mm; }
+.prima .alto { display: flex; justify-content: space-between; align-items: center; font-family: "Titoli"; font-size: 8pt; text-transform: uppercase; color: var(--grigio); letter-spacing: .05em; }
+.prima .testata { font-family: "Testata"; font-weight: 900; font-size: 54pt; line-height: 1; white-space: nowrap; text-align: center; margin: 1mm 0 1.5mm; letter-spacing: -.01em; }
+.prima .testata span { color: var(--rosso); }
+.prima .motto { text-align: center; font-style: italic; font-size: 10pt; margin-bottom: 1.5mm; }
+.orecchio { width: 34mm; border: .6pt solid var(--inchiostro); padding: 1.5mm 2mm; font-family: "Titoli"; font-size: 7.5pt; text-transform: uppercase; line-height: 1.3; color: var(--inchiostro); }
+.orecchio b { color: var(--rosso); font-size: 9pt; }
+.strillo { border-bottom: .5pt solid #bbb; padding-bottom: 2.5mm; margin-bottom: 2.5mm; }
+.strillo .occhiello { margin-top: 0; }
+.strillo h3 { margin-bottom: 1mm; }
+.strillo p { font-size: 9.2pt; margin: 0; }
+.pag { font-family: "Titoli"; font-weight: 600; color: var(--rosso); font-size: 8pt; }
+.indice { font-family: "Titoli"; font-size: 9pt; text-transform: uppercase; letter-spacing: .03em; }
+.indice div { display: flex; justify-content: space-between; border-bottom: .5pt dotted #999; padding: .8mm 0; }
 
 /* fumetto */
-.strip { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
-.vignetta { border: 3px solid #1f2430; border-radius: 2mm; height: 68mm; position: relative; background: #fffdf5; overflow: hidden; }
-.vignetta .scena { position: absolute; bottom: 3mm; left: 0; right: 0; text-align: center; font-size: 46pt; }
-.vignetta .nuvola { position: absolute; top: 3mm; left: 3mm; right: 3mm; background: #fff; border: 2px solid #1f2430; border-radius: 6mm; padding: 2mm 3mm; font-size: 10pt; font-weight: bold; }
-.vignetta .didascalia { position: absolute; top: 0; left: 0; background: #ffd166; padding: 1mm 3mm; font-size: 9pt; border-right: 2px solid #1f2430; border-bottom: 2px solid #1f2430; }
-.vignetta .didascalia + .nuvola { top: 10mm; }
+.tavola { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+.vignetta { position: relative; height: 72mm; border: 1.6pt solid var(--inchiostro); background: #fff; overflow: hidden; }
+.vignetta .img { position: absolute; inset: 0; border: 0; }
+.nuvola { position: absolute; z-index: 2; background: #fff; border: 1.2pt solid var(--inchiostro); border-radius: 50% / 40%; padding: 2.5mm 4mm; font-family: "Titoli"; font-weight: 500; font-size: 9pt; line-height: 1.2; text-align: center; max-width: 62%; }
+.nuvola::after { content: ""; position: absolute; bottom: -2.4mm; left: 30%; width: 4mm; height: 4mm; background: #fff; border-right: 1.2pt solid var(--inchiostro); border-bottom: 1.2pt solid var(--inchiostro); transform: rotate(45deg) skew(10deg, 10deg); }
+.didascalia-f { position: absolute; z-index: 2; top: 0; left: 0; background: var(--giallo); padding: 1mm 3mm; font-family: "Titoli"; font-size: 8.5pt; border-right: 1.2pt solid var(--inchiostro); border-bottom: 1.2pt solid var(--inchiostro); }
+
+/* intervista */
+.domanda { font-family: "Titoli"; font-weight: 600; color: var(--blu); margin-top: 2.5mm; break-after: avoid; }
+.citazione { font-family: "Testata"; font-style: italic; font-weight: 700; font-size: 16pt; line-height: 1.2; border-top: 2pt solid var(--rosso); border-bottom: 2pt solid var(--rosso); padding: 3mm 0; margin: 3mm 0; text-align: center; }
 
 /* giochi */
-table.cruci { border-collapse: collapse; margin: 3mm auto; }
-table.cruci td { width: 9mm; height: 9mm; border: 1.5px solid #1f2430; text-align: left; vertical-align: top; font-size: 7pt; padding: 0.5mm; }
-table.cruci td.nero { background: #1f2430; }
-.quiz li { margin-bottom: 2.5mm; }
-.soluzioni { font-size: 8.5pt; transform: rotate(180deg); text-align: center; margin-top: 6mm; color: #555; }
-.domanda { font-weight: bold; color: #457b9d; }
+.quiz { padding-left: 5mm; margin: 0; } .quiz li { margin-bottom: 2.2mm; }
+.quiz .opz { font-family: "Titoli"; font-size: 9pt; display: block; color: #333; }
+table.cruci { border-collapse: collapse; margin: 2mm 0 3mm; }
+table.cruci td { width: 8.5mm; height: 8.5mm; border: 1pt solid var(--inchiostro); vertical-align: top; font-family: "Titoli"; font-size: 6.5pt; padding: .4mm .8mm; }
+table.cruci td.chiave { background: var(--giallo); }
+table.cruci td.vuoto { border: 0; }
+.soluzioni { transform: rotate(180deg); font-family: "Titoli"; font-size: 7.5pt; color: var(--grigio); text-align: center; border-top: .5pt solid #bbb; padding-top: 1.5mm; margin-top: 4mm; }
+.bufala { background: #fff9db; border: 1pt dashed var(--rosso); padding: 3mm 4mm; break-inside: avoid; }
+.bufala .timbro { display: inline-block; font-family: "Titoli"; font-weight: 700; color: var(--rosso); border: 1.5pt solid var(--rosso); padding: 0 2mm; transform: rotate(-4deg); margin-bottom: 1.5mm; letter-spacing: .1em; }
+
+.colophon { font-family: "Titoli"; font-size: 7.8pt; line-height: 1.45; color: #444; border-top: 2.5pt solid var(--inchiostro); padding-top: 2mm; }
+.colophon b { color: var(--inchiostro); }
+.piede { position: absolute; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; font-family: "Titoli"; font-size: 7.5pt; color: var(--grigio); text-transform: uppercase; letter-spacing: .05em; }
+table.crivello { border-collapse: collapse; margin: 2mm 0; }
+table.crivello td { width: 6.6mm; height: 6.6mm; text-align: center; font-family: "Titoli"; font-size: 10pt; border: .4pt solid #ccc; }
+.numerone { font-family: "Testata"; font-weight: 900; font-size: 34pt; color: var(--rosso); line-height: 1; }

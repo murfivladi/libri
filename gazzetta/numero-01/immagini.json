@@ -1,0 +1,17 @@
+{
+  "_stile": "children's magazine illustration, hand-drawn ink lines with watercolor, warm Mediterranean colors, soft paper texture, friendly, detailed, no text, no letters, no watermark",
+  "briciola": {"size": "1024x1024", "prompt": "a small cheerful green Sicilian gecko with big round eyes clinging to an old sunlit stone wall with a lemon branch, looking at the viewer"},
+  "etna-luna": {"size": "1024x640", "prompt": "a huge full moon rising at dusk over Mount Etna volcano puffing a plume of grey ash, pink and violet sky, Sicilian hills and a small village with lights in the foreground"},
+  "pianeta-lava": {"size": "1024x768", "prompt": "an alien rocky planet covered in glowing orange lava seas with a thin hazy blue atmosphere, orbiting very close to a big orange star, deep space with stars"},
+  "animali-salvati": {"size": "1024x768", "prompt": "many small freshwater turtles in a shallow tub and colorful green, red and blue parrots on a wooden perch inside a clean animal rescue center, a kind volunteer in the background"},
+  "razzo": {"size": "768x1024", "prompt": "a white reusable rocket landing upright on its four legs on a sea platform at sunrise, flames and smoke under it, seagulls flying"},
+  "geco-zampa": {"size": "768x768", "prompt": "close-up of a gecko's foot pressed against a glass window seen from below, showing the wide toe pads with fine ridges, sunlight"},
+  "fomà-dispensa": {"size": "1024x640", "prompt": "a tiny old bearded hairy house spirit (Russian domovoj) in a peasant shirt sitting on a flour sack on the top shelf of a dark pantry, eating a Sicilian cannolo with crumbs in his beard, a girl and a small boy peeking through the door with a flashlight"},
+  "fomà-ritratto": {"size": "768x1024", "prompt": "portrait of a tiny grumpy old bearded hairy house spirit (Russian domovoj) holding a glass of tea in a metal holder, sitting next to a warm stove in a Sicilian kitchen with majolica tiles"},
+  "fumetto-1": {"size": "1024x768", "prompt": "comic panel: a little green gecko on a bedroom wall at night looking up at a mosquito on the ceiling, moonlight from the window, empty space at the top of the image"},
+  "fumetto-2": {"size": "1024x768", "prompt": "comic panel: a little green gecko climbing up a wall very fast with determined face, motion lines, night bedroom, empty space at the top of the image"},
+  "fumetto-3": {"size": "1024x768", "prompt": "comic panel: a little green gecko walking upside down on a white ceiling, proud smile, a mosquito nearby, night, empty space at the bottom of the image"},
+  "fumetto-4": {"size": "1024x768", "prompt": "comic panel: a mosquito flying away fast with a cheeky face while a dizzy little green gecko hangs from the ceiling by one foot, stars around its head, empty space at the top"},
+  "fumetto-5": {"size": "1024x768", "prompt": "comic panel: morning kitchen, a boy of 13 with a surprised face finds a little green gecko sitting inside an open jar of honey on the table, empty space at the top"},
+  "fumetto-6": {"size": "1024x768", "prompt": "comic panel: close-up of a little green gecko covered in honey licking its lips with an innocent look, kitchen background, empty space at the top"}
+}
