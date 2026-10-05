@@ -1,0 +1,19 @@
+{
+  "stili": {
+    "presente": "cinematic digital painting, young adult techno-thriller book illustration, night city of Turin, deep teal and electric cyan palette with warm amber accents, glowing screens, soft rim light, detailed, no text, no letters, no words, no watermark"
+  },
+  "personaggi": {
+    "teo": {
+      "descrizione": "Teo, a 13-year-old Italian boy, slim, messy dark brown hair, pale skin, thoughtful brown eyes, dark grey hoodie, face lit by a laptop screen"
+    },
+    "irene": {
+      "descrizione": "Irene, a 13-year-old Italian-Nigerian girl, dark skin, short natural black curly hair with a teal headband, confident sharp eyes, red athletic jacket"
+    },
+    "grigio": {
+      "descrizione": "a calm elegant man about 50 years old in a tailored grey suit, short silver hair, thin smile, seen from a distance"
+    },
+    "portatile": {
+      "descrizione": "an old scratched black laptop with stickers, its screen showing a single glowing cyan circle on black"
+    }
+  }
+}
