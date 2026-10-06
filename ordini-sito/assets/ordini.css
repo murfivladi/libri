@@ -1,0 +1,14 @@
+/* Aggiunte per il modulo d'ordine (il resto viene da stile.css) */
+.scheda .prezzo { font-size:.95rem; color:var(--accento); }
+.scheda { aspect-ratio:auto; min-height:300px; }
+.ordina-box { background:var(--scheda); border:1px solid var(--linea); border-radius:10px; padding:18px; margin-top:20px; max-width:560px; }
+.form-pub textarea { min-height:90px; }
+.form-pub .due { display:grid; grid-template-columns:1fr 2fr; gap:12px; }
+.form-pub small { font-weight:normal; color:#8a7f72; }
+.ok-pub h1 { margin-top:0; }
+.piccolo-nota { color:#8a7f72; font-size:.85rem; }
+.passi { padding-left:22px; } .passi li { margin:8px 0; }
+.form-pub h3 { margin:10px 0 0; border-bottom:1px solid var(--linea); padding-bottom:4px; }
+.ordina-box { max-width:640px; } .ordina-box .form-pub { max-width:none; }
+#spedizione[hidden] { display:none; }
+#spedizione { display:grid; gap:12px; }
