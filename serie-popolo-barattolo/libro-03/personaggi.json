@@ -1,0 +1,21 @@
+{
+  "stili": {
+    "presente": "digital painting, whimsical science fiction storybook illustration for children, deep violet night sky and silver starlight palette, warm tiny orange firelights, soft cinematic lighting, painterly brush strokes, no text, no letters, no watermark",
+    "oblio": "digital painting, whimsical science fiction storybook illustration, violet and silver palette, no text, no letters, no watermark",
+    "duecento": "digital painting, whimsical science fiction storybook illustration, violet and silver palette, no text, no letters, no watermark"
+  },
+  "personaggi": {
+    "nico": {
+      "descrizione": "Nico, a 12-year-old Italian boy from Calabria, slim, short neat dark brown hair, olive skin, serious careful dark eyes, a little worried expression, plain navy t-shirt and shorts, always holding a small squared notebook and a pencil"
+    },
+    "gin": {
+      "descrizione": "Gin (Ginevra), a 12-year-old Italian girl, sun-tanned, messy black curly hair in a high ponytail, sharp amused eyes, a mischievous sarcastic half-smile, oversized faded yellow t-shirt, sneakers"
+    },
+    "lupetti": {
+      "descrizione": "Professor Ugo Lupetti, a short plump vain Italian astronomer about 60 years old, a straw hat, a tiny curled grey moustache, round gold-rimmed glasses, a cream linen suit too warm for summer, a metal detector in one hand"
+    },
+    "barattolo": {
+      "descrizione": "an ordinary glass jam jar with a metal lid, filled with beach sand and a small smooth black pebble; inside, tiny glowing orange firelights of a microscopic people and miniature stone huts"
+    }
+  }
+}
