@@ -1,0 +1,58 @@
+{
+ "_stile": "colorful warm children's book illustration, funny and cheerful, soft painterly cartoon style, rich detail, sunny Sicilian village, no text, no letters, no words, no watermark",
+ "copertina": {
+  "size": "768x1152",
+  "seed": 11,
+  "prompt": "book cover composition, vertical, empty sky space at the top, Tano, a lanky 26-year-old Sicilian substitute teacher with messy dark hair, round glasses and a green tie, standing nervous in the doorway of a bright yellow school classroom with a bucket balanced above the door, a white goat peeking beside him, a cake with a candle, cheerful chaotic classroom behind, Mount Etna in the distance"
+ },
+ "cap01": {
+  "size": "768x1024",
+  "seed": 7,
+  "prompt": "a bus stop sign nibbled by a goat, a young nervous teacher with green tie walking toward a yellow school building with red tile roof, a big bald school janitor hiding a sandwich behind his back, a young teacher with messy dark hair, round glasses and a green tie"
+ },
+ "cap02": {
+  "size": "768x1024",
+  "seed": 7,
+  "prompt": "a classroom with desks in a horseshoe, children with funny looks: a girl with two braids and headphones, a boy in a velvet jacket holding a long contract, a red-haired girl with a hamster peeking from backpack, a sleeping boy on his desk, a huge cake on a trolley, a young teacher at the desk smiling, a young teacher with messy dark hair, round glasses and a green tie"
+ },
+ "cap03": {
+  "size": "768x1024",
+  "seed": 7,
+  "prompt": "a tiny old math teacher with white hair and calculator earrings sitting in an armchair next to a round cushion with number seven on it, a coffee machine, staff room with lemon tree outside the window, "
+ },
+ "cap04": {
+  "size": "768x1024",
+  "seed": 7,
+  "prompt": "behind an old courtyard well, children whispering around a glass jar full of coins, a teacher peeking from the wall corner, lemon tree, sunny autumn day, a young teacher with messy dark hair, round glasses and a green tie"
+ },
+ "cap05": {
+  "size": "768x1024",
+  "seed": 7,
+  "prompt": "a school gym with floor marked in chalk, kids playing bocce, a hamster racing across the court knocking bocce balls, a stern coach with a whistle sitting on the floor in awe, a teacher throwing a red ball, a young teacher with messy dark hair, round glasses and a green tie"
+ },
+ "cap06": {
+  "size": "768x1024",
+  "seed": 7,
+  "prompt": "a girl journalist with a retro tape recorder and red notebook interviewing a young teacher, a school bulletin board covered with funny newspaper pages, a goat watching through the window, a young teacher with messy dark hair, round glasses and a green tie"
+ },
+ "cap07": {
+  "size": "768x1024",
+  "seed": 7,
+  "prompt": "a dusty school basement archive at dawn, children sitting in a circle with torches and blankets, old shelves, a bust of Archimedes wearing a fisherman's hat, an old wooden teacher's desk, a goat at the top of the stairs, "
+ },
+ "cap08": {
+  "size": "768x1024",
+  "seed": 7,
+  "prompt": "a school principal's office full of potted cactus plants with name tags, a small stern woman with a bun and three pairs of glasses holding a yellow sticky note, children lined up, a goat eating a leaf, "
+ },
+ "cap09": {
+  "size": "768x1024",
+  "seed": 7,
+  "prompt": "a cozy small apartment full of books, an old kind teacher with white braid and walking stick pouring tea for a young teacher, a fat tabby cat on his lap, pastry shop below, a young teacher with messy dark hair, round glasses and a green tie"
+ },
+ "cap10": {
+  "size": "768x1024",
+  "seed": 7,
+  "prompt": "Halloween party in a classroom, children in costumes: witch, cardboard robot, giant cushion, princess with hamster king, a notary with a white wig, carved pumpkin lanterns, an old teacher with a cane hugging a student, a goat with a scarf, a cake with a tiny carousel, "
+ }
+}
