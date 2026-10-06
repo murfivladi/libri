@@ -1,0 +1,35 @@
+{
+  "stili": {
+    "presente": "illuminated Norman-Byzantine mosaic style mixed with a painterly storybook illustration, gold leaf tesserae, deep turquoise and terracotta palette, warm Sicilian light, twelfth century Palermo, detailed and atmospheric, no text, no letters, no watermark"
+  },
+  "personaggi": {
+    "costanza": {
+      "descrizione": "Costanza, a 12-year-old Arab-Sicilian girl of twelfth-century Palermo, long dark curly hair half covered by a light turquoise veil, olive skin, big sharp dark observant eyes, a plain linen tunic dyed terracotta with a turquoise sash, a small leather satchel; she holds a small green glass phial sealed with wax and a single black raven feather",
+      "riferimento": "riferimenti/costanza.jpg"
+    },
+    "yusuf": {
+      "descrizione": "Nonno Yusuf, a 70-year-old Arab physician, former court doctor, almost blind, milky cloudy eyes, white beard, white turban, long dark blue robe, a carved wooden walking stick, gentle ironic smile"
+    },
+    "karim": {
+      "descrizione": "Karim, a 38-year-old Arab-Sicilian apothecary, kind tired face, short dark beard, simple linen tunic with a leather apron stained with herbs"
+    },
+    "ruben": {
+      "descrizione": "Ruben, a 13-year-old Jewish boy, dyer's son, thin, curly dark hair, blue-stained hands and fingertips, quick clever smile, simple tunic"
+    },
+    "zaffira": {
+      "descrizione": "Zaffira, a small grey cat with sapphire-blue eyes and a white spot on the chest"
+    },
+    "ugo": {
+      "descrizione": "Maestro Ugo, a 50-year-old Norman court notary, round gentle face, soft smile, dark robe, ink-stained fingers, a leather document case"
+    },
+    "yasmin": {
+      "descrizione": "Yasmin, a 14-year-old Arab embroiderer apprentice of twelfth-century Palermo, tall and thin, long black braid, a white headscarf, sharp lively eyes, a small silver thimble on her finger, left-handed, simple dark green dress with gold thread stuck to the sleeves"
+    },
+    "hasan": {
+      "descrizione": "Master Hasan, a 60-year-old Arab master of the royal silk workshop, thin white beard, round spectacles-free squinting eyes, a silver needle pinned on his turban, long grey robe"
+    },
+    "nina": {
+      "descrizione": "Nina the Cat, a 10-year-old barefoot street girl and rooftop runner of Palermo, tangled short hair, soot-stained hands and face, ragged tunic, agile like a cat"
+    }
+  }
+}
