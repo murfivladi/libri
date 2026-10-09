@@ -210,20 +210,28 @@ const VOCI_TTS = [
     'if_sara' => 'Sara (donna, italiano)', 'im_nicola' => 'Nicola (uomo, italiano)',
 ];
 function deapi_chiave(): string { return trim(impost('deapi_chiave')); }
+// Indirizzo di deAPI: quello ufficiale oppure un proxy (es. https://vladproxy.v7755837.deno.net) che inoltra a api.deapi.ai.
+const DEAPI_UFFICIALE = 'https://api.deapi.ai';
+function deapi_base(): string {
+    $u = rtrim(trim(impost('deapi_indirizzo')), '/');
+    return preg_match('#^https://[a-z0-9.-]+(:\d+)?(/[\w./-]*)?$#i', $u) ? $u : DEAPI_UFFICIALE;
+}
 
 function deapi_richiesta(string $metodo, string $percorso, ?array $campi = null, int $timeout = 60): array {
     if (!function_exists('curl_init')) throw new RuntimeException('Serve l\'estensione curl di PHP per usare deAPI.');
-    $ch = curl_init('https://api.deapi.ai/api/v2' . $percorso);
+    $ch = curl_init(deapi_base() . '/api/v2' . $percorso);
     $h = ['Accept: application/json'];
     if (deapi_chiave() !== '') $h[] = 'Authorization: Bearer ' . deapi_chiave();
     curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => $timeout, CURLOPT_CONNECTTIMEOUT => 10, CURLOPT_HTTPHEADER => $h, CURLOPT_USERAGENT => 'VladEditore-Scuola/1.0']);
     if ($metodo === 'POST') { curl_setopt($ch, CURLOPT_POST, true); curl_setopt($ch, CURLOPT_POSTFIELDS, $campi ?? []); }
     $r = curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE); $err = curl_error($ch); curl_close($ch);
-    if ($r === false) throw new RuntimeException('deAPI non risponde: ' . $err);
+    $proxy = deapi_base() !== DEAPI_UFFICIALE ? ' (tramite il proxy ' . deapi_base() . ')' : '';
+    if ($r === false) throw new RuntimeException('deAPI non risponde' . $proxy . ': ' . $err);
     if ($code === 401 || $code === 403) throw new RuntimeException('deAPI rifiuta la chiave: controlla Admin → Scuola → Impostazioni.');
     if ($code === 429) throw new RuntimeException('deAPI: troppe richieste, riprova tra un minuto.');
     $j = json_decode((string)$r, true);
-    if ($code >= 400 || !is_array($j) || !is_array($j['data'] ?? null)) throw new RuntimeException("deAPI ha risposto con un errore (HTTP $code).");
+    if (!is_array($j) && $proxy) throw new RuntimeException("Il proxy non risponde come deAPI (HTTP $code)$proxy: controlla l'indirizzo in Admin → Scuola.");
+    if ($code >= 400 || !is_array($j) || !is_array($j['data'] ?? null)) throw new RuntimeException("deAPI ha risposto con un errore (HTTP $code)$proxy.");
     return $j['data'];
 }
 

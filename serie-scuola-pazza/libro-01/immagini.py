@@ -9,7 +9,7 @@ Uso:  python3 immagini.py [nome ...]
 """
 import json, os, sys, time, urllib.error, urllib.request
 
-API = "https://api.deapi.ai/api/v1/client"   # API nativa deAPI (la chiave "id|token" non vale sull'endpoint OpenAI)
+API = os.environ.get("DEAPI_URL", "https://api.deapi.ai").rstrip("/") + "/api/v1/client"   # DEAPI_URL = proxy (es. https://vladproxy.v7755837.deno.net)
 MODELLO = "Flux_2_Klein_4B_BF16"
 
 QUI = os.path.dirname(os.path.abspath(__file__))

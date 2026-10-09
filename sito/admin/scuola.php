@@ -10,6 +10,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST['togli'])) $k = '';
         if ($k !== '' || !empty($_POST['togli'])) { imposta('deapi_chiave', $k); registra('Chiave deAPI ' . ($k === '' ? 'tolta' : 'salvata')); flash($k === '' ? 'Chiave deAPI tolta.' : 'Chiave deAPI salvata.'); }
     }
+    if (($_POST['azione'] ?? '') === 'deapi_indirizzo') {
+        $u = rtrim(trim((string)($_POST['indirizzo'] ?? '')), '/');
+        if ($u !== '' && !preg_match('#^https://[a-z0-9.-]+(:\d+)?(/[\w./-]*)?$#i', $u)) { flash('Indirizzo non valido: deve iniziare con https://', 'errore'); torna('scuola.php'); }
+        imposta('deapi_indirizzo', $u); registra('Indirizzo deAPI', $u ?: 'ufficiale');
+        flash($u === '' ? 'Si usa l\'indirizzo ufficiale di deAPI.' : 'Le chiamate a deAPI passano dal proxy ' . $u . '.');
+        if (empty($_POST['prova'])) torna('scuola.php');
+    }
+    if (($_POST['azione'] ?? '') === 'deapi_indirizzo' || ($_POST['azione'] ?? '') === 'prova_deapi') {
+        $t = microtime(true);
+        try { $m = deapi_richiesta('GET', '/models?per_page=1', null, 20); flash('✓ deAPI risponde da ' . deapi_base() . ' in ' . round((microtime(true) - $t) * 1000) . ' ms.'); }
+        catch (RuntimeException $e) { flash('✗ ' . $e->getMessage(), 'errore'); }
+        torna('scuola.php');
+    }
     if (($_POST['azione'] ?? '') === 'codice_prof') { $c = nuovo_codice_prof(); registra('Nuovo codice per i prof'); flash('Nuovo codice per i prof: ' . $c . ' (quello vecchio non funziona più).'); }
     if (($_POST['azione'] ?? '') === 'chiudi_prof') { imposta('codice_prof', ''); flash('Registrazione dei prof chiusa.'); }
     if (($_POST['azione'] ?? '') === 'elimina_prof' && ($pid = (int)($_POST['prof'] ?? 0))) { elimina_prof($pid); registra('Prof eliminato dall\'admin', (string)$pid); flash('Prof eliminato con classi, studenti e risultati.'); }
@@ -82,6 +95,10 @@ $cp = codice_prof();
   <p><a class="bottone" href="ai.php">✨ Apri lo Studio AI</a> <span class="muto">immagini con Vlad e Luce, voci, musica, animazioni</span></p>
   <h2 style="margin-top:0">deAPI (voci e immagini con l'AI)</h2>
   <p class="muto">Serve per creare l'audio con la voce AI direttamente dall'admin. La chiave si trova nella dashboard di deAPI. Stato: <?= $chiave !== '' ? '<b>chiave salvata</b> (…' . e(substr($chiave, -4)) . ')' : '<b>nessuna chiave</b>' ?>.</p>
+  <form method="post" class="azioni-riga" style="margin-bottom:10px"><?= csrf_campo() ?><input type="hidden" name="azione" value="deapi_indirizzo">
+    <input type="url" name="indirizzo" value="<?= e(impost('deapi_indirizzo')) ?>" placeholder="<?= e(DEAPI_UFFICIALE) ?> (vuoto = ufficiale)" style="max-width:420px" aria-label="Indirizzo di deAPI o del proxy">
+    <button class="bottone sec">Salva l'indirizzo</button> <button class="bottone sec" name="prova" value="1">Salva e prova</button></form>
+  <p class="muto">Indirizzo attuale: <code><?= e(deapi_base()) ?></code><?= deapi_base() !== DEAPI_UFFICIALE ? ' (proxy)' : '' ?>. Un proxy deve inoltrare <code>/api/v2/…</code> a api.deapi.ai così com'è.</p>
   <form method="post" class="azioni-riga"><?= csrf_campo() ?><input type="hidden" name="azione" value="deapi">
     <input type="password" name="deapi_chiave" placeholder="Incolla qui la chiave deAPI" autocomplete="off" style="max-width:420px">
     <button class="bottone">Salva</button><?php if ($chiave !== ''): ?> <button class="bottone sec" name="togli" value="1" data-conferma="Togliere la chiave deAPI?">Togli</button><?php endif; ?>

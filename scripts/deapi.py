@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Genera immagini con deAPI v2. Vedi scripts/README.md."""
+import os
 import argparse
 import json
 import math
@@ -12,7 +13,7 @@ from urllib.parse import quote, urlparse
 import requests
 import yaml
 
-API = "https://api.deapi.ai/api/v2"
+API = os.environ.get("DEAPI_URL", "https://api.deapi.ai").rstrip("/") + "/api/v2"   # DEAPI_URL = proxy (es. https://vladproxy.v7755837.deno.net)
 CONFIG = Path(__file__).resolve().parents[1] / "config.yaml"
 
 

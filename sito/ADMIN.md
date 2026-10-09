@@ -170,3 +170,5 @@ Ogni richiesta diventa un «lavoro» in coda: la pagina controlla da sola ogni 6
 - **Animazioni**: un'immagine prende vita (LTX-2.5, 2–10 secondi).
 - **Fai parlare Vlad o Luce**: immagine + audio corto (max 10 s) → il personaggio parla a tempo con la voce.
 - **Tutti i lavori**: stato, errori (es. limite di richieste, credito), anteprime, elimina.
+
+- **Proxy**: in Admin → Scuola → deAPI si può scrivere l'indirizzo di un proxy (es. `https://vladproxy.v7755837.deno.net`) che inoltra `/api/v2/…` a api.deapi.ai; «Salva e prova» controlla subito che risponda. I file dei risultati si scaricano comunque dal link che dà deAPI.

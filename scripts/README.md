@@ -30,3 +30,6 @@ la chiave al CDN. I bytes dell'immagine sono salvati senza conversione: usa
 l'estensione del formato restituito dal modello (normalmente PNG).
 
 Test senza API né spese: `python3 -m unittest discover -s scripts/tests`.
+
+## Proxy
+Tutti gli script deAPI del repository usano la variabile `DEAPI_URL` se c'è (es. `DEAPI_URL=https://vladproxy.v7755837.deno.net python3 scripts/deapi.py …`); senza, chiamano `https://api.deapi.ai`.

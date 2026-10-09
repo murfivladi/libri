@@ -86,6 +86,17 @@ Tk=$(tok "admin/zone.php?libro=$LID")
 chk "salva zone" "$(post "admin/zone.php?libro=$LID" --data-urlencode "csrf=$Tk" --data-urlencode 'zone=[{"p":3,"x":100,"y":200,"w":300,"h":80,"c":"CFC-2"},{"p":1,"x":0,"y":0,"w":50,"h":50,"c":"NON-1"},{"p":2,"x":10,"y":10,"w":2,"h":2,"c":"CFC-1"}]' -d pagina=3)" 302
 chk "solo le zone valide" "$(sql "SELECT COUNT(*) FROM zone WHERE libro_id = $LID")" 1
 
+# indirizzo di deAPI (proxy)
+Tk=$(tok admin/scuola.php)
+post admin/scuola.php -d "csrf=$Tk&azione=deapi_indirizzo&indirizzo=http://non-sicuro.it" >/dev/null
+chk "proxy deAPI: serve https" "$(sql "SELECT COUNT(*) FROM impostazioni WHERE chiave = 'deapi_indirizzo' AND valore != ''")" 0
+Tk=$(tok admin/scuola.php)
+post admin/scuola.php -d "csrf=$Tk&azione=deapi_indirizzo&indirizzo=https://proxy.esempio.it/" >/dev/null
+chk "proxy deAPI: salvato" "$(php -r 'require "inc/scuola.php"; echo deapi_base();')" "https://proxy.esempio.it"
+Tk=$(tok admin/scuola.php)
+post admin/scuola.php -d "csrf=$Tk&azione=deapi_indirizzo&indirizzo=" >/dev/null
+chk "proxy deAPI: vuoto = ufficiale" "$(php -r 'require "inc/scuola.php"; echo deapi_base();')" "https://api.deapi.ai"
+
 # ---------- Studio AI (senza rete: pagine, controlli e cosa succede ai risultati) ----------
 for v in immagini voci musica animazione lavori; do
   chk "studio AI: $v" "$(code "admin/ai.php?vista=$v")" 200; senza_errori "admin/ai.php?vista=$v"

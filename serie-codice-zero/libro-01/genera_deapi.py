@@ -13,7 +13,7 @@ import time
 import urllib.request
 
 QUI = os.path.dirname(os.path.abspath(__file__))
-BASE = "https://api.deapi.ai/api/v1/client"
+BASE = os.environ.get("DEAPI_URL", "https://api.deapi.ai").rstrip("/") + "/api/v1/client"   # DEAPI_URL = proxy (es. https://vladproxy.v7755837.deno.net)
 MODELLO = "Flux_2_Klein_4B_BF16"
 
 
