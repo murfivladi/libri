@@ -127,3 +127,37 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
 - **Esercizi** (editor visivo, con anteprima accanto): crocette, vero/falso, completa (con banca di parole), tocca le parole (soggetto, predicato, complementi… con i colori di scuola), riordina la frase, trascina nei gruppi, risposta libera. Codice automatico (es. `CFC-12`), pagina, livello, «solo online», duplica, QR da scaricare.
 - **Audio, video e immagini**: carica un file, registra dal microfono (anche dal telefono) oppure fai leggere un testo alla voce AI di deAPI.
 - **Zone**: sulle pagine del PDF i codici stampati vengono riconosciuti da soli (riquadri blu tratteggiati); si possono disegnare zone in più trascinando sulla pagina.
+
+## Lavagna e video (admin e prof)
+Editor a tutto schermo (`assets/lavagna.js`), tela Full HD 1920×1080. Funzioni:
+1. Seleziona e sposta (anche più oggetti, con Maiusc o trascinando un riquadro)
+2. Ridimensiona dagli angoli
+3. Ruota (con scatti di 15°)
+4. Penna, con spessore che segue la pressione della penna del tablet
+5. Evidenziatore trasparente
+6. Gomma per i tratti
+7. Puntatore laser rosso che sparisce da solo (si vede nel video)
+8. Testo (doppio clic per scrivere), 4 caratteri, grandezza, grassetto, allineamento
+9. Testo con sfondo colorato e sottolineatura colorata (come a scuola)
+10. Etichetta grammaticale: parola in un riquadro colorato con il nome (soggetto, predicato, complementi…)
+11. Frase smontabile: ogni parola diventa un pezzo che si sposta da solo
+12. Freccia, freccia curva (con punto di controllo), freccia doppia, linea, con estremi trascinabili
+13. Rettangolo, cerchio/ellisse, nuvoletta, stella, con riempimento e tratteggio
+14. Personaggi Vlad e Luce (5 pose, sfondo trasparente) e immagini dal computer, specchiabili
+15. Sfondi: lavagna verde/nera, blu, bianco, quadretti, righe, carta, colore, immagine
+16. Griglia con calamita e guide al centro (non finiscono nel video)
+17. Colori (tavolozza + qualsiasi colore), trasparenza, spessore
+18. Duplica, porta davanti/dietro, centra, raddrizza, allinea in fila/colonna, elimina
+19. Annulla/ripeti (150 passi), scorciatoie da tastiera, frecce per spostare
+20. **Passi**: ogni passo è una «foto» della lavagna; nel video gli oggetti nuovi compaiono e quelli spostati scivolano da soli
+21. Durata dei passi, oggetti «uno dopo l'altro», movimento morbido / costante / con rimbalzo / a scatto
+22. 10 effetti di entrata (si scrive/si disegna, dissolvenza, zoom, dai lati, girando, subito) con durata
+23. «Nascondi da qui»: l'oggetto esce dal video in dissolvenza
+24. Miniature dei passi e barra del tempo per scorrere l'animazione
+25. Riproduci con musica di sottofondo (audio del sito o caricato) e volume
+26. **Crea il video** dei passi, anche parlando sopra con il microfono
+27. **Dal vivo**: registra tutto quello che fai sulla lavagna, con la voce, conto alla rovescia 3-2-1
+28. Video in MP4 (Chrome/Edge recenti, Safari) o WebM; scarica il file
+29. Salva sul sito: admin → video del libro con il suo codice (QR, lettore); prof → video per una classe
+30. Salvataggio sul server, salvataggio automatico ogni minuto e bozza nel browser se si chiude per sbaglio
+31. Funziona con mouse, dita e penna; schermo intero

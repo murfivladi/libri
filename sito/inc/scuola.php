@@ -175,10 +175,14 @@ function mappa_scuola_libro(int $libro_id): array {
 
 // ---------- file multimediali ----------
 // Salva un file audio/video/immagine (caricato, registrato nel browser o scaricato da deAPI) nella cartella uploads/media.
-function salva_media_da_percorso(string $tmp, bool $caricato): string {
+// $suggerito = tipo dichiarato dal browser: serve solo per i .webm, che possono essere audio o video.
+// Dopo il salvataggio $GLOBALS['ultimo_media_tipo'] vale 'audio', 'video' o 'immagine'.
+function salva_media_da_percorso(string $tmp, bool $caricato, string $suggerito = ''): string {
     $mime = (new finfo(FILEINFO_MIME_TYPE))->file($tmp);
-    if ($mime === 'application/octet-stream' || $mime === 'video/x-matroska') $mime = 'audio/webm';     // registrazioni del browser
+    if ($mime === 'application/octet-stream' || $mime === 'video/x-matroska') $mime = str_starts_with($suggerito, 'video/') ? 'video/webm' : 'audio/webm';
     if (!isset(TIPI_MEDIA[$mime])) throw new RuntimeException('Tipo di file non ammesso (' . $mime . ').');
+    $GLOBALS['ultimo_media_tipo'] = str_starts_with($mime, 'image/') ? 'immagine'
+        : (str_starts_with($mime, 'audio/') ? 'audio' : ($mime === 'video/webm' && str_starts_with($suggerito, 'audio/') ? 'audio' : 'video'));
     $d = dir_uploads();
     if ($d !== null) {
         $nome = bin2hex(random_bytes(8)) . '.' . TIPI_MEDIA[$mime];
@@ -196,13 +200,7 @@ function salva_media(string $campo, int $max = 200 * 1024 * 1024): ?string {
     $f = $_FILES[$campo];
     if ($f['error'] !== UPLOAD_ERR_OK) throw new RuntimeException('Caricamento fallito (codice ' . $f['error'] . '). Controlla upload_max_filesize su PHP.');
     if ($f['size'] > $max) throw new RuntimeException('File troppo grande.');
-    return salva_media_da_percorso($f['tmp_name'], true);
-}
-function tipo_da_mime(string $valore): string {
-    $est = strtolower(pathinfo(nome_file($valore), PATHINFO_EXTENSION));
-    if (in_array($est, ['jpg', 'png', 'webp', 'gif'], true)) return 'immagine';
-    if (in_array($est, ['mp4', 'mov'], true)) return 'video';
-    return 'audio';
+    return salva_media_da_percorso($f['tmp_name'], true, (string)($f['type'] ?? ''));
 }
 
 // ---------- deAPI (voci) ----------

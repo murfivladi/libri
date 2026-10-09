@@ -13,7 +13,7 @@ function admin_testata(string $titolo, string $voce = ''): void {
     $voci = [
         'dashboard' => ['index.php', '🏠 Dashboard'], 'libri' => ['libri.php', '📚 Libri'],
         'collane' => ['collane.php', '🗂 Collane'],
-        'scuola' => ['scuola.php', '🎒 Scuola'], 'esercizi' => ['esercizi.php', '✏️ Esercizi'], 'contenuti' => ['contenuti.php', '🔊 Audio e video'], 'pagine' => ['pagine.php', '📄 Pagine'],
+        'scuola' => ['scuola.php', '🎒 Scuola'], 'esercizi' => ['esercizi.php', '✏️ Esercizi'], 'contenuti' => ['contenuti.php', '🔊 Audio e video'], 'lavagna' => ['lavagna.php', '🎬 Lavagna e video'], 'pagine' => ['pagine.php', '📄 Pagine'],
         'media' => ['media.php', '🖼 File'], 'impostazioni' => ['impostazioni.php', '⚙️ Impostazioni'],
         'strumenti' => ['strumenti.php', '🧰 Strumenti'], 'log' => ['log.php', '📜 Attività'],
         'password' => ['password.php', '🔑 Password'], 'sicurezza' => ['sicurezza.php', '🔐 Sicurezza'],

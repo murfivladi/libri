@@ -94,6 +94,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// editor della lavagna: pagina a tutto schermo
+if ($p && $a === 'lavagna' && (isset($_GET['id']) || isset($_GET['nuova']))) {
+    require_once __DIR__ . '/inc/lavagna.php';
+    $l = isset($_GET['id']) ? lavagna_permessa((int)$_GET['id'], ['admin' => false, 'prof' => $p]) : null;
+    if (isset($_GET['id']) && !$l) vai('prof.php?a=lavagna');
+    $st = db()->prepare('SELECT id, nome FROM classi WHERE prof_id = ? ORDER BY nome'); $st->execute([$p['id']]);
+    pagina_editor_lavagna($l, '', 'lavagna-api.php', 'prof.php?a=lavagna', ['classi' => $st->fetchAll()], 'prof');
+    exit;
+}
+
 intestazione('Area prof', '', '', ['css' => ['assets/scuola.css'], 'noindex' => true]);
 foreach ($_SESSION['flash'] ?? [] as [$tipo, $msg]) echo '<p class="' . ($tipo === 'ok' ? 'ok-pub' : 'errore') . '">' . e($msg) . '</p>';
 unset($_SESSION['flash']);
@@ -126,7 +136,7 @@ $libri = db()->query("SELECT id, slug, titolo FROM libri WHERE sezione = 'scuola
 $titolo_libro = array_column($libri, 'titolo', 'id');
 $menu = function (string $att) use ($p) { ?>
   <div class="testata-studente"><div><h1>🍎 <?= e($p['nome']) ?></h1><p class="meta">Area prof · <?= e($p['email']) ?></p></div>
-    <p class="schede-mini"><a href="prof.php"<?= $att === 'home' ? ' class="att"' : '' ?>>Le mie classi</a><a href="prof.php?a=soluzioni"<?= $att === 'soluzioni' ? ' class="att"' : '' ?>>Soluzioni</a><a href="prof.php?a=account"<?= $att === 'account' ? ' class="att"' : '' ?>>Account</a></p></div>
+    <p class="schede-mini"><a href="prof.php"<?= $att === 'home' ? ' class="att"' : '' ?>>Le mie classi</a><a href="prof.php?a=lavagna"<?= $att === 'lavagna' ? ' class="att"' : '' ?>>🎬 Video</a><a href="prof.php?a=soluzioni"<?= $att === 'soluzioni' ? ' class="att"' : '' ?>>Soluzioni</a><a href="prof.php?a=account"<?= $att === 'account' ? ' class="att"' : '' ?>>Account</a></p></div>
 <?php };
 
 // ---------- soluzioni ----------
@@ -140,6 +150,18 @@ if ($a === 'soluzioni'):
       <?php if ($e['consegna'] !== ''): ?><p class="meta"><?= e($e['consegna']) ?></p><?php endif; ?>
       <ol><?php foreach (soluzione_righe($e) as $riga): ?><li><?= e($riga) ?></li><?php endforeach; ?></ol></div>
   <?php endforeach; ?>
+<?php piede(); exit; endif;
+
+// ---------- video (lavagne) ----------
+if ($a === 'lavagna'):
+    $menu('lavagna');
+    $st = db()->prepare('SELECT l.*, c.nome AS classe FROM lavagne l LEFT JOIN classi c ON c.id = l.classe_id WHERE l.prof_id = ? ORDER BY l.aggiornato DESC, l.id DESC'); $st->execute([$p['id']]); ?>
+  <p><a class="bottone arancio" href="prof.php?a=lavagna&amp;nuova=1">+ Nuova lavagna</a></p>
+  <p class="meta">Prepara una spiegazione sulla lavagna (a passi, o registrandoti dal vivo con la tua voce) e salvala come video: lo vedono solo gli studenti della classe che scegli.</p>
+  <table class="tab-scuola"><tr><th>Titolo</th><th>Classe</th><th>Video</th><th>Modificata</th></tr>
+  <?php foreach ($st as $r): ?><tr><td><a href="prof.php?a=lavagna&amp;id=<?= (int)$r['id'] ?>"><b><?= e($r['titolo'] !== '' ? $r['titolo'] : '(senza titolo)') ?></b></a></td><td><?= e($r['classe'] ?? '—') ?></td>
+    <td><?= $r['video'] !== '' ? '<a href="' . e(url_media($r['video'])) . '" target="_blank">▶ guarda</a>' : '<span class="meta">non ancora</span>' ?></td><td class="meta"><?= e(formatta_data($r['aggiornato'] ?: $r['creato'])) ?></td></tr>
+  <?php endforeach; ?></table>
 <?php piede(); exit; endif;
 
 // ---------- account ----------

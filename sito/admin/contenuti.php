@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             registra('Voce AI generata', $codice);
         } else {
             $nuovo_file = salva_media('file');                     // file scelto o registrazione del microfono
-            if ($nuovo_file) $r['tipo'] = tipo_da_mime($nuovo_file);
+            if ($nuovo_file) $r['tipo'] = $fonte === 'registra' ? 'audio' : $GLOBALS['ultimo_media_tipo'];
         }
         if ($nuovo_file) $r['file'] = $nuovo_file;
         if (!$pid && $r['file'] === '') throw new RuntimeException('Carica un file, registra la tua voce oppure genera la voce AI.');

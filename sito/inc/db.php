@@ -4,7 +4,7 @@
 // Questo file contiene: configurazione, connessione, schema delle tabelle (uguale per i due motori) e piccole
 // funzioni che nascondono le differenze di linguaggio SQL.
 
-const VERSIONE_DB = 10;
+const VERSIONE_DB = 11;
 
 // Testo iniziale della pagina Privacy (modificabile dall'admin). È un modello: va controllato da un adulto.
 const TESTO_PRIVACY = "Questo sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti.\n\n"
@@ -164,6 +164,10 @@ function schema(): array {
         'studenti' => ['id' => 'pk', 'classe_id' => 'int', 'nick' => 's', 'pin' => 's', 'token' => 's', 'creato' => 'creato', 'ultimo_accesso' => 'dt'],
         'risultati' => ['id' => 'pk', 'studente_id' => 'int', 'esercizio_id' => 'int', 'compito_id' => 'int', 'fatti' => 'int', 'totale' => 'int', 'voci' => 'txt:[]', 'quando' => 'dt'],
         'compiti' => ['id' => 'pk', 'classe_id' => 'int', 'titolo' => 's', 'esercizi' => 'txt', 'scadenza' => 'dt', 'creato' => 'creato'],
+        // Lavagne (editor video): il progetto (oggetti, passi, audio) e il video esportato. prof_id 0 = admin.
+        // I video dei prof li vedono solo gli studenti della classe scelta (classe_id).
+        'lavagne' => ['id' => 'pk', 'titolo' => 's', 'prof_id' => 'int', 'classe_id' => 'int', 'libro_id' => 'int', 'dati' => 'txt:{}',
+            'video' => 'url', 'contenuto_id' => 'int', 'creato' => 'creato', 'aggiornato' => 'dt'],
     ];
 }
 
@@ -184,6 +188,7 @@ function indici(): array {
         'i_classi_prof' => ['classi', ['prof_id'], false],
         'i_risultati' => ['risultati', ['studente_id', 'esercizio_id'], false],
         'i_compiti_classe' => ['compiti', ['classe_id'], false],
+        'i_lavagne_prof' => ['lavagne', ['prof_id'], false],
     ];
 }
 

@@ -154,3 +154,7 @@ body.incorporato .contenuto-apri { padding:16px 16px 28px; max-width:none; }
 .riga-form select { font:inherit; padding:6px 10px; border-radius:8px; }
 .ok-pub { background:#e3f4e1; color:#17501a; padding:10px 14px; border-radius:6px; }
 @media (max-width:640px) { .errore-comune { grid-template-columns:80px 44px 1fr; } }
+.griglia-video { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+.video-classe { margin:0; background:var(--sc-carta); border:1px solid var(--sc-linea); border-radius:12px; overflow:hidden; }
+.video-classe video { width:100%; display:block; background:#000; aspect-ratio:16/9; }
+.video-classe figcaption { padding:8px 10px; font-family:system-ui,sans-serif; }

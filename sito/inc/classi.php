@@ -48,12 +48,16 @@ function esci_prof(): void { unset($_SESSION['prof']); session_regenerate_id(tru
 // Elimina un prof con le sue classi, gli studenti e i risultati.
 function elimina_prof(int $id): void {
     foreach (db()->query('SELECT id FROM classi WHERE prof_id = ' . $id)->fetchAll(PDO::FETCH_COLUMN) as $c) elimina_classe((int)$c);
+    $video = db()->query('SELECT video FROM lavagne WHERE prof_id = ' . $id)->fetchAll(PDO::FETCH_COLUMN);
+    db()->prepare('DELETE FROM lavagne WHERE prof_id = ?')->execute([$id]);
+    foreach ($video as $v) elimina_file('media', (string)$v);
     db()->prepare('DELETE FROM prof WHERE id = ?')->execute([$id]);
 }
 function elimina_classe(int $id): void {
     $ids = db()->query('SELECT id FROM studenti WHERE classe_id = ' . $id)->fetchAll(PDO::FETCH_COLUMN);
     if ($ids) db()->exec('DELETE FROM risultati WHERE studente_id IN (' . implode(',', array_map('intval', $ids)) . ')');
     foreach (['studenti' => 'classe_id', 'compiti' => 'classe_id', 'classi' => 'id'] as $t => $k) db()->prepare("DELETE FROM $t WHERE $k = ?")->execute([$id]);
+    db()->prepare('UPDATE lavagne SET classe_id = 0 WHERE classe_id = ?')->execute([$id]);      // i video restano al prof
 }
 function elimina_studente(int $id): void {
     db()->prepare('DELETE FROM risultati WHERE studente_id = ?')->execute([$id]);

@@ -31,7 +31,7 @@ Tk=$(tok admin/login.php)
 chk "accesso admin" "$(post admin/login.php -d "csrf=$Tk&password=provaprova12")" 302
 
 # ---------- pagine admin della scuola ----------
-for pg in scuola.php esercizi.php "esercizi.php?nuovo=1" contenuti.php "contenuti.php?nuovo=1" "libro.php?sezione=scuola"; do
+for pg in scuola.php esercizi.php "esercizi.php?nuovo=1" contenuti.php "contenuti.php?nuovo=1" "libro.php?sezione=scuola" lavagna.php "lavagna.php?nuova=1"; do
   chk "admin/$pg" "$(code "admin/$pg")" 200; senza_errori "admin/$pg"
 done
 chk "scuola.php pubblica: 404 senza libri scolastici" "$(code scuola.php)" 404
@@ -171,11 +171,30 @@ postj "$JP" prof.php -d "csrf=$Tk&azione=nuovo_pin&classe=$CID&studente=$SID" >/
 NP=$(curl -s -b "$JP" "$B/prof.php?a=classe&id=$CID" | grep -o 'Nuovo PIN: [0-9]*' | grep -o '[0-9]*$')
 Tk=$(tokj "$JX" studente.php)
 chk "il nuovo PIN funziona" "$(postj "$JX" "studente.php?a=entra" -d "csrf=$Tk&codice=$CC&nick=Drago42&pin=$NP")" 302
+# lavagna del prof: video per la classe, lo vede lo studente
+printf '\x00\x00\x00\x18ftypmp42\x00\x00\x00\x00mp42isom\x00\x00\x00\x08free' > "$T/video.mp4"
+CSP=$(curl -s -b "$JP" -c "$JP" "$B/prof.php?a=lavagna&nuova=1" | grep -o '"csrf":"[^"]*"' | cut -d'"' -f4)
+chk "prof: editor della lavagna" "$(curl -s -b "$JP" "$B/prof.php?a=lavagna&nuova=1" | conta 'lavagna.js')" 1
+R=$(curl -s -b "$JP" -c "$JP" -H "X-CSRF: $CSP" -F come=prof -F azione=salva -F "titolo=Ripasso" -F classe_id=$CID -F 'dati={"oggetti":[],"passi":[{"durata":2,"stato":{}}]}' "$B/lavagna-api.php")
+LVID=$(echo "$R" | grep -o '"id":[0-9]*' | cut -d: -f2)
+chk "prof: lavagna salvata" "$([ -n "$LVID" ] && echo si)" si
+R=$(curl -s -b "$JP" -c "$JP" -H "X-CSRF: $CSP" -F come=prof -F azione=video -F id=$LVID -F "video=@$T/voce.wav;type=audio/wav" "$B/lavagna-api.php")
+chk "prof: un audio non è un video" "$(echo "$R" | grep -c 'Serve un file video')" 1
+R=$(curl -s -b "$JP" -c "$JP" -H "X-CSRF: $CSP" -F come=prof -F azione=video -F id=$LVID -F "video=@$T/video.mp4;type=video/mp4" "$B/lavagna-api.php")
+chk "prof: video caricato" "$(echo "$R" | grep -c '"ok":true')" 1
+chk "studente: vede il video della classe" "$(curl -s -b "$JS" "$B/studente.php" | conta 'video-classe')" 1
+chk "studente senza login: niente video" "$(curl -s "$B/studente.php" | conta 'video-classe')" 0
+R=$(curl -s -b "$JX" -c "$JX" -H "X-CSRF: x" -F come=prof -F azione=salva -F id=$LVID -F 'dati={"oggetti":[],"passi":[]}' "$B/lavagna-api.php")
+chk "altro prof: non tocca la lavagna" "$(echo "$R" | grep -c '"ok":true')" 0
+chk "lavagna senza accesso" "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$B/lavagna-api.php")" 401
 chk "admin: prof elencati" "$(curl -s -b "$J" "$B/admin/scuola.php" | conta 'rossi@scuola.it')" 1
 
 if [ -z "${SENZA_BROWSER:-}" ]; then
   export NODE_PATH="${NODE_PATH:-$(npm root -g 2>/dev/null)}"
   BASE="$B" SLUG="$SLUG" LID="$LID" CC="$CC" CID="$CID" node "$REPO/sito/tests/scuola-browser.js" && ok=$((ok+1)) || { ko=$((ko+1)); echo "FAIL: test nel browser"; }
+  BASE="$B" LID="$LID" WAV="$T/voce.wav" node "$REPO/sito/tests/lavagna-browser.js" && ok=$((ok+1)) || { ko=$((ko+1)); echo "FAIL: test della lavagna nel browser"; }
+  chk "lavagna: video salvato" "$(sql "SELECT COUNT(*) FROM lavagne WHERE video != '' AND prof_id = 0")" 1
+  chk "lavagna: diventato un contenuto video del libro" "$(sql "SELECT COUNT(*) FROM contenuti WHERE tipo = 'video' AND libro_id = $LID")" 1
 fi
 
 # lo studente cancella il suo profilo; il prof elimina il suo account

@@ -98,6 +98,15 @@ $oggi = date('Y-m-d');
 </div>
 <?php endforeach; ?>
 
+<?php $st = db()->prepare("SELECT l.titolo, l.video, l.aggiornato, p.nome AS prof FROM lavagne l JOIN prof p ON p.id = l.prof_id WHERE l.classe_id = ? AND l.video != '' ORDER BY l.aggiornato DESC");
+$st->execute([$s['classe_id']]); $video = $st->fetchAll();
+if ($video): ?>
+<h2 class="sezione">🎬 Video della classe</h2>
+<div class="griglia-video"><?php foreach ($video as $v): ?>
+  <figure class="video-classe"><video controls playsinline preload="metadata" src="<?= e(url_media($v['video'])) ?>"></video><figcaption><b><?= e($v['titolo'] !== '' ? $v['titolo'] : 'Video') ?></b> <span class="meta">· <?= e($v['prof']) ?> · <?= e(date('d/m', strtotime($v['aggiornato']))) ?></span></figcaption></figure>
+<?php endforeach; ?></div>
+<?php endif; ?>
+
 <h2 class="sezione">⭐ I miei risultati</h2>
 <?php
 $st = db()->prepare('SELECT r.fatti, r.totale, r.quando, e.codice, e.titolo FROM risultati r JOIN esercizi e ON e.id = r.esercizio_id WHERE r.studente_id = ? ORDER BY r.id DESC LIMIT 30');
