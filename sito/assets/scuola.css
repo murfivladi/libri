@@ -1,0 +1,103 @@
+/* Vlad Editore Scuola: pagine pubbliche, esercizi interattivi, finestre del lettore. Arancione = colore di Vlad cartone. */
+:root { --sc-arancio:#f07c12; --sc-arancio-scuro:#c45f00; --sc-verde:#2e7d32; --sc-rosso:#c62828; --sc-blu:#1565c0; --sc-carta:#fff; --sc-fondo:#fff7ee; --sc-linea:#f1d9bf; --sc-testo:#1d2433; }
+@media (prefers-color-scheme: dark) { :root { --sc-carta:#262120; --sc-fondo:#2b2119; --sc-linea:#4a3a2c; --sc-testo:#eee6da; } }
+
+/* ---------- pagine pubbliche ---------- */
+.scuola-hero { margin:-24px calc(50% - 50vw) 24px; padding:36px 5vw; background:linear-gradient(120deg,#0b1a36 0%,#13305e 55%,var(--sc-arancio) 140%); color:#fff; display:flex; gap:24px; align-items:center; flex-wrap:wrap; }
+.scuola-hero h1 { margin:0 0 6px; font-size:clamp(1.7rem,4.5vw,2.6rem); line-height:1.15; }
+.scuola-hero h1 span { color:#ffb15c; }
+.scuola-hero p { margin:0; max-width:560px; font-size:1.08rem; }
+.scuola-hero img { width:min(220px,40vw); height:auto; border-radius:16px; background:#fff; padding:6px; }
+.marchio-scuola { display:inline-block; background:var(--sc-arancio); color:#fff; font:700 .8rem/1 system-ui,sans-serif; letter-spacing:.14em; padding:5px 8px; border-radius:4px; vertical-align:middle; margin-left:6px; }
+.box-codice { background:var(--sc-fondo); border:2px dashed var(--sc-arancio); border-radius:12px; padding:16px; margin:0 0 24px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+.box-codice form { display:flex; gap:8px; flex:1; min-width:240px; }
+.box-codice input { flex:1; font:600 1.1rem/1.2 ui-monospace,monospace; text-transform:uppercase; padding:10px 12px; border:1px solid var(--sc-linea); border-radius:8px; background:var(--sc-carta); color:inherit; min-width:0; }
+.bottone.arancio { background:var(--sc-arancio); border-color:var(--sc-arancio-scuro); color:#fff; }
+.elenco-contenuti { list-style:none; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:10px; }
+.elenco-contenuti a { display:flex; gap:10px; align-items:center; padding:10px 12px; border:1px solid var(--sc-linea); border-radius:10px; background:var(--sc-carta); text-decoration:none; color:inherit; }
+.elenco-contenuti a:hover { border-color:var(--sc-arancio); }
+.elenco-contenuti .ic { font-size:1.4rem; width:32px; text-align:center; flex:none; }
+.elenco-contenuti code { font-size:.8rem; color:var(--sc-arancio-scuro); }
+.elenco-contenuti small { display:block; color:#8a7f72; }
+
+/* ---------- pagina di un esercizio / contenuto ---------- */
+.apri-testata { display:flex; gap:12px; align-items:baseline; flex-wrap:wrap; margin-bottom:8px; }
+.apri-testata h1 { margin:0; font-size:1.5rem; }
+.apri-testata .codice { font:700 .9rem ui-monospace,monospace; background:var(--sc-arancio); color:#fff; padding:3px 8px; border-radius:6px; }
+.apri-libro { color:#8a7f72; font-size:.95rem; margin:0 0 16px; }
+body.incorporato { margin:0; background:var(--sc-carta); color:var(--sc-testo); font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
+body.incorporato .contenuto-apri { padding:16px 16px 28px; max-width:none; }
+.media-box audio, .media-box video, .media-box img { width:100%; max-width:860px; display:block; border-radius:10px; background:#000; }
+.media-box img { background:transparent; }
+.trascrizione { margin-top:12px; white-space:pre-line; background:var(--sc-fondo); border-radius:10px; padding:12px 14px; }
+
+/* ---------- esercizi ---------- */
+.vs-esercizio { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; font-size:17px; line-height:1.5; color:var(--sc-testo); }
+.vs-esercizio .consegna { font-weight:700; margin:0 0 12px; }
+.vs-esercizio .record { margin:-4px 0 10px; font-size:.9rem; }
+.voce-es { display:flex; gap:10px; padding:10px 0; border-bottom:1px solid var(--sc-linea); }
+.voce-es:last-child { border-bottom:0; }
+.num-voce { font-weight:700; color:var(--sc-arancio-scuro); min-width:1.6em; }
+.corpo-voce { flex:1; min-width:0; }
+.testo-voce { margin:0 0 6px; }
+.segno { font-weight:900; font-size:1.2rem; min-width:1em; }
+.segno.si { color:var(--sc-verde); } .segno.no { color:var(--sc-rosso); }
+.opzioni { display:flex; flex-wrap:wrap; gap:8px; }
+.opzione { display:flex; align-items:center; gap:6px; padding:7px 12px; border:2px solid var(--sc-linea); border-radius:10px; cursor:pointer; background:var(--sc-carta); font-weight:400; }
+.opzione:hover { border-color:var(--sc-arancio); }
+.opzione:has(input:checked) { border-color:var(--sc-arancio); background:var(--sc-fondo); }
+.opzione input { accent-color:var(--sc-arancio); width:18px; height:18px; margin:0; }
+.giusta { border-color:var(--sc-verde) !important; background:#e3f4e1 !important; color:#17501a !important; }
+.sbagliata { border-color:var(--sc-rosso) !important; background:#fde2e0 !important; color:#7a1a12 !important; }
+.spiegazione { margin:8px 0 0; padding:8px 12px; border-left:4px solid var(--sc-arancio); background:var(--sc-fondo); border-radius:0 8px 8px 0; font-size:.95rem; }
+.frase-completa { line-height:2.3; }
+.spazio { font:inherit; padding:2px 6px; border:0; border-bottom:2px solid var(--sc-arancio); background:var(--sc-fondo); color:inherit; border-radius:4px 4px 0 0; text-align:center; max-width:100%; }
+.spazio:focus { outline:2px solid var(--sc-arancio); }
+.banca { display:flex; flex-wrap:wrap; gap:8px; padding:10px; background:var(--sc-fondo); border-radius:10px; margin-bottom:10px; min-height:52px; }
+.gettone { font:inherit; padding:7px 12px; border:2px solid var(--sc-linea); border-radius:999px; background:var(--sc-carta); color:inherit; cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none; }
+.gettone:hover { border-color:var(--sc-arancio); }
+.gettone.scelto { border-color:var(--sc-arancio); box-shadow:0 0 0 3px #f07c1240; }
+.gettone.in-viaggio { opacity:.3; }
+.gettone.fantasma { position:fixed; z-index:9999; pointer-events:none; box-shadow:0 8px 24px #0004; transform:rotate(-2deg); opacity:.95; margin:0; }
+.riga-gettoni { display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-height:52px; padding:8px; border-radius:10px; }
+.riga-gettoni.risposta { border:2px dashed var(--sc-arancio); margin-bottom:8px; }
+.riga-gettoni.risposta:not(.vuota) .segnaposto { display:none; }
+.segnaposto { color:#8a7f72; font-size:.9rem; }
+.riga-gettoni.banca { background:var(--sc-fondo); }
+.sopra { outline:3px solid var(--sc-arancio); outline-offset:2px; }
+.gruppi { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-top:10px; }
+.gruppo { border:2px solid var(--sc-linea); border-radius:12px; padding:8px; background:var(--sc-carta); min-height:110px; }
+.nome-gruppo { font-weight:700; text-align:center; padding-bottom:6px; border-bottom:1px solid var(--sc-linea); margin-bottom:4px; }
+.gruppo .riga-gettoni { min-height:60px; }
+.categorie { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:8px; position:sticky; top:0; background:var(--sc-carta); padding:6px 0; z-index:2; }
+.categoria { font:inherit; font-size:.95rem; padding:6px 12px; border-radius:999px; border:2px solid var(--col,#999); background:transparent; color:inherit; cursor:pointer; }
+.categoria.att { background:var(--col,#999); color:#fff; }
+.categoria.gomma { --col:#777; }
+.frase-tocca { line-height:2.4; }
+.parola { font:inherit; border:0; background:transparent; color:inherit; padding:2px 4px; border-radius:6px; cursor:pointer; border-bottom:3px solid var(--col,transparent); }
+.parola:hover { background:var(--sc-fondo); }
+.parola.segnata { background:color-mix(in srgb,var(--col) 18%,transparent); }
+.parola.giusta, .parola.sbagliata { border-width:0 0 3px; border-style:solid; }
+.risposta-libera { width:100%; font:inherit; padding:8px; border:2px solid var(--sc-linea); border-radius:10px; background:var(--sc-carta); color:inherit; }
+.piede-es { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.bottone-es { font:600 1rem system-ui,sans-serif; padding:10px 18px; border-radius:10px; border:2px solid var(--sc-arancio-scuro); background:var(--sc-arancio); color:#fff; cursor:pointer; }
+.bottone-es.sec { background:transparent; color:var(--sc-arancio-scuro); }
+.esito { margin-top:14px; padding:12px 14px; border-radius:10px; font-size:1.05rem; }
+.esito:empty { display:none; }
+.esito.pieno { background:#e3f4e1; color:#17501a; } .esito.buono { background:#fff3cd; color:#5c4400; } .esito.basso { background:#fde2e0; color:#7a1a12; } .esito.libero { background:var(--sc-fondo); }
+.esito b { font-size:1.3rem; }
+
+/* ---------- lettore: zone cliccabili e finestra ---------- */
+.zona-scuola { position:absolute; z-index:3; border:2px solid transparent; border-radius:6px; background:transparent; padding:0; cursor:pointer; transition:background .15s, border-color .15s; }
+.zona-scuola:hover, .zona-scuola:focus-visible { background:#f07c1226; border-color:var(--sc-arancio); outline:none; }
+.lettore-scuola .zona-scuola { animation:zona-luce 2.4s ease-out 1; }
+@keyframes zona-luce { 0%,40% { background:#f07c1240; border-color:var(--sc-arancio); } 100% { background:transparent; border-color:transparent; } }
+.pagina-pdf { position:relative; }
+.finestra-scuola { position:fixed; inset:0; z-index:50; background:#0009; display:flex; align-items:center; justify-content:center; padding:max(10px,env(safe-area-inset-top)) 10px 10px; }
+.finestra-scuola[hidden] { display:none; }
+.finestra-scuola .riquadro { background:var(--sc-carta); color:var(--sc-testo); width:min(900px,100%); height:min(88vh,900px); border-radius:14px; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 20px 60px #0008; }
+.finestra-scuola .testa { display:flex; align-items:center; gap:10px; padding:8px 10px 8px 16px; border-bottom:1px solid var(--sc-linea); font:600 16px system-ui,sans-serif; }
+.finestra-scuola .testa span { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.finestra-scuola .testa button { font-size:20px; width:40px; height:40px; border:1px solid var(--sc-linea); border-radius:8px; background:transparent; color:inherit; cursor:pointer; }
+.finestra-scuola iframe { flex:1; border:0; width:100%; background:var(--sc-carta); }
+@media (max-width:640px) { .finestra-scuola { padding:0; } .finestra-scuola .riquadro { height:100%; border-radius:0; } }

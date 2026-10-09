@@ -34,6 +34,7 @@
         return p.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise.then(function () {
           resa[i] = larghezzaPagina() * scalaRender();
           pagine[i].div.classList.add('pronta');
+          if (window.dopoPagina) window.dopoPagina(i, p, vp, pagine[i].div);      // scuola: zone cliccabili sulla pagina
           if (termine) return evidenzia(p, vp, c);
         });
       });

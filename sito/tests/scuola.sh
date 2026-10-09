@@ -1,0 +1,124 @@
+#!/bin/bash
+# Test della sezione Scuola: libro scolastico, esercizi, contenuti, zone, pagine pubbliche (curl) e poi nel browser (Playwright).
+# Uso (dalla radice del repository):  bash sito/tests/scuola.sh      (SENZA_BROWSER=1 per saltare la parte nel browser)
+set -u
+REPO="$(cd "$(dirname "$0")/../.." && pwd)"
+T="$(mktemp -d)"
+S="$T/sito"
+cp -r "$REPO/sito" "$S"
+rm -rf "$S/data/"*.sqlite "$S/uploads/pdf/"*.pdf "$S/uploads/cover/"* "$S/uploads/media/"* "$S/uploads/thumb" "$S/tests"
+PORT=${PORT:-8097}
+B="http://127.0.0.1:$PORT"
+J="$T/cookie"; touch "$J"
+ok=0; ko=0
+cd "$S" || exit 1
+python3 "$REPO/sito/tests/pdf_scuola.py" "$T/libro.pdf" "$T/voce.wav" || { echo "serve python3 con reportlab"; exit 1; }
+php -r 'require "inc/bootstrap.php"; db()->prepare("INSERT INTO admin (id, password) VALUES (1, ?)")->execute([password_hash("provaprova12", PASSWORD_DEFAULT)]);'
+php -d post_max_size=100M -d upload_max_filesize=100M -S 127.0.0.1:$PORT >"$T/server.log" 2>&1 &
+PID=$!
+trap 'kill $PID 2>/dev/null; rm -rf "$T"' EXIT
+for i in $(seq 1 30); do curl -s -o /dev/null "$B/robots.txt" && break; sleep 0.2; done
+
+chk()  { if [ "$2" = "$3" ]; then ok=$((ok+1)); else ko=$((ko+1)); echo "FAIL: $1 (atteso '$3', ottenuto '$2')"; fi; }
+tok()  { curl -s -b "$J" -c "$J" "$B/$1" | grep -o 'name="csrf" value="[^"]*"' | head -1 | cut -d'"' -f4; }
+post() { local p=$1; shift; curl -s -b "$J" -c "$J" -o "$T/post.html" -w "%{http_code}" "$@" "$B/$p"; }
+code() { curl -s -b "$J" -c "$J" -o "$T/out.html" -w "%{http_code}" "$B/$1"; }
+conta() { grep -o "$1" | wc -l | tr -d ' '; }
+sql()  { php -r 'require "inc/bootstrap.php"; echo db()->query($argv[1])->fetchColumn();' "$1"; }
+senza_errori() { if grep -qE "Warning|Notice|Fatal error|Deprecated|Parse error" "$T/out.html"; then ko=$((ko+1)); echo "FAIL: errori PHP in $1"; else ok=$((ok+1)); fi; }
+
+Tk=$(tok admin/login.php)
+chk "accesso admin" "$(post admin/login.php -d "csrf=$Tk&password=provaprova12")" 302
+
+# ---------- pagine admin della scuola ----------
+for pg in scuola.php esercizi.php "esercizi.php?nuovo=1" contenuti.php "contenuti.php?nuovo=1" "libro.php?sezione=scuola"; do
+  chk "admin/$pg" "$(code "admin/$pg")" 200; senza_errori "admin/$pg"
+done
+chk "scuola.php pubblica: 404 senza libri scolastici" "$(code scuola.php)" 404
+
+# ---------- libro scolastico ----------
+Tk=$(tok "admin/libro.php?sezione=scuola")
+chk "nuovo libro scolastico" "$(post admin/libro.php -F csrf=$Tk -F "titolo=Chi fa cosa?" -F sezione=scuola -F stato=pubblicato -F "pdf=@$T/libro.pdf;type=application/pdf" -F dopo=resta)" 302
+LID=$(sql "SELECT id FROM libri WHERE titolo = 'Chi fa cosa?'")
+chk "sezione salvata" "$(sql "SELECT sezione FROM libri WHERE id = $LID")" scuola
+chk "codice proposto dalla sigla del titolo" "$(php -r 'require "inc/scuola.php"; echo nuovo_codice((int)$argv[1]);' "$LID")" CFC-1
+
+# ---------- esercizi ----------
+TOCCA='{"categorie":[{"nome":"soggetto","colore":"#2e7d32"},{"nome":"predicato","colore":"#c62828"}],"frasi":[{"testo":"Luce mangia la pappa.","segni":{"0":"soggetto","1":"predicato"},"spiegazione":"Chi mangia? Luce."}]}'
+Tk=$(tok "admin/esercizi.php?nuovo=1")
+chk "salva esercizio «tocca»" "$(post admin/esercizi.php --data-urlencode "csrf=$Tk" -d libro_id=$LID -d pagina=2 -d codice= --data-urlencode "titolo=Trova il soggetto" --data-urlencode "consegna=Tocca soggetto e predicato." -d tipo=tocca --data-urlencode "dati=$TOCCA")" 302
+chk "codice automatico CFC-1" "$(sql "SELECT codice FROM esercizi WHERE titolo = 'Trova il soggetto'")" CFC-1
+chk "punti dell'esercizio" "$(php -r 'require "inc/scuola.php"; $st = db()->query("SELECT * FROM esercizi WHERE codice = \"CFC-1\""); echo punti_esercizio($st->fetch());')" 2
+Tk=$(tok "admin/esercizi.php?nuovo=1")
+post admin/esercizi.php --data-urlencode "csrf=$Tk" -d libro_id=$LID -d codice=CFC-1 -d tipo=vf --data-urlencode 'dati={"domande":[{"testo":"Prova","vero":true}]}' >/dev/null
+chk "codice doppio rifiutato" "$(grep -c 'è già usato' "$T/post.html")" 1
+Tk=$(tok "admin/esercizi.php?nuovo=1")
+post admin/esercizi.php --data-urlencode "csrf=$Tk" -d libro_id=$LID -d tipo=scelta --data-urlencode 'dati={"domande":[{"testo":"Senza risposte","opzioni":["solo una"]}]}' >/dev/null
+chk "esercizio vuoto rifiutato" "$(grep -c 'esercizio è vuoto' "$T/post.html")" 1
+Tk=$(tok "admin/esercizi.php?nuovo=1")
+post admin/esercizi.php --data-urlencode "csrf=$Tk" -d libro_id=$LID -d codice=CFC-9 -d extra=1 --data-urlencode "titolo=<b>Riordina</b>" -d tipo=ordina --data-urlencode 'dati={"frasi":[{"testo":"Vlad spiega la grammatica","spiegazione":"<script>x</script>"}],"intruso":1}' >/dev/null
+chk "esercizio «ordina» extra" "$(sql "SELECT extra FROM esercizi WHERE codice = 'CFC-9'")" 1
+chk "campi sconosciuti scartati" "$(sql "SELECT dati FROM esercizi WHERE codice = 'CFC-9'" | conta intruso)" 0
+ES9=$(sql "SELECT id FROM esercizi WHERE codice = 'CFC-9'")
+chk "editor di un esercizio" "$(code "admin/esercizi.php?id=$ES9")" 200; senza_errori "admin/esercizi.php?id=$ES9"
+Tk=$(tok "admin/esercizi.php?id=$ES9")
+chk "duplica esercizio" "$(post admin/esercizi.php -d "csrf=$Tk&azione=duplica&id=$ES9")" 302
+chk "il duplicato ha un codice nuovo" "$(sql "SELECT COUNT(*) FROM esercizi WHERE titolo LIKE '%(copia)' AND codice != 'CFC-9'")" 1
+DUP=$(sql "SELECT id FROM esercizi WHERE titolo LIKE '%(copia)'")
+Tk=$(tok "admin/esercizi.php?id=$DUP")
+chk "elimina il duplicato" "$(post admin/esercizi.php -d "csrf=$Tk&azione=elimina&id=$DUP")" 302
+chk "elenco esercizi" "$(curl -s -b "$J" "$B/admin/esercizi.php?libro=$LID" | conta 'data-qr=')" 2
+
+# ---------- contenuti (audio caricato) ----------
+Tk=$(tok "admin/contenuti.php?nuovo=1")
+chk "carica un audio" "$(post admin/contenuti.php -F csrf=$Tk -F libro_id=$LID -F pagina=3 -F codice=CFC-2 -F "titolo=Ascolta Luce" -F fonte=file -F "file=@$T/voce.wav;type=audio/wav" -F "testo=Ciao, sono Luce." -F azione=salva)" 302
+chk "contenuto audio salvato" "$(sql "SELECT tipo FROM contenuti WHERE codice = 'CFC-2'")" audio
+F=$(sql "SELECT file FROM contenuti WHERE codice = 'CFC-2'")
+chk "file in uploads/media" "$([ -f "uploads/media/$F" ] && echo si)" si
+Tk=$(tok "admin/contenuti.php?nuovo=1")
+post admin/contenuti.php -F csrf=$Tk -F libro_id=$LID -F codice=CFC-3 -F fonte=file -F azione=salva >/dev/null
+chk "contenuto senza file rifiutato" "$(grep -c 'class="errore">Carica un file' "$T/post.html")" 1
+chk "voce AI senza chiave: avviso" "$(curl -s -b "$J" "$B/admin/contenuti.php?nuovo=1" | conta 'serve la chiave deAPI')" 1
+
+# ---------- zone ----------
+chk "pagina zone" "$(code "admin/zone.php?libro=$LID")" 200; senza_errori "admin/zone.php"
+Tk=$(tok "admin/zone.php?libro=$LID")
+chk "salva zone" "$(post "admin/zone.php?libro=$LID" --data-urlencode "csrf=$Tk" --data-urlencode 'zone=[{"p":3,"x":100,"y":200,"w":300,"h":80,"c":"CFC-2"},{"p":1,"x":0,"y":0,"w":50,"h":50,"c":"NON-1"},{"p":2,"x":10,"y":10,"w":2,"h":2,"c":"CFC-1"}]' -d pagina=3)" 302
+chk "solo le zone valide" "$(sql "SELECT COUNT(*) FROM zone WHERE libro_id = $LID")" 1
+
+# ---------- sito pubblico ----------
+chk "scuola.php" "$(code scuola.php)" 200; senza_errori scuola.php
+chk "scuola: il libro c'è" "$(conta 'Chi fa cosa?' < "$T/out.html" | awk '{print ($1>0)?"si":"no"}')" si
+chk "menu: voce Scuola" "$(curl -s "$B/index.php" | conta 'href="scuola.php"')" 1
+chk "catalogo dei romanzi: niente libri scolastici" "$(curl -s "$B/index.php" | conta 'Chi fa cosa')" 0
+SLUG=$(sql "SELECT slug FROM libri WHERE id = $LID")
+code "libro.php?s=$SLUG" >/dev/null
+chk "scheda: esercizi elencati" "$(conta 'apri.php?c=CFC-' < "$T/out.html")" 3
+chk "apri.php esercizio" "$(code "apri.php?c=cfc-1")" 200; senza_errori apri.php
+chk "apri.php: dati dell'esercizio" "$(conta 'VSEsercizio.monta' < "$T/out.html")" 1
+chk "apri.php: titolo senza HTML" "$(curl -s "$B/apri.php?c=CFC-9" | conta '<b>Riordina')" 0
+chk "apri.php: niente script dai dati" "$(curl -s "$B/apri.php?c=CFC-9" | conta '<script>x')" 0
+chk "apri.php incorporato" "$(curl -s "$B/apri.php?c=CFC-2&embed=1" | conta '<audio controls')" 1
+chk "apri.php codice inesistente: 404" "$(code "apri.php?c=ZZZ-99")" 404
+chk "lettore: mappa dei codici" "$(curl -s "$B/leggi.php?s=$SLUG" | conta 'window.SCUOLA')" 1
+# libro in bozza: esercizi invisibili al pubblico, visibili all'admin
+php -r 'require "inc/bootstrap.php"; db()->exec("UPDATE libri SET pubblicato = 0 WHERE sezione = \"scuola\"");'
+chk "bozza: esercizio nascosto al pubblico" "$(curl -s -o /dev/null -w '%{http_code}' "$B/apri.php?c=CFC-1")" 404
+chk "bozza: l'admin lo vede" "$(code "apri.php?c=CFC-1")" 200
+chk "bozza: niente voce Scuola nel menu" "$(curl -s "$B/index.php" | conta 'href="scuola.php"')" 0
+php -r 'require "inc/bootstrap.php"; db()->exec("UPDATE libri SET pubblicato = 1 WHERE sezione = \"scuola\"");'
+
+if [ -z "${SENZA_BROWSER:-}" ]; then
+  export NODE_PATH="${NODE_PATH:-$(npm root -g 2>/dev/null)}"
+  BASE="$B" SLUG="$SLUG" LID="$LID" node "$REPO/sito/tests/scuola-browser.js" && ok=$((ok+1)) || { ko=$((ko+1)); echo "FAIL: test nel browser"; }
+fi
+
+# eliminazione definitiva del libro: via anche esercizi, contenuti, zone e file
+php -r 'require "inc/bootstrap.php"; require "inc/libri.php"; elimina_libro_definitivo((int)$argv[1]);' "$LID"
+chk "eliminazione: esercizi tolti" "$(sql "SELECT COUNT(*) FROM esercizi WHERE libro_id = $LID")" 0
+chk "eliminazione: file audio tolto" "$([ -f "uploads/media/$F" ] && echo resta || echo via)" via
+
+ERRPHP=$(grep -iE "PHP (Warning|Fatal|Notice|Deprecated)" "$T/server.log" | grep -v "in Unknown on line 0")
+if [ -n "$ERRPHP" ]; then echo "FAIL: errori PHP nel log del server"; echo "$ERRPHP" | head -5; ko=$((ko+1)); fi
+echo "scuola: OK=$ok KO=$ko"
+[ $ko -eq 0 ]

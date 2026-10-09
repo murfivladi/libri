@@ -63,6 +63,20 @@ if (!$l['anteprima']): ?><script type="application/ld+json"><?= json_encode($ld,
     <?php if (impost('contatori_pubblici') === '1'): ?><p class="meta">👁 <?= (int)$l['letture'] ?> <?= e(t('letture')) ?></p><?php endif; ?>
   </div>
 </article>
+<?php if ($l['sezione'] === 'scuola'):
+    $st = db()->prepare('SELECT codice, tipo, titolo, pagina FROM esercizi WHERE libro_id = ? ORDER BY pagina, ordine, id'); $st->execute([$l['id']]); $esercizi = $st->fetchAll();
+    $st = db()->prepare('SELECT codice, tipo, titolo, pagina FROM contenuti WHERE libro_id = ? ORDER BY pagina, id'); $st->execute([$l['id']]); $contenuti = $st->fetchAll();
+    $voce = function (array $r, string $ic, string $tipo) { ?>
+      <li><a href="apri.php?c=<?= e($r['codice']) ?>"><span class="ic"><?= $ic ?></span><span><?= e($r['titolo'] !== '' ? $r['titolo'] : $tipo) ?>
+        <small><?= e($tipo) ?><?= $r['pagina'] ? ' · pagina ' . (int)$r['pagina'] : '' ?> · <code><?= e($r['codice']) ?></code></small></span></a></li>
+    <?php };
+    if ($esercizi || $contenuti): ?>
+<link rel="stylesheet" href="assets/scuola.css">
+<?php if ($esercizi): ?><h2 class="sezione">✏️ Esercizi interattivi</h2>
+<ul class="elenco-contenuti"><?php foreach ($esercizi as $r) $voce($r, TIPI_ESERCIZIO[$r['tipo']][0] ?? '✏️', TIPI_ESERCIZIO[$r['tipo']][1] ?? 'Esercizio'); ?></ul><?php endif; ?>
+<?php if ($contenuti): ?><h2 class="sezione">🎧 Audio, video e immagini</h2>
+<ul class="elenco-contenuti"><?php foreach ($contenuti as $r) $voce($r, TIPI_CONTENUTO[$r['tipo']][0] ?? '📎', TIPI_CONTENUTO[$r['tipo']][1] ?? 'Contenuto'); ?></ul><?php endif; ?>
+<?php endif; endif; ?>
 <?php if ($altri): ?>
 <h2 class="sezione"><?= e(t('Nella stessa collana')) ?></h2>
 <div class="griglia"><?php foreach ($altri as $a) scheda_libro($a); ?></div>

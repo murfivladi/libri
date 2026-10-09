@@ -120,3 +120,10 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
 67. Contatore di letture. **I PDF non si possono scaricare**: si leggono solo online (nessun pulsante, `scarica.php` risponde 410, accesso diretto al file bloccato)
 68. Pagine statiche modificabili e menu dinamico
 69. `sitemap.php` e `feed.php` (RSS)
+
+## Scuola (Vlad Editore Scuola)
+- **Admin → Scuola**: libri scolastici con il numero di esercizi, contenuti e zone; chiave deAPI (non esce nei backup).
+- **Sezione del libro**: nella scheda del libro, «🎒 Scuola» lo toglie dal catalogo dei romanzi e lo mette in `scuola.php`.
+- **Esercizi** (editor visivo, con anteprima accanto): crocette, vero/falso, completa (con banca di parole), tocca le parole (soggetto, predicato, complementi… con i colori di scuola), riordina la frase, trascina nei gruppi, risposta libera. Codice automatico (es. `CFC-12`), pagina, livello, «solo online», duplica, QR da scaricare.
+- **Audio, video e immagini**: carica un file, registra dal microfono (anche dal telefono) oppure fai leggere un testo alla voce AI di deAPI.
+- **Zone**: sulle pagine del PDF i codici stampati vengono riconosciuti da soli (riquadri blu tratteggiati); si possono disegnare zone in più trascinando sulla pagina.

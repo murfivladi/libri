@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../inc/bootstrap.php';
 require_once __DIR__ . '/../inc/file.php';
 require_once __DIR__ . '/../inc/lettori.php';
+require_once __DIR__ . '/../inc/scuola.php';
 
 if (empty($_SESSION['admin'])) { header('Location: login.php'); exit; }
 if (time() - ($_SESSION['attivo'] ?? time()) > 8 * 3600) { $_SESSION = []; header('Location: login.php'); exit; }
@@ -11,7 +12,8 @@ $_SESSION['attivo'] = time();
 function admin_testata(string $titolo, string $voce = ''): void {
     $voci = [
         'dashboard' => ['index.php', '🏠 Dashboard'], 'libri' => ['libri.php', '📚 Libri'],
-        'collane' => ['collane.php', '🗂 Collane'], 'pagine' => ['pagine.php', '📄 Pagine'],
+        'collane' => ['collane.php', '🗂 Collane'],
+        'scuola' => ['scuola.php', '🎒 Scuola'], 'esercizi' => ['esercizi.php', '✏️ Esercizi'], 'contenuti' => ['contenuti.php', '🔊 Audio e video'], 'pagine' => ['pagine.php', '📄 Pagine'],
         'media' => ['media.php', '🖼 File'], 'impostazioni' => ['impostazioni.php', '⚙️ Impostazioni'],
         'strumenti' => ['strumenti.php', '🧰 Strumenti'], 'log' => ['log.php', '📜 Attività'],
         'password' => ['password.php', '🔑 Password'], 'sicurezza' => ['sicurezza.php', '🔐 Sicurezza'],

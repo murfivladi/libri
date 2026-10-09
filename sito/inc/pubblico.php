@@ -2,6 +2,7 @@
 // Funzioni per le pagine pubbliche (catalogo, scheda libro, lettore).
 require_once __DIR__ . '/bootstrap.php';
 require_once __DIR__ . '/file.php';
+require_once __DIR__ . '/scuola.php';
 
 function ordine_catalogo(): string {
     return [
