@@ -4,7 +4,7 @@
 // Questo file contiene: configurazione, connessione, schema delle tabelle (uguale per i due motori) e piccole
 // funzioni che nascondono le differenze di linguaggio SQL.
 
-const VERSIONE_DB = 9;
+const VERSIONE_DB = 10;
 
 // Testo iniziale della pagina Privacy (modificabile dall'admin). È un modello: va controllato da un adulto.
 const TESTO_PRIVACY = "Questo sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti.\n\n"
@@ -157,6 +157,13 @@ function schema(): array {
             'file' => 'url', 'testo' => 'txt', 'voce' => 's', 'durata' => 'int', 'creato' => 'creato'],
         // Zone cliccabili disegnate a mano sulle pagine (in millesimi della pagina): aprono un esercizio o un contenuto.
         'zone' => ['id' => 'pk', 'libro_id' => 'int', 'pagina' => 'int', 'x' => 'int', 'y' => 'int', 'w' => 'int', 'h' => 'int', 'codice' => 's'],
+        // Classi: i prof si registrano con il codice segreto dato dall'admin; gli studenti entrano con codice classe + nickname + PIN
+        // (nessun dato personale: niente email, niente nome vero). I risultati degli esercizi li vede solo il prof della classe.
+        'prof' => ['id' => 'pk', 'email' => 'slug', 'nome' => 's', 'password' => 's', 'stato' => 'int:1', 'creato' => 'creato', 'ultimo_accesso' => 'dt'],
+        'classi' => ['id' => 'pk', 'prof_id' => 'int', 'nome' => 's', 'codice' => 'slug', 'libro_id' => 'int', 'creato' => 'creato'],
+        'studenti' => ['id' => 'pk', 'classe_id' => 'int', 'nick' => 's', 'pin' => 's', 'token' => 's', 'creato' => 'creato', 'ultimo_accesso' => 'dt'],
+        'risultati' => ['id' => 'pk', 'studente_id' => 'int', 'esercizio_id' => 'int', 'compito_id' => 'int', 'fatti' => 'int', 'totale' => 'int', 'voci' => 'txt:[]', 'quando' => 'dt'],
+        'compiti' => ['id' => 'pk', 'classe_id' => 'int', 'titolo' => 's', 'esercizi' => 'txt', 'scadenza' => 'dt', 'creato' => 'creato'],
     ];
 }
 
@@ -173,6 +180,10 @@ function indici(): array {
         'i_esercizi_libro' => ['esercizi', ['libro_id', 'pagina'], false],
         'i_contenuti_libro' => ['contenuti', ['libro_id', 'pagina'], false],
         'i_zone_libro' => ['zone', ['libro_id', 'pagina'], false],
+        'u_studenti' => ['studenti', ['classe_id', 'nick'], true],
+        'i_classi_prof' => ['classi', ['prof_id'], false],
+        'i_risultati' => ['risultati', ['studente_id', 'esercizio_id'], false],
+        'i_compiti_classe' => ['compiti', ['classe_id'], false],
     ];
 }
 

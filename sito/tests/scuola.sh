@@ -108,10 +108,84 @@ chk "bozza: l'admin lo vede" "$(code "apri.php?c=CFC-1")" 200
 chk "bozza: niente voce Scuola nel menu" "$(curl -s "$B/index.php" | conta 'href="scuola.php"')" 0
 php -r 'require "inc/bootstrap.php"; db()->exec("UPDATE libri SET pubblicato = 1 WHERE sezione = \"scuola\"");'
 
+# ---------- classi: prof, studenti, compiti, risultati ----------
+JP="$T/cookie-prof"; JS="$T/cookie-stud"; JX="$T/cookie-altro"; touch "$JP" "$JS" "$JX"
+tokj() { curl -s -b "$1" -c "$1" "$B/$2" | grep -o 'name="csrf" value="[^"]*"' | head -1 | cut -d'"' -f4; }
+postj() { local j=$1 p=$2; shift 2; curl -s -b "$j" -c "$j" -o "$T/post.html" -w "%{http_code}" "$@" "$B/$p"; }
+chk "prof.php senza codice: niente registrazione" "$(curl -s "$B/prof.php" | conta 'a=registrati')" 0
+Tk=$(tok admin/scuola.php)
+post admin/scuola.php -d "csrf=$Tk&azione=codice_prof" >/dev/null
+CP=$(sql "SELECT valore FROM impostazioni WHERE chiave = 'codice_prof'")
+chk "codice prof creato" "$(echo "$CP" | grep -c '^PROF-')" 1
+Tk=$(tokj "$JP" "prof.php?a=registrati")
+postj "$JP" "prof.php?a=registrati" --data-urlencode "csrf=$Tk" -d "codice=SBAGLIATO&nome=Prof+Rossi&email=rossi@scuola.it&password=passwordprof1&password2=passwordprof1&adulto=1" >/dev/null
+chk "codice prof sbagliato rifiutato" "$(grep -c 'non è giusto' "$T/post.html")" 1
+Tk=$(tokj "$JP" "prof.php?a=registrati")
+chk "registrazione prof" "$(postj "$JP" "prof.php?a=registrati" --data-urlencode "csrf=$Tk" --data-urlencode "codice=$CP" -d "nome=Prof+Rossi&email=rossi@scuola.it&password=passwordprof1&password2=passwordprof1&adulto=1")" 302
+Tk=$(tokj "$JP" prof.php)
+chk "nuova classe" "$(postj "$JP" prof.php -d "csrf=$Tk&azione=nuova_classe&nome=2E+Trappitello&libro_id=$LID")" 302
+CID=$(sql "SELECT id FROM classi WHERE nome = '2E Trappitello'")
+CC=$(sql "SELECT codice FROM classi WHERE id = $CID")
+chk "codice classe ABC-123" "$(echo "$CC" | grep -cE '^[A-Z0-9]{3}-[A-Z0-9]{3}$')" 1
+Tk=$(tokj "$JS" studente.php)
+postj "$JS" "studente.php?a=entra" -d "csrf=$Tk&codice=$(echo "$CC" | tr 'A-Z' 'a-z' | tr -d -)&nick=Drago42&pin=1234&ricorda=1" >/dev/null
+chk "studente nuovo: chiede di ripetere il PIN" "$(grep -c 'name="pin2"' "$T/post.html")" 1
+Tk=$(tokj "$JS" studente.php)
+chk "studente entra in classe" "$(postj "$JS" "studente.php?a=entra" -d "csrf=$Tk&codice=$CC&nick=Drago42&pin=1234&pin2=1234&ricorda=1")" 302
+chk "pagina dello studente" "$(curl -s -b "$JS" "$B/studente.php" | conta 'Ciao, Drago42')" 1
+chk "il PIN è cifrato" "$(sql "SELECT COUNT(*) FROM studenti WHERE pin = '1234'")" 0
+Tk=$(tokj "$JX" studente.php)
+postj "$JX" "studente.php?a=entra" -d "csrf=$Tk&codice=$CC&nick=drago42&pin=9999" >/dev/null
+chk "PIN sbagliato rifiutato" "$(grep -c 'PIN sbagliato' "$T/post.html")" 1
+Tk=$(tokj "$JX" studente.php)
+postj "$JX" "studente.php?a=entra" -d "csrf=$Tk&codice=ZZZ-999&nick=Pippo&pin=1234" >/dev/null
+chk "codice classe inesistente" "$(grep -c 'non esiste' "$T/post.html")" 1
+ES1=$(sql "SELECT id FROM esercizi WHERE codice = 'CFC-1'")
+Tk=$(tokj "$JP" "prof.php?a=classe&id=$CID&vista=compiti")
+chk "assegna compito" "$(postj "$JP" prof.php -d "csrf=$Tk&azione=nuovo_compito&classe=$CID&titolo=Per+lunedi&scadenza=2099-01-01&esercizi[]=$ES1")" 302
+chk "compito visibile allo studente" "$(curl -s -b "$JS" "$B/studente.php" | conta 'Per lunedi')" 1
+Tk=$(curl -s -b "$JS" -c "$JS" "$B/apri.php?c=CFC-1" | grep -o 'data-csrf="[^"]*"' | cut -d'"' -f2)
+chk "esercizio: banner dello studente" "$(curl -s -b "$JS" "$B/apri.php?c=CFC-1" | conta 'banner-studente')" 1
+R=$(curl -s -b "$JS" -H "X-CSRF: $Tk" -H 'Content-Type: application/json' -d '{"codice":"CFC-1","voci":[1,0]}' "$B/api-scuola.php")
+chk "risultato salvato (1 su 2, nel compito)" "$(echo "$R" | grep -c '"fatti":1,"totale":2,"compito":[1-9]')" 1
+R=$(curl -s -b "$JS" -H "X-CSRF: $Tk" -H 'Content-Type: application/json' -d '{"codice":"CFC-1","voci":[1,1,1,1,1,1],"totale":99}' "$B/api-scuola.php")
+chk "non si bara sul totale" "$(echo "$R" | grep -c '"fatti":2,"totale":2')" 1
+curl -s -b "$JS" -H "X-CSRF: $Tk" -H 'Content-Type: application/json' -d '{"codice":"CFC-1","voci":[1,0]}' "$B/api-scuola.php" >/dev/null   # ultimo tentativo: sbaglia il predicato
+chk "risultato senza CSRF rifiutato" "$(curl -s -o /dev/null -w '%{http_code}' -b "$JS" -H 'Content-Type: application/json' -d '{"codice":"CFC-1","voci":[1]}' "$B/api-scuola.php")" 400
+chk "risultato senza classe rifiutato" "$(curl -s -o /dev/null -w '%{http_code}' -b "$JX" -H "X-CSRF: x" -d '{}' "$B/api-scuola.php")" 400
+for v in studenti compiti risultati errori progressi classe; do
+  chk "prof: vista $v" "$(curl -s -b "$JP" -c "$JP" -o "$T/out.html" -w '%{http_code}' "$B/prof.php?a=classe&id=$CID&vista=$v")" 200; senza_errori "prof vista $v"
+done
+chk "prof: risultato migliore 2/2" "$(curl -s -b "$JP" "$B/prof.php?a=classe&id=$CID&vista=risultati" | conta '>2/2<')" 1
+chk "prof: errore comune (Luce/mangia)" "$(curl -s -b "$JP" "$B/prof.php?a=classe&id=$CID&vista=errori" | conta '«mangia» = predicato')" 1
+chk "prof: soluzioni" "$(curl -s -b "$JP" "$B/prof.php?a=soluzioni&libro=$LID" | conta 'Luce \[soggetto\]')" 1
+# un altro prof non vede (e non tocca) la classe del primo
+php -r 'require "inc/bootstrap.php"; db()->prepare("INSERT INTO prof (email, nome, password) VALUES (?,?,?)")->execute(["bianchi@scuola.it", "Bianchi", password_hash("passwordprof2", PASSWORD_DEFAULT)]);'
+Tk=$(tokj "$JX" prof.php); postj "$JX" "prof.php?a=accedi" -d "csrf=$Tk&email=bianchi@scuola.it&password=passwordprof2" >/dev/null
+chk "altro prof: la classe non si apre" "$(curl -s -b "$JX" "$B/prof.php?a=classe&id=$CID" | conta "$CC")" 0
+Tk=$(tokj "$JX" prof.php)
+chk "altro prof: niente modifiche" "$(postj "$JX" prof.php -d "csrf=$Tk&azione=elimina_classe&classe=$CID")" 403
+SID=$(sql "SELECT id FROM studenti WHERE nick = 'Drago42'")
+Tk=$(tokj "$JP" "prof.php?a=classe&id=$CID")
+postj "$JP" prof.php -d "csrf=$Tk&azione=nuovo_pin&classe=$CID&studente=$SID" >/dev/null
+NP=$(curl -s -b "$JP" "$B/prof.php?a=classe&id=$CID" | grep -o 'Nuovo PIN: [0-9]*' | grep -o '[0-9]*$')
+Tk=$(tokj "$JX" studente.php)
+chk "il nuovo PIN funziona" "$(postj "$JX" "studente.php?a=entra" -d "csrf=$Tk&codice=$CC&nick=Drago42&pin=$NP")" 302
+chk "admin: prof elencati" "$(curl -s -b "$J" "$B/admin/scuola.php" | conta 'rossi@scuola.it')" 1
+
 if [ -z "${SENZA_BROWSER:-}" ]; then
   export NODE_PATH="${NODE_PATH:-$(npm root -g 2>/dev/null)}"
-  BASE="$B" SLUG="$SLUG" LID="$LID" node "$REPO/sito/tests/scuola-browser.js" && ok=$((ok+1)) || { ko=$((ko+1)); echo "FAIL: test nel browser"; }
+  BASE="$B" SLUG="$SLUG" LID="$LID" CC="$CC" CID="$CID" node "$REPO/sito/tests/scuola-browser.js" && ok=$((ok+1)) || { ko=$((ko+1)); echo "FAIL: test nel browser"; }
 fi
+
+# lo studente cancella il suo profilo; il prof elimina il suo account
+Tk=$(tokj "$JS" studente.php)
+postj "$JS" "studente.php?a=cancella" -d "csrf=$Tk" >/dev/null
+chk "profilo studente cancellato" "$(sql "SELECT COUNT(*) FROM studenti WHERE nick = 'Drago42'")" 0
+chk "risultati cancellati" "$(sql "SELECT COUNT(*) FROM risultati WHERE studente_id = $SID")" 0
+Tk=$(tokj "$JP" "prof.php?a=account")
+postj "$JP" prof.php -d "csrf=$Tk&azione=elimina_account&attuale=passwordprof1" >/dev/null
+chk "account prof eliminato con le classi" "$(sql "SELECT COUNT(*) FROM classi WHERE id = $CID")" 0
 
 # eliminazione definitiva del libro: via anche esercizi, contenuti, zone e file
 php -r 'require "inc/bootstrap.php"; require "inc/libri.php"; elimina_libro_definitivo((int)$argv[1]);' "$LID"

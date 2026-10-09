@@ -97,6 +97,41 @@ async function foto(p, nome) { if (SHOTS) await p.screenshot({ path: SHOTS + '/'
     chk('zone: codice riconosciuto anche nell\'admin', await a.locator('.rett.auto').count() === 1);
     await foto(a, '8-admin-zone');
     await adm.close(); await ctx.close();
+
+    // ---------- studente: entra in classe, fa l'esercizio, il risultato arriva al prof ----------
+    if (process.env.CC) {
+      const sc = await browser.newContext({ viewport: { width: 390, height: 800 }, isMobile: true, hasTouch: true });
+      const s = await sc.newPage();
+      s.on('pageerror', e => errori.push(e.message));
+      await s.goto(`${B}/studente.php`);
+      await s.fill('input[name=codice]', process.env.CC); await s.fill('input[name=nick]', 'Gatto7'); await s.fill('input[name=pin]', '4321');
+      await s.locator('form.form-scuola button').click(); await s.waitForLoadState();
+      await s.fill('input[name=pin]', '4321'); await s.fill('input[name=pin2]', '4321');
+      await foto(s, '9-studente-entra');
+      await s.locator('form.form-scuola button').click(); await s.waitForLoadState();
+      chk('studente: home della classe', (await s.locator('h1').textContent()).includes('Gatto7'));
+      await foto(s, '10-studente-home');
+      await s.goto(`${B}/apri.php?c=CFC-1`);
+      await s.locator('.parola', { hasText: 'Luce' }).tap();
+      await s.locator('.categoria', { hasText: 'predicato' }).tap();
+      await s.locator('.parola', { hasText: 'mangia' }).tap();
+      await s.locator('.bottone-es', { hasText: 'Controlla' }).tap();
+      await s.waitForFunction(() => /inviato al prof/.test((document.querySelector('.inviato') || {}).textContent || ''), null, { timeout: 8000 });
+      chk('studente: risultato inviato', true);
+      await foto(s, '11-studente-inviato');
+      await sc.close();
+      const pc = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+      const pr = await pc.newPage();
+      await pr.goto(`${B}/prof.php`);
+      await pr.fill('input[name=email]', 'rossi@scuola.it'); await pr.fill('input[name=password]', 'passwordprof1');
+      await pr.locator('form.form-scuola button').click(); await pr.waitForLoadState();
+      await pr.goto(`${B}/prof.php?a=classe&id=${process.env.CID}&vista=risultati`);
+      chk('prof: Gatto7 nei risultati', (await pr.locator('.matrice').textContent()).includes('Gatto7'));
+      await foto(pr, '12-prof-risultati');
+      await pr.goto(`${B}/prof.php?a=classe&id=${process.env.CID}&vista=errori`); await foto(pr, '13-prof-errori');
+      await pr.goto(`${B}/prof.php?a=classe&id=${process.env.CID}&vista=progressi`); await foto(pr, '14-prof-progressi');
+      await pc.close();
+    }
   } catch (e) { ko++; console.log('FAIL: ' + e.message); }
   chk('nessun errore JavaScript', errori.length === 0);
   if (errori.length) console.log(errori.slice(0, 5).join('\n'));

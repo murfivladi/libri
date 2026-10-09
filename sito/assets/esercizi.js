@@ -260,7 +260,7 @@
     var tutti = [];
     gruppi.forEach(function (g, i) { g.elementi.forEach(function (x) { tutti.push({ testo: x, g: i }); }); });
     mescola(tutti).forEach(function (x) {
-      var b = gettone(x.testo); giusto[tutti.indexOf(x)] = x.g; b.dataset.g = x.g;
+      var b = gettone(x.testo); giusto[tutti.indexOf(x)] = x.g; b.dataset.g = x.g; b.dataset.k = tutti.indexOf(x);
       trascinabile(b, {
         tocco: function () { if (box.classList.contains('bloccato')) return; if (scelto) scelto.classList.remove('scelto'); if (scelto === b) { scelto = null; return; } scelto = b; b.classList.add('scelto'); },
         lascia: function (z) { if (box.classList.contains('bloccato')) return; if (z.dataset.zona === 'banca') banca.appendChild(b); else caselle[+z.dataset.zona.slice(1)].dentro.appendChild(b); },
@@ -270,8 +270,8 @@
     box.appendChild(banca); box.appendChild(area);
     return {
       verifica: function () {
-        var out = [];
-        Array.prototype.forEach.call(box.querySelectorAll('.gettone'), function (b) {
+        var out = [], ordinati = Array.prototype.slice.call(box.querySelectorAll('.gettone')).sort(function (a, b) { return a.dataset.k - b.dataset.k; });
+        ordinati.forEach(function (b) {                // sempre nello stesso ordine (gruppo per gruppo): serve agli «errori comuni» del prof
           var casella = b.closest('.gruppo'), ok = !!casella && casella.dataset.zona === 'g' + b.dataset.g;
           b.classList.toggle('giusta', ok); b.classList.toggle('sbagliata', !ok);
           out.push({ ok: ok, nodo: null });
@@ -338,7 +338,7 @@
       cont.classList.add('verificato'); box.classList.add('bloccato');
       bVerifica.hidden = true; bRiprova.hidden = false; bSol.hidden = perc === 1;
       if (chiave && opz.salva !== false && (!prec || fatti >= prec.fatti)) { prec = { fatti: fatti, totale: totale, quando: Date.now() }; scrivi(chiave, prec); }
-      try { cont.dispatchEvent(new CustomEvent('vs-risultato', { bubbles: true, detail: { codice: es.codice, fatti: fatti, totale: totale } })); } catch (e) {}
+      try { cont.dispatchEvent(new CustomEvent('vs-risultato', { bubbles: true, detail: { codice: es.codice, fatti: fatti, totale: totale, voci: voci.map(function (v) { return v.ok ? 1 : 0; }) } })); } catch (e) {}
     });
     bRiprova.addEventListener('click', function () { monta(cont, es, opz); });
     bSol.addEventListener('click', function () { pulisciSpiegazioni(); ctl.soluzioni(); bSol.hidden = true; esito.appendChild(document.createTextNode(' Ecco le soluzioni.')); });

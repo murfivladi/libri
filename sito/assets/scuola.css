@@ -101,3 +101,56 @@ body.incorporato .contenuto-apri { padding:16px 16px 28px; max-width:none; }
 .finestra-scuola .testa button { font-size:20px; width:40px; height:40px; border:1px solid var(--sc-linea); border-radius:8px; background:transparent; color:inherit; cursor:pointer; }
 .finestra-scuola iframe { flex:1; border:0; width:100%; background:var(--sc-carta); }
 @media (max-width:640px) { .finestra-scuola { padding:0; } .finestra-scuola .riquadro { height:100%; border-radius:0; } }
+
+/* ---------- classi: studenti e prof ---------- */
+.pannello-scuola { background:var(--sc-carta); border:1px solid var(--sc-linea); border-radius:14px; padding:18px; margin:0 0 18px; }
+.pannello-scuola.stretto { max-width:560px; }
+.pannello-scuola h1, .pannello-scuola h2 { margin-top:0; }
+.form-scuola { display:grid; gap:12px; }
+.form-scuola label { display:grid; gap:4px; font-weight:700; font-family:system-ui,sans-serif; font-size:.95rem; }
+.form-scuola label small { font-weight:400; color:#8a7f72; }
+.form-scuola input[type=text], .form-scuola input[type=email], .form-scuola input[type=password], .form-scuola input[type=date], .form-scuola select { font:inherit; font-weight:400; padding:10px 12px; border:1px solid var(--sc-linea); border-radius:8px; background:var(--sc-carta); color:inherit; width:100%; }
+.form-scuola .bottone { justify-self:start; }
+.mono { font-family:ui-monospace,monospace !important; letter-spacing:.06em; text-transform:uppercase; }
+.spunta-pub { display:flex !important; gap:8px; align-items:center; font-weight:400 !important; }
+.spunta-pub input { width:18px; height:18px; accent-color:var(--sc-arancio); flex:none; }
+.schede-mini { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 16px; }
+.schede-mini a { padding:6px 14px; border:1px solid var(--sc-linea); border-radius:999px; text-decoration:none; font-family:system-ui,sans-serif; font-size:.95rem; background:var(--sc-carta); }
+.schede-mini a.att { background:var(--sc-arancio); color:#fff; border-color:var(--sc-arancio-scuro); }
+.testata-studente { display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.testata-studente h1 { margin:0; }
+.banner-studente { background:var(--sc-fondo); border-radius:8px; padding:6px 12px; font-size:.92rem; font-family:system-ui,sans-serif; }
+.inviato { margin-top:8px; }
+.compito { border:1px solid var(--sc-linea); border-left:5px solid var(--sc-arancio); border-radius:10px; padding:12px; margin-bottom:14px; background:var(--sc-carta); }
+.compito.finito { border-left-color:var(--sc-verde); } .compito.scaduto { opacity:.75; }
+.testa-compito { display:flex; flex-wrap:wrap; gap:6px 14px; justify-content:space-between; margin-bottom:8px; }
+.tab-scuola { width:100%; border-collapse:collapse; font-family:system-ui,sans-serif; font-size:.95rem; background:var(--sc-carta); margin-bottom:10px; }
+.tab-scuola th, .tab-scuola td { text-align:left; padding:7px 9px; border-bottom:1px solid var(--sc-linea); vertical-align:middle; }
+.tab-scuola th { background:var(--sc-fondo); font-size:.85rem; white-space:nowrap; }
+.matrice td { text-align:center; } .matrice td:first-child { text-align:left; }
+.matrice td.alto { background:#e3f4e1; color:#17501a; } .matrice td.medio { background:#fff3cd; color:#5c4400; } .matrice td.basso { background:#fde2e0; color:#7a1a12; }
+.scorri { overflow-x:auto; }
+.perc { display:inline-block; min-width:52px; padding:1px 6px; border-radius:6px; background:linear-gradient(90deg,#f07c1240 var(--p),transparent var(--p)); border:1px solid var(--sc-linea); text-align:right; }
+.mini-pub { font:inherit; font-size:.85rem; padding:3px 9px; border:1px solid var(--sc-linea); border-radius:6px; background:var(--sc-carta); color:inherit; cursor:pointer; }
+.mini-pub:hover { border-color:var(--sc-arancio); }
+.scheda-classe { display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between; background:var(--sc-fondo); border-radius:14px; padding:14px 18px; }
+.scheda-classe h2 { margin:0; }
+.codice-classe { display:grid; text-align:center; } .codice-classe b { font:700 2rem ui-monospace,monospace; letter-spacing:.1em; color:var(--sc-arancio-scuro); }
+#qr-classe img, #qr-classe canvas { background:#fff; padding:4px; border-radius:6px; }
+.scelta-esercizi { border:1px solid var(--sc-linea); border-radius:10px; display:grid; gap:6px; max-height:360px; overflow:auto; }
+.errore-comune { display:grid; grid-template-columns:120px 48px 1fr; gap:8px; align-items:center; padding:4px 0; font-family:system-ui,sans-serif; font-size:.95rem; }
+.errore-comune small { grid-column:3; }
+.barra-perc { height:10px; background:var(--sc-fondo); border-radius:6px; overflow:hidden; } .barra-perc i { display:block; height:100%; background:var(--sc-rosso); }
+.grafico { display:flex; gap:8px; align-items:flex-end; height:220px; padding:10px; background:var(--sc-carta); border:1px solid var(--sc-linea); border-radius:12px; margin-bottom:8px; }
+.colonna { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; font-family:system-ui,sans-serif; }
+.colonna i { width:100%; max-width:46px; background:linear-gradient(var(--sc-arancio),var(--sc-arancio-scuro)); border-radius:6px 6px 0 0; min-height:2px; }
+.colonna .valore { font-size:.8rem; font-weight:700; } .colonna small { font-size:.72rem; color:#8a7f72; margin-top:4px; }
+.griglia-classi { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-bottom:18px; }
+.carta-classe { display:grid; gap:4px; padding:14px; border:1px solid var(--sc-linea); border-left:5px solid var(--sc-arancio); border-radius:12px; background:var(--sc-carta); text-decoration:none; color:inherit; }
+.carta-classe:hover { border-color:var(--sc-arancio); }
+.soluzione { border-bottom:1px solid var(--sc-linea); padding:6px 0 10px; }
+.soluzione h3 { margin:8px 0 4px; font-size:1.05rem; }
+.riga-form { display:flex; gap:8px; align-items:end; margin-bottom:12px; }
+.riga-form select { font:inherit; padding:6px 10px; border-radius:8px; }
+.ok-pub { background:#e3f4e1; color:#17501a; padding:10px 14px; border-radius:6px; }
+@media (max-width:640px) { .errore-comune { grid-template-columns:80px 44px 1fr; } }

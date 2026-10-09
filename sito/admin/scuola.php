@@ -1,6 +1,7 @@
 <?php
 // Vlad Editore Scuola: panoramica dei libri scolastici, esercizi e contenuti, impostazioni (chiave deAPI).
 require __DIR__ . '/_admin.php';
+require_once __DIR__ . '/../inc/classi.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verifica();
@@ -9,6 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST['togli'])) $k = '';
         if ($k !== '' || !empty($_POST['togli'])) { imposta('deapi_chiave', $k); registra('Chiave deAPI ' . ($k === '' ? 'tolta' : 'salvata')); flash($k === '' ? 'Chiave deAPI tolta.' : 'Chiave deAPI salvata.'); }
     }
+    if (($_POST['azione'] ?? '') === 'codice_prof') { $c = nuovo_codice_prof(); registra('Nuovo codice per i prof'); flash('Nuovo codice per i prof: ' . $c . ' (quello vecchio non funziona più).'); }
+    if (($_POST['azione'] ?? '') === 'chiudi_prof') { imposta('codice_prof', ''); flash('Registrazione dei prof chiusa.'); }
+    if (($_POST['azione'] ?? '') === 'elimina_prof' && ($pid = (int)($_POST['prof'] ?? 0))) { elimina_prof($pid); registra('Prof eliminato dall\'admin', (string)$pid); flash('Prof eliminato con classi, studenti e risultati.'); }
+    if (($_POST['azione'] ?? '') === 'sospendi_prof' && ($pid = (int)($_POST['prof'] ?? 0))) { db()->prepare('UPDATE prof SET stato = 1 - stato WHERE id = ?')->execute([$pid]); flash('Stato del prof cambiato.'); }
     torna('scuola.php');
 }
 
@@ -52,6 +57,25 @@ admin_testata('🎒 Vlad Editore Scuola', 'scuola');
     <li>Nel PDF, accanto al simbolo dell'esercizio, c'è scritto il codice e c'è il QR code (che porta a <code>apri.php?c=CFC-12</code>).</li>
     <li>Nel lettore del sito il codice viene <b>riconosciuto da solo</b>: toccando il simbolo si apre l'esercizio. Se serve, correggi o aggiungi le zone a mano in <b>Zone</b>.</li>
   </ol>
+</div>
+
+<?php
+$profs = db()->query('SELECT p.*, (SELECT COUNT(*) FROM classi c WHERE c.prof_id = p.id) AS n_classi, (SELECT COUNT(*) FROM studenti s JOIN classi c ON c.id = s.classe_id WHERE c.prof_id = p.id) AS n_stud FROM prof p ORDER BY p.id DESC')->fetchAll();
+$cp = codice_prof();
+?>
+<div class="pannello">
+  <h2 style="margin-top:0">🍎 Prof e classi</h2>
+  <p class="muto">I prof si registrano in <a href="../prof.php" target="_blank">prof.php ↗</a> con il <b>codice per i prof</b>: dallo solo agli insegnanti che conosci. Gli studenti entrano con il codice della classe, un nickname e un PIN (nessun dato personale).</p>
+  <p>Codice per i prof: <?= $cp !== '' ? '<code style="font-size:1.1rem">' . e($cp) . '</code> <button type="button" class="bottone sec piccolo" data-copia="' . e($cp) . '">Copia</button>' : '<b>registrazione chiusa</b>' ?></p>
+  <form method="post" class="azioni-riga"><?= csrf_campo() ?>
+    <button class="bottone piccolo" name="azione" value="codice_prof"<?= $cp !== '' ? ' data-conferma="Creare un codice nuovo? Quello attuale smetterà di funzionare (i prof già registrati restano)."' : '' ?>><?= $cp !== '' ? '🔄 Nuovo codice' : 'Apri la registrazione (crea il codice)' ?></button>
+    <?php if ($cp !== ''): ?><button class="bottone sec piccolo" name="azione" value="chiudi_prof">Chiudi la registrazione</button><?php endif; ?></form>
+  <table class="tabella" style="margin-top:12px"><tr><th>Prof</th><th>Email</th><th>Classi</th><th>Studenti</th><th>Ultimo accesso</th><th></th></tr>
+  <?php foreach ($profs as $pr): ?><tr><td><b><?= e($pr['nome']) ?></b> <?= $pr['stato'] ? '' : '<span class="stato cest">sospeso</span>' ?></td><td><?= e($pr['email']) ?></td><td><?= (int)$pr['n_classi'] ?></td><td><?= (int)$pr['n_stud'] ?></td><td class="muto"><?= e(formatta_data($pr['ultimo_accesso'] ?: null)) ?></td>
+    <td><form method="post" class="azioni-riga"><?= csrf_campo() ?><input type="hidden" name="prof" value="<?= (int)$pr['id'] ?>">
+      <button class="bottone sec piccolo" name="azione" value="sospendi_prof"><?= $pr['stato'] ? 'Sospendi' : 'Riattiva' ?></button>
+      <button class="bottone pericolo piccolo" name="azione" value="elimina_prof" data-conferma="Eliminare il prof con tutte le sue classi, gli studenti e i risultati?">Elimina</button></form></td></tr>
+  <?php endforeach; if (!$profs): ?><tr><td colspan="6" class="muto">Nessun prof registrato.</td></tr><?php endif; ?></table>
 </div>
 
 <div class="pannello">

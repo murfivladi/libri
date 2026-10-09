@@ -2,6 +2,7 @@
 // Apre un esercizio interattivo o un contenuto (audio, video, immagine) dal suo codice: apri.php?c=CFC-12.
 // È l'indirizzo dei QR code del PDF; con &embed=1 si apre dentro la finestra del lettore (senza testata del sito).
 require __DIR__ . '/inc/pubblico.php';
+require_once __DIR__ . '/inc/classi.php';
 
 $c = normalizza_codice((string)($_GET['c'] ?? ''));
 $embed = !empty($_GET['embed']);
@@ -38,10 +39,12 @@ if (!$trovato): ?>
   <?php if ($libro): ?><p class="apri-libro">Dal libro <a href="libro.php?s=<?= e($libro['slug']) ?>"><?= e($libro['titolo']) ?></a><?php if ($r['pagina']): ?>, <a href="leggi.php?s=<?= e($libro['slug']) ?>&amp;pagina=<?= (int)$r['pagina'] ?>">pagina <?= (int)$r['pagina'] ?></a><?php endif; ?></p><?php endif; ?>
   <?php endif; ?>
 
-  <?php if ($genere === 'esercizio'): ?>
-    <div id="esercizio"></div>
+  <?php if ($genere === 'esercizio'): $stud = studente_corrente(); ?>
+    <?php if ($stud): ?><p class="banner-studente">👤 <b><?= e($stud['nick']) ?></b> · classe <?= e($stud['classe']) ?> — il risultato arriva al tuo prof.</p><?php endif; ?>
+    <div id="esercizio"<?= $stud ? ' data-api="api-scuola.php" data-csrf="' . e(csrf()) . '"' : '' ?>></div>
     <script src="assets/esercizi.js"></script>
     <script>VSEsercizio.monta(document.getElementById('esercizio'), <?= $json(['codice' => $r['codice'], 'tipo' => $r['tipo'], 'titolo' => $r['titolo'], 'consegna' => $r['consegna'], 'dati' => dati_esercizio($r)]) ?>);</script>
+    <?php if ($stud): ?><script src="assets/scuola-invia.js"></script><?php endif; ?>
   <?php else: $src = url_media($r['file']); ?>
     <div class="media-box">
     <?php if ($r['file'] === ''): ?><p class="muto">Questo contenuto non ha ancora un file.</p>
