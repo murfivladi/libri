@@ -7,9 +7,44 @@ $libro_f = (int)($_GET['libro'] ?? 0);
 $id = (int)($_GET['id'] ?? 0);
 $nuovo = !empty($_GET['nuovo']);
 
+// esporta gli esercizi di un libro in JSON (per copiarli su un altro sito o tenerne una copia)
+if (($_GET['esporta'] ?? '') !== '') {
+    $lid = (int)$_GET['esporta'];
+    $righe = db()->query('SELECT codice, pagina, titolo, consegna, tipo, dati, extra, livello FROM esercizi WHERE libro_id = ' . $lid . ' ORDER BY pagina, ordine, id')->fetchAll();
+    foreach ($righe as &$r) { $r['dati'] = json_decode($r['dati'], true); foreach (['pagina', 'extra', 'livello'] as $k) $r[$k] = (int)$r[$k]; }
+    header('Content-Type: application/json; charset=utf-8');
+    header('Content-Disposition: attachment; filename="esercizi-libro-' . $lid . '.json"');
+    echo json_encode(['versione' => 1, 'esercizi' => $righe], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verifica();
     $az = $_POST['azione'] ?? 'salva';
+    // importa da JSON: stessi codici del PDF; un esercizio con lo stesso codice viene aggiornato
+    if ($az === 'importa') {
+        $lid = (int)($_POST['libro_id'] ?? 0);
+        $d = !empty($_FILES['file']['tmp_name']) ? json_decode((string)file_get_contents($_FILES['file']['tmp_name']), true) : null;
+        if (!is_array($d) || !is_array($d['esercizi'] ?? null)) { flash('File non valido: serve il JSON degli esercizi.', 'errore'); torna('esercizi.php'); }
+        $nuovi = 0; $agg = 0; $saltati = [];
+        foreach (array_slice($d['esercizi'], 0, 1000) as $x) {
+            $codice = normalizza_codice((string)($x['codice'] ?? ''));
+            $tipo = (string)($x['tipo'] ?? '');
+            if (!codice_valido($codice) || !isset(TIPI_ESERCIZIO[$tipo])) { $saltati[] = $codice ?: '?'; continue; }
+            $dati = pulisci_dati_esercizio($tipo, $x['dati'] ?? []);
+            $r = ['codice' => $codice, 'libro_id' => $lid, 'pagina' => max(0, (int)($x['pagina'] ?? 0)), 'titolo' => mb_substr(trim((string)($x['titolo'] ?? '')), 0, 200),
+                'consegna' => mb_substr(trim((string)($x['consegna'] ?? '')), 0, 2000), 'tipo' => $tipo, 'dati' => json_encode($dati, JSON_UNESCAPED_UNICODE),
+                'extra' => empty($x['extra']) ? 0 : 1, 'livello' => max(1, min(3, (int)($x['livello'] ?? 1))), 'aggiornato' => date('Y-m-d H:i:s')];
+            $st = db()->prepare('SELECT id FROM esercizi WHERE codice = ?'); $st->execute([$codice]); $esiste = (int)$st->fetchColumn();
+            if (!$esiste && codice_usato($codice)) { $saltati[] = $codice; continue; }       // codice usato da un audio/video
+            if ($tipo !== 'aperta' && punti_esercizio($r) === 0) { $saltati[] = $codice; continue; }
+            if ($esiste) { $set = implode(', ', array_map(fn($k) => "$k = :$k", array_keys($r))); db()->prepare("UPDATE esercizi SET $set WHERE id = :id")->execute($r + ['id' => $esiste]); $agg++; }
+            else { $r['ordine'] = $nuovi + $agg; db()->prepare('INSERT INTO esercizi (' . implode(',', array_keys($r)) . ') VALUES (:' . implode(',:', array_keys($r)) . ')')->execute($r); $nuovi++; }
+        }
+        registra('Esercizi importati', "$nuovi nuovi, $agg aggiornati");
+        flash("Importati: $nuovi nuovi, $agg aggiornati." . ($saltati ? ' Saltati (codice o dati non validi): ' . implode(', ', array_slice($saltati, 0, 20)) : ''), $saltati ? 'errore' : 'ok');
+        torna('esercizi.php' . ($lid ? "?libro=$lid" : ''));
+    }
     $pid = (int)($_POST['id'] ?? 0);
     if ($az === 'elimina' && $pid) {
         db()->prepare('DELETE FROM esercizi WHERE id = ?')->execute([$pid]);
@@ -125,6 +160,13 @@ admin_testata('✏️ Esercizi interattivi', 'esercizi');
   <a class="bottone" href="esercizi.php?nuovo=1<?= $libro_f ? '&amp;libro=' . $libro_f : '' ?>">+ Nuovo esercizio</a>
   <form method="get" style="display:flex;gap:6px"><select name="libro" onchange="this.form.submit()"><option value="0">Tutti i libri</option><?php foreach ($libri as $lb): ?><option value="<?= (int)$lb['id'] ?>" <?= $libro_f === (int)$lb['id'] ? 'selected' : '' ?>><?= e($lb['titolo']) ?></option><?php endforeach; ?></select></form>
 </div>
+<details class="pannello" style="margin-bottom:12px"><summary><b>⇅ Importa / esporta</b> <span class="muto">(per caricare gli esercizi di un capitolo con gli stessi codici del PDF)</span></summary>
+  <form method="post" enctype="multipart/form-data" class="azioni-riga" style="margin-top:10px;align-items:end"><?= csrf_campo() ?><input type="hidden" name="azione" value="importa">
+    <label>Libro <select name="libro_id"><option value="0">— nessun libro —</option><?php foreach ($libri as $lb): ?><option value="<?= (int)$lb['id'] ?>" <?= $libro_f === (int)$lb['id'] ? 'selected' : '' ?>><?= e($lb['titolo']) ?></option><?php endforeach; ?></select></label>
+    <label>File JSON <input type="file" name="file" accept=".json,application/json" required></label>
+    <button class="bottone piccolo">Importa</button></form>
+  <?php if ($libro_f): ?><p><a href="esercizi.php?esporta=<?= $libro_f ?>">⬇ Esporta gli esercizi di questo libro (JSON)</a></p><?php endif; ?>
+</details>
 <table class="tabella"><tr><th>Codice</th><th>Titolo</th><th>Tipo</th><th>Libro</th><th>Pag.</th><th>Punti</th><th></th></tr>
 <?php foreach ($righe as $r): $t = TIPI_ESERCIZIO[$r['tipo']] ?? ['?', $r['tipo']]; ?>
 <tr><td><code><?= e($r['codice']) ?></code></td>

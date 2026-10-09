@@ -1,0 +1,179 @@
+/* «Chi fa cosa?» · Vlad Editore Scuola · grammatica per la 2ª media.
+   Pagine A4 fisse (210 × 297 mm), a colori. Ogni <section class="pagina"> è una pagina stampata.
+   Colore della parte: Ripasso grammaticale = blu, Analisi logica = arancione (classe .parte-ripasso / .parte-logica sul body). */
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  --parte: #1f5fbf; --parte-chiaro: #e7f0fc; --parte-medio: #b9d1f3; --parte-scuro: #133e80;
+  --testo: #1d2433; --muto: #5c6577; --linea: #d5dbe6; --carta: #ffffff;
+  --verde: #2e7d32; --rosso: #c62828; --arancio: #f07c12; --giallo: #ffd54f;
+  /* colori delle parti del discorso (gli stessi dell'editor degli esercizi sul sito) */
+  --c-articolo: #6a1b9a; --c-nome: #1565c0; --c-aggettivo: #ef6c00; --c-pronome: #5d4037; --c-verbo: #c62828;
+  --c-avverbio: #558b2f; --c-preposizione: #00838f; --c-congiunzione: #546e7a; --c-interiezione: #ad1457;
+  font-family: Inter, "Liberation Sans", Arial, sans-serif; font-size: 10.6pt; line-height: 1.42; color: var(--testo);
+  -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #8a8f99;
+}
+body.parte-logica { --parte: #e8710a; --parte-chiaro: #fff1e3; --parte-medio: #ffd1a3; --parte-scuro: #a34d00; }
+.pagina { width: 210mm; height: 297mm; position: relative; overflow: hidden; background: var(--carta); break-after: page; padding: 16mm 15mm 18mm 18mm; }
+@media screen { .pagina { margin: 8mm auto; box-shadow: 0 4px 20px #0005; } }
+.pagina.pari { padding: 16mm 18mm 18mm 15mm; }
+h1, h2, h3, h4 { font-family: "Inter Display", Inter, sans-serif; margin: 0; line-height: 1.15; }
+p { margin: 0 0 2.2mm; }
+b, strong { font-weight: 700; }
+
+/* ---------- linguetta laterale e piede ---------- */
+.linguetta { position: absolute; top: 40mm; right: 0; width: 9mm; height: 62mm; background: var(--parte); color: #fff; writing-mode: vertical-rl; text-orientation: mixed;
+  display: flex; align-items: center; justify-content: center; font: 800 9pt "Inter Display", Inter, sans-serif; letter-spacing: .2em; border-radius: 3mm 0 0 3mm; }
+.pari .linguetta { right: auto; left: 0; border-radius: 0 3mm 3mm 0; transform: rotate(180deg); }
+.piede { position: absolute; bottom: 8mm; left: 18mm; right: 15mm; display: flex; justify-content: space-between; align-items: center; font-size: 8pt; color: var(--muto); border-top: 0.6mm solid var(--parte); padding-top: 1.6mm; }
+.pari .piede { left: 15mm; right: 18mm; flex-direction: row-reverse; }
+.piede .num { font: 800 11pt "Inter Display", Inter, sans-serif; color: var(--parte); }
+.testata { display: flex; align-items: center; gap: 3mm; margin: -4mm 0 5mm; font: 700 8.5pt Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--parte); }
+.testata::after { content: ""; flex: 1; height: 0.6mm; background: var(--parte-medio); }
+
+/* ---------- apertura del capitolo ---------- */
+.apertura { padding: 0; }
+.apertura .fascia { background: var(--parte); color: #fff; padding: 12mm 18mm 8mm; position: relative; }
+.apertura .fascia .parte-nome { font: 700 9pt Inter, sans-serif; letter-spacing: .22em; text-transform: uppercase; opacity: .85; }
+.apertura .fascia .numero { position: absolute; right: 16mm; top: 6mm; font: 900 64pt/1 "Inter Display", Inter, sans-serif; color: #ffffff38; }
+.apertura h1 { font-size: 30pt; font-weight: 800; margin: 3mm 0 1.5mm; }
+.apertura .sottotitolo { font-size: 13pt; font-weight: 500; opacity: .95; margin: 0; }
+.apertura .scena { position: relative; height: 118mm; background: var(--parte-chiaro); }
+.apertura .scena img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.nuvola { position: absolute; background: #fff; border: 0.7mm solid #222; border-radius: 6mm; padding: 2.5mm 4mm; font: 600 10.5pt "Comic Sans MS", Inter, sans-serif; max-width: 62mm; box-shadow: 0 1mm 0 #0002; }
+.nuvola::after { content: ""; position: absolute; width: 5mm; height: 5mm; background: #fff; border-right: 0.7mm solid #222; border-bottom: 0.7mm solid #222; bottom: -2.9mm; left: 9mm; transform: rotate(45deg); }
+.nuvola.giu-destra::after { left: auto; right: 9mm; }
+.nuvola.su::after { bottom: auto; top: -2.9mm; transform: rotate(225deg); }
+.apertura .corpo-apertura { padding: 6mm 18mm 0; display: grid; grid-template-columns: 1.25fr 1fr; gap: 6mm; }
+.situazione { font-size: 10.8pt; }
+.domanda-grande { background: var(--giallo); border-radius: 4mm; padding: 3.5mm 4.5mm; font: 700 11.5pt Inter, sans-serif; margin-top: 3mm; position: relative; }
+.domanda-grande::before { content: "?"; position: absolute; right: 3mm; top: -4mm; font: 900 26pt "Inter Display", sans-serif; color: var(--parte); }
+.obiettivi { background: var(--parte-chiaro); border-radius: 4mm; padding: 4mm 5mm; border-top: 1.5mm solid var(--parte); }
+.obiettivi h3 { font-size: 10pt; text-transform: uppercase; letter-spacing: .1em; color: var(--parte-scuro); margin-bottom: 2mm; }
+.obiettivi ul { margin: 0; padding-left: 5mm; } .obiettivi li { margin-bottom: 1.2mm; }
+.digitale { display: flex; gap: 3mm; align-items: center; margin-top: 4mm; font-size: 8.8pt; color: var(--muto); }
+
+/* ---------- lezione ---------- */
+.titolo-lezione { display: flex; align-items: baseline; gap: 3mm; margin-bottom: 4mm; }
+.titolo-lezione .n { background: var(--parte); color: #fff; font: 800 15pt "Inter Display", sans-serif; border-radius: 2.5mm; padding: 0.8mm 3mm; }
+.titolo-lezione h2 { font-size: 19pt; font-weight: 800; color: var(--parte-scuro); }
+.esempi { margin: 2mm 0 3.5mm; padding: 0; list-style: none; }
+.esempi li { padding: 1mm 0 1mm 5mm; position: relative; }
+.esempi li::before { content: "●"; position: absolute; left: 0; color: var(--parte); font-size: 7pt; top: 1.8mm; }
+h3.sotto { font-size: 12pt; color: var(--parte); margin: 4mm 0 2mm; }
+.due-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+.col-larga { display: grid; grid-template-columns: 1.6fr 1fr; gap: 5mm; align-items: start; }
+
+/* parole colorate per parte del discorso */
+.p { font-weight: 700; border-bottom: 0.6mm solid currentColor; }
+.art { color: var(--c-articolo); } .nom { color: var(--c-nome); } .agg { color: var(--c-aggettivo); } .pro { color: var(--c-pronome); } .ver { color: var(--c-verbo); }
+.avv { color: var(--c-avverbio); } .pre { color: var(--c-preposizione); } .con { color: var(--c-congiunzione); } .int { color: var(--c-interiezione); }
+.etich { display: inline-flex; flex-direction: column; align-items: center; margin: 0 0.6mm; vertical-align: top; }
+.etich .p { border: 0.5mm solid currentColor; border-radius: 1.5mm; padding: 0 1.4mm; }
+.etich small { font: 700 6.2pt Inter, sans-serif; text-transform: uppercase; letter-spacing: .04em; margin-top: 0.6mm; }
+.frase-analizzata { background: #f7f9fc; border-radius: 3mm; padding: 4mm 3mm 3mm; text-align: center; font-size: 13pt; line-height: 1.2; margin: 2mm 0 4mm; }
+
+/* tabelle */
+table.tab { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 9.6pt; margin: 2mm 0 3mm; border: 0.4mm solid var(--parte-medio); border-radius: 3mm; overflow: hidden; }
+.tab th { background: var(--parte); color: #fff; text-align: left; padding: 1.6mm 2.2mm; font-size: 8.8pt; }
+.tab td { padding: 1.5mm 2.2mm; border-top: 0.3mm solid var(--parte-medio); vertical-align: top; }
+.tab tr:nth-child(even) td { background: var(--parte-chiaro); }
+.tab td.cat { font-weight: 800; white-space: nowrap; }
+.tab .gruppo td { background: #fff !important; font: 800 8pt Inter, sans-serif; text-transform: uppercase; letter-spacing: .1em; color: var(--parte-scuro); padding-top: 2.2mm; }
+
+/* ---------- box fissi con icona ---------- */
+.box { border-radius: 3.5mm; padding: 3mm 4mm 3mm 13mm; margin: 3mm 0; position: relative; font-size: 10pt; break-inside: avoid; }
+.box::before { position: absolute; left: 3mm; top: 2.6mm; width: 7.5mm; height: 7.5mm; border-radius: 50%; display: grid; place-items: center; font: 900 11pt "Inter Display", sans-serif; color: #fff; }
+.box .tit { display: block; font: 800 8.4pt Inter, sans-serif; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 1mm; }
+.box p:last-child { margin-bottom: 0; }
+.ricorda { background: #e8f1fd; border: 0.5mm solid #8fb4ea; } .ricorda::before { content: "!"; background: #1f5fbf; } .ricorda .tit { color: #1f5fbf; }
+.attenzione { background: #fdeceb; border: 0.5mm solid #ef9a9a; } .attenzione::before { content: "⚠"; background: #c62828; font-size: 10pt; } .attenzione .tit { color: #c62828; }
+.trucco { background: #eaf6ea; border: 0.5mm solid #9ccc9f; } .trucco::before { content: "★"; background: #2e7d32; } .trucco .tit { color: #2e7d32; }
+.lo-sapevi { background: #fff7e0; border: 0.5mm solid #f3cf6b; } .lo-sapevi::before { content: "?"; background: #e0a100; } .lo-sapevi .tit { color: #a27200; }
+.definizione { background: var(--parte-chiaro); border-left: 2mm solid var(--parte); border-radius: 0 3mm 3mm 0; padding: 3mm 4mm; margin: 3mm 0; }
+.definizione .tit { display: inline-block; background: var(--parte); color: #fff; font: 800 8pt Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; padding: 0.6mm 2.4mm; border-radius: 1.5mm; margin-bottom: 1.5mm; }
+
+/* ---------- fumetto con Vlad e Luce dentro la spiegazione ---------- */
+.fumetto { display: grid; grid-template-columns: auto 1fr auto; gap: 2mm 3mm; align-items: end; margin: 3mm 0; background: #f4f7fb; border-radius: 4mm; padding: 2mm 3mm 0; border: 0.4mm solid var(--linea); break-inside: avoid; }
+.fumetto img { height: 34mm; display: block; }
+.fumetto .battute { display: grid; gap: 2mm; padding-bottom: 3mm; align-self: center; }
+.battuta { background: #fff; border: 0.5mm solid #333; border-radius: 4mm; padding: 1.8mm 3mm; font: 600 9.6pt "Comic Sans MS", Inter, sans-serif; position: relative; }
+.battuta.luce { margin-right: 6mm; background: #fff6ec; }
+.battuta.vlad { margin-left: 6mm; background: #eef5ff; }
+.battuta .chi { font: 800 7pt Inter, sans-serif; text-transform: uppercase; letter-spacing: .08em; display: block; color: var(--muto); }
+
+/* ---------- esercizi ---------- */
+.esercizi-testa { display: flex; align-items: center; justify-content: space-between; background: var(--parte); color: #fff; border-radius: 3mm; padding: 2mm 4mm; margin-bottom: 4mm; }
+.esercizi-testa h2 { font-size: 15pt; letter-spacing: .08em; text-transform: uppercase; }
+.esercizi-testa span { font-size: 8.6pt; opacity: .95; }
+.es { margin: 0 0 4.2mm; break-inside: avoid; }
+.es-testa { display: grid; grid-template-columns: auto 1fr auto; gap: 2.5mm; align-items: start; margin-bottom: 1.6mm; }
+.es-num { background: var(--parte); color: #fff; font: 800 10pt "Inter Display", sans-serif; width: 6.6mm; height: 6.6mm; border-radius: 50%; display: grid; place-items: center; }
+.es-consegna { font-weight: 700; padding-top: 0.6mm; }
+.es-consegna .liv { color: var(--parte); letter-spacing: .05em; margin-right: 1mm; font-size: 8pt; vertical-align: 0.3mm; }
+.es-digitale { display: flex; align-items: center; gap: 1.6mm; font: 700 7.6pt Inter, sans-serif; color: var(--parte-scuro); }
+.es-digitale .qr { width: 13mm; height: 13mm; }
+.es-digitale .qr img, .es-digitale .qr canvas { width: 13mm !important; height: 13mm !important; display: block; }
+.es-digitale .codice { display: grid; text-align: right; line-height: 1.2; }
+.es-digitale .codice b { font: 800 9pt ui-monospace, "DejaVu Sans Mono", monospace; }
+.simbolo { display: inline-grid; place-items: center; width: 5.6mm; height: 5.6mm; border-radius: 1.6mm; background: var(--arancio); color: #fff; font-size: 8pt; font-weight: 900; }
+.es-corpo { padding-left: 9mm; }
+.righe-es { margin: 0; padding-left: 5mm; } .righe-es li { margin: 0 0 1.5mm; padding-left: 1mm; }
+.righe-es.due { columns: 2; column-gap: 6mm; }
+.spazio { display: inline-block; min-width: 24mm; border-bottom: 0.35mm solid #777; height: 4.5mm; vertical-align: -0.8mm; }
+.spazio.lungo { min-width: 60mm; } .spazio.corto { min-width: 14mm; }
+.riga-scrivi { border-bottom: 0.35mm solid #999; height: 7mm; margin: 0 0 0.5mm; }
+.scelta { display: inline-flex; gap: 3mm; margin-left: 2mm; }
+.scelta span::before { content: ""; display: inline-block; width: 3.2mm; height: 3.2mm; border: 0.35mm solid #555; border-radius: 0.8mm; margin-right: 1mm; vertical-align: -0.5mm; }
+.risposte-esatte { text-align: right; font-size: 8.4pt; color: var(--muto); margin-top: -1mm; }
+.risposte-esatte b { display: inline-block; border: 0.4mm solid var(--parte); border-radius: 1.5mm; padding: 0 2mm; color: var(--parte-scuro); }
+.banca { background: #f4f7fb; border: 0.4mm dashed var(--parte-medio); border-radius: 2.5mm; padding: 1.6mm 3mm; margin: 0 0 2mm; font-size: 9.6pt; }
+table.griglia-es { width: 100%; border-collapse: collapse; font-size: 9.3pt; }
+.griglia-es th, .griglia-es td { border: 0.35mm solid #b9c2d1; padding: 1.3mm 1.8mm; text-align: center; }
+.griglia-es th { background: var(--parte-chiaro); font-size: 7.6pt; text-transform: uppercase; letter-spacing: .03em; }
+.griglia-es td:first-child { text-align: left; font-weight: 700; }
+
+/* ---------- testo da leggere ---------- */
+.lettura { display: grid; grid-template-columns: 1.15fr 1fr; gap: 6mm; }
+.racconto { font-family: "Bitstream Charter", Georgia, serif; font-size: 10.6pt; line-height: 1.5; }
+.racconto h3 { font-family: "Inter Display", sans-serif; font-size: 14pt; color: var(--parte-scuro); margin-bottom: 1mm; }
+.racconto .autore { font: 600 8.4pt Inter, sans-serif; color: var(--muto); margin-bottom: 3mm; }
+.racconto p { text-indent: 4mm; margin: 0 0 1.2mm; text-align: justify; hyphens: auto; }
+.racconto sup { font: 700 6.5pt Inter, sans-serif; color: var(--parte); }
+.illustrazione { border-radius: 4mm; overflow: hidden; }
+.illustrazione img { width: 100%; display: block; }
+.ascolta { display: flex; gap: 2.5mm; align-items: center; background: #fff6ec; border-radius: 3mm; padding: 2mm 3mm; margin-top: 3mm; font-size: 9pt; }
+
+/* ---------- mappa concettuale ---------- */
+.mappa { position: relative; height: 128mm; margin-bottom: 4mm; }
+.mappa svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.nodo { position: absolute; transform: translate(-50%, -50%); border-radius: 3mm; padding: 1.8mm 3mm; text-align: center; font-size: 9pt; line-height: 1.25; background: #fff; border: 0.5mm solid var(--parte-medio); }
+.nodo.radice { background: var(--parte); color: #fff; border: none; font: 800 12pt "Inter Display", sans-serif; padding: 2.5mm 5mm; }
+.nodo.ramo { background: var(--parte-chiaro); border-color: var(--parte); font-weight: 800; color: var(--parte-scuro); }
+.nodo small { display: block; color: var(--muto); font-size: 7.6pt; font-weight: 500; }
+.riassunto { background: var(--parte-chiaro); border-radius: 4mm; padding: 4mm 5mm; }
+.riassunto h3, .errori-comuni h3 { font-size: 11pt; color: var(--parte-scuro); margin-bottom: 2mm; text-transform: uppercase; letter-spacing: .08em; }
+.riassunto ol { margin: 0; padding-left: 5mm; } .riassunto li { margin-bottom: 1.2mm; }
+.errori-comuni { border: 0.5mm solid #ef9a9a; border-radius: 4mm; padding: 4mm 5mm; }
+.errori-comuni .err { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-bottom: 2mm; font-size: 9.4pt; }
+.errori-comuni .no { color: var(--rosso); } .errori-comuni .no::before { content: "✗ "; font-weight: 900; }
+.errori-comuni .si { color: var(--verde); } .errori-comuni .si::before { content: "✓ "; font-weight: 900; }
+
+/* ---------- verifica e autovalutazione ---------- */
+.verifica-testa { display: flex; justify-content: space-between; align-items: center; border: 0.7mm solid var(--parte); border-radius: 4mm; padding: 3mm 5mm; margin-bottom: 5mm; }
+.verifica-testa h2 { font-size: 18pt; color: var(--parte-scuro); }
+.verifica-testa .dati { font-size: 9pt; color: var(--muto); display: grid; gap: 2mm; }
+.punti { float: right; font: 700 8.4pt Inter, sans-serif; color: var(--parte-scuro); background: var(--parte-chiaro); border-radius: 1.5mm; padding: 0.3mm 2mm; }
+.punteggio { display: flex; justify-content: space-between; align-items: center; background: var(--parte); color: #fff; border-radius: 3mm; padding: 3mm 5mm; margin: 4mm 0; font-weight: 700; }
+.punteggio .tot { font: 800 13pt "Inter Display", sans-serif; }
+.auto { width: 100%; border-collapse: collapse; font-size: 9.6pt; }
+.auto th, .auto td { border: 0.35mm solid var(--linea); padding: 2mm; }
+.auto th { background: var(--parte-chiaro); font-size: 8.4pt; }
+.auto td.faccia { text-align: center; font-size: 13pt; width: 18mm; }
+.nota-piccola { font-size: 8.4pt; color: var(--muto); }
+/* QR della pagina di apertura e del racconto */
+.digitale .qr, .ascolta .qr { width: 17mm; height: 17mm; flex: none; }
+.digitale .qr img, .digitale .qr canvas, .ascolta .qr img, .ascolta .qr canvas { width: 17mm !important; height: 17mm !important; display: block; }
+table.tab.stretta td { padding-top: 1mm; padding-bottom: 1mm; }
+.griglia-es.stretta td { padding-top: 0.8mm; padding-bottom: 0.8mm; }

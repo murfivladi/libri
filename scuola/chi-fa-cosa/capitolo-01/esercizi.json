@@ -1,0 +1,809 @@
+{
+ "versione": 1,
+ "esercizi": [
+  {
+   "codice": "CFC-1",
+   "pagina": 8,
+   "titolo": "Trova i nomi",
+   "consegna": "Scegli «nome» e tocca tutti i nomi.",
+   "tipo": "tocca",
+   "dati": {
+    "categorie": [
+     {
+      "nome": "nome",
+      "colore": "#1565c0"
+     }
+    ],
+    "frasi": [
+     {
+      "testo": "Il gelato al pistacchio di Bronte piace molto alla nonna.",
+      "segni": {
+       "1": "nome",
+       "3": "nome",
+       "5": "nome",
+       "9": "nome"
+      },
+      "spiegazione": "Bronte è un nome proprio di luogo: anche lui è un nome!"
+     },
+     {
+      "testo": "Luce dorme sul divano accanto al tablet di Vlad.",
+      "segni": {
+       "0": "nome",
+       "3": "nome",
+       "6": "nome",
+       "8": "nome"
+      },
+      "spiegazione": ""
+     },
+     {
+      "testo": "A Taormina il teatro antico guarda il mare e il vulcano.",
+      "segni": {
+       "1": "nome",
+       "3": "nome",
+       "7": "nome",
+       "10": "nome"
+      },
+      "spiegazione": "«antico» dice com'è il teatro: è un aggettivo."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-2",
+   "pagina": 8,
+   "titolo": "Trova l'intruso",
+   "consegna": "In ogni gruppo una parola fa un lavoro diverso: quale?",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "cane · lavagna · corre · amicizia",
+      "opzioni": [
+       "cane",
+       "lavagna",
+       "corre",
+       "amicizia"
+      ],
+      "giusta": 2,
+      "spiegazione": "«corre» è un verbo, le altre sono nomi."
+     },
+     {
+      "testo": "verde · allegro · Sicilia · piccolo",
+      "opzioni": [
+       "verde",
+       "allegro",
+       "Sicilia",
+       "piccolo"
+      ],
+      "giusta": 2,
+      "spiegazione": "«Sicilia» è un nome, le altre sono aggettivi."
+     },
+     {
+      "testo": "il · una · lo · sotto",
+      "opzioni": [
+       "il",
+       "una",
+       "lo",
+       "sotto"
+      ],
+      "giusta": 3,
+      "spiegazione": "«sotto» è una preposizione, le altre sono articoli."
+     },
+     {
+      "testo": "gioca · scrive · bello · dorme",
+      "opzioni": [
+       "gioca",
+       "scrive",
+       "bello",
+       "dorme"
+      ],
+      "giusta": 2,
+      "spiegazione": "«bello» è un aggettivo, le altre sono verbi."
+     },
+     {
+      "testo": "ieri · sempre · lentamente · tavolo",
+      "opzioni": [
+       "ieri",
+       "sempre",
+       "lentamente",
+       "tavolo"
+      ],
+      "giusta": 3,
+      "spiegazione": "«tavolo» è un nome, le altre sono avverbi."
+     },
+     {
+      "testo": "e · ma · però · con",
+      "opzioni": [
+       "e",
+       "ma",
+       "però",
+       "con"
+      ],
+      "giusta": 3,
+      "spiegazione": "«con» è una preposizione, le altre sono congiunzioni."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-3",
+   "pagina": 11,
+   "titolo": "Nella colonna giusta",
+   "consegna": "Trascina ogni parola nel gruppo giusto.",
+   "tipo": "gruppi",
+   "dati": {
+    "gruppi": [
+     {
+      "nome": "nome",
+      "elementi": [
+       "scuola",
+       "Etna",
+       "amica"
+      ]
+     },
+     {
+      "nome": "verbo",
+      "elementi": [
+       "scrivere",
+       "ride",
+       "gioca"
+      ]
+     },
+     {
+      "nome": "aggettivo",
+      "elementi": [
+       "simpatico",
+       "bianco",
+       "rotondo"
+      ]
+     },
+     {
+      "nome": "avverbio",
+      "elementi": [
+       "lì",
+       "domani",
+       "sempre"
+      ]
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-4",
+   "pagina": 11,
+   "titolo": "Variabile o invariabile?",
+   "consegna": "Trascina ogni parola nel gruppo giusto.",
+   "tipo": "gruppi",
+   "dati": {
+    "gruppi": [
+     {
+      "nome": "variabile",
+      "elementi": [
+       "ragazzo",
+       "verde",
+       "noi",
+       "corriamo"
+      ]
+     },
+     {
+      "nome": "invariabile",
+      "elementi": [
+       "sotto",
+       "evviva",
+       "perché",
+       "volentieri"
+      ]
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-5",
+   "pagina": 11,
+   "titolo": "Volgi al plurale",
+   "consegna": "Scrivi le parole al plurale.",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "[Le] [compagne] [simpatiche] [arrivano] sempre presto.",
+      "spiegazione": "«sempre» e «presto» sono avverbi: non cambiano."
+     },
+     {
+      "testo": "[I] [libri] [nuovi] [sono] sopra [gli] [zaini].",
+      "spiegazione": "«sopra» è una preposizione: non cambia."
+     },
+     {
+      "testo": "[Gli] [studenti] [curiosi] [alzano] [le] [mani].",
+      "spiegazione": "«mano» al plurale fa «mani» (femminile)."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-6",
+   "pagina": 11,
+   "titolo": "Vero o falso",
+   "consegna": "Decidi se ogni frase è vera o falsa.",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "L'avverbio cambia al plurale.",
+      "vero": false,
+      "spiegazione": "L'avverbio è invariabile."
+     },
+     {
+      "testo": "Il pronome prende il posto di un nome.",
+      "vero": true
+     },
+     {
+      "testo": "«Città» è invariabile, quindi non è un nome.",
+      "vero": false,
+      "spiegazione": "«Città» è un nome (famiglia variabile), anche se ha la stessa forma al singolare e al plurale."
+     },
+     {
+      "testo": "Il verbo cambia per persona, numero, tempo e modo.",
+      "vero": true
+     },
+     {
+      "testo": "In «Vlad la saluta», «la» è un articolo.",
+      "vero": false,
+      "spiegazione": "Qui «la» prende il posto di un nome (la cagnolina): è un pronome."
+     },
+     {
+      "testo": "Le interiezioni esprimono emozioni.",
+      "vero": true
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-7",
+   "pagina": 11,
+   "titolo": "Scrivi tu",
+   "consegna": "Scrivi una frase sulla tua scuola con articolo, nome, aggettivo, verbo e avverbio.",
+   "tipo": "aperta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "La tua frase:",
+      "esempio": "La (articolo) palestra (nome) nuova (aggettivo) apre (verbo) domani (avverbio)."
+     }
+    ]
+   },
+   "livello": 3,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-8",
+   "pagina": 13,
+   "titolo": "Colora le parole",
+   "consegna": "Scegli il colore e tocca articoli, nomi, aggettivi e verbi.",
+   "tipo": "tocca",
+   "dati": {
+    "categorie": [
+     {
+      "nome": "articolo",
+      "colore": "#6a1b9a"
+     },
+     {
+      "nome": "nome",
+      "colore": "#1565c0"
+     },
+     {
+      "nome": "aggettivo",
+      "colore": "#ef6c00"
+     },
+     {
+      "nome": "verbo",
+      "colore": "#c62828"
+     }
+    ],
+    "frasi": [
+     {
+      "testo": "Il vulcano sputa una lava rossa.",
+      "segni": {
+       "0": "articolo",
+       "1": "nome",
+       "2": "verbo",
+       "3": "articolo",
+       "4": "nome",
+       "5": "aggettivo"
+      },
+      "spiegazione": ""
+     },
+     {
+      "testo": "La prof gentile corregge le verifiche.",
+      "segni": {
+       "0": "articolo",
+       "1": "nome",
+       "2": "aggettivo",
+       "3": "verbo",
+       "4": "articolo",
+       "5": "nome"
+      },
+      "spiegazione": ""
+     },
+     {
+      "testo": "Un gabbiano curioso ruba la focaccia.",
+      "segni": {
+       "0": "articolo",
+       "1": "nome",
+       "2": "aggettivo",
+       "3": "verbo",
+       "4": "articolo",
+       "5": "nome"
+      },
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-9",
+   "pagina": 13,
+   "titolo": "Completa l'analisi",
+   "consegna": "«Ieri noi abbiamo visto un delfino nel mare»: scrivi la parte del discorso.",
+   "tipo": "completa",
+   "dati": {
+    "banca": true,
+    "frasi": [
+     {
+      "testo": "Ieri → [avverbio]"
+     },
+     {
+      "testo": "noi → [pronome]"
+     },
+     {
+      "testo": "abbiamo visto → [verbo]"
+     },
+     {
+      "testo": "un → [articolo]"
+     },
+     {
+      "testo": "delfino → [nome]"
+     },
+     {
+      "testo": "nel → [preposizione]",
+      "spiegazione": "«nel» = in + il: preposizione articolata."
+     },
+     {
+      "testo": "mare → [nome]"
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-10",
+   "pagina": 13,
+   "titolo": "L'errore di Luce",
+   "consegna": "Luce ha analizzato «Vlad scrive bene». Ogni riga è giusta (vero) o sbagliata (falso)?",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Vlad: nome proprio di persona, maschile singolare.",
+      "vero": true
+     },
+     {
+      "testo": "scrive: aggettivo, femminile singolare.",
+      "vero": false,
+      "spiegazione": "«scrive» è un verbo: indicativo presente, 3ª persona singolare."
+     },
+     {
+      "testo": "bene: avverbio di modo.",
+      "vero": true
+     },
+     {
+      "testo": "Vlad: articolo determinativo.",
+      "vero": false,
+      "spiegazione": "Vlad è un nome proprio."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-11",
+   "pagina": 13,
+   "titolo": "Stessa parola, lavoro diverso",
+   "consegna": "Che parte del discorso è la parola tra asterischi?",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Luce cammina *piano* per non svegliare il gatto.",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 5,
+      "spiegazione": "Vuol dire «lentamente»: dice come cammina."
+     },
+     {
+      "testo": "Al secondo *piano* c'è la palestra.",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Il *dovere* viene prima del gioco.",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 1,
+      "spiegazione": "Ha l'articolo davanti: è un verbo usato come nome."
+     },
+     {
+      "testo": "Oggi dobbiamo *studiare* molto.",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 4,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Vlad *la* chiama e Luce corre.",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 3,
+      "spiegazione": "«la» sta al posto di «Luce»."
+     }
+    ]
+   },
+   "livello": 3,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-12",
+   "pagina": 13,
+   "titolo": "Rimetti in ordine",
+   "consegna": "Trascina le parole per formare la frase.",
+   "tipo": "ordina",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "Vlad mangia una granita alla mandorla."
+     },
+     {
+      "testo": "Luce insegue sempre i gabbiani."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-13",
+   "pagina": 13,
+   "titolo": "Le parti invariabili",
+   "consegna": "Trascina ogni parola nel gruppo giusto.",
+   "tipo": "gruppi",
+   "dati": {
+    "gruppi": [
+     {
+      "nome": "avverbio",
+      "elementi": [
+       "qui",
+       "presto",
+       "volentieri"
+      ]
+     },
+     {
+      "nome": "preposizione",
+      "elementi": [
+       "tra",
+       "per",
+       "su"
+      ]
+     },
+     {
+      "nome": "congiunzione",
+      "elementi": [
+       "ma",
+       "perché",
+       "oppure"
+      ]
+     },
+     {
+      "nome": "interiezione",
+      "elementi": [
+       "ahi",
+       "evviva",
+       "uffa"
+      ]
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 1
+  },
+  {
+   "codice": "CFC-14",
+   "pagina": 14,
+   "titolo": "Luce e il gabbiano: hai capito?",
+   "consegna": "Vero o falso?",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "La storia si svolge a Catania.",
+      "vero": false,
+      "spiegazione": "Si svolge a Giardini Naxos."
+     },
+     {
+      "testo": "Luce abbaia alle onde.",
+      "vero": true
+     },
+     {
+      "testo": "Il gabbiano ruba la focaccia.",
+      "vero": true
+     },
+     {
+      "testo": "Alla fine Vlad è arrabbiato.",
+      "vero": false,
+      "spiegazione": "Ha perso la merenda, ma ha passato un bel pomeriggio."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-15",
+   "pagina": 14,
+   "titolo": "Nomi e aggettivi nel racconto",
+   "consegna": "Segna i nomi e gli aggettivi.",
+   "tipo": "tocca",
+   "dati": {
+    "categorie": [
+     {
+      "nome": "nome",
+      "colore": "#1565c0"
+     },
+     {
+      "nome": "aggettivo",
+      "colore": "#ef6c00"
+     }
+    ],
+    "frasi": [
+     {
+      "testo": "Domenica pomeriggio io e Luce siamo andati alla spiaggia di Giardini Naxos.",
+      "segni": {
+       "0": "nome",
+       "1": "nome",
+       "4": "nome",
+       "8": "nome",
+       "10": "nome",
+       "11": "nome"
+      },
+      "spiegazione": "«Giardini Naxos» è un nome proprio di luogo fatto di due parole."
+     },
+     {
+      "testo": "All'improvviso un gabbiano grande e grigio si è posato vicino al nostro asciugamano.",
+      "segni": {
+       "2": "nome",
+       "3": "aggettivo",
+       "5": "aggettivo",
+       "11": "aggettivo",
+       "12": "nome"
+      },
+      "spiegazione": "«nostro» è un aggettivo possessivo."
+     },
+     {
+      "testo": "Il gabbiano ha preso la focaccia con il becco ed è volato via velocemente.",
+      "segni": {
+       "1": "nome",
+       "5": "nome",
+       "8": "nome"
+      },
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-17",
+   "pagina": 16,
+   "titolo": "Verifica: che parte del discorso è?",
+   "consegna": "Scegli la parte del discorso.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "montagna",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "noi",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 3,
+      "spiegazione": ""
+     },
+     {
+      "testo": "tra",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 6,
+      "spiegazione": ""
+     },
+     {
+      "testo": "simpatico",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 2,
+      "spiegazione": ""
+     },
+     {
+      "testo": "ahi",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 8,
+      "spiegazione": ""
+     },
+     {
+      "testo": "scrivono",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 4,
+      "spiegazione": ""
+     },
+     {
+      "testo": "oggi",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 5,
+      "spiegazione": ""
+     },
+     {
+      "testo": "ma",
+      "opzioni": [
+       "articolo",
+       "nome",
+       "aggettivo",
+       "pronome",
+       "verbo",
+       "avverbio",
+       "preposizione",
+       "congiunzione",
+       "interiezione"
+      ],
+      "giusta": 7,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  }
+ ]
+}

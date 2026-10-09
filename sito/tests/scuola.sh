@@ -217,6 +217,14 @@ if [ -z "${SENZA_BROWSER:-}" ]; then
   chk "lavagna: diventato un contenuto video del libro" "$(sql "SELECT COUNT(*) FROM contenuti WHERE tipo = 'video' AND libro_id = $LID")" 1
 fi
 
+# importa gli esercizi del capitolo 1 di «Chi fa cosa?» (stessi codici del PDF)
+Tk=$(tok "admin/esercizi.php")
+post admin/esercizi.php -F csrf=$Tk -F azione=importa -F libro_id=$LID -F "file=@$REPO/scuola/chi-fa-cosa/capitolo-01/esercizi.json" >/dev/null
+chk "importa: il codice di un audio non si sovrascrive" "$(curl -s -b "$J" "$B/admin/esercizi.php" | conta 'Saltati (codice o dati non validi): CFC-2')" 1
+chk "importa: esercizi del capitolo caricati" "$(sql "SELECT COUNT(*) FROM esercizi WHERE codice IN ('CFC-1','CFC-8','CFC-15','CFC-17') AND libro_id = $LID")" 4
+chk "importa: punti come nel PDF (CFC-8: 18)" "$(php -r 'require "inc/scuola.php"; echo punti_esercizio(db()->query("SELECT * FROM esercizi WHERE codice = \"CFC-8\"")->fetch());')" 18
+chk "esporta: JSON" "$(curl -s -b "$J" "$B/admin/esercizi.php?esporta=$LID" | conta '"codice": "CFC-15"')" 1
+
 # lo studente cancella il suo profilo; il prof elimina il suo account
 Tk=$(tokj "$JS" studente.php)
 postj "$JS" "studente.php?a=cancella" -d "csrf=$Tk" >/dev/null
