@@ -32,4 +32,4 @@ l'estensione del formato restituito dal modello (normalmente PNG).
 Test senza API né spese: `python3 -m unittest discover -s scripts/tests`.
 
 ## Proxy
-Tutti gli script deAPI del repository usano la variabile `DEAPI_URL` se c'è (es. `DEAPI_URL=https://vladproxy.v7755837.deno.net python3 scripts/deapi.py …`); senza, chiamano `https://api.deapi.ai`.
+Tutti gli script deAPI del repository passano dal proxy se c'è la variabile `DEAPI_PROXY` (es. `DEAPI_PROXY=https://vladik-proxy.v7755837.deno.net python3 scripts/deapi.py …`): chiamate e download dei risultati vanno al proxy con l'intestazione `vladik-proxy` che indica la destinazione vera (`https://api.deapi.ai`, `https://results.deapi.ai`). Codice comune: `scripts/proxy_deapi.py`. Senza la variabile chiamano deAPI direttamente.

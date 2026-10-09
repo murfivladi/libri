@@ -210,27 +210,44 @@ const VOCI_TTS = [
     'if_sara' => 'Sara (donna, italiano)', 'im_nicola' => 'Nicola (uomo, italiano)',
 ];
 function deapi_chiave(): string { return trim(impost('deapi_chiave')); }
-// Indirizzo di deAPI: quello ufficiale oppure un proxy (es. https://vladproxy.v7755837.deno.net) che inoltra a api.deapi.ai.
+// Proxy (facoltativo): tutte le chiamate a deAPI, anche il download dei risultati da results.deapi.ai, passano da
+// un proxy (es. https://vladik-proxy.v7755837.deno.net). Il proxy riceve l'indirizzo vero nell'intestazione «vladik-proxy».
 const DEAPI_UFFICIALE = 'https://api.deapi.ai';
-function deapi_base(): string {
+function deapi_proxy(): string {
     $u = rtrim(trim(impost('deapi_indirizzo')), '/');
-    return preg_match('#^https://[a-z0-9.-]+(:\d+)?(/[\w./-]*)?$#i', $u) ? $u : DEAPI_UFFICIALE;
+    return preg_match('#^https://[a-z0-9.-]+(:\d+)?(/[\w./-]*)?$#i', $u) && $u !== DEAPI_UFFICIALE ? $u : '';
+}
+function deapi_base(): string { return deapi_proxy() ?: DEAPI_UFFICIALE; }
+// [indirizzo da chiamare, intestazioni in più] per un indirizzo di deAPI
+function deapi_via_proxy(string $url): array {
+    $p = deapi_proxy();
+    if ($p === '') return [$url, []];
+    $x = parse_url($url);
+    return [$p . ($x['path'] ?? '/') . (isset($x['query']) ? '?' . $x['query'] : ''), ['vladik-proxy: ' . $x['scheme'] . '://' . $x['host'] . (isset($x['port']) ? ':' . $x['port'] : '')]];
+}
+// Scarica un risultato di deAPI (immagine, audio, video), passando dal proxy se c'è.
+function deapi_scarica(string $url, int $max): string {
+    if (!preg_match('#^https://[a-z0-9.-]+\.deapi\.ai/#i', $url)) throw new RuntimeException('Indirizzo del risultato non valido.');
+    [$u, $h] = deapi_via_proxy($url);
+    return scarica_url($u, $max, $h);
 }
 
 function deapi_richiesta(string $metodo, string $percorso, ?array $campi = null, int $timeout = 60): array {
     if (!function_exists('curl_init')) throw new RuntimeException('Serve l\'estensione curl di PHP per usare deAPI.');
-    $ch = curl_init(deapi_base() . '/api/v2' . $percorso);
-    $h = ['Accept: application/json'];
+    [$url, $h] = deapi_via_proxy(DEAPI_UFFICIALE . '/api/v2' . $percorso);
+    $ch = curl_init($url);
+    $h[] = 'Accept: application/json';
     if (deapi_chiave() !== '') $h[] = 'Authorization: Bearer ' . deapi_chiave();
     curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => $timeout, CURLOPT_CONNECTTIMEOUT => 10, CURLOPT_HTTPHEADER => $h, CURLOPT_USERAGENT => 'VladEditore-Scuola/1.0']);
     if ($metodo === 'POST') { curl_setopt($ch, CURLOPT_POST, true); curl_setopt($ch, CURLOPT_POSTFIELDS, $campi ?? []); }
     $r = curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE); $err = curl_error($ch); curl_close($ch);
-    $proxy = deapi_base() !== DEAPI_UFFICIALE ? ' (tramite il proxy ' . deapi_base() . ')' : '';
+    $proxy = deapi_proxy() !== '' ? ' (tramite il proxy ' . deapi_proxy() . ')' : '';
     if ($r === false) throw new RuntimeException('deAPI non risponde' . $proxy . ': ' . $err);
-    if ($code === 401 || $code === 403) throw new RuntimeException('deAPI rifiuta la chiave: controlla Admin → Scuola → Impostazioni.');
-    if ($code === 429) throw new RuntimeException('deAPI: troppe richieste, riprova tra un minuto.');
     $j = json_decode((string)$r, true);
     if (!is_array($j) && $proxy) throw new RuntimeException("Il proxy non risponde come deAPI (HTTP $code)$proxy: controlla l'indirizzo in Admin → Scuola.");
+    if (is_array($j) && isset($j['error']) && !isset($j['data']) && $proxy) throw new RuntimeException('Il proxy dice: ' . mb_substr((string)$j['error'], 0, 200));
+    if ($code === 401 || $code === 403) throw new RuntimeException('deAPI rifiuta la chiave: controlla Admin → Scuola → deAPI.');
+    if ($code === 429) throw new RuntimeException('deAPI: troppe richieste, riprova tra un minuto.');
     if ($code >= 400 || !is_array($j) || !is_array($j['data'] ?? null)) throw new RuntimeException("deAPI ha risposto con un errore (HTTP $code)$proxy.");
     return $j['data'];
 }
@@ -251,7 +268,7 @@ function deapi_voce(string $testo, string $voce): string {
         if ($stato === 'done') {
             $url = (string)($j['result_url'] ?? '');
             if (!preg_match('#^https://#', $url)) throw new RuntimeException('deAPI non ha restituito il file.');
-            return scarica_url($url, 50 * 1024 * 1024);
+            return deapi_scarica($url, 50 * 1024 * 1024);
         }
         if (in_array($stato, ['error', 'failed', 'cancelled', 'canceled'], true)) throw new RuntimeException('deAPI: generazione non riuscita.');
         sleep(2);

@@ -57,3 +57,15 @@ class DeapiTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ProxyTests(unittest.TestCase):
+    def test_senza_proxy(self):
+        with patch.dict("os.environ", {"DEAPI_PROXY": ""}):
+            self.assertEqual(deapi.via_proxy("https://api.deapi.ai/api/v2/jobs/1", {"A": "b"}), ("https://api.deapi.ai/api/v2/jobs/1", {"A": "b"}))
+
+    def test_con_proxy(self):
+        with patch.dict("os.environ", {"DEAPI_PROXY": "https://vladik-proxy.v7755837.deno.net/"}):
+            url, h = deapi.via_proxy("https://results.deapi.ai/123/file.mp3?X-Amz-Signature=abc")
+            self.assertEqual(url, "https://vladik-proxy.v7755837.deno.net/123/file.mp3?X-Amz-Signature=abc")
+            self.assertEqual(h, {"vladik-proxy": "https://results.deapi.ai"})

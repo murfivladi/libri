@@ -43,8 +43,9 @@ function ai_avvia(string $tipo, string $percorso, array $campi, array $par, int 
     if ($id === '') throw new RuntimeException('deAPI non ha accettato la richiesta.');
     db()->prepare('INSERT INTO lavori_ai (tipo, request_id, parametri, contenuto_id, aggiornato) VALUES (?,?,?,?,?)')
         ->execute([$tipo, $id, json_encode($par, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), $contenuto, date('Y-m-d H:i:s')]);
+    $nuovo = (int)db()->lastInsertId();             // prima di registra(), che scrive un'altra riga (nel registro attività)
     registra('Lavoro AI avviato', $tipo);
-    return (int)db()->lastInsertId();
+    return $nuovo;
 }
 
 // ---------- richieste ----------
@@ -130,7 +131,7 @@ function ai_controlla(array $r): string {
     try {
         $url = (string)($j['result_url'] ?? '');
         if (!preg_match('#^https://#', $url)) throw new RuntimeException('deAPI non ha restituito il file.');
-        $tmp = scarica_url($url, 400 * 1024 * 1024);
+        $tmp = deapi_scarica($url, 400 * 1024 * 1024);
         $suggerito = ['immagine' => 'image/png', 'scontorno' => 'image/png', 'voce' => 'audio/mpeg', 'musica' => 'audio/mpeg', 'animazione' => 'video/mp4', 'parla' => 'video/mp4'][$r['tipo']];
         $file = salva_media_da_percorso($tmp, false, $suggerito);
         db()->prepare("UPDATE lavori_ai SET stato = 'fatto', risultato = ?, aggiornato = ? WHERE id = ?")->execute([$file, date('Y-m-d H:i:s'), $r['id']]);

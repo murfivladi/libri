@@ -13,7 +13,9 @@ from urllib.parse import quote, urlparse
 import requests
 import yaml
 
-API = os.environ.get("DEAPI_URL", "https://api.deapi.ai").rstrip("/") + "/api/v2"   # DEAPI_URL = proxy (es. https://vladproxy.v7755837.deno.net)
+API = "https://api.deapi.ai/api/v2"
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from proxy_deapi import via_proxy   # noqa: E402  (proxy di Vlad, variabile DEAPI_PROXY)
 CONFIG = Path(__file__).resolve().parents[1] / "config.yaml"
 
 
@@ -45,12 +47,9 @@ def load_key(path):
 
 def api_call(key, path, payload=None, timeout=60):
     # Non ritentare POST automaticamente: potrebbe creare un secondo job a pagamento.
-    response = requests.request(
-        "POST" if payload is not None else "GET", API + path,
-        json=payload, timeout=timeout,
-        headers={"Authorization": f"Bearer {key}", "Accept": "application/json",
-                 "User-Agent": "VladEditore-deAPI/1.0"},
-    )
+    url, headers = via_proxy(API + path, {"Authorization": f"Bearer {key}", "Accept": "application/json",
+                                          "User-Agent": "VladEditore-deAPI/1.0"})
+    response = requests.request("POST" if payload is not None else "GET", url, json=payload, timeout=timeout, headers=headers)
     if not response.ok:
         # Non stampare corpi/header: potrebbero contenere dati sensibili.
         raise RuntimeError(f"deAPI HTTP {response.status_code}: controlla chiave, credito e parametri del modello")
@@ -84,7 +83,8 @@ def download(url, output, force=False):
     temporary = None
     try:
         # Il CDN non deve ricevere la chiave API. Salva prima in un file temporaneo.
-        with requests.get(url, stream=True, timeout=120) as response:
+        indirizzo, h = via_proxy(url)          # senza chiave: il CDN non deve riceverla
+        with requests.get(indirizzo, stream=True, timeout=120, **({"headers": h} if h else {})) as response:
             if not response.ok:
                 raise RuntimeError(f"Download HTTP {response.status_code}")
             if not response.headers.get("Content-Type", "").lower().startswith("image/"):
