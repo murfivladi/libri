@@ -125,9 +125,14 @@ function salva_file(string $campo, string $cartella, array $tipi_ok, int $max): 
 // Un file è "usato" se un libro, una collana o l'aspetto del sito lo richiama (anche con un altro formato di indirizzo).
 function file_usato(string $cartella, string $valore): bool {
     $nome = nome_file($valore);
-    $campi = ['cover' => [['libri', 'copertina'], ['collane', 'banner']], 'pdf' => [['libri', 'pdf'], ['libri', 'pdf_ru']]][$cartella] ?? [];
+    $campi = ['cover' => [['libri', 'copertina'], ['collane', 'banner']], 'pdf' => [['libri', 'pdf'], ['libri', 'pdf_ru']], 'media' => [['contenuti', 'file'], ['lavagne', 'video'], ['lavori_ai', 'risultato']]][$cartella] ?? [];
     foreach ($campi as [$t, $c]) {
         $st = db()->prepare("SELECT COUNT(*) FROM $t WHERE $c = ? OR $c = ? OR $c LIKE ?"); $st->execute([$valore, $nome, '%/' . $nome]);
+        if ($st->fetchColumn() > 0) return true;
+    }
+    if ($cartella === 'media') {          // voci di riferimento, prove e pose della lavagna stanno nelle impostazioni
+        $st = db()->prepare("SELECT COUNT(*) FROM impostazioni WHERE chiave IN ('personaggi_extra','voce_vlad_ref','voce_luce_prova','voce_vlad_prova') AND valore LIKE ?");
+        $st->execute(['%' . $nome . '%']);
         if ($st->fetchColumn() > 0) return true;
     }
     if ($cartella === 'cover') {

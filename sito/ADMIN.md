@@ -120,3 +120,53 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
 67. Contatore di letture. **I PDF non si possono scaricare**: si leggono solo online (nessun pulsante, `scarica.php` risponde 410, accesso diretto al file bloccato)
 68. Pagine statiche modificabili e menu dinamico
 69. `sitemap.php` e `feed.php` (RSS)
+
+## Scuola (Vlad Editore Scuola)
+- **Admin → Scuola**: libri scolastici con il numero di esercizi, contenuti e zone; chiave deAPI (non esce nei backup).
+- **Sezione del libro**: nella scheda del libro, «🎒 Scuola» lo toglie dal catalogo dei romanzi e lo mette in `scuola.php`.
+- **Esercizi** (editor visivo, con anteprima accanto): crocette, vero/falso, completa (con banca di parole), tocca le parole (soggetto, predicato, complementi… con i colori di scuola), riordina la frase, trascina nei gruppi, risposta libera. Codice automatico (es. `CFC-12`), pagina, livello, «solo online», duplica, QR da scaricare.
+- **Audio, video e immagini**: carica un file, registra dal microfono (anche dal telefono) oppure fai leggere un testo alla voce AI di deAPI.
+- **Zone**: sulle pagine del PDF i codici stampati vengono riconosciuti da soli (riquadri blu tratteggiati); si possono disegnare zone in più trascinando sulla pagina.
+
+## Lavagna e video (admin e prof)
+Editor a tutto schermo (`assets/lavagna.js`), tela Full HD 1920×1080. Funzioni:
+1. Seleziona e sposta (anche più oggetti, con Maiusc o trascinando un riquadro)
+2. Ridimensiona dagli angoli
+3. Ruota (con scatti di 15°)
+4. Penna, con spessore che segue la pressione della penna del tablet
+5. Evidenziatore trasparente
+6. Gomma per i tratti
+7. Puntatore laser rosso che sparisce da solo (si vede nel video)
+8. Testo (doppio clic per scrivere), 4 caratteri, grandezza, grassetto, allineamento
+9. Testo con sfondo colorato e sottolineatura colorata (come a scuola)
+10. Etichetta grammaticale: parola in un riquadro colorato con il nome (soggetto, predicato, complementi…)
+11. Frase smontabile: ogni parola diventa un pezzo che si sposta da solo
+12. Freccia, freccia curva (con punto di controllo), freccia doppia, linea, con estremi trascinabili
+13. Rettangolo, cerchio/ellisse, nuvoletta, stella, con riempimento e tratteggio
+14. Personaggi Vlad e Luce (5 pose, sfondo trasparente) e immagini dal computer, specchiabili
+15. Sfondi: lavagna verde/nera, blu, bianco, quadretti, righe, carta, colore, immagine
+16. Griglia con calamita e guide al centro (non finiscono nel video)
+17. Colori (tavolozza + qualsiasi colore), trasparenza, spessore
+18. Duplica, porta davanti/dietro, centra, raddrizza, allinea in fila/colonna, elimina
+19. Annulla/ripeti (150 passi), scorciatoie da tastiera, frecce per spostare
+20. **Passi**: ogni passo è una «foto» della lavagna; nel video gli oggetti nuovi compaiono e quelli spostati scivolano da soli
+21. Durata dei passi, oggetti «uno dopo l'altro», movimento morbido / costante / con rimbalzo / a scatto
+22. 10 effetti di entrata (si scrive/si disegna, dissolvenza, zoom, dai lati, girando, subito) con durata
+23. «Nascondi da qui»: l'oggetto esce dal video in dissolvenza
+24. Miniature dei passi e barra del tempo per scorrere l'animazione
+25. Riproduci con musica di sottofondo (audio del sito o caricato) e volume
+26. **Crea il video** dei passi, anche parlando sopra con il microfono
+27. **Dal vivo**: registra tutto quello che fai sulla lavagna, con la voce, conto alla rovescia 3-2-1
+28. Video in MP4 (Chrome/Edge recenti, Safari) o WebM; scarica il file
+29. Salva sul sito: admin → video del libro con il suo codice (QR, lettore); prof → video per una classe
+30. Salvataggio sul server, salvataggio automatico ogni minuto e bozza nel browser se si chiude per sbaglio
+31. Funziona con mouse, dita e penna; schermo intero
+
+## Studio AI (deAPI)
+Ogni richiesta diventa un «lavoro» in coda: la pagina controlla da sola ogni 6 secondi e scarica il risultato in `uploads/media` quando è pronto (anche video e voci che richiedono qualche minuto).
+- **Immagini con Vlad e Luce**: FLUX.2 con le schede a 360° come riferimento; formato lavagna, pagina, quadrato o verticale; finiscono in galleria, come immagine del libro (con codice) o come **posa nuova della lavagna** (sfondo tolto in automatico con Ben2).
+- **Voci**: Luce ha una voce «disegnata» da una descrizione (Qwen3 VoiceDesign); Vlad ha una **copia della sua voce** da una registrazione di 5–15 secondi (Qwen3, solo con il consenso suo e dei genitori). Le due voci compaiono in «Audio e video → Voce AI» insieme alle voci pronte.
+- **Musica**: strumentale da una descrizione (ACE-Step), 10–300 secondi; va in «Audio e video» e nella lista musiche della lavagna.
+- **Animazioni**: un'immagine prende vita (LTX-2.5, 2–10 secondi).
+- **Fai parlare Vlad o Luce**: immagine + audio corto (max 10 s) → il personaggio parla a tempo con la voce.
+- **Tutti i lavori**: stato, errori (es. limite di richieste, credito), anteprime, elimina.

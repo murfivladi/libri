@@ -10,6 +10,7 @@ $pag = max(1, (int)($_GET['p'] ?? 1));
 
 $dove = [sql_visibile('l')]; $par = [];
 $dove[] = '(l.collana_id = 0 OR c.visibile = 1)';
+$dove[] = "l.sezione != 'scuola'";                     // i libri scolastici stanno in scuola.php
 if ($q !== '') { $dove[] = '(l.titolo LIKE :q OR l.sottotitolo LIKE :q OR l.autore LIKE :q OR l.tags LIKE :q OR l.genere LIKE :q OR l.trama LIKE :q OR l.titolo_ru LIKE :q OR l.sottotitolo_ru LIKE :q OR l.trama_ru LIKE :q)'; $par[':q'] = "%$q%"; }
 if ($sc !== '') { $dove[] = 'c.slug = :sc'; $par[':sc'] = $sc; }
 if ($tag !== '') { $dove[] = sql_concat("','", 'l.tags', "','") . ' LIKE :tag'; $par[':tag'] = "%,$tag,%"; }
@@ -25,7 +26,7 @@ $libri = $st->fetchAll();
 
 $evidenza = [];
 if (!$filtrato && $pag === 1 && impost('mostra_evidenza') === '1')
-    $evidenza = db()->query('SELECT l.*, c.nome AS nome_collana, c.nome_ru AS nome_collana_ru FROM libri l LEFT JOIN collane c ON c.id = l.collana_id WHERE l.evidenza = 1 AND ' . sql_visibile('l') . ' ORDER BY l.ordine, l.numero LIMIT 6')->fetchAll();
+    $evidenza = db()->query('SELECT l.*, c.nome AS nome_collana, c.nome_ru AS nome_collana_ru FROM libri l LEFT JOIN collane c ON c.id = l.collana_id WHERE l.evidenza = 1 AND l.sezione != \'scuola\' AND ' . sql_visibile('l') . ' ORDER BY l.ordine, l.numero LIMIT 6')->fetchAll();
 $collane = db()->query('SELECT c.slug, c.nome, c.nome_ru FROM collane c WHERE c.visibile = 1 AND EXISTS (SELECT 1 FROM libri l WHERE l.collana_id = c.id AND ' . sql_visibile('l') . ') ORDER BY c.ordine, c.nome')->fetchAll();
 
 function url_catalogo(array $cambia): string {

@@ -47,6 +47,17 @@ Senza `data/config.php` il sito usa SQLite (un solo sito, tutto in locale: va be
 - I lettori vivono nel database condiviso (stessi account sui due siti), ma l'accesso è **per sito**: chi entra su un sito deve entrare anche sull'altro. I link nelle email puntano sempre all'indirizzo ufficiale.
 - La password SMTP sta nel database (serve per spedire) ed è esclusa dal backup JSON di MySQL; la copia del file SQLite la contiene: tienila privata.
 
+## Vlad Editore Scuola
+- I libri con **Sezione: Scuola** stanno in `scuola.php` (non nel catalogo dei romanzi). La sezione scolastica è solo in italiano.
+- Ogni esercizio o contenuto (audio, video, immagine) ha un **codice breve** (es. `CFC-12`, dalle iniziali del titolo). Nel PDF il codice va stampato accanto al simbolo, insieme al QR code che porta a `apri.php?c=CFC-12`.
+- Nel lettore (`leggi.php`) `assets/scuola-lettore.js` cerca i codici nel testo di ogni pagina e li rende cliccabili; le zone disegnate a mano (tabella `zone`) si aggiungono. Un clic apre `apri.php?embed=1` in una finestra sopra il libro.
+- Esercizi: motore unico `assets/esercizi.js` (studenti, anteprima dell'admin). Correzione subito, spiegazioni, «7 su 8», miglior risultato salvato sul dispositivo.
+- File audio/video/immagini in `uploads/media/` (sul sito principale; il deploy non la tocca). Voce AI: deAPI (chiave in Admin → Scuola).
+- **Classi**: i prof si registrano con il codice segreto (Admin → Scuola) in `prof.php`; gli studenti entrano in `studente.php` con codice classe + nickname + PIN, senza email né dati personali (cookie tecnico `studente` per restare entrati). I risultati arrivano con `api-scuola.php` (il punteggio massimo lo calcola il server).
+- **Lavagna** (`assets/lavagna.js`, `lavagna-api.php`): editor video per admin e prof, vedi `ADMIN.md`. Il video si registra nel browser (MediaRecorder: MP4 dove il browser lo supporta, altrimenti WebM).
+- **Privacy**: se apri le classi aggiorna il testo della pagina Privacy (dati dei prof: nome ed email; studenti: nickname e risultati; cookie `studente`).
+- Test: `bash sito/tests/scuola.sh` (con Playwright prova anche lettore, finestra, trascinamento ed editor; `SENZA_BROWSER=1` per saltarli; serve `python3-reportlab` per il PDF di prova).
+
 ## Italiano e russo
 - Tutto il sito pubblico è bilingue: **menu, pagine, lettore, account, errori, email e privacy**. La lingua si sceglie con l'interruttore **IT | RU** in alto (`?lang=ru`), si ricorda in un cookie (`lingua`, un anno) e, alla prima visita, segue la lingua del browser. Le pagine hanno `hreflang` e indirizzo canonico per lingua.
 - Testi dell'interfaccia: `t('testo italiano')` in `inc/lingua.php`; le traduzioni russe stanno in `inc/ru.php` (la chiave è il testo italiano). `php sito/tests/chiavi_ru.php` (e `unit.php`) controllano che non ne manchi nessuna.

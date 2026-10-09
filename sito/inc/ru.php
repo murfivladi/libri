@@ -4,7 +4,7 @@ return [
     // —— titoli di pagina e comuni
     'Registrati' => 'Регистрация', 'Accedi' => 'Войти', 'Password dimenticata' => 'Забыли пароль', 'Nuova password' => 'Новый пароль',
     'Informativa aggiornata' => 'Политика обновлена', 'La mia libreria' => 'Моя библиотека', 'registrati' => 'зарегистрируйтесь',
-    'Catalogo' => 'Каталог', 'Collane' => 'Серии', 'Privacy' => 'Конфиденциальность', 'Novità' => 'Новинки', 'Ricerca' => 'Поиск',
+    'Catalogo' => 'Каталог', 'Scuola' => 'Школа', 'Collane' => 'Серии', 'Privacy' => 'Конфиденциальность', 'Novità' => 'Новинки', 'Ricerca' => 'Поиск',
     'Non trovato' => 'Не найдено', 'Pagina non trovata' => 'Страница не найдена', 'Torna al catalogo' => 'Вернуться в каталог',
     'Vai al catalogo' => 'Перейти в каталог', 'Richiesta non valida (CSRF).' => 'Недопустимый запрос (CSRF).',
     'Solo lettura online' => 'Только чтение онлайн', 'I libri si leggono online' => 'Книги читаются онлайн',

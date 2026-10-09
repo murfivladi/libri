@@ -4,5 +4,7 @@ data/config.php.tmp*
 uploads/pdf/*
 uploads/cover/*
 uploads/thumb/*
+uploads/media/*
 !uploads/pdf/.gitkeep
 !uploads/cover/.gitkeep
+!uploads/media/.gitkeep

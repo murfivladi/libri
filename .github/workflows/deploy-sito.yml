@@ -59,6 +59,10 @@ jobs:
         run: E2E_DB=mysql bash sito/tests/e2e.sh
       - name: Test con due siti che condividono il database
         run: bash sito/tests/duesiti.sh
+      - name: Test della sezione Scuola
+        run: |
+          sudo apt-get install -y -q python3-reportlab
+          SENZA_BROWSER=1 bash sito/tests/scuola.sh
 
       - name: Carica sul sito principale (vladinc.ru/libri)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -81,6 +85,7 @@ jobs:
             uploads/pdf/**
             uploads/cover/**
             uploads/thumb/**
+            uploads/media/**
             tests/**
             README.md
             ADMIN.md
@@ -105,6 +110,7 @@ jobs:
             uploads/pdf/**
             uploads/cover/**
             uploads/thumb/**
+            uploads/media/**
             tests/**
             README.md
             ADMIN.md

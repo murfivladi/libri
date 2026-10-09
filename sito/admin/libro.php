@@ -5,7 +5,7 @@ require __DIR__ . '/../inc/libri.php';
 $id = (int)($_GET['id'] ?? 0);
 $vuoto = ['titolo' => '', 'sottotitolo' => '', 'slug' => '', 'autore' => impost('autore_predefinito'), 'collana_id' => (int)($_GET['collana'] ?? 0), 'numero' => 0, 'genere' => '',
           'titolo_ru' => '', 'sottotitolo_ru' => '', 'genere_ru' => '', 'trama_ru' => '', 'meta_ru' => '', 'lingua' => 'it', 'anno' => (int)date('Y'), 'pagine_n' => 0, 'isbn' => '', 'tags' => '', 'trama' => '', 'meta' => '', 'note' => '', 'copertina' => '', 'pdf' => '', 'pdf_ru' => '',
-          'pubblicato' => 0, 'evidenza' => 0, 'pubblica_il' => '', 'token' => '', 'letture' => 0, 'download' => 0, 'creato' => '', 'aggiornato' => '', 'eliminato' => null];
+          'sezione' => ($_GET['sezione'] ?? '') === 'scuola' ? 'scuola' : 'narrativa', 'pubblicato' => 0, 'evidenza' => 0, 'pubblica_il' => '', 'token' => '', 'letture' => 0, 'download' => 0, 'creato' => '', 'aggiornato' => '', 'eliminato' => null];
 $l = $id ? carica_libro($id) : $vuoto;
 if (!$l) { flash('Libro non trovato.', 'errore'); torna('libri.php'); }
 $errore = '';
@@ -55,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'note' => trim($_POST['note'] ?? ''), 'copertina' => $copertina, 'pdf' => $pdf_att, 'pdf_ru' => $pdf_ru_att,
             'pubblicato' => ($_POST['stato'] ?? '') === 'pubblicato' ? 1 : 0, 'evidenza' => empty($_POST['evidenza']) ? 0 : 1,
             'pubblica_il' => $pubblica_il, 'aggiornato' => date('Y-m-d H:i:s'),
+            'sezione' => ($_POST['sezione'] ?? '') === 'scuola' ? 'scuola' : 'narrativa',
         ];
         if ($id) {
             $set = implode(', ', array_map(fn($k) => "$k = :$k", array_keys($dati)));
@@ -99,6 +100,8 @@ if ($id && $l['eliminato']) echo '<p class="errore">Questo libro è nel cestino 
 <div class="pannello"><h2 style="margin-top:0">Informazioni</h2>
 <div class="form-griglia">
   <label class="largo">Titolo * <input type="text" name="titolo" value="<?= e($l['titolo']) ?>" required></label>
+  <label>Sezione <select name="sezione"><option value="narrativa">📚 Narrativa (catalogo)</option><option value="scuola" <?= ($l['sezione'] ?? '') === 'scuola' ? 'selected' : '' ?>>🎒 Scuola (libro scolastico)</option></select></label>
+  <?php if ($id && ($l['sezione'] ?? '') === 'scuola'): ?><p class="largo">🎒 Libro scolastico: <a href="esercizi.php?libro=<?= $id ?>">esercizi</a> · <a href="contenuti.php?libro=<?= $id ?>">audio, video e immagini</a> · <a href="zone.php?libro=<?= $id ?>">zone cliccabili sulle pagine</a></p><?php endif; ?>
   <label class="largo">Sottotitolo <input type="text" name="sottotitolo" value="<?= e($l['sottotitolo']) ?>"></label>
   <label>Autore <input type="text" name="autore" value="<?= e($l['autore']) ?>"></label>
   <label>Collana <select name="collana_id"><option value="0">— nessuna —</option>

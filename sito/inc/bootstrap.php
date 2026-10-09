@@ -182,10 +182,11 @@ function intestazione(string $titolo, string $prefisso = '', string $descrizione
     $d = $descr ? '<meta name="description" content="' . e($descr) . '">' : '';
     echo "<!doctype html><html lang=\"" . lingua() . "\"><head><meta charset=\"utf-8\">
 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-<title>$t</title>$d$extra<link rel=\"icon\" type=\"image/png\" href=\"" . e(asset_emblema($prefisso)) . "\"><link rel=\"stylesheet\" href=\"{$prefisso}assets/stile.css\">" . stile_tema($prefisso) . "</head><body>
+<title>$t</title>$d$extra<link rel=\"icon\" type=\"image/png\" href=\"" . e(asset_emblema($prefisso)) . "\"><link rel=\"stylesheet\" href=\"{$prefisso}assets/stile.css\">" . implode('', array_map(fn($c) => '<link rel="stylesheet" href="' . e($prefisso . $c) . '">', $og['css'] ?? [])) . stile_tema($prefisso) . "</head><body>
 <header class=\"testata\"><a class=\"marchio\" href=\"{$prefisso}index.php\"><img src=\"" . e(asset_emblema($prefisso)) . "\" alt=\"\" width=\"44\" height=\"44\"><span>" . e(strtoupper($nome)) . "</span></a><nav><a href=\"{$prefisso}index.php\">" . e(t('Catalogo')) . "</a>";
     if (!$prefisso) {
         if (db()->query('SELECT 1 FROM collane WHERE visibile = 1 LIMIT 1')->fetchColumn()) echo '<a href="collane.php">' . e(t('Collane')) . '</a>';
+        if (function_exists('sezione_scuola_attiva') && sezione_scuola_attiva()) echo '<a href="scuola.php">🎒 ' . e(t('Scuola')) . '</a>';
         foreach (db()->query('SELECT slug, titolo, titolo_ru FROM pagine WHERE visibile = 1 AND nel_menu = 1 ORDER BY ordine, id') as $p)
             echo '<a href="pagina.php?s=' . e($p['slug']) . '">' . e(campo_l($p, 'titolo')) . '</a>';
         if (function_exists('lettore_corrente')) {

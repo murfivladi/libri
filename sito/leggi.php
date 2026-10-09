@@ -13,13 +13,14 @@ if (!$l['anteprima']) conta_una_volta('letture', (int)$l['id']);
 $lt = $l['anteprima'] ? null : lettore_corrente();
 $sync = !$ru && $lt && $lt['privacy_versione'] === privacy_versione();
 $suffisso = $l['anteprima'] ? '&anteprima=' . urlencode($token) : '';
+$scuola = $l['sezione'] === 'scuola';
 ?><!doctype html><html lang="<?= lingua() ?>"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <meta name="robots" content="noindex">
 <title><?= e($l['titolo']) ?> · <?= e(t('Lettura')) ?></title>
 <link rel="icon" type="image/png" href="<?= e(asset_emblema()) ?>">
-<link rel="stylesheet" href="assets/stile.css"><?= stile_tema() ?></head>
-<body class="lettore" data-pdf="<?= e(url_pdf_lettore($file_pdf)) ?>" data-chiave="<?= e($l['slug'] . ($ru ? '-ru' : '')) ?>"<?php if ($sync): ?> data-api="api-lettore.php" data-csrf="<?= e(csrf()) ?>"<?php elseif (!$l['anteprima'] && registrazione_aperta()): ?> data-accedi="account.php?a=accedi&amp;ritorno=<?= e(urlencode('leggi.php?s=' . $l['slug'])) ?>"<?php endif; ?>>
+<link rel="stylesheet" href="assets/stile.css"><?php if ($scuola): ?><link rel="stylesheet" href="assets/scuola.css"><?php endif; ?><?= stile_tema() ?></head>
+<body class="lettore<?= $scuola ? ' lettore-scuola' : '' ?>" data-pdf="<?= e(url_pdf_lettore($file_pdf)) ?>" data-chiave="<?= e($l['slug'] . ($ru ? '-ru' : '')) ?>"<?php if ($sync): ?> data-api="api-lettore.php" data-csrf="<?= e(csrf()) ?>"<?php elseif (!$l['anteprima'] && registrazione_aperta()): ?> data-accedi="account.php?a=accedi&amp;ritorno=<?= e(urlencode('leggi.php?s=' . $l['slug'])) ?>"<?php endif; ?>>
 <div class="barra">
   <a class="indietro-libro" href="libro.php?s=<?= e($l['slug']) . $suffisso ?>" title="<?= e(t('Torna alla scheda')) ?>">←<span class="solo-pc"> <?= e($l['titolo']) ?></span></a>
   <span class="comandi">
@@ -60,5 +61,12 @@ $suffisso = $l['anteprima'] ? '&anteprima=' . urlencode($token) : '';
 <script src="assets/vendor/pdf.min.js"></script>
 <script src="assets/vendor/page-flip.browser.js"></script>
 <script>window.TR = <?= json_encode(lettore_traduzioni(), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;</script>
+<?php if ($scuola): ?>
+<div class="finestra-scuola" id="finestra-scuola" hidden role="dialog" aria-modal="true" aria-labelledby="titolo-finestra">
+  <div class="riquadro"><div class="testa"><span id="titolo-finestra"></span><button type="button" id="chiudi-finestra" aria-label="Chiudi">✕</button></div><iframe id="cornice-scuola" title="Esercizio"></iframe></div>
+</div>
+<script>window.SCUOLA = <?= json_encode(mappa_scuola_libro((int)$l['id']), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;</script>
+<script src="assets/scuola-lettore.js"></script>
+<?php endif; ?>
 <script src="assets/lettore.js"></script>
 </body></html>

@@ -4,7 +4,7 @@
 // Questo file contiene: configurazione, connessione, schema delle tabelle (uguale per i due motori) e piccole
 // funzioni che nascondono le differenze di linguaggio SQL.
 
-const VERSIONE_DB = 8;
+const VERSIONE_DB = 12;
 
 // Testo iniziale della pagina Privacy (modificabile dall'admin). È un modello: va controllato da un adulto.
 const TESTO_PRIVACY = "Questo sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti.\n\n"
@@ -131,6 +131,7 @@ function schema(): array {
             'sottotitolo' => 's', 'autore' => 's', 'lingua' => 's:it', 'anno' => 'int', 'pagine_n' => 'int', 'isbn' => 's',
             'tags' => 'txt', 'collana_id' => 'int', 'evidenza' => 'int', 'pubblica_il' => 'dt', 'ordine' => 'int',
             'note' => 'txt', 'meta' => 'txt', 'titolo_ru' => 's', 'sottotitolo_ru' => 's', 'trama_ru' => 'txt', 'meta_ru' => 'txt', 'genere_ru' => 's', 'token' => 's', 'letture' => 'int', 'download' => 'int', 'eliminato' => 'dtnull', 'aggiornato' => 'dt',
+            'sezione' => 's:narrativa',                 // narrativa | scuola (Vlad Editore Scuola)
         ],
         'collane' => ['id' => 'pk', 'slug' => 'slug', 'nome' => 's', 'descrizione' => 'txt', 'nome_ru' => 's', 'descrizione_ru' => 'txt', 'banner' => 'url', 'visibile' => 'int:1', 'ordine' => 'int'],
         'pagine' => ['id' => 'pk', 'slug' => 'slug', 'titolo' => 's', 'contenuto' => 'txt', 'titolo_ru' => 's', 'contenuto_ru' => 'txt', 'visibile' => 'int:1', 'nel_menu' => 'int', 'ordine' => 'int'],
@@ -148,6 +149,28 @@ function schema(): array {
         'recensioni' => ['id' => 'pk', 'lettore_id' => 'int', 'libro_id' => 'int', 'voto' => 'int', 'titolo' => 's', 'testo' => 'txt',
             'stato' => 'int', 'creato' => 'creato', 'aggiornato' => 'dt'],
         'consensi' => ['id' => 'pk', 'lettore_id' => 'int', 'tipo' => 's', 'versione' => 's', 'quando' => 'dt', 'esito' => 'int'],
+        // Scuola: esercizi interattivi e contenuti multimediali dei libri scolastici. Ognuno ha un codice breve (es. CFC-12)
+        // stampato nel PDF accanto al simbolo: il lettore lo riconosce da solo, e si apre anche da apri.php?c=CODICE (QR).
+        'esercizi' => ['id' => 'pk', 'codice' => 'slug', 'libro_id' => 'int', 'pagina' => 'int', 'titolo' => 's', 'consegna' => 'txt',
+            'tipo' => 's', 'dati' => 'txt:{}', 'extra' => 'int', 'livello' => 'int:1', 'ordine' => 'int', 'creato' => 'creato', 'aggiornato' => 'dt'],
+        'contenuti' => ['id' => 'pk', 'codice' => 'slug', 'libro_id' => 'int', 'pagina' => 'int', 'tipo' => 's', 'titolo' => 's',
+            'file' => 'url', 'testo' => 'txt', 'voce' => 's', 'durata' => 'int', 'creato' => 'creato'],
+        // Zone cliccabili disegnate a mano sulle pagine (in millesimi della pagina): aprono un esercizio o un contenuto.
+        'zone' => ['id' => 'pk', 'libro_id' => 'int', 'pagina' => 'int', 'x' => 'int', 'y' => 'int', 'w' => 'int', 'h' => 'int', 'codice' => 's'],
+        // Classi: i prof si registrano con il codice segreto dato dall'admin; gli studenti entrano con codice classe + nickname + PIN
+        // (nessun dato personale: niente email, niente nome vero). I risultati degli esercizi li vede solo il prof della classe.
+        'prof' => ['id' => 'pk', 'email' => 'slug', 'nome' => 's', 'password' => 's', 'stato' => 'int:1', 'creato' => 'creato', 'ultimo_accesso' => 'dt'],
+        'classi' => ['id' => 'pk', 'prof_id' => 'int', 'nome' => 's', 'codice' => 'slug', 'libro_id' => 'int', 'creato' => 'creato'],
+        'studenti' => ['id' => 'pk', 'classe_id' => 'int', 'nick' => 's', 'pin' => 's', 'token' => 's', 'creato' => 'creato', 'ultimo_accesso' => 'dt'],
+        'risultati' => ['id' => 'pk', 'studente_id' => 'int', 'esercizio_id' => 'int', 'compito_id' => 'int', 'fatti' => 'int', 'totale' => 'int', 'voci' => 'txt:[]', 'quando' => 'dt'],
+        'compiti' => ['id' => 'pk', 'classe_id' => 'int', 'titolo' => 's', 'esercizi' => 'txt', 'scadenza' => 'dt', 'creato' => 'creato'],
+        // Lavagne (editor video): il progetto (oggetti, passi, audio) e il video esportato. prof_id 0 = admin.
+        // I video dei prof li vedono solo gli studenti della classe scelta (classe_id).
+        'lavagne' => ['id' => 'pk', 'titolo' => 's', 'prof_id' => 'int', 'classe_id' => 'int', 'libro_id' => 'int', 'dati' => 'txt:{}',
+            'video' => 'url', 'contenuto_id' => 'int', 'creato' => 'creato', 'aggiornato' => 'dt'],
+        // Lavori dell'AI (deAPI): immagini, sfondi tolti, voci, musica, animazioni. Si avviano e poi si controllano finché sono pronti.
+        'lavori_ai' => ['id' => 'pk', 'tipo' => 's', 'stato' => 's:attesa', 'request_id' => 's', 'parametri' => 'txt:{}', 'risultato' => 'url',
+            'contenuto_id' => 'int', 'errore' => 's', 'creato' => 'creato', 'aggiornato' => 'dt'],
     ];
 }
 
@@ -161,6 +184,15 @@ function indici(): array {
         'i_recensioni_libro' => ['recensioni', ['libro_id', 'stato'], false],
         'i_token_hash' => ['token_lettori', ['hash'], false],
         'i_consensi_lettore' => ['consensi', ['lettore_id'], false],
+        'i_esercizi_libro' => ['esercizi', ['libro_id', 'pagina'], false],
+        'i_contenuti_libro' => ['contenuti', ['libro_id', 'pagina'], false],
+        'i_zone_libro' => ['zone', ['libro_id', 'pagina'], false],
+        'u_studenti' => ['studenti', ['classe_id', 'nick'], true],
+        'i_classi_prof' => ['classi', ['prof_id'], false],
+        'i_risultati' => ['risultati', ['studente_id', 'esercizio_id'], false],
+        'i_compiti_classe' => ['compiti', ['classe_id'], false],
+        'i_lavagne_prof' => ['lavagne', ['prof_id'], false],
+        'i_lavori_stato' => ['lavori_ai', ['stato'], false],
     ];
 }
 

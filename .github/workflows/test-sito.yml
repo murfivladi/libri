@@ -62,6 +62,10 @@ jobs:
         run: E2E_DB=mysql bash sito/tests/e2e.sh
       - name: Test con due siti che condividono il database
         run: bash sito/tests/duesiti.sh
+      - name: Test della sezione Scuola
+        run: |
+          sudo apt-get install -y -q python3-reportlab
+          SENZA_BROWSER=1 bash sito/tests/scuola.sh
 
   browser:
     name: Browser (lettore PDF, trascinamento, telefono, secondo sito)
@@ -94,3 +98,7 @@ jobs:
         run: bash sito/tests/browser.sh
       - name: Test nel browser (due siti, PDF e copertine da un altro indirizzo)
         run: CON_BROWSER=1 bash sito/tests/duesiti.sh
+      - name: Test nel browser (Scuola - esercizi, zone, editor)
+        run: |
+          sudo apt-get install -y -q python3-reportlab
+          bash sito/tests/scuola.sh

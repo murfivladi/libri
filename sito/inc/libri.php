@@ -22,7 +22,7 @@ function duplica_libro(int $id): ?int {
         'trama' => $l['trama'], 'meta' => $l['meta'], 'note' => $l['note'],
         'copertina' => $l['copertina'], 'pdf' => $l['pdf'], 'pdf_ru' => $l['pdf_ru'],      // lo stesso file: viene cancellato solo quando nessun libro lo usa più
         'pubblicato' => 0, 'evidenza' => 0, 'pubblica_il' => '', 'token' => nuovo_token(), 'aggiornato' => date('Y-m-d H:i:s'),
-        'ordine' => $l['ordine'],
+        'ordine' => $l['ordine'], 'sezione' => $l['sezione'] ?? 'narrativa',
     ];
     $campi = implode(',', array_keys($nuovo));
     $segn = implode(',', array_fill(0, count($nuovo), '?'));
@@ -34,6 +34,10 @@ function elimina_libro_definitivo(int $id): void {
     $l = carica_libro($id);
     if (!$l) return;
     db()->prepare('DELETE FROM libri WHERE id = ?')->execute([$id]);
+    // esercizi, contenuti e zone del libro scolastico (i file audio/video si cancellano se nessuno li usa più)
+    $st = db()->prepare('SELECT file FROM contenuti WHERE libro_id = ?'); $st->execute([$id]); $files = $st->fetchAll(PDO::FETCH_COLUMN);
+    foreach (['esercizi', 'contenuti', 'zone'] as $t) db()->prepare("DELETE FROM $t WHERE libro_id = ?")->execute([$id]);
+    foreach ($files as $f) elimina_file('media', (string)$f);
     elimina_file('cover', $l['copertina']);
     elimina_file('pdf', $l['pdf']);
     elimina_file('pdf', $l['pdf_ru']);

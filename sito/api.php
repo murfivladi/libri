@@ -17,7 +17,7 @@ $firma = (string)($_SERVER['HTTP_X_LIBRI_FIRMA'] ?? '');
 if (abs(time() - $ts) > 300) fine(['ok' => false, 'errore' => 'Richiesta scaduta: controlla che l\'orologio dei due server sia giusto.'], 401);
 
 $cartella = (string)($_POST['cartella'] ?? '');
-if ($azione !== 'ping' && !in_array($cartella, ['cover', 'pdf'], true)) fine(['ok' => false, 'errore' => 'Cartella non valida.'], 400);
+if ($azione !== 'ping' && !in_array($cartella, ['cover', 'pdf', 'media'], true)) fine(['ok' => false, 'errore' => 'Cartella non valida.'], 400);
 
 if ($azione === 'ping') {
     if (!hash_equals(api_firma('ping', $ts, ''), $firma)) fine(['ok' => false, 'errore' => 'Firma non valida.'], 401);
@@ -28,10 +28,12 @@ if ($azione === 'carica') {
     $f = $_FILES['file'] ?? null;
     if (!$f || $f['error'] !== UPLOAD_ERR_OK) fine(['ok' => false, 'errore' => 'Caricamento non riuscito (codice ' . ($f['error'] ?? '?') . '): controlla upload_max_filesize e post_max_size sul sito principale.'], 400);
     if (!hash_equals(api_firma('carica', $ts, hash_file('sha256', $f['tmp_name']) . '|' . $cartella), $firma)) fine(['ok' => false, 'errore' => 'Firma non valida.'], 401);
-    $tipi = $cartella === 'pdf' ? TIPI_PDF : TIPI_IMMAGINE;
-    $max = $cartella === 'pdf' ? 100 * 1024 * 1024 : 8 * 1024 * 1024;
+    if ($cartella === 'media') require_once __DIR__ . '/inc/scuola.php';
+    $tipi = $cartella === 'pdf' ? TIPI_PDF : ($cartella === 'media' ? TIPI_MEDIA : TIPI_IMMAGINE);
+    $max = $cartella === 'pdf' ? 100 * 1024 * 1024 : ($cartella === 'media' ? 200 * 1024 * 1024 : 8 * 1024 * 1024);
     if ($f['size'] > $max) fine(['ok' => false, 'errore' => 'File troppo grande.'], 413);
     $mime = (new finfo(FILEINFO_MIME_TYPE))->file($f['tmp_name']);
+    if ($cartella === 'media' && ($mime === 'application/octet-stream' || $mime === 'video/x-matroska')) $mime = 'audio/webm';
     if (!isset($tipi[$mime])) fine(['ok' => false, 'errore' => 'Tipo di file non ammesso (' . $mime . ').'], 415);
     $nome = bin2hex(random_bytes(8)) . '.' . $tipi[$mime];
     @mkdir(RADICE . "/uploads/$cartella", 0755, true);
