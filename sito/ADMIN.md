@@ -161,3 +161,12 @@ Editor a tutto schermo (`assets/lavagna.js`), tela Full HD 1920×1080. Funzioni:
 29. Salva sul sito: admin → video del libro con il suo codice (QR, lettore); prof → video per una classe
 30. Salvataggio sul server, salvataggio automatico ogni minuto e bozza nel browser se si chiude per sbaglio
 31. Funziona con mouse, dita e penna; schermo intero
+
+## Studio AI (deAPI)
+Ogni richiesta diventa un «lavoro» in coda: la pagina controlla da sola ogni 6 secondi e scarica il risultato in `uploads/media` quando è pronto (anche video e voci che richiedono qualche minuto).
+- **Immagini con Vlad e Luce**: FLUX.2 con le schede a 360° come riferimento; formato lavagna, pagina, quadrato o verticale; finiscono in galleria, come immagine del libro (con codice) o come **posa nuova della lavagna** (sfondo tolto in automatico con Ben2).
+- **Voci**: Luce ha una voce «disegnata» da una descrizione (Qwen3 VoiceDesign); Vlad ha una **copia della sua voce** da una registrazione di 5–15 secondi (Qwen3, solo con il consenso suo e dei genitori). Le due voci compaiono in «Audio e video → Voce AI» insieme alle voci pronte.
+- **Musica**: strumentale da una descrizione (ACE-Step), 10–300 secondi; va in «Audio e video» e nella lista musiche della lavagna.
+- **Animazioni**: un'immagine prende vita (LTX-2.5, 2–10 secondi).
+- **Fai parlare Vlad o Luce**: immagine + audio corto (max 10 s) → il personaggio parla a tempo con la voce.
+- **Tutti i lavori**: stato, errori (es. limite di richieste, credito), anteprime, elimina.

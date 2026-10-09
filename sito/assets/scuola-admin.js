@@ -16,8 +16,9 @@
   });
 
   // ---------- contenuti: file, registrazione o voce AI ----------
-  var form = document.getElementById('form-co');
+  var form = document.getElementById('form-co') || document.getElementById('form-vlad');
   if (!form) return;
+  var massimo = form.id === 'form-vlad' ? 15 : 0;               // voce di Vlad per la copia AI: 5–15 secondi
   function mostraFonte() {
     var f = (form.querySelector('input[name=fonte]:checked') || {}).value;
     form.querySelectorAll('[data-fonte]').forEach(function (d) { d.hidden = d.dataset.fonte !== f; });
@@ -43,6 +44,7 @@
         flusso.getTracks().forEach(function (tr) { tr.stop(); });
         var tipo = (rec.mimeType || 'audio/webm').split(';')[0], est = tipo.indexOf('mp4') >= 0 ? 'm4a' : tipo.indexOf('ogg') >= 0 ? 'ogg' : 'webm';
         var blob = new Blob(pezzi, { type: tipo });
+        if (massimo && Date.now() - inizio < 5000) stato.textContent = 'Troppo corta: servono almeno 5 secondi. Registra di nuovo.';
         ascolta.src = URL.createObjectURL(blob); ascolta.hidden = false;
         try {                                      // la registrazione diventa il «file» del modulo
           var dt = new DataTransfer(); dt.items.add(new File([blob], 'registrazione.' + est, { type: tipo })); input.files = dt.files;
@@ -52,7 +54,10 @@
       };
       rec.start(250); inizio = Date.now(); reg.classList.add('attivo'); via.disabled = true; stop.disabled = false;
       stato.textContent = 'Sto registrando… parla vicino al microfono.';
-      timer = setInterval(function () { var s = Math.floor((Date.now() - inizio) / 1000); tempo.textContent = Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2); }, 250);
+      timer = setInterval(function () {
+        var s = Math.floor((Date.now() - inizio) / 1000); tempo.textContent = Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2) + (massimo ? ' / 0:' + massimo : '');
+        if (massimo && s >= massimo) stop.click();
+      }, 250);
     }).catch(function () { stato.textContent = 'Il microfono non è disponibile o non hai dato il permesso.'; });
   });
   stop.addEventListener('click', function () { if (rec && rec.state !== 'inactive') rec.stop(); clearInterval(timer); reg.classList.remove('attivo'); via.disabled = false; stop.disabled = true; });

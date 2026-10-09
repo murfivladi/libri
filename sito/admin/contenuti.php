@@ -1,6 +1,7 @@
 <?php
 // Audio, video e immagini dei libri scolastici: caricare un file, registrare dal microfono o far leggere un testo alla voce AI (deAPI).
 require __DIR__ . '/_admin.php';
+require_once __DIR__ . '/../inc/ai.php';
 
 $libri = db()->query("SELECT id, titolo FROM libri WHERE sezione = 'scuola' AND eliminato IS NULL ORDER BY ordine, numero, id")->fetchAll();
 $libro_f = (int)($_GET['libro'] ?? 0);
@@ -31,20 +32,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         if (!codice_valido($codice)) throw new RuntimeException('Il codice deve essere fatto così: lettere, trattino, numero (es. CFC-12).');
         if (codice_usato($codice, 0, $pid)) throw new RuntimeException("Il codice $codice è già usato da un altro esercizio o contenuto.");
-        $nuovo_file = null;
+        $nuovo_file = null; $lavoro = null;
         $fonte = (string)($_POST['fonte'] ?? 'file');
         if ($fonte === 'voce' && $az === 'genera') {
-            if (!isset(VOCI_TTS[$r['voce']])) $r['voce'] = 'if_sara';
-            $tmp = deapi_voce($r['testo'], $r['voce']);
-            $nuovo_file = salva_media_da_percorso($tmp, false);
+            // la voce AI si prepara in coda (Luce e Vlad possono richiedere qualche minuto): il file arriva da solo quando è pronto
+            if (!isset(voci_disponibili()[$r['voce']])) $r['voce'] = 'if_sara';
+            $lavoro = ai_campi_voce($r['voce'], $r['testo']);
             $r['tipo'] = 'audio';
-            registra('Voce AI generata', $codice);
         } else {
             $nuovo_file = salva_media('file');                     // file scelto o registrazione del microfono
             if ($nuovo_file) $r['tipo'] = $fonte === 'registra' ? 'audio' : $GLOBALS['ultimo_media_tipo'];
         }
         if ($nuovo_file) $r['file'] = $nuovo_file;
-        if (!$pid && $r['file'] === '') throw new RuntimeException('Carica un file, registra la tua voce oppure genera la voce AI.');
+        if (!$pid && $r['file'] === '' && !$lavoro) throw new RuntimeException('Carica un file, registra la tua voce oppure genera la voce AI.');
         if ($pid) {
             $set = implode(', ', array_map(fn($k) => "$k = :$k", array_keys($r)));
             db()->prepare("UPDATE contenuti SET $set WHERE id = :id")->execute($r + ['id' => $pid]);
@@ -55,6 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pid = (int)db()->lastInsertId();
         }
         registra('Contenuto salvato', $codice);
+        if ($lavoro) {
+            ai_avvia('voce', '/audio/speech', $lavoro, ['voce' => $r['voce']], $pid);
+            flash("Salvato: $codice. La voce AI è in preparazione: il file arriverà da solo tra poco (puoi lasciare aperta questa pagina).");
+            torna('contenuti.php?id=' . $pid);
+        }
         flash("Salvato: $codice");
         torna('contenuti.php?id=' . $pid);
     } catch (RuntimeException $ex) {
@@ -79,6 +84,10 @@ if ($id || $nuovo) {
   <label class="largo">Titolo <input type="text" name="titolo" value="<?= e($c['titolo']) ?>" placeholder="es. Luce spiega il soggetto" maxlength="200"></label>
 </div></div>
 
+<?php if ($c['id'] && ($lv = db()->query("SELECT * FROM lavori_ai WHERE contenuto_id = " . (int)$c['id'] . " AND stato IN ('attesa','scarico') ORDER BY id DESC")->fetch())): ?>
+<p class="avviso" data-attesa-ai>⏳ La voce AI è in preparazione (avviata <?= e(formatta_data($lv['creato'])) ?>). La pagina si aggiorna da sola quando è pronta.</p>
+<script src="../assets/ai-attesa.js"></script>
+<?php endif; ?>
 <?php if ($c['file'] !== ''): $src = url_media($c['file'], '../'); ?>
 <div class="pannello"><h2 style="margin-top:0">File attuale (<?= e(TIPI_CONTENUTO[$c['tipo']][1] ?? $c['tipo']) ?>)</h2>
   <?php if ($c['tipo'] === 'audio'): ?><audio controls src="<?= e($src) ?>" style="width:100%"></audio>
@@ -101,8 +110,8 @@ if ($id || $nuovo) {
 </div>
 <div data-fonte="voce" hidden>
   <?php if (!$chiave_ok): ?><p class="errore">Per la voce AI serve la chiave deAPI: inseriscila in <a href="scuola.php">Scuola → deAPI</a>.</p><?php endif; ?>
-  <label>Voce <select name="voce"><?php foreach (VOCI_TTS as $k => $v): ?><option value="<?= e($k) ?>" <?= $c['voce'] === $k ? 'selected' : '' ?>><?= e($v) ?></option><?php endforeach; ?></select></label>
-  <p class="muto">La voce legge il «Testo» qui sotto. La generazione richiede da pochi secondi a un minuto e consuma credito deAPI.</p>
+  <label>Voce <select name="voce"><?php foreach (voci_disponibili() as $k => $v): ?><option value="<?= e($k) ?>" <?= $c['voce'] === $k ? 'selected' : '' ?>><?= e($v) ?></option><?php endforeach; ?></select></label>
+  <p class="muto">La voce legge il «Testo» qui sotto. Le voci pronte arrivano in pochi secondi; Luce e Vlad possono richiedere qualche minuto. Consuma credito deAPI. Le voci si regolano in <a href="ai.php?vista=voci">Studio AI → Voci</a>.</p>
   <button class="bottone" name="azione" value="genera">🤖 Genera la voce e salva</button>
 </div>
 </div>
@@ -135,7 +144,7 @@ admin_testata('🔊 Audio, video e immagini', 'contenuti');
 </div>
 <table class="tabella"><tr><th>Codice</th><th>Titolo</th><th>Tipo</th><th>Libro</th><th>Pag.</th><th></th></tr>
 <?php foreach ($righe as $r): $t = TIPI_CONTENUTO[$r['tipo']] ?? ['📎', $r['tipo']]; ?>
-<tr><td><code><?= e($r['codice']) ?></code></td><td><a href="contenuti.php?id=<?= (int)$r['id'] ?>"><b><?= e($r['titolo'] !== '' ? $r['titolo'] : '(senza titolo)') ?></b></a></td>
+<tr><td><code><?= e($r['codice']) ?></code></td><td><a href="contenuti.php?id=<?= (int)$r['id'] ?>"><b><?= e($r['titolo'] !== '' ? $r['titolo'] : '(senza titolo)') ?></b></a><?= $r['file'] === '' ? ' <span class="stato prog">⏳ in preparazione</span>' : '' ?></td>
   <td><?= $t[0] ?> <?= e($t[1]) ?></td><td class="muto"><?= e($r['libro'] ?? '—') ?></td><td><?= $r['pagina'] ? (int)$r['pagina'] : '—' ?></td>
   <td class="azioni-riga"><a class="bottone sec piccolo" href="../apri.php?c=<?= e($r['codice']) ?>" target="_blank">Apri ↗</a>
     <button type="button" class="bottone sec piccolo" data-qr="<?= e(base_ufficiale() . 'apri.php?c=' . $r['codice']) ?>" data-nome="<?= e($r['codice']) ?>">QR</button></td></tr>

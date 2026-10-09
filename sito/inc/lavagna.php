@@ -1,6 +1,7 @@
 <?php
 // Lavagna ed editor video (per l'admin e per i prof): pagina dell'editor e controlli di accesso.
 require_once __DIR__ . '/classi.php';
+require_once __DIR__ . '/ai.php';
 
 // Chi sta usando la lavagna: ['admin' => bool, 'prof' => riga|null]. Nessuno dei due = niente accesso.
 function utente_lavagna(): array { return ['admin' => !empty($_SESSION['admin']), 'prof' => prof_corrente()]; }
@@ -23,11 +24,11 @@ function pagina_editor_lavagna(?array $l, string $pre, string $api, string $indi
         'id' => $l ? (int)$l['id'] : 0, 'titolo' => $l['titolo'] ?? '', 'dati' => $l ? (json_decode((string)$l['dati'], true) ?: null) : null,
         'video' => $l && $l['video'] !== '' ? url_media($l['video'], $pre) : '', 'classe_id' => (int)($l['classe_id'] ?? 0), 'libro_id' => (int)($l['libro_id'] ?? 0),
         'api' => $api, 'csrf' => csrf(), 'pre' => $pre, 'extra' => $extra,
-        'personaggi' => [
+        'personaggi' => array_merge([
             ['Vlad (davanti)', $pre . 'assets/personaggi/vlad-davanti.png'], ['Vlad (con il tablet)', $pre . 'assets/personaggi/vlad-tablet.png'],
             ['Vlad (di profilo)', $pre . 'assets/personaggi/vlad-profilo.png'], ['Luce (davanti)', $pre . 'assets/personaggi/luce-davanti.png'],
             ['Luce (di profilo)', $pre . 'assets/personaggi/luce-profilo.png'],
-        ],
+        ], array_map(fn($p) => [$p['titolo'], url_media($p['src'], $pre)], personaggi_extra())),
         'musiche' => array_map(fn($r) => ['titolo' => $r['titolo'] !== '' ? $r['titolo'] : $r['codice'], 'src' => url_media($r['file'], $pre)],
             db()->query("SELECT codice, titolo, file FROM contenuti WHERE tipo = 'audio' AND file != '' ORDER BY id DESC LIMIT 200")->fetchAll()),
     ];

@@ -4,7 +4,7 @@
 // Questo file contiene: configurazione, connessione, schema delle tabelle (uguale per i due motori) e piccole
 // funzioni che nascondono le differenze di linguaggio SQL.
 
-const VERSIONE_DB = 11;
+const VERSIONE_DB = 12;
 
 // Testo iniziale della pagina Privacy (modificabile dall'admin). È un modello: va controllato da un adulto.
 const TESTO_PRIVACY = "Questo sito non usa cookie di profilazione, non usa strumenti di analisi di terzi e non carica script, font o immagini da altri siti.\n\n"
@@ -168,6 +168,9 @@ function schema(): array {
         // I video dei prof li vedono solo gli studenti della classe scelta (classe_id).
         'lavagne' => ['id' => 'pk', 'titolo' => 's', 'prof_id' => 'int', 'classe_id' => 'int', 'libro_id' => 'int', 'dati' => 'txt:{}',
             'video' => 'url', 'contenuto_id' => 'int', 'creato' => 'creato', 'aggiornato' => 'dt'],
+        // Lavori dell'AI (deAPI): immagini, sfondi tolti, voci, musica, animazioni. Si avviano e poi si controllano finché sono pronti.
+        'lavori_ai' => ['id' => 'pk', 'tipo' => 's', 'stato' => 's:attesa', 'request_id' => 's', 'parametri' => 'txt:{}', 'risultato' => 'url',
+            'contenuto_id' => 'int', 'errore' => 's', 'creato' => 'creato', 'aggiornato' => 'dt'],
     ];
 }
 
@@ -189,6 +192,7 @@ function indici(): array {
         'i_risultati' => ['risultati', ['studente_id', 'esercizio_id'], false],
         'i_compiti_classe' => ['compiti', ['classe_id'], false],
         'i_lavagne_prof' => ['lavagne', ['prof_id'], false],
+        'i_lavori_stato' => ['lavori_ai', ['stato'], false],
     ];
 }
 

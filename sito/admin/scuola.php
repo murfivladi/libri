@@ -79,6 +79,7 @@ $cp = codice_prof();
 </div>
 
 <div class="pannello">
+  <p><a class="bottone" href="ai.php">✨ Apri lo Studio AI</a> <span class="muto">immagini con Vlad e Luce, voci, musica, animazioni</span></p>
   <h2 style="margin-top:0">deAPI (voci e immagini con l'AI)</h2>
   <p class="muto">Serve per creare l'audio con la voce AI direttamente dall'admin. La chiave si trova nella dashboard di deAPI. Stato: <?= $chiave !== '' ? '<b>chiave salvata</b> (…' . e(substr($chiave, -4)) . ')' : '<b>nessuna chiave</b>' ?>.</p>
   <form method="post" class="azioni-riga"><?= csrf_campo() ?><input type="hidden" name="azione" value="deapi">

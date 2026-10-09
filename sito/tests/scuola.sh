@@ -86,6 +86,26 @@ Tk=$(tok "admin/zone.php?libro=$LID")
 chk "salva zone" "$(post "admin/zone.php?libro=$LID" --data-urlencode "csrf=$Tk" --data-urlencode 'zone=[{"p":3,"x":100,"y":200,"w":300,"h":80,"c":"CFC-2"},{"p":1,"x":0,"y":0,"w":50,"h":50,"c":"NON-1"},{"p":2,"x":10,"y":10,"w":2,"h":2,"c":"CFC-1"}]' -d pagina=3)" 302
 chk "solo le zone valide" "$(sql "SELECT COUNT(*) FROM zone WHERE libro_id = $LID")" 1
 
+# ---------- Studio AI (senza rete: pagine, controlli e cosa succede ai risultati) ----------
+for v in immagini voci musica animazione lavori; do
+  chk "studio AI: $v" "$(code "admin/ai.php?vista=$v")" 200; senza_errori "admin/ai.php?vista=$v"
+done
+chk "studio AI: controllo lavori (JSON)" "$(curl -s -b "$J" "$B/admin/ai.php?azione=controlla")" '{"in_attesa":0,"cambiati":[]}'
+Tk=$(tok "admin/ai.php?vista=immagini")
+post "admin/ai.php?vista=immagini" -d "csrf=$Tk&azione=immagine&prompt=ab&dest=galleria" >/dev/null
+chk "studio AI: descrizione troppo corta" "$(curl -s -b "$J" "$B/admin/ai.php?vista=immagini" | conta 'Descrivi l')" 1
+Tk=$(tok "admin/ai.php?vista=voci")
+post "admin/ai.php?vista=voci" -d "csrf=$Tk&azione=voce_vlad&testo_ref=Ciao+sono+Vlad+e+parlo" >/dev/null
+chk "studio AI: voce di Vlad solo con il consenso" "$(curl -s -b "$J" "$B/admin/ai.php?vista=voci" | conta 'serve il permesso')" 1
+cp "$T/voce.wav" uploads/media/aaaaaaaaaaaaaaaa.wav
+php -r 'require "inc/ai.php"; db()->exec("INSERT INTO lavori_ai (tipo, stato, request_id, parametri, risultato) VALUES (\"scontorno\", \"fatto\", \"x\", \"{}\", \"aaaaaaaaaaaaaaaa.wav\")");
+  $r = db()->query("SELECT * FROM lavori_ai ORDER BY id DESC")->fetch(); ai_dopo($r, ["dest" => "personaggio", "titolo" => "Posa di prova"]);
+  ai_dopo($r, ["dest" => "contenuto", "libro_id" => (int)$argv[1], "titolo" => "Da AI"]);' "$LID"
+chk "studio AI: posa nuova tra i personaggi della lavagna" "$(curl -s -b "$J" "$B/admin/lavagna.php?nuova=1" | conta 'Posa di prova')" 1
+chk "studio AI: risultato diventato contenuto" "$(sql "SELECT COUNT(*) FROM contenuti WHERE titolo = 'Da AI' AND file = 'aaaaaaaaaaaaaaaa.wav'")" 1
+php -r 'require "inc/ai.php"; db()->exec("DELETE FROM lavori_ai"); db()->exec("DELETE FROM contenuti WHERE titolo = \"Da AI\"");'
+chk "studio AI: il file della posa resta (è in uso)" "$([ -f uploads/media/aaaaaaaaaaaaaaaa.wav ] && echo si)" si
+
 # ---------- sito pubblico ----------
 chk "scuola.php" "$(code scuola.php)" 200; senza_errori scuola.php
 chk "scuola: il libro c'è" "$(conta 'Chi fa cosa?' < "$T/out.html" | awk '{print ($1>0)?"si":"no"}')" si

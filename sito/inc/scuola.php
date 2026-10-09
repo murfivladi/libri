@@ -189,6 +189,7 @@ function salva_media_da_percorso(string $tmp, bool $caricato, string $suggerito 
         @mkdir("$d/media", 0755, true);
         $ok = $caricato ? move_uploaded_file($tmp, "$d/media/$nome") : rename($tmp, "$d/media/$nome");
         if (!$ok) throw new RuntimeException('Non riesco a salvare il file.');
+        @chmod("$d/media/$nome", 0644);            // i file scaricati nascono leggibili solo dal proprietario: il server web deve poterli servire
         return valore_file('media', $nome);
     }
     $r = api_chiama('carica', ['cartella' => 'media'], $tmp, hash_file('sha256', $tmp) . '|media');
