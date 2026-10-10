@@ -32,4 +32,4 @@ Apertura (scena, domanda, obiettivi) → per cominciare → lezioni (una pagina 
 
 ## Capitolo 3 · L'articolo (pagine 27–36)
 - Esercizi: `capitolo-03/esercizi.py` → `esercizi.json` (CFC-35 … CFC-51; CFC-47 solo online). Audio **CFC-50** «Luce sull'Etna», pagina 34.
-- Illustrazioni provvisorie (composte dai ritagli: limite giornaliero di immagini deAPI finito): da rifare con l'AI.
+- Illustrazioni generate da Vlad con le reference dei personaggi.
