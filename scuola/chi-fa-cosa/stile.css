@@ -177,3 +177,24 @@ table.griglia-es { width: 100%; border-collapse: collapse; font-size: 9.3pt; }
 .digitale .qr img, .digitale .qr canvas, .ascolta .qr img, .ascolta .qr canvas { width: 17mm !important; height: 17mm !important; display: block; }
 table.tab.stretta td { padding-top: 1mm; padding-bottom: 1mm; }
 .griglia-es.stretta td { padding-top: 0.8mm; padding-bottom: 0.8mm; }
+
+/* ---------- copertina ---------- */
+.copertina { padding: 0; background: linear-gradient(180deg, #8fd0ff 0%, #c9e9ff 55%, #fff4d6 100%); }
+.copertina .alto { position: absolute; top: 0; left: 0; right: 0; padding: 16mm 16mm 0; }
+.copertina .editore { display: inline-flex; align-items: center; gap: 2mm; background: #fff; color: var(--testo); border-radius: 20mm; padding: 1.6mm 4.5mm; font: 800 9pt Inter, sans-serif; letter-spacing: .16em; text-transform: uppercase; box-shadow: 0 1mm 0 #0000001a; }
+.copertina .editore i { width: 3mm; height: 3mm; border-radius: 50%; background: var(--arancio); }
+.copertina h1 { font: 900 64pt/0.95 "Inter Display", Inter, sans-serif; color: #fff; margin: 9mm 0 0; letter-spacing: -.02em;
+  -webkit-text-stroke: 1.6mm #133e80; paint-order: stroke fill; text-shadow: 0 2.4mm 0 #133e80; }
+.copertina h1 span { color: var(--giallo); }
+.copertina .sottotitolo { margin: 6mm 0 0; font: 800 15pt "Inter Display", Inter, sans-serif; color: #133e80; }
+.copertina .materia { display: inline-block; margin-top: 4mm; background: #133e80; color: #fff; border-radius: 2mm; padding: 2mm 4mm; font: 700 11pt Inter, sans-serif; }
+.copertina .tessere { position: absolute; inset: 0; }
+.copertina .tessera { position: absolute; padding: 2.4mm 4.6mm; border-radius: 2.6mm; color: #fff; font: 800 13pt "Inter Display", Inter, sans-serif; box-shadow: 0 1.4mm 0 #00000030; }
+.copertina .tessera small { display: block; font: 700 6.5pt Inter, sans-serif; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+.copertina .personaggi { position: absolute; right: 4mm; bottom: 22mm; width: 128mm; }
+.copertina .prato { position: absolute; left: 0; right: 0; bottom: 0; height: 34mm; background: #7cc35a; border-top: 1.2mm solid #5a9e3c; }
+.copertina .basso { position: absolute; left: 16mm; bottom: 9mm; color: #fff; font: 700 10pt Inter, sans-serif; text-shadow: 0 .4mm 0 #0004; }
+.copertina .basso b { display: block; font: 800 14pt "Inter Display", Inter, sans-serif; }
+.copertina .bollino { position: absolute; left: 16mm; top: 150mm; width: 40mm; height: 40mm; border-radius: 50%; background: var(--arancio); color: #fff; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; font: 800 10pt/1.15 Inter, sans-serif; transform: rotate(-10deg); box-shadow: 0 1.6mm 0 #a34d00; }
+.copertina .bollino b { font: 900 22pt/1 "Inter Display", Inter, sans-serif; }
