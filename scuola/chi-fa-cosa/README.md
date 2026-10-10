@@ -24,3 +24,8 @@ Apertura (scena, domanda, obiettivi) → per cominciare → lezioni (una pagina 
 2. Admin → Esercizi → **Importa**: scegli il libro e carica `capitolo-01/esercizi.json` (codici CFC-1 … CFC-17, CFC-13 solo online).
 3. Admin → Audio e video → Nuovo: codice **CFC-16**, titolo «Luce e il gabbiano», pagina 14, file `capitolo-01/media/CFC-16-luce-e-il-gabbiano.mp3` (testo in `.txt`).
 4. Nel lettore i codici stampati diventano cliccabili da soli; i QR del PDF portano a `https://vladinc.ru/libri/apri.php?c=CODICE`.
+
+## Capitolo 2 · Il nome (pagine 17–26)
+- `capitolo-02/capitolo.html`, immagini in `capitolo-02/immagini/` (apertura «Nomi, cose, città», mercato della Pescheria).
+- Esercizi interattivi: `python3 scuola/chi-fa-cosa/capitolo-02/esercizi.py` → `esercizi.json` (CFC-18 … CFC-34; CFC-30 solo online).
+- Audio: codice **CFC-33** «Luce alla Pescheria», pagina 24, file `capitolo-02/media/CFC-33-luce-alla-pescheria.mp3`.
