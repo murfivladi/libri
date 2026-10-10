@@ -28,9 +28,24 @@
     b.style.left = (x * 100) + '%'; b.style.top = (y * 100) + '%'; b.style.width = (w * 100) + '%'; b.style.height = (h * 100) + '%';
     b.title = (info.titolo || codice) + ' (' + codice + ')';
     b.setAttribute('aria-label', 'Apri ' + (info.g === 'esercizio' ? 'esercizio' : info.t) + ': ' + (info.titolo || codice));
-    b.addEventListener('click', function (e) { e.stopPropagation(); apri(codice); });
+    var ultimoTocco = 0;
+    // col dito: si apre subito al tocco (alcuni telefoni non mandano il «click» dentro il libro che si sfoglia)
+    b.addEventListener('pointerup', function (e) { if (e.pointerType !== 'mouse') { e.stopPropagation(); ultimoTocco = Date.now(); apri(codice); } });
+    b.addEventListener('click', function (e) { e.stopPropagation(); if (Date.now() - ultimoTocco > 700) apri(codice); });
     div.appendChild(b);
   }
+
+  // tocco vicino a una zona piccola (fino a 22 px di distanza): apre lo stesso
+  window.zonaVicina = function (cx, cy) {
+    var best = null, dmin = 23;
+    document.querySelectorAll('.zona-scuola').forEach(function (b) {
+      var r = b.getBoundingClientRect(); if (!r.width) return;
+      var d = Math.hypot(Math.max(r.left - cx, 0, cx - r.right), Math.max(r.top - cy, 0, cy - r.bottom));
+      if (d < dmin) { dmin = d; best = b; }
+    });
+    if (best && finestra.hidden) { best.click(); return true; }
+    return false;
+  };
 
   window.dopoPagina = function (i, page, vp, div) {
     if (fatte[i]) return;

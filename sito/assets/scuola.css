@@ -89,6 +89,8 @@ body.incorporato .contenuto-apri { padding:16px 16px 28px; max-width:none; }
 
 /* ---------- lettore: zone cliccabili e finestra ---------- */
 .zona-scuola { position:absolute; z-index:3; border:2px solid transparent; border-radius:6px; background:transparent; padding:0; cursor:pointer; transition:background .15s, border-color .15s; }
+.zona-scuola::after { content:''; position:absolute; inset:-10px; }   /* area di tocco più grande del simbolo */
+@media (pointer: coarse) { .zona-scuola { min-width:28px; min-height:28px; } }
 .zona-scuola:hover, .zona-scuola:focus-visible { background:#f07c1226; border-color:var(--sc-arancio); outline:none; }
 .lettore-scuola .zona-scuola { animation:zona-luce 2.4s ease-out 1; }
 @keyframes zona-luce { 0%,40% { background:#f07c1240; border-color:var(--sc-arancio); } 100% { background:transparent; border-color:transparent; } }

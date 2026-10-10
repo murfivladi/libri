@@ -253,6 +253,7 @@
         if (dx > 0) indietro(alto); else avanti(alto);
       } else flip.userStop(pos);
     }
+    if (fermo && !annullato && inizio.tipo !== 'mouse' && window.zonaVicina && window.zonaVicina(ultimo.x, ultimo.y)) { gesto = null; inizio = null; return; }
     if (fermo && !annullato) {
       var ora = Date.now(), p = puntoScena(ultimo.x, ultimo.y);
       if (ultimoTocco && ora - ultimoTocco.t < 330 && Math.hypot(p.x - ultimoTocco.x, p.y - ultimoTocco.y) < 34) {   // doppio tocco / doppio clic

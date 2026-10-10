@@ -66,6 +66,13 @@ async function foto(p, nome) { if (SHOTS) await p.screenshot({ path: SHOTS + '/'
     await t.locator('.parola', { hasText: 'Luce' }).tap();
     chk('telefono: niente scorrimento orizzontale', await t.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
     await foto(t, '5-telefono');
+    await t.goto(`${B}/leggi.php?s=${SLUG}&pagina=2`);
+    await t.waitForSelector('.zona-scuola[title*="CFC-1"]', { timeout: 15000 });
+    await t.waitForTimeout(2600);
+    const zb = await t.locator('.zona-scuola[title*="CFC-1"]').boundingBox();
+    await t.touchscreen.tap(zb.x + zb.width / 2, zb.y + zb.height / 2);
+    await t.waitForTimeout(500);
+    chk('telefono: tocco sulla zona apre l\'esercizio', await t.locator('#finestra-scuola').isVisible());
     await t.goto(`${B}/scuola.php`);
     await foto(t, '6-scuola-telefono');
     await tel.close();
