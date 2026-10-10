@@ -198,3 +198,39 @@ table.tab.stretta td { padding-top: 1mm; padding-bottom: 1mm; }
 .copertina .bollino { position: absolute; left: 16mm; top: 150mm; width: 40mm; height: 40mm; border-radius: 50%; background: var(--arancio); color: #fff; display: flex; flex-direction: column;
   align-items: center; justify-content: center; text-align: center; font: 800 10pt/1.15 Inter, sans-serif; transform: rotate(-10deg); box-shadow: 0 1.6mm 0 #a34d00; }
 .copertina .bollino b { font: 900 22pt/1 "Inter Display", Inter, sans-serif; }
+
+/* ---------- pagine iniziali ---------- */
+.frontespizio { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 40mm; }
+.fr-autore { font: 700 14pt Inter, sans-serif; letter-spacing: .1em; }
+.fr-titolo { font: 900 46pt/1 "Inter Display", Inter, sans-serif; color: var(--parte-scuro); margin: 14mm 0 5mm; }
+.fr-sotto { font: 600 13pt/1.4 Inter, sans-serif; color: var(--muto); }
+.fr-img { height: 70mm; margin: 20mm 0 0; }
+.fr-editore { position: absolute; bottom: 22mm; left: 0; right: 0; font-size: 10pt; color: var(--muto); }
+.fr-editore b { display: block; font-size: 12pt; color: var(--testo); letter-spacing: .14em; text-transform: uppercase; }
+.colophon .col-testo { position: absolute; left: 15mm; right: 18mm; bottom: 26mm; font-size: 8.6pt; color: var(--muto); }
+.colophon .col-testo p { margin: 0 0 3mm; }
+.pres-tit { font-size: 22pt; color: var(--parte-scuro); margin: 2mm 0 6mm; }
+.presentazione p { font-size: 11.4pt; margin: 0 0 4mm; }
+.presentazione .firma { text-align: right; }
+.grazie { margin-top: 10mm; background: var(--parte-chiaro); border-radius: 4mm; padding: 5mm 7mm; }
+.grazie h3 { color: var(--parte); margin-bottom: 2mm; }
+.grazie p { margin: 0 !important; }
+.pers { display: grid; grid-template-columns: 55mm 1fr; gap: 6mm; align-items: center; margin: 4mm 0 8mm; }
+.pers img { width: 55mm; height: 80mm; object-fit: contain; }
+.pers h2 { font-size: 22pt; color: var(--parte-scuro); margin-bottom: 2mm; }
+.pers p { font-size: 11pt; margin: 0; }
+.guida h3 { color: var(--parte-scuro); margin: 3mm 0 2mm; font-size: 13pt; }
+.guida-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
+.guida-col p { margin: 0 0 2.6mm; }
+.guida-codice { justify-content: flex-start; margin: 0 0 3mm; }
+.colori { display: flex; flex-wrap: wrap; gap: 1.6mm; }
+.colori .t { color: #fff; font: 700 8.5pt Inter, sans-serif; padding: 1mm 2.6mm; border-radius: 1.6mm; }
+.percorso { margin: 0; padding-left: 6mm; columns: 2; column-gap: 8mm; }
+.percorso li { margin-bottom: 1.6mm; break-inside: avoid; }
+.indice .parte-ind { margin: 2mm 0 3mm; padding: 2mm 4mm; border-radius: 2.4mm; color: #fff; font: 800 10pt Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+.indice .cap-ind { display: flex; align-items: baseline; gap: 3mm; font: 800 14pt "Inter Display", Inter, sans-serif; margin: 3mm 0 1.5mm; }
+.indice .cap-ind .n { color: var(--parte); }
+.indice .riga { display: flex; align-items: baseline; gap: 2mm; padding-left: 9mm; margin-bottom: 1.1mm; font-size: 10.4pt; }
+.indice .riga::after, .indice .cap-ind::after { content: ""; order: 1; flex: 1; border-bottom: 0.4mm dotted #9aa3b5; }
+.indice .riga .pg, .indice .cap-ind .pg { order: 2; font-weight: 700; }
+.indice-nota { position: absolute; left: 15mm; bottom: 20mm; font-size: 8.6pt; color: var(--muto); font-style: italic; }
