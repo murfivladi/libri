@@ -209,7 +209,8 @@
     if (nPuntatori() === 2) { avviaPizzico(); return; }
     if (nPuntatori() > 2) return;
     inizio = { x: ev.clientX, y: ev.clientY, t: Date.now(), tx: tx, ty: ty, mosso: false, tipo: ev.pointerType };
-    if (zoom > 1.02) gesto = 'sposta';
+    if (window.zonaVicina && window.zonaVicina(ev.clientX, ev.clientY, true)) gesto = 'zona';     // vicino a un esercizio: niente pagina girata
+    else if (zoom > 1.02) gesto = 'sposta';
     else { gesto = 'pagina'; flip.startUserTouch(posLibro(ev.clientX, ev.clientY)); }
   });
 
@@ -245,6 +246,7 @@
     if (!inizio) return;
     var dx = ultimo.x - inizio.x, dy = ultimo.y - inizio.y, durata = Date.now() - inizio.t;
     var fermo = !inizio.mosso && durata < 350;
+    if (gesto === 'zona') { if (!inizio.mosso && durata < 900 && !annullato) window.zonaVicina(ultimo.x, ultimo.y); gesto = null; inizio = null; ultimoTocco = null; return; }
     if (gesto === 'pagina') {
       var pos = posLibro(ultimo.x, ultimo.y);
       if (!annullato && Math.abs(dx) > 30 && Math.abs(dy) < 70 && durata < 250 && inizio.tipo !== 'mouse') {   // strisciata veloce = pagina girata
@@ -253,7 +255,6 @@
         if (dx > 0) indietro(alto); else avanti(alto);
       } else flip.userStop(pos);
     }
-    if (fermo && !annullato && inizio.tipo !== 'mouse' && window.zonaVicina && window.zonaVicina(ultimo.x, ultimo.y)) { gesto = null; inizio = null; return; }
     if (fermo && !annullato) {
       var ora = Date.now(), p = puntoScena(ultimo.x, ultimo.y);
       if (ultimoTocco && ora - ultimoTocco.t < 330 && Math.hypot(p.x - ultimoTocco.x, p.y - ultimoTocco.y) < 34) {   // doppio tocco / doppio clic

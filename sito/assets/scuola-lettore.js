@@ -35,15 +35,15 @@
     div.appendChild(b);
   }
 
-  // tocco vicino a una zona piccola (fino a 22 px di distanza): apre lo stesso
-  window.zonaVicina = function (cx, cy) {
-    var best = null, dmin = 23;
+  // tocco vicino a una zona (fino a 30 px di distanza): apre l'esercizio invece di girare pagina o ingrandire
+  window.zonaVicina = function (cx, cy, soloControlla) {
+    var best = null, dmin = 31;
     document.querySelectorAll('.zona-scuola').forEach(function (b) {
       var r = b.getBoundingClientRect(); if (!r.width) return;
       var d = Math.hypot(Math.max(r.left - cx, 0, cx - r.right), Math.max(r.top - cy, 0, cy - r.bottom));
       if (d < dmin) { dmin = d; best = b; }
     });
-    if (best && finestra.hidden) { best.click(); return true; }
+    if (best && finestra.hidden) { if (!soloControlla) best.click(); return true; }
     return false;
   };
 
@@ -64,7 +64,7 @@
           var w = it.width * vp.scale, h = Math.hypot(t[2], t[3]) || 12;
           var x0 = t[4] + w * (m.index / Math.max(1, s.length)), wc = w * (codice.length / Math.max(1, s.length));
           // il simbolo sta di solito a sinistra del codice: la zona lo comprende, con un po' di margine
-          var x = x0 - h * 2.4, y = t[5] - h * 1.5, ww = wc + h * 2.8, hh = h * 2.2;
+          var x = x0 - h * 2.4, y = t[5] - h * 2.8, ww = wc + h * 7.6, hh = h * 4.6;   // simbolo, codice e QR
           zona(div, Math.max(0, x / W), Math.max(0, y / H), Math.min(1, ww / W), Math.min(1, hh / H), codice);
         }
       });

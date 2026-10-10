@@ -73,6 +73,11 @@ async function foto(p, nome) { if (SHOTS) await p.screenshot({ path: SHOTS + '/'
     await t.touchscreen.tap(zb.x + zb.width / 2, zb.y + zb.height / 2);
     await t.waitForTimeout(500);
     chk('telefono: tocco sulla zona apre l\'esercizio', await t.locator('#finestra-scuola').isVisible());
+    await t.locator('#chiudi-finestra').tap();
+    const prima = await t.locator('#vai').inputValue();
+    await t.touchscreen.tap(zb.x + zb.width + 14, zb.y + zb.height + 10);       // tocco un po' fuori dalla zona
+    await t.waitForTimeout(600);
+    chk('telefono: tocco vicino alla zona apre l\'esercizio (e non gira pagina)', await t.locator('#finestra-scuola').isVisible() && await t.locator('#vai').inputValue() === prima);
     await t.goto(`${B}/scuola.php`);
     await foto(t, '6-scuola-telefono');
     await tel.close();
