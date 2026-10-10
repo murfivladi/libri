@@ -1,0 +1,654 @@
+{
+ "versione": 1,
+ "esercizi": [
+  {
+   "codice": "CFC-70",
+   "pagina": 48,
+   "titolo": "Trova i pronomi personali",
+   "consegna": "Scegli «pronome» e tocca i pronomi personali.",
+   "tipo": "tocca",
+   "dati": {
+    "categorie": [
+     {
+      "nome": "pronome",
+      "colore": "#5d4037"
+     }
+    ],
+    "frasi": [
+     {
+      "testo": "Io vado al mare, tu vieni con me?",
+      "segni": {
+       "0": "pronome",
+       "4": "pronome",
+       "7": "pronome"
+      },
+      "spiegazione": ""
+     },
+     {
+      "testo": "Noi studiamo, loro giocano in cortile.",
+      "segni": {
+       "0": "pronome",
+       "2": "pronome"
+      },
+      "spiegazione": ""
+     },
+     {
+      "testo": "Luce ha visto la vicina e la saluta.",
+      "segni": {
+       "6": "pronome"
+      },
+      "spiegazione": "Il primo «la» è un articolo (la vicina); il secondo sta al posto di «la vicina»: è un pronome."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-71",
+   "pagina": 48,
+   "titolo": "Gli o le?",
+   "consegna": "Scegli la forma giusta.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Ho visto Marco e … ho dato il libro.",
+      "opzioni": [
+       "gli",
+       "le"
+      ],
+      "giusta": 0,
+      "spiegazione": "a lui = gli"
+     },
+     {
+      "testo": "Telefono alla nonna e … dico ciao.",
+      "opzioni": [
+       "gli",
+       "le"
+      ],
+      "giusta": 1,
+      "spiegazione": "a lei = le"
+     },
+     {
+      "testo": "Luce ha fame: … do le crocchette.",
+      "opzioni": [
+       "gli",
+       "le"
+      ],
+      "giusta": 1,
+      "spiegazione": "Luce è femmina: a lei = le."
+     },
+     {
+      "testo": "Il prof è arrivato: … consegno il compito.",
+      "opzioni": [
+       "gli",
+       "le"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-72",
+   "pagina": 51,
+   "titolo": "I pronomi deboli",
+   "consegna": "Scrivi il pronome debole al posto delle parole tra parentesi.",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "Vlad chiama (Luce). → Vlad [la] chiama."
+     },
+     {
+      "testo": "Mangio (i biscotti). → [Li] mangio."
+     },
+     {
+      "testo": "Scrivo (a Marco). → [Gli] scrivo."
+     },
+     {
+      "testo": "Porto il gelato (a Giulia). → [Le] porto il gelato."
+     },
+     {
+      "testo": "Guardo (le stelle). → [Le] guardo.",
+      "spiegazione": "«le» qui è complemento oggetto (le stelle), non «a lei»."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-73",
+   "pagina": 51,
+   "titolo": "Aggettivo o pronome?",
+   "consegna": "La parola tra asterischi è un aggettivo o un pronome?",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "*Quello* zaino è mio.",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "*Quello* è mio.",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "*Alcuni* sono stanchi.",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "*Alcuni* ragazzi sono stanchi.",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "*Quale* preferisci?",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "La *tua* idea è ottima.",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-74",
+   "pagina": 51,
+   "titolo": "Che tipo di pronome?",
+   "consegna": "Trascina ogni pronome nel gruppo giusto.",
+   "tipo": "gruppi",
+   "dati": {
+    "gruppi": [
+     {
+      "nome": "personale",
+      "elementi": [
+       "noi",
+       "te"
+      ]
+     },
+     {
+      "nome": "possessivo",
+      "elementi": [
+       "il loro",
+       "il nostro"
+      ]
+     },
+     {
+      "nome": "dimostrativo",
+      "elementi": [
+       "ciò",
+       "questo"
+      ]
+     },
+     {
+      "nome": "indefinito",
+      "elementi": [
+       "qualcuno",
+       "niente"
+      ]
+     },
+     {
+      "nome": "interrogativo",
+      "elementi": [
+       "chi",
+       "che cosa"
+      ]
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-75",
+   "pagina": 51,
+   "titolo": "Vero o falso",
+   "consegna": "Decidi se ogni frase è vera o falsa.",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "«Gli» significa «a lei».",
+      "vero": false,
+      "spiegazione": "«gli» = a lui (o a loro); «le» = a lei."
+     },
+     {
+      "testo": "«Ciò» è sempre un pronome.",
+      "vero": true
+     },
+     {
+      "testo": "Il pronome soggetto si deve scrivere sempre.",
+      "vero": false,
+      "spiegazione": "Spesso si sottintende: la desinenza del verbo dice già chi fa l'azione."
+     },
+     {
+      "testo": "In «Vieni con me», «me» è una forma forte.",
+      "vero": true
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-76",
+   "pagina": 51,
+   "titolo": "Racconta con i pronomi",
+   "consegna": "Racconta in tre frasi che cosa hai fatto ieri con un amico, usando almeno tre pronomi diversi.",
+   "tipo": "aperta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Il tuo racconto:",
+      "esempio": "Ieri ho incontrato Marco e gli ho prestato un libro. Lui mi ha detto che questo è il suo preferito. Poi qualcuno ci ha chiamati per giocare."
+     }
+    ]
+   },
+   "livello": 3,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-77",
+   "pagina": 53,
+   "titolo": "Che o cui?",
+   "consegna": "Completa con «che» oppure con preposizione + «cui».",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "Ho letto il libro [che] mi hai prestato."
+     },
+     {
+      "testo": "Questa è la spiaggia [in cui|a cui] vado ogni estate."
+     },
+     {
+      "testo": "Saluto l'amica [con cui] esco."
+     },
+     {
+      "testo": "Luce ha un osso [che] è enorme."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-78",
+   "pagina": 53,
+   "titolo": "«Che» pronome o congiunzione?",
+   "consegna": "Prova a sostituire con «il quale / la quale».",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Il gatto *che* ruba è grigio.",
+      "opzioni": [
+       "pronome relativo",
+       "congiunzione"
+      ],
+      "giusta": 0,
+      "spiegazione": "= il gatto il quale ruba."
+     },
+     {
+      "testo": "Penso *che* pioverà.",
+      "opzioni": [
+       "pronome relativo",
+       "congiunzione"
+      ],
+      "giusta": 1,
+      "spiegazione": "Non si può dire «penso il quale»."
+     },
+     {
+      "testo": "La torta *che* hai fatto è ottima.",
+      "opzioni": [
+       "pronome relativo",
+       "congiunzione"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Spero *che* tu venga.",
+      "opzioni": [
+       "pronome relativo",
+       "congiunzione"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-79",
+   "pagina": 53,
+   "titolo": "Il quale",
+   "consegna": "Scrivi la forma giusta di «il quale» (con la preposizione se serve).",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "le amiche che ho invitato → le amiche [le quali] ho invitato"
+     },
+     {
+      "testo": "il paese in cui sono nato → il paese [nel quale] sono nato",
+      "spiegazione": "in + il quale = nel quale."
+     },
+     {
+      "testo": "i ragazzi con cui gioco → i ragazzi [con i quali|coi quali] gioco"
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-80",
+   "pagina": 53,
+   "titolo": "L'analisi del pronome",
+   "consegna": "«Chi ha visto Luce? Io la cerco, ma nessuno mi risponde»: completa l'analisi.",
+   "tipo": "completa",
+   "dati": {
+    "banca": true,
+    "frasi": [
+     {
+      "testo": "Chi → pronome [interrogativo]"
+     },
+     {
+      "testo": "Io → pronome [personale], 1ª persona singolare, soggetto"
+     },
+     {
+      "testo": "la → pronome [personale], 3ª persona singolare, femminile"
+     },
+     {
+      "testo": "nessuno → pronome [indefinito]"
+     },
+     {
+      "testo": "mi → pronome [personale], 1ª persona singolare, forma debole"
+     }
+    ]
+   },
+   "livello": 3,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-81",
+   "pagina": 53,
+   "titolo": "Rimetti in ordine",
+   "consegna": "Trascina le parole per formare la frase.",
+   "tipo": "ordina",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "Il gatto che ha preso il panino è grigio."
+     },
+     {
+      "testo": "Vlad le regala un biscotto."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-82",
+   "pagina": 53,
+   "titolo": "Basta ripetere!",
+   "consegna": "Scrivi il pronome al posto del nome ripetuto.",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "Ho un gatto. [Lo] porto dal veterinario."
+     },
+     {
+      "testo": "Vedo la nonna e [le] porto i fiori."
+     },
+     {
+      "testo": "I miei amici arrivano: [li] aspetto alla stazione."
+     },
+     {
+      "testo": "Marco ha fame: [gli] preparo un panino."
+     },
+     {
+      "testo": "Ho comprato delle pesche e [le] ho mangiate."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 1
+  },
+  {
+   "codice": "CFC-83",
+   "pagina": 54,
+   "titolo": "Il segreto della nonna: hai capito?",
+   "consegna": "Vero o falso?",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "La nonna tiene la ricetta in un quaderno.",
+      "vero": true
+     },
+     {
+      "testo": "La nonna dice subito il segreto a Vlad.",
+      "vero": false,
+      "spiegazione": "«Te lo dico quando sarai grande»."
+     },
+     {
+      "testo": "Manca un cannolo.",
+      "vero": true
+     },
+     {
+      "testo": "Alla fine la nonna si arrabbia.",
+      "vero": false,
+      "spiegazione": "Ride tanto!"
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-84",
+   "pagina": 54,
+   "titolo": "I pronomi del racconto",
+   "consegna": "Tocca i pronomi.",
+   "tipo": "tocca",
+   "dati": {
+    "categorie": [
+     {
+      "nome": "pronome",
+      "colore": "#5d4037"
+     }
+    ],
+    "frasi": [
+     {
+      "testo": "Lei mi ha dato la ricotta e io l'ho mescolata con lo zucchero.",
+      "segni": {
+       "0": "pronome",
+       "1": "pronome",
+       "7": "pronome"
+      },
+      "spiegazione": "Anche in «l'ho» c'è un pronome: l' = la ricotta."
+     },
+     {
+      "testo": "Nessuno conosce la sua ricetta.",
+      "segni": {
+       "0": "pronome"
+      },
+      "spiegazione": "«sua» qui è un aggettivo possessivo: accompagna «ricetta»."
+     },
+     {
+      "testo": "Lei ha sorriso: «Te lo dico quando sarai grande».",
+      "segni": {
+       "0": "pronome",
+       "3": "pronome",
+       "4": "pronome"
+      },
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-86",
+   "pagina": 56,
+   "titolo": "Verifica: che tipo di pronome?",
+   "consegna": "Scegli il tipo del pronome.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "voi",
+      "opzioni": [
+       "personale",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "interrogativo",
+       "relativo"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "cui",
+      "opzioni": [
+       "personale",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "interrogativo",
+       "relativo"
+      ],
+      "giusta": 5,
+      "spiegazione": ""
+     },
+     {
+      "testo": "ciò",
+      "opzioni": [
+       "personale",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "interrogativo",
+       "relativo"
+      ],
+      "giusta": 2,
+      "spiegazione": ""
+     },
+     {
+      "testo": "chiunque",
+      "opzioni": [
+       "personale",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "interrogativo",
+       "relativo"
+      ],
+      "giusta": 3,
+      "spiegazione": ""
+     },
+     {
+      "testo": "il vostro",
+      "opzioni": [
+       "personale",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "interrogativo",
+       "relativo"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "che cosa?",
+      "opzioni": [
+       "personale",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "interrogativo",
+       "relativo"
+      ],
+      "giusta": 4,
+      "spiegazione": ""
+     },
+     {
+      "testo": "ti",
+      "opzioni": [
+       "personale",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "interrogativo",
+       "relativo"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "quello (da solo)",
+      "opzioni": [
+       "personale",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "interrogativo",
+       "relativo"
+      ],
+      "giusta": 2,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  }
+ ]
+}

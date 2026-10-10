@@ -37,3 +37,7 @@ Apertura (scena, domanda, obiettivi) → per cominciare → lezioni (una pagina 
 ## Capitolo 4 · L'aggettivo (pagine 37–46)
 - Esercizi: `capitolo-04/esercizi.py` → `esercizi.json` (CFC-52 … CFC-69; CFC-65 solo online). Audio **CFC-68** «Il concorso più simpatico», pagina 44.
 - Immagini `apertura.jpg` e `concorso.jpg`: le genera Vlad dai prompt (reference: 1 = Vlad, 2 = Luce).
+
+## Capitolo 5 · Il pronome (pagine 47–56)
+- Esercizi: `capitolo-05/esercizi.py` → `esercizi.json` (CFC-70 … CFC-86; CFC-82 solo online). Audio **CFC-85** «Il segreto della nonna», pagina 54.
+- Immagini `apertura.jpg` e `nonna.jpg`: le genera Vlad dai prompt.
