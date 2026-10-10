@@ -234,3 +234,9 @@ table.tab.stretta td { padding-top: 1mm; padding-bottom: 1mm; }
 .indice .riga::after, .indice .cap-ind::after { content: ""; order: 1; flex: 1; border-bottom: 0.4mm dotted #9aa3b5; }
 .indice .riga .pg, .indice .cap-ind .pg { order: 2; font-weight: 700; }
 .indice-nota { position: absolute; left: 15mm; bottom: 20mm; font-size: 8.6pt; color: var(--muto); font-style: italic; }
+
+#indice { columns: 2; column-gap: 8mm; }
+#indice .parte-ind { column-span: all; }
+.indice .cap-ind { font-size: 11.5pt; margin: 2.5mm 0 1mm; break-after: avoid; }
+.indice .riga { font-size: 9.4pt; padding-left: 6mm; margin-bottom: .6mm; }
+.indice .altro { font-size: 8pt; color: var(--muto); padding-left: 6mm; margin-bottom: 1.5mm; break-before: avoid; }

@@ -35,7 +35,13 @@ const capitoli = fs.readdirSync(dir).filter(d => /^capitolo-\d+$/.test(d) && fs.
     voci.forEach(v => {
       if (v.parte !== parte) { parte = v.parte; h += `<div class="parte-ind" style="background:${v.logica ? '#e8710a' : '#1f5fbf'}">${e(parte)}</div>`; }
       h += `<div class="cap-ind"><span class="n">${e(v.n)}</span><span>${e(v.titolo)}</span><span class="pg">${e(v.p)}</span></div>`;
-      v.righe.forEach(r => { h += `<div class="riga"><span>${e(r.t)}</span><span class="pg">${e(r.p)}</span></div>`; });
+      // le lezioni una per riga; il resto (per cominciare, esercizi, testo, mappa, verifica) in una riga sola
+      const altro = [];
+      v.righe.forEach(r => {
+        if (/^Lezione/.test(r.t)) h += `<div class="riga"><span>${e(r.t.replace(/^Lezione (\d+) · /, '$1. '))}</span><span class="pg">${e(r.p)}</span></div>`;
+        else altro.push(`${r.t.replace(/ · Capitolo \d+$/, '').replace('Dal testo alla grammatica', 'Testo').replace('Mappa del capitolo', 'Mappa').toLowerCase()} ${r.p}`);
+      });
+      if (altro.length) h += `<div class="altro">${e(altro.join(' · '))}</div>`;
     });
     document.getElementById('indice').innerHTML = h;
   }, voci);
