@@ -29,3 +29,7 @@ Apertura (scena, domanda, obiettivi) → per cominciare → lezioni (una pagina 
 - `capitolo-02/capitolo.html`, immagini in `capitolo-02/immagini/` (apertura «Nomi, cose, città», mercato della Pescheria).
 - Esercizi interattivi: `python3 scuola/chi-fa-cosa/capitolo-02/esercizi.py` → `esercizi.json` (CFC-18 … CFC-34; CFC-30 solo online).
 - Audio: codice **CFC-33** «Luce alla Pescheria», pagina 24, file `capitolo-02/media/CFC-33-luce-alla-pescheria.mp3`.
+
+## Capitolo 3 · L'articolo (pagine 27–36)
+- Esercizi: `capitolo-03/esercizi.py` → `esercizi.json` (CFC-35 … CFC-51; CFC-47 solo online). Audio **CFC-50** «Luce sull'Etna», pagina 34.
+- Illustrazioni provvisorie (composte dai ritagli: limite giornaliero di immagini deAPI finito): da rifare con l'AI.
