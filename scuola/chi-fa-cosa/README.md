@@ -40,4 +40,4 @@ Apertura (scena, domanda, obiettivi) → per cominciare → lezioni (una pagina 
 
 ## Capitolo 5 · Il pronome (pagine 47–56)
 - Esercizi: `capitolo-05/esercizi.py` → `esercizi.json` (CFC-70 … CFC-86; CFC-82 solo online). Audio **CFC-85** «Il segreto della nonna», pagina 54.
-- Immagini `apertura.jpg` e `nonna.jpg`: le genera Vlad dai prompt.
+- Immagini generate da Vlad dai prompt.
