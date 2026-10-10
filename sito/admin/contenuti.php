@@ -102,7 +102,8 @@ if ($id || $nuovo) {
   <label class="tipo-es"><input type="radio" name="fonte" value="registra"><span class="ic">🎙</span><b>Registra la tua voce</b><small>Dal microfono del computer o del telefono</small></label>
   <label class="tipo-es"><input type="radio" name="fonte" value="voce"><span class="ic">🤖</span><b>Voce AI</b><small>deAPI legge il testo qui sotto</small></label>
 </div>
-<div data-fonte="file"><label>File <input type="file" name="file" id="file-media" accept="audio/*,video/*,image/*"></label></div>
+<div data-fonte="file"><label>File <input type="file" name="file" id="file-media" accept=".mp3,.m4a,.aac,.ogg,.wav,.webm,.mp4,.mov,.jpg,.jpeg,.png,.webp,.gif,audio/mpeg,audio/mp4,audio/wav,video/mp4,video/quicktime,image/jpeg,image/png"></label>
+  <p class="muto">Audio (mp3, m4a, wav, ogg), video (mp4, mov, webm) o immagini. Sul telefono, se vedi solo la galleria, scegli «File» o «Sfoglia».</p></div>
 <div data-fonte="registra" hidden>
   <div class="registratore" id="registratore"><button type="button" class="bottone" id="reg-via">⏺ Registra</button><button type="button" class="bottone sec" id="reg-stop" disabled>⏹ Ferma</button><span class="punto"></span><span id="reg-tempo" class="muto">0:00</span></div>
   <p class="muto" id="reg-stato">Premi «Registra», parla, poi «Ferma». Puoi riascoltare prima di salvare.</p>

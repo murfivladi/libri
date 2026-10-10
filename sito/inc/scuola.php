@@ -179,7 +179,10 @@ function mappa_scuola_libro(int $libro_id): array {
 // Dopo il salvataggio $GLOBALS['ultimo_media_tipo'] vale 'audio', 'video' o 'immagine'.
 function salva_media_da_percorso(string $tmp, bool $caricato, string $suggerito = ''): string {
     $mime = (new finfo(FILEINFO_MIME_TYPE))->file($tmp);
-    if ($mime === 'application/octet-stream' || $mime === 'video/x-matroska') $mime = str_starts_with($suggerito, 'video/') ? 'video/webm' : 'audio/webm';
+    if ($mime === 'application/octet-stream' && preg_match('/\.(mp3|m4a|wav|ogg|aac)$/i', $GLOBALS['nome_caricato'] ?? '', $m))   // mp3 senza intestazione: decide l'estensione
+        $mime = ['mp3' => 'audio/mpeg', 'm4a' => 'audio/mp4', 'wav' => 'audio/wav', 'ogg' => 'audio/ogg', 'aac' => 'audio/aac'][strtolower($m[1])];
+    elseif ($mime === 'application/octet-stream' || $mime === 'video/x-matroska') $mime = str_starts_with($suggerito, 'video/') ? 'video/webm' : 'audio/webm';
+    if ($mime === 'audio/x-mpeg' || $mime === 'audio/mpeg3') $mime = 'audio/mpeg';
     if (!isset(TIPI_MEDIA[$mime])) throw new RuntimeException('Tipo di file non ammesso (' . $mime . ').');
     $GLOBALS['ultimo_media_tipo'] = str_starts_with($mime, 'image/') ? 'immagine'
         : (str_starts_with($mime, 'audio/') ? 'audio' : ($mime === 'video/webm' && str_starts_with($suggerito, 'audio/') ? 'audio' : 'video'));
@@ -201,6 +204,7 @@ function salva_media(string $campo, int $max = 200 * 1024 * 1024): ?string {
     $f = $_FILES[$campo];
     if ($f['error'] !== UPLOAD_ERR_OK) throw new RuntimeException('Caricamento fallito (codice ' . $f['error'] . '). Controlla upload_max_filesize su PHP.');
     if ($f['size'] > $max) throw new RuntimeException('File troppo grande.');
+    $GLOBALS['nome_caricato'] = (string)$f['name'];
     return salva_media_da_percorso($f['tmp_name'], true, (string)($f['type'] ?? ''));
 }
 
