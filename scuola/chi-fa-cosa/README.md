@@ -33,3 +33,7 @@ Apertura (scena, domanda, obiettivi) → per cominciare → lezioni (una pagina 
 ## Capitolo 3 · L'articolo (pagine 27–36)
 - Esercizi: `capitolo-03/esercizi.py` → `esercizi.json` (CFC-35 … CFC-51; CFC-47 solo online). Audio **CFC-50** «Luce sull'Etna», pagina 34.
 - Illustrazioni generate da Vlad con le reference dei personaggi.
+
+## Capitolo 4 · L'aggettivo (pagine 37–46)
+- Esercizi: `capitolo-04/esercizi.py` → `esercizi.json` (CFC-52 … CFC-69; CFC-65 solo online). Audio **CFC-68** «Il concorso più simpatico», pagina 44.
+- Immagini `apertura.jpg` e `concorso.jpg`: le genera Vlad dai prompt (reference: 1 = Vlad, 2 = Luce).
