@@ -16,7 +16,7 @@ python3 "$REPO/sito/tests/pdf_scuola.py" "$T/libro.pdf" "$T/voce.wav" || { echo 
 php -r 'require "inc/bootstrap.php"; db()->prepare("INSERT INTO admin (id, password) VALUES (1, ?)")->execute([password_hash("provaprova12", PASSWORD_DEFAULT)]);'
 php -d post_max_size=100M -d upload_max_filesize=100M -S 127.0.0.1:$PORT >"$T/server.log" 2>&1 &
 PID=$!
-trap 'kill $PID 2>/dev/null; rm -rf "$T"' EXIT
+trap 'kill $PID ${PIDF:-} 2>/dev/null; rm -rf "$T"' EXIT
 for i in $(seq 1 30); do curl -s -o /dev/null "$B/robots.txt" && break; sleep 0.2; done
 
 chk()  { if [ "$2" = "$3" ]; then ok=$((ok+1)); else ko=$((ko+1)); echo "FAIL: $1 (atteso '$3', ottenuto '$2')"; fi; }
@@ -78,7 +78,7 @@ chk "file in uploads/media" "$([ -f "uploads/media/$F" ] && echo si)" si
 Tk=$(tok "admin/contenuti.php?nuovo=1")
 post admin/contenuti.php -F csrf=$Tk -F libro_id=$LID -F codice=CFC-3 -F fonte=file -F azione=salva >/dev/null
 chk "contenuto senza file rifiutato" "$(grep -c 'class="errore">Carica un file' "$T/post.html")" 1
-chk "voce AI senza chiave: avviso" "$(curl -s -b "$J" "$B/admin/contenuti.php?nuovo=1" | conta 'serve la chiave deAPI')" 1
+chk "voce AI senza chiave: avviso" "$(curl -s -b "$J" "$B/admin/contenuti.php?nuovo=1" | conta 'serve la chiave di Polza.ai')" 1
 
 # ---------- zone ----------
 chk "pagina zone" "$(code "admin/zone.php?libro=$LID")" 200; senza_errori "admin/zone.php"
@@ -116,6 +116,92 @@ chk "studio AI: posa nuova tra i personaggi della lavagna" "$(curl -s -b "$J" "$
 chk "studio AI: risultato diventato contenuto" "$(sql "SELECT COUNT(*) FROM contenuti WHERE titolo = 'Da AI' AND file = 'aaaaaaaaaaaaaaaa.wav'")" 1
 php -r 'require "inc/ai.php"; db()->exec("DELETE FROM lavori_ai"); db()->exec("DELETE FROM contenuti WHERE titolo = \"Da AI\"");'
 chk "studio AI: il file della posa resta (è in uso)" "$([ -f uploads/media/aaaaaaaaaaaaaaaa.wav ] && echo si)" si
+
+# ---------- Studio AI con Polza.ai (un finto Polza in locale: stesse risposte dell'API vera, nessuna spesa) ----------
+PORTF=${PORT_FINTO:-8101}; FD="$T/finto"; mkdir -p "$FD"
+printf '\x00\x00\x00\x18ftypmp42\x00\x00\x00\x00mp42isom\x00\x00\x00\x08free' > "$T/finto.mp4"
+POLZA_FINTO_DIR="$FD" POLZA_FINTO_WAV="$T/voce.wav" POLZA_FINTO_MP4="$T/finto.mp4" php -S 127.0.0.1:$PORTF "$REPO/sito/tests/polza_finto.php" >"$T/finto.log" 2>&1 &
+PIDF=$!
+for i in $(seq 1 30); do curl -s -o /dev/null "http://127.0.0.1:$PORTF/api/v2/balance" && break; sleep 0.2; done
+echo "<?php return ['polza_url' => 'http://127.0.0.1:$PORTF/api', 'scarica_locale' => true];" > data/config.php
+reg() { cat "$FD/$1.json"; }
+controlla() { curl -s -b "$J" "$B/admin/ai.php?azione=controlla" >/dev/null; }
+chk "polza: pannello nell'admin" "$(curl -s -b "$J" "$B/admin/scuola.php" | conta 'Polza.ai (immagini, voci, musica e video')" 1
+Tk=$(tok admin/scuola.php)
+post admin/scuola.php -d "csrf=$Tk&azione=polza&polza_chiave=corta" >/dev/null
+chk "polza: chiave che non sembra giusta rifiutata" "$(curl -s -b "$J" "$B/admin/scuola.php" | conta 'non sembra giusta')" 1
+Tk=$(tok admin/scuola.php)
+post admin/scuola.php -d "csrf=$Tk&azione=polza&polza_chiave=chiave-sbagliata-polza-9999&prova=1" >/dev/null
+chk "polza: chiave rifiutata dal servizio, messaggio chiaro" "$(curl -s -b "$J" "$B/admin/scuola.php" | conta 'rifiuta la chiave')" 1
+Tk=$(tok admin/scuola.php)
+post admin/scuola.php -d "csrf=$Tk&azione=polza&polza_chiave=prova-chiave-polza-0123456&prova=1" >/dev/null
+chk "polza: chiave giusta, saldo mostrato" "$(curl -s -b "$J" "$B/admin/scuola.php" | conta 'Saldo: 99,50')" 1
+chk "polza: da ora lo Studio AI usa Polza" "$(php -r 'require "inc/scuola.php"; echo ai_provider();')" polza
+chk "polza: i backup non portano la chiave" "$(grep -c "'polza_chiave'" admin/strumenti.php)" 1
+
+# voci: pronte subito (nessuna coda)
+Tk=$(tok "admin/ai.php?vista=voci")
+post admin/ai.php -d "csrf=$Tk&azione=voce_luce&prova=1" --data-urlencode "descrizione=Voce dolce di cagnolina" --data-urlencode "testo_prova=Ciao sono Luce e oggi studiamo" >/dev/null
+chk "polza voce di Luce: pronta subito" "$(sql "SELECT COUNT(*) FROM lavori_ai WHERE tipo = 'voce' AND stato = 'fatto' AND risultato != ''")" 1
+chk "polza voce di Luce: modello e istruzioni mandati" "$(reg voce | conta '"model":"openai/gpt-4o-mini-tts".*"instructions":"Voce dolce di cagnolina"')" 1
+chk "polza voce di Luce: la prova è salvata" "$([ -n "$(sql "SELECT valore FROM impostazioni WHERE chiave = 'voce_luce_prova'")" ] && echo si)" si
+post admin/ai.php -d "csrf=$Tk&azione=voce_vlad&prova=1" --data-urlencode "descrizione=Ragazzo di 13 anni" --data-urlencode "testo_prova=Adesso proviamo insieme la frase" >/dev/null
+chk "polza voce di Vlad: senza copia della voce, a parole" "$(reg voce | conta '"voice":"ash".*"instructions":"Ragazzo di 13 anni"')" 1
+post admin/ai.php -d "csrf=$Tk&azione=voce_luce&prova=1" --data-urlencode "descrizione=x" --data-urlencode "testo_prova=POCO CREDITO per questa prova" >/dev/null
+chk "polza: credito finito, messaggio chiaro" "$(curl -s -b "$J" "$B/admin/ai.php?vista=voci" | conta 'credito di Polza.ai è finito')" 1
+chk "polza: la voce AI si sceglie in Audio e video" "$(curl -s -b "$J" "$B/admin/contenuti.php?nuovo=1" | conta 'value="nova"')" 1
+
+# immagine con la scheda di Luce come riferimento → poi lo sfondo tolto dal sito (posa per la lavagna)
+Tk=$(tok "admin/ai.php?vista=immagini")
+post admin/ai.php -d "csrf=$Tk&azione=immagine&dest=personaggio&formato=orizzontale&titolo=Luce+salta" -d "rif[]=assets/personaggi/luce-scheda.jpg" --data-urlencode "prompt=Luce salta felice" >/dev/null
+chk "polza immagine: modello" "$(reg media-img | conta '"model":"google/gemini-nano-banana-2.1"')" 1
+chk "polza immagine: posa in verticale (2:3)" "$(reg media-img | conta '"aspect_ratio":"2:3"')" 1
+chk "polza immagine: la scheda di Luce come riferimento" "$(reg media-img | conta '"images":\[{"type":"base64","data":"data:image/jpeg;base64,')" 1
+chk "polza immagine: in preparazione" "$(sql "SELECT stato FROM lavori_ai WHERE tipo = 'immagine'")" attesa
+controlla; chk "polza immagine: la prima volta non è pronta" "$(sql "SELECT stato FROM lavori_ai WHERE tipo = 'immagine'")" attesa
+controlla; chk "polza immagine: pronta e scaricata" "$(sql "SELECT stato FROM lavori_ai WHERE tipo = 'immagine'")" fatto
+chk "polza immagine: sfondo tolto dal sito" "$(sql "SELECT COUNT(*) FROM lavori_ai WHERE tipo = 'scontorno' AND stato = 'fatto'")" 1
+SF=$(sql "SELECT risultato FROM lavori_ai WHERE tipo = 'scontorno'")
+chk "polza immagine: lo sfondo è davvero trasparente" "$(php -r '$im = imagecreatefrompng("uploads/media/" . basename($argv[1])); echo (imagecolorat($im, 2, 2) >> 24) & 127;' "$SF")" 127
+chk "polza immagine: la figura resta colorata" "$(php -r '$im = imagecreatefrompng("uploads/media/" . basename($argv[1])); echo (imagecolorat($im, 60, 80) >> 24) & 127;' "$SF")" 0
+chk "polza immagine: posa tra i personaggi della lavagna" "$(curl -s -b "$J" "$B/admin/lavagna.php?nuova=1" | conta 'Luce salta')" 1
+
+# musica: clip breve o brano intero, sempre strumentale
+Tk=$(tok "admin/ai.php?vista=musica")
+post admin/ai.php -d "csrf=$Tk&azione=musica&durata=30&bpm=100&libro_id=0&pagina=0" --data-urlencode "descrizione=allegra con ukulele" --data-urlencode "titolo=Sigla breve" >/dev/null
+chk "polza musica: clip per i brani corti" "$(reg media-mus | conta 'lyria-3-clip-preview')" 1
+chk "polza musica: strumentale e ritmo nel testo" "$(reg media-mus | conta 'senza voce.*100 battiti al minuto')" 1
+controlla; controlla
+chk "polza musica: arriva tra i contenuti (data[0].url)" "$(sql "SELECT COUNT(*) FROM contenuti WHERE titolo = 'Sigla breve' AND tipo = 'audio' AND file != ''")" 1
+post admin/ai.php -d "csrf=$Tk&azione=musica&durata=90&bpm=0&libro_id=0&pagina=0" --data-urlencode "descrizione=calma" --data-urlencode "titolo=Brano lungo" >/dev/null
+chk "polza musica: brano intero per i più lunghi" "$(reg media-mus | conta 'lyria-3-pro-preview')" 1
+
+# animazione e personaggio che parla
+IMGF=$(sql "SELECT risultato FROM lavori_ai WHERE tipo = 'immagine' AND stato = 'fatto'")
+Tk=$(tok "admin/ai.php?vista=animazione")
+post admin/ai.php -d "csrf=$Tk&azione=animazione&secondi=2&formato=verticale&libro_id=0&pagina=0" -d "img=$IMGF" --data-urlencode "prompt=Luce salta felice" --data-urlencode "titolo=Luce salta in video" >/dev/null
+chk "polza animazione: modello, 480p e almeno 4 secondi" "$(reg media-vid | conta 'seedance-2-mini.*"resolution":"480p".*"duration":"4"')" 1
+chk "polza animazione: l'immagine di partenza e formato verticale" "$(reg media-vid | conta '"aspect_ratio":"9:16".*"images":\[{"type":"base64"')" 1
+chk "polza animazione: senza voce" "$(reg media-vid | conta '"generate_audio":"false"')" 1
+VOCEF=$(sql "SELECT valore FROM impostazioni WHERE chiave = 'voce_luce_prova'")
+post admin/ai.php -d "csrf=$Tk&azione=parla&secondi=4&formato=orizzontale&libro_id=0&pagina=0" -d "img=$IMGF" -d "audio=$VOCEF" --data-urlencode "titolo=Luce parla" >/dev/null
+chk "polza parla: le parole dell'audio finiscono nel prompt" "$(reg media-vid | conta 'dice in italiano.*«Ciao sono Luce»')" 1
+chk "polza parla: video con la voce" "$(reg media-vid | conta '"generate_audio":"true"')" 1
+controlla; controlla
+chk "polza video: arrivano tra i contenuti" "$(sql "SELECT COUNT(*) FROM contenuti WHERE tipo = 'video' AND libro_id = 0 AND file != ''")" 2
+
+# errore del servizio spiegato
+post admin/ai.php -d "csrf=$Tk&azione=animazione&secondi=4&formato=orizzontale&libro_id=0&pagina=0" -d "img=$IMGF" --data-urlencode "prompt=FALLISCI questo" --data-urlencode "titolo=Non riesce" >/dev/null
+controlla
+chk "polza: errore del servizio spiegato nei lavori" "$(sql "SELECT errore FROM lavori_ai WHERE stato = 'errore'")" "Polza.ai: Il contenuto non è consentito"
+
+# senza chiave Polza si torna a deAPI; il finto Polza si spegne
+Tk=$(tok admin/scuola.php)
+post admin/scuola.php -d "csrf=$Tk&azione=polza&togli=1" >/dev/null
+chk "polza: tolta la chiave si torna a deAPI" "$(php -r 'require "inc/scuola.php"; echo ai_provider();')" deapi
+php -r 'require "inc/bootstrap.php"; db()->exec("DELETE FROM lavori_ai"); db()->exec("DELETE FROM contenuti WHERE libro_id = 0");'
+rm -f data/config.php uploads/media/*.mp4 uploads/media/*.png
+kill $PIDF 2>/dev/null
 
 # ---------- sito pubblico ----------
 chk "scuola.php" "$(code scuola.php)" 200; senza_errori scuola.php

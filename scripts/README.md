@@ -33,3 +33,6 @@ Test senza API né spese: `python3 -m unittest discover -s scripts/tests`.
 
 ## Proxy
 Tutti gli script deAPI del repository passano dal proxy se c'è la variabile `DEAPI_PROXY` (es. `DEAPI_PROXY=https://vladik-proxy.v7755837.deno.net python3 scripts/deapi.py …`): chiamate e download dei risultati vanno al proxy con l'intestazione `vladik-proxy` che indica la destinazione vera (`https://api.deapi.ai`, `https://results.deapi.ai`). Codice comune: `scripts/proxy_deapi.py`. Senza la variabile chiamano deAPI direttamente.
+
+## Polza.ai
+Il sito (Admin → Scuola → Polza.ai) usa Polza.ai per tutto lo Studio AI: immagini con i personaggi come riferimento, voci, musica e video, con una chiave sola e senza proxy. Gli script di questa cartella restano su deAPI; per le illustrazioni dei libri con Polza vedi `libro-01/genera.py` (variabile d'ambiente `POLZA`).

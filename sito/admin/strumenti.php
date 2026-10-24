@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (db_driver() === 'mysql') {                // MySQL: tutte le tabelle in un file JSON
                 $dump = ['creato' => date('c'), 'versione' => VERSIONE_DB];
                 foreach (tabelle_sito() as $t) $dump[$t] = $pdo->query("SELECT * FROM `$t`")->fetchAll();
-                $dump['impostazioni'] = array_values(array_filter($dump['impostazioni'], fn($r) => !in_array($r['chiave'], ['smtp_password', 'deapi_chiave'], true)));   // password SMTP e chiave deAPI non escono nei backup
+                $dump['impostazioni'] = array_values(array_filter($dump['impostazioni'], fn($r) => !in_array($r['chiave'], ['smtp_password', 'deapi_chiave', 'polza_chiave'], true)));   // password SMTP e chiavi di Polza.ai e deAPI non escono nei backup
                 $dump['token_lettori'] = [];
                 registra('Backup scaricato (JSON)');
                 header('Content-Type: application/json; charset=utf-8');

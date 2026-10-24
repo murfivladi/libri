@@ -1,5 +1,5 @@
 <?php
-// Studio AI (deAPI): immagini con Vlad e Luce, pose nuove per la lavagna, voci di Luce e di Vlad, musica, animazioni, personaggi che parlano.
+// Studio AI (Polza.ai, oppure deAPI): immagini con Vlad e Luce, pose nuove per la lavagna, voci di Luce e di Vlad, musica, animazioni, personaggi che parlano.
 require __DIR__ . '/_admin.php';
 require_once __DIR__ . '/../inc/ai.php';
 
@@ -47,15 +47,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 flash('Immagine in preparazione: di solito servono 10–60 secondi.'); torna('ai.php?vista=immagini');
             case 'scontorna':
                 $f = scelta_valida((string)$_POST['img'], immagini_scelta());
-                ai_avvia('scontorno', '/images/background-removals', ['image' => curl_file(file_per_ai($f)), 'model' => 'Ben2'],
-                    ['dest' => !empty($_POST['personaggio']) ? 'personaggio' : 'galleria', 'titolo' => trim((string)($_POST['titolo'] ?? 'Posa nuova'))]);
-                flash('Tolgo lo sfondo…'); torna('ai.php?vista=immagini');
+                ai_togli_sfondo($f, ['dest' => !empty($_POST['personaggio']) ? 'personaggio' : 'galleria', 'titolo' => trim((string)($_POST['titolo'] ?? 'Posa nuova'))]);
+                flash(ai_provider() === 'polza' ? 'Sfondo tolto.' : 'Tolgo lo sfondo…'); torna('ai.php?vista=immagini');
             case 'voce_luce':
                 imposta('voce_luce', mb_substr(trim((string)$_POST['descrizione']), 0, 500));
-                if (!empty($_POST['prova'])) { ai_avvia('voce', '/audio/speech', ai_campi_voce('luce', (string)$_POST['testo_prova']), ['dest' => 'voce_luce_prova']); flash('Voce di Luce salvata: la prova arriva tra qualche minuto.'); }
+                if (!empty($_POST['prova'])) { ai_avvia('voce', '/audio/speech', ai_campi_voce('luce', (string)$_POST['testo_prova']), ['dest' => 'voce_luce_prova']); flash(ai_provider() === 'polza' ? 'Voce di Luce salvata: ascolta la prova qui sotto.' : 'Voce di Luce salvata: la prova arriva tra qualche minuto.'); }
                 else flash('Voce di Luce salvata.');
                 torna('ai.php?vista=voci');
             case 'voce_vlad':
+                if (ai_provider() === 'polza') {            // Polza non copia le voci: la voce di Vlad si «dirige» a parole, come quella di Luce
+                    imposta('voce_vlad_stile', mb_substr(trim((string)$_POST['descrizione']), 0, 500));
+                    if (!empty($_POST['prova'])) { ai_avvia('voce', '', ai_campi_voce('vlad', (string)$_POST['testo_prova']), ['dest' => 'voce_vlad_prova']); flash('Voce di Vlad salvata: ascolta la prova qui sotto.'); }
+                    else flash('Voce di Vlad salvata.');
+                    torna('ai.php?vista=voci');
+                }
                 if (empty($_POST['consenso'])) throw new RuntimeException('Per copiare la voce di Vlad serve il permesso suo e dei genitori: spunta la casella.');
                 $testo = trim((string)($_POST['testo_ref'] ?? ''));
                 if (!empty($_FILES['ref']['name'])) {
@@ -86,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $ok = db()->prepare("SELECT 1 FROM contenuti WHERE tipo = 'audio' AND file = ?"); $ok->execute([$audio]);
                 if (!$ok->fetchColumn() && !in_array($audio, [impost('voce_luce_prova'), impost('voce_vlad_prova')], true)) throw new RuntimeException('Scegli un audio dall\'elenco.');
                 $par = $dest_contenuto(); if ($par['titolo'] === '') $par['titolo'] = 'Personaggio che parla';
-                ai_avvia('parla', '/videos/audio-syncs', ai_campi_video(trim((string)$_POST['prompt']) ?: 'il personaggio parla guardando chi lo ascolta, con le labbra a tempo con la voce', $img, (float)($_POST['secondi'] ?? 5), (string)($_POST['formato'] ?? ''), $audio), $par);
+                ai_avvia('parla', '/videos/audio-syncs', ai_campi_video(trim((string)($_POST['prompt'] ?? '')) ?: 'il personaggio parla guardando chi lo ascolta, con le labbra a tempo con la voce', $img, (float)($_POST['secondi'] ?? 5), (string)($_POST['formato'] ?? ''), $audio), $par);
                 flash('Video in preparazione: può servire qualche minuto.'); torna('ai.php?vista=animazione');
             case 'elimina_lavoro':
                 $st = db()->prepare('SELECT * FROM lavori_ai WHERE id = ?'); $st->execute([(int)$_POST['id']]);
@@ -113,7 +118,7 @@ $opzLibri = function () use ($libri) { ?>
 $selImg = function (string $nome = 'img', string $scelto = '') { ?>
   <label>Immagine di partenza <select name="<?= $nome ?>" required><?php foreach (immagini_scelta() as $v => $t): ?><option value="<?= e($v) ?>" <?= $v === $scelto ? 'selected' : '' ?>><?= e($t) ?></option><?php endforeach; ?></select></label>
 <?php };
-if (deapi_chiave() === ''): ?><p class="errore">Manca la chiave deAPI: inseriscila in <a href="scuola.php">Scuola → deAPI</a>.</p><?php endif; ?>
+if (!ai_pronto()): ?><p class="errore">Manca la chiave di Polza.ai: inseriscila in <a href="scuola.php">Scuola → Polza.ai</a>.</p><?php endif; ?>
 <?php if ($attesa): ?><p class="avviso" data-attesa-ai>⏳ Lavori in preparazione: <b><?= $attesa ?></b>. La pagina si aggiorna da sola quando sono pronti.</p><?php endif; ?>
 <nav class="schede-ai"><?= $tab('immagini', '🎨 Immagini') . $tab('voci', '🗣 Voci') . $tab('musica', '🎵 Musica') . $tab('animazione', '🎞 Animazioni') . $tab('lavori', '📋 Tutti i lavori') ?></nav>
 
@@ -132,7 +137,7 @@ if (deapi_chiave() === ''): ?><p class="errore">Manca la chiave deAPI: inserisci
       <label class="spunta"><input type="checkbox" name="scontorno" value="1"> Togli lo sfondo</label></div>
     <?php $opzLibri(); ?>
   </div>
-  <p><button class="bottone">🎨 Crea l'immagine</button> <span class="muto">FLUX.2 con le schede dei personaggi come riferimento.</span></p>
+  <p><button class="bottone">🎨 Crea l'immagine</button> <span class="muto"><?= ai_provider() === 'polza' ? 'Nano Banana 2.1 con le schede dei personaggi come riferimento (~3 ₽).' : 'FLUX.2 con le schede dei personaggi come riferimento.' ?></span></p>
 </form>
 <?php $gal = db()->query("SELECT * FROM lavori_ai WHERE tipo IN ('immagine','scontorno') AND stato = 'fatto' ORDER BY id DESC LIMIT 60")->fetchAll(); ?>
 <h2>Galleria</h2>
@@ -164,6 +169,16 @@ if (deapi_chiave() === ''): ?><p class="errore">Manca la chiave deAPI: inserisci
   <?php if (impost('voce_luce_prova') !== ''): ?><p>Ultima prova: <audio controls src="<?= e(url_media(impost('voce_luce_prova'), '../')) ?>"></audio></p><?php endif; ?>
   <p><button class="bottone" name="prova" value="1">💾 Salva e prova</button> <button class="bottone sec">Salva soltanto</button></p>
 </form>
+<?php if (ai_provider() === 'polza'): $vlad = impost('voce_vlad_stile') ?: AI_VLAD_PREDEFINITA; ?>
+<form method="post" class="pannello"><?= csrf_campo() ?><input type="hidden" name="azione" value="voce_vlad">
+  <h2 style="margin-top:0">🧒 Voce di Vlad</h2>
+  <p class="muto">Anche la voce di Vlad si «dirige» a parole. Polza.ai non copia le voci vere: per sentire <b>Vlad in persona</b> registra la sua voce in <a href="contenuti.php?nuovo=1">Audio e video → Registra la tua voce</a>.</p>
+  <label>Come parla Vlad <textarea name="descrizione" rows="3" maxlength="500"><?= e($vlad) ?></textarea></label>
+  <label>Frase di prova <input type="text" name="testo_prova" value="Adesso proviamo insieme: trova il predicato in questa frase!"></label>
+  <?php if (impost('voce_vlad_prova') !== ''): ?><p>Ultima prova: <audio controls src="<?= e(url_media(impost('voce_vlad_prova'), '../')) ?>"></audio></p><?php endif; ?>
+  <p><button class="bottone" name="prova" value="1">💾 Salva e prova</button> <button class="bottone sec">Salva soltanto</button></p>
+</form>
+<?php else: ?>
 <form method="post" enctype="multipart/form-data" class="pannello" id="form-vlad"><?= csrf_campo() ?><input type="hidden" name="azione" value="voce_vlad">
   <h2 style="margin-top:0">🧒 Voce di Vlad</h2>
   <p class="muto">L'AI impara la voce di Vlad da una registrazione di <b>5–15 secondi</b>: leggi ad alta voce la frase qui sotto, in un posto silenzioso. Poi le parti «AI» di Vlad avranno la sua voce.</p>
@@ -178,7 +193,8 @@ if (deapi_chiave() === ''): ?><p class="errore">Manca la chiave deAPI: inserisci
   <p><button class="bottone" name="prova" value="1">💾 Salva e prova</button> <button class="bottone sec">Salva soltanto</button></p>
 </form>
 <?php if (impost('voce_vlad_ref') !== ''): ?><form method="post"><?= csrf_campo() ?><button class="bottone pericolo piccolo" name="azione" value="togli_vlad" data-conferma="Cancellare la registrazione e la copia della voce di Vlad?">Cancella la voce di Vlad</button></form><?php endif; ?>
-<script src="../assets/scuola-admin.js"></script>
+<?php endif; ?>
+<?php if (ai_provider() !== 'polza'): ?><script src="../assets/scuola-admin.js"></script><?php endif; ?>
 
 <?php elseif ($vista === 'musica'): ?>
 <form method="post" class="pannello"><?= csrf_campo() ?><input type="hidden" name="azione" value="musica">
@@ -190,7 +206,7 @@ if (deapi_chiave() === ''): ?><p class="errore">Manca la chiave deAPI: inserisci
     <label>Titolo <input type="text" name="titolo" maxlength="120" placeholder="es. Sigla della lavagna"></label>
     <?php $opzLibri(); ?>
   </div>
-  <p><button class="bottone">🎵 Crea la musica</button> <span class="muto">Senza voce (strumentale). Finisce in «Audio e video» e nella lista musiche della lavagna.</span></p>
+  <p><button class="bottone">🎵 Crea la musica</button> <span class="muto">Senza voce (strumentale). Finisce in «Audio e video» e nella lista musiche della lavagna.<?= ai_provider() === 'polza' ? ' Fino a 40 secondi: clip (4 ₽); più lunga: brano intero (8 ₽).' : '' ?></span></p>
 </form>
 
 <?php elseif ($vista === 'animazione'): $pre = (string)($_GET['img'] ?? ''); ?>
@@ -199,12 +215,12 @@ if (deapi_chiave() === ''): ?><p class="errore">Manca la chiave deAPI: inserisci
   <div class="form-griglia">
     <?php $selImg('img', $pre); ?>
     <label class="largo">Cosa succede <textarea name="prompt" rows="2" required placeholder="es. Vlad saluta con la mano e sorride, Luce scodinzola"></textarea></label>
-    <label>Durata (secondi, 2–10) <input type="number" name="secondi" min="2" max="10" step="0.5" value="5"></label>
+    <label>Durata (secondi, <?= ai_provider() === 'polza' ? '4–10' : '2–10' ?>) <input type="number" name="secondi" min="<?= ai_provider() === 'polza' ? 4 : 2 ?>" max="10" step="0.5" value="5"></label>
     <label>Formato <select name="formato"><option value="orizzontale">Orizzontale</option><option value="quadrato">Quadrato</option><option value="verticale">Verticale</option></select></label>
     <label>Titolo <input type="text" name="titolo" maxlength="120"></label>
     <?php $opzLibri(); ?>
   </div>
-  <p><button class="bottone">🎞 Crea l'animazione</button> <span class="muto">LTX-2.5, 24 fotogrammi al secondo. Diventa un video in «Audio e video».</span></p>
+  <p><button class="bottone">🎞 Crea l'animazione</button> <span class="muto"><?= ai_provider() === 'polza' ? 'Seedance 2 Mini, 480p (~2,6 ₽ al secondo, da 4 secondi). ' : 'LTX-2.5, 24 fotogrammi al secondo. ' ?>Diventa un video in «Audio e video».</span></p>
 </form>
 <?php $audio = db()->query("SELECT codice, titolo, file FROM contenuti WHERE tipo = 'audio' AND file != '' ORDER BY id DESC LIMIT 100")->fetchAll(); ?>
 <form method="post" class="pannello"><?= csrf_campo() ?><input type="hidden" name="azione" value="parla">

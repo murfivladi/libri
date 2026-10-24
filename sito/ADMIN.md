@@ -122,10 +122,10 @@ Entra da `/admin/login.php`. Premi `?` in qualsiasi pagina admin per le scorciat
 69. `sitemap.php` e `feed.php` (RSS)
 
 ## Scuola (Vlad Editore Scuola)
-- **Admin → Scuola**: libri scolastici con il numero di esercizi, contenuti e zone; chiave deAPI (non esce nei backup).
+- **Admin → Scuola**: libri scolastici con il numero di esercizi, contenuti e zone; chiave di Polza.ai per lo Studio AI (oppure deAPI): le chiavi non escono nei backup.
 - **Sezione del libro**: nella scheda del libro, «🎒 Scuola» lo toglie dal catalogo dei romanzi e lo mette in `scuola.php`.
 - **Esercizi** (editor visivo, con anteprima accanto): crocette, vero/falso, completa (con banca di parole), tocca le parole (soggetto, predicato, complementi… con i colori di scuola), riordina la frase, trascina nei gruppi, risposta libera. Codice automatico (es. `CFC-12`), pagina, livello, «solo online», duplica, QR da scaricare.
-- **Audio, video e immagini**: carica un file, registra dal microfono (anche dal telefono) oppure fai leggere un testo alla voce AI di deAPI.
+- **Audio, video e immagini**: carica un file, registra dal microfono (anche dal telefono) oppure fai leggere un testo alla voce AI (Polza.ai).
 - **Zone**: sulle pagine del PDF i codici stampati vengono riconosciuti da soli (riquadri blu tratteggiati); si possono disegnare zone in più trascinando sulla pagina.
 
 ## Lavagna e video (admin e prof)
@@ -162,13 +162,15 @@ Editor a tutto schermo (`assets/lavagna.js`), tela Full HD 1920×1080. Funzioni:
 30. Salvataggio sul server, salvataggio automatico ogni minuto e bozza nel browser se si chiude per sbaglio
 31. Funziona con mouse, dita e penna; schermo intero
 
-## Studio AI (deAPI)
-Ogni richiesta diventa un «lavoro» in coda: la pagina controlla da sola ogni 6 secondi e scarica il risultato in `uploads/media` quando è pronto (anche video e voci che richiedono qualche minuto).
-- **Immagini con Vlad e Luce**: FLUX.2 con le schede a 360° come riferimento; formato lavagna, pagina, quadrato o verticale; finiscono in galleria, come immagine del libro (con codice) o come **posa nuova della lavagna** (sfondo tolto in automatico con Ben2).
-- **Voci**: Luce ha una voce «disegnata» da una descrizione (Qwen3 VoiceDesign); Vlad ha una **copia della sua voce** da una registrazione di 5–15 secondi (Qwen3, solo con il consenso suo e dei genitori). Le due voci compaiono in «Audio e video → Voce AI» insieme alle voci pronte.
-- **Musica**: strumentale da una descrizione (ACE-Step), 10–300 secondi; va in «Audio e video» e nella lista musiche della lavagna.
-- **Animazioni**: un'immagine prende vita (LTX-2.5, 2–10 secondi).
-- **Fai parlare Vlad o Luce**: immagine + audio corto (max 10 s) → il personaggio parla a tempo con la voce.
-- **Tutti i lavori**: stato, errori (es. limite di richieste, credito), anteprime, elimina.
+## Studio AI (Polza.ai)
+Si usa **una chiave sola** di [Polza.ai](https://polza.ai): in Admin → Scuola → Polza.ai incolla la chiave (si crea in polza.ai → API Keys) e premi «Salva e prova»: il sito controlla che risponda e mostra il saldo. Non serve nessun proxy. Se la chiave di Polza manca ma c'è quella di deAPI, lo Studio AI usa ancora deAPI (vecchio modo, in «Alternativa: deAPI»).
 
-- **Proxy**: in Admin → Scuola → deAPI si scrive l'indirizzo del proxy (es. `https://vladik-proxy.v7755837.deno.net`). Tutte le chiamate a deAPI, compresi i download dei risultati, passano da lì con l'intestazione `vladik-proxy` che indica la destinazione vera; «Salva e prova» controlla subito che risponda.
+Le voci e gli sfondi tolti sono **immediati**; immagini, musica e video diventano «lavori» in coda: la pagina controlla da sola ogni 6 secondi e scarica il risultato in `uploads/media` quando è pronto.
+- **Immagini con Vlad e Luce**: Nano Banana 2.1 con le schede a 360° come riferimento (~3 ₽, 20–30 secondi); formato lavagna, pagina, quadrato o verticale; finiscono in galleria, come immagine del libro (con codice) o come **posa nuova della lavagna**: lo sfondo si toglie in automatico, **sul sito** (gratis e subito, serve l'estensione GD di PHP).
+- **Voci**: gpt-4o-mini-tts, in italiano, ~2 ₽ ogni 1000 caratteri. Luce e Vlad si «dirigono» a parole (come parla, che carattere ha); in più ci sono voci pronte (Nova, Onyx, Ash…). Polza non copia le voci vere: per sentire Vlad in persona registra la sua voce in «Audio e video → Registra la tua voce».
+- **Musica**: strumentale (Lyria 3). Fino a 40 secondi è una clip (4 ₽), più lunga un brano intero (8 ₽); va in «Audio e video» e nella lista musiche della lavagna.
+- **Animazioni**: un'immagine prende vita (Seedance 2 Mini, 480p, 4–10 secondi, ~2,6 ₽ al secondo).
+- **Fai parlare Vlad o Luce**: immagine + audio corto → il sito trascrive l'audio e il personaggio dice quelle parole, con la bocca a tempo (la voce nel video la crea il modello: non è identica a quella dell'audio).
+- **Tutti i lavori**: stato, errori (es. credito finito, contenuto non consentito), anteprime, elimina.
+
+I modelli sono nelle costanti `POLZA_MODELLO_*` di `sito/inc/ai.php`: per cambiarli basta cambiare il nome (l'elenco è su polza.ai/models).

@@ -279,3 +279,92 @@ function deapi_voce(string $testo, string $voce): string {
     }
     throw new RuntimeException('deAPI ci mette troppo: riprova più tardi.');
 }
+
+// ---------- Polza.ai (immagini, voci, musica, video) ----------
+// Un solo servizio per tutto lo Studio AI: una chiave sola (Admin → Scuola → Polza.ai), nessun proxy (polza.ai si raggiunge direttamente).
+// Se la chiave Polza manca ma c'è quella di deAPI, lo Studio AI usa ancora deAPI (vecchio modo).
+const POLZA_STANDARD = 'https://polza.ai/api';
+function polza_chiave(): string { return trim(impost('polza_chiave')); }
+// «polza_url» in data/config.php serve solo ai test automatici (un finto Polza in locale)
+function polza_base(): string { $u = rtrim((string)(config()['polza_url'] ?? ''), '/'); return $u !== '' ? $u : POLZA_STANDARD; }
+function ai_provider(): string { return polza_chiave() !== '' ? 'polza' : 'deapi'; }
+function ai_pronto(): bool { return polza_chiave() !== '' || deapi_chiave() !== ''; }
+function ai_nome(): string { return ai_provider() === 'polza' ? 'Polza.ai' : 'deAPI'; }
+
+// Voci pronte (OpenAI via Polza): con «gpt-4o-mini-tts» parlano bene in italiano e si possono dirigere con le istruzioni.
+const VOCI_POLZA = [
+    'nova' => 'Nova (donna, chiara)', 'shimmer' => 'Shimmer (donna, dolce)', 'coral' => 'Coral (donna, vivace)', 'sage' => 'Sage (donna, calma)',
+    'onyx' => 'Onyx (uomo, profonda)', 'echo' => 'Echo (uomo, pacata)', 'ash' => 'Ash (uomo, giovane)', 'fable' => 'Fable (uomo, narratore)',
+    'alloy' => 'Alloy (neutra)',
+];
+function voce_predefinita(): string { return ai_provider() === 'polza' ? 'nova' : 'if_sara'; }
+
+function polza_messaggio(int $code, $j): string {
+    if ($code === 401 || $code === 403) return 'Polza.ai rifiuta la chiave: controlla Admin → Scuola → Polza.ai.';
+    if ($code === 402) return 'Il credito di Polza.ai è finito: ricarica il saldo su polza.ai.';
+    if ($code === 429) return 'Polza.ai: troppe richieste, riprova tra un minuto.';
+    $m = is_array($j) ? ($j['error']['message'] ?? $j['error'] ?? $j['message'] ?? '') : '';
+    if (is_array($m)) $m = json_encode($m, JSON_UNESCAPED_UNICODE);
+    return 'Polza.ai' . ($m !== '' ? ': ' . mb_substr((string)$m, 0, 220) : ' ha risposto con un errore') . " (HTTP $code).";
+}
+
+// Chiama l'API di Polza (JSON). Restituisce la risposta già decodificata; in caso di errore il codice dell'eccezione è il codice HTTP.
+function polza_richiesta(string $metodo, string $percorso, ?array $json = null, int $timeout = 60): array {
+    if (!function_exists('curl_init')) throw new RuntimeException('Serve l\'estensione curl di PHP per usare Polza.ai.');
+    if (polza_chiave() === '') throw new RuntimeException('Manca la chiave di Polza.ai: inseriscila in Admin → Scuola → Polza.ai.');
+    $ch = curl_init(polza_base() . $percorso);
+    $h = ['Accept: application/json', 'Authorization: Bearer ' . polza_chiave()];
+    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => $timeout, CURLOPT_CONNECTTIMEOUT => 10, CURLOPT_USERAGENT => 'VladEditore-Scuola/1.0']);
+    if ($metodo === 'POST') {
+        $h[] = 'Content-Type: application/json';
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($json ?? new stdClass, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    }
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $h);
+    $r = curl_exec($ch); $code = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE); $err = curl_error($ch); curl_close($ch);
+    if ($r === false) throw new RuntimeException('Polza.ai non risponde: ' . $err, 0);
+    $j = json_decode((string)$r, true);
+    if ($code >= 400 || !is_array($j)) throw new RuntimeException(polza_messaggio($code, $j), $code);
+    return $j;
+}
+
+// File locale → oggetto da mandare a Polza (immagine o audio in base64)
+function polza_file(string $percorso): array {
+    if (!is_file($percorso) || filesize($percorso) > 12 * 1024 * 1024) throw new RuntimeException('File di riferimento mancante o troppo grande (massimo 12 MB).');
+    $mime = (new finfo(FILEINFO_MIME_TYPE))->file($percorso) ?: 'application/octet-stream';
+    return ['type' => 'base64', 'data' => 'data:' . $mime . ';base64,' . base64_encode((string)file_get_contents($percorso))];
+}
+
+// Gli unici indirizzi da cui si scaricano i risultati: polza.ai (o il finto Polza dei test)
+function polza_url_valido(string $u): bool {
+    return (bool)preg_match('#^https://([a-z0-9-]+\.)*polza\.ai/#i', $u) || strncmp($u, polza_base() . '/', strlen(polza_base()) + 1) === 0;
+}
+// L'indirizzo del file finito nella risposta di GET /v1/media/{id} (può stare in data.url oppure in data[0].url)
+function polza_url_risultato(array $j): string {
+    $cerca = function ($x) use (&$cerca): string {
+        if (is_string($x)) return polza_url_valido($x) ? $x : '';
+        if (!is_array($x)) return '';
+        foreach (['url', 'audio_url', 'video_url', 'image_url'] as $k) if (isset($x[$k]) && is_string($x[$k]) && polza_url_valido($x[$k])) return $x[$k];
+        foreach ($x as $v) if ($u = $cerca($v)) return $u;
+        return '';
+    };
+    return $cerca($j['data'] ?? null);
+}
+function polza_errore_testo(array $j): string {
+    $e = $j['error'] ?? '';
+    if (is_array($e)) $e = $e['message'] ?? json_encode($e, JSON_UNESCAPED_UNICODE);
+    return mb_substr((string)$e, 0, 200) ?: 'generazione non riuscita';
+}
+// Scarica un risultato di Polza (immagine, audio, video): solo da polza.ai (o dal finto Polza dei test)
+function polza_scarica(string $url, int $max): string {
+    if (!polza_url_valido($url)) throw new RuntimeException('Indirizzo del risultato non valido.');
+    return scarica_url($url, $max);
+}
+
+// Trascrive un audio breve (Whisper via Polza, pochi centesimi): serve a far dire al personaggio le stesse parole dell'audio scelto.
+function polza_trascrivi(string $percorso): string {
+    $j = polza_richiesta('POST', '/v1/audio/transcriptions', ['model' => 'openai/whisper-1', 'language' => 'it', 'file' => polza_file($percorso)['data']], 90);
+    $t = trim((string)($j['text'] ?? ''));
+    if ($t === '') throw new RuntimeException('Non riesco a capire le parole dell\'audio scelto.');
+    return mb_substr($t, 0, 400);
+}

@@ -52,7 +52,7 @@ Senza `data/config.php` il sito usa SQLite (un solo sito, tutto in locale: va be
 - Ogni esercizio o contenuto (audio, video, immagine) ha un **codice breve** (es. `CFC-12`, dalle iniziali del titolo). Nel PDF il codice va stampato accanto al simbolo, insieme al QR code che porta a `apri.php?c=CFC-12`.
 - Nel lettore (`leggi.php`) `assets/scuola-lettore.js` cerca i codici nel testo di ogni pagina e li rende cliccabili; le zone disegnate a mano (tabella `zone`) si aggiungono. Un clic apre `apri.php?embed=1` in una finestra sopra il libro.
 - Esercizi: motore unico `assets/esercizi.js` (studenti, anteprima dell'admin). Correzione subito, spiegazioni, «7 su 8», miglior risultato salvato sul dispositivo.
-- File audio/video/immagini in `uploads/media/` (sul sito principale; il deploy non la tocca). Voce AI: deAPI (chiave in Admin → Scuola).
+- File audio/video/immagini in `uploads/media/` (sul sito principale; il deploy non la tocca). Studio AI (immagini, voci, musica, video): Polza.ai (chiave in Admin → Scuola → Polza.ai).
 - **Classi**: i prof si registrano con il codice segreto (Admin → Scuola) in `prof.php`; gli studenti entrano in `studente.php` con codice classe + nickname + PIN, senza email né dati personali (cookie tecnico `studente` per restare entrati). I risultati arrivano con `api-scuola.php` (il punteggio massimo lo calcola il server).
 - **Lavagna** (`assets/lavagna.js`, `lavagna-api.php`): editor video per admin e prof, vedi `ADMIN.md`. Il video si registra nel browser (MediaRecorder: MP4 dove il browser lo supporta, altrimenti WebM).
 - **Privacy**: se apri le classi aggiorna il testo della pagina Privacy (dati dei prof: nome ed email; studenti: nickname e risultati; cookie `studente`).

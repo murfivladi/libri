@@ -1,5 +1,5 @@
 <?php
-// Audio, video e immagini dei libri scolastici: caricare un file, registrare dal microfono o far leggere un testo alla voce AI (deAPI).
+// Audio, video e immagini dei libri scolastici: caricare un file, registrare dal microfono o far leggere un testo alla voce AI (Polza.ai, oppure deAPI).
 require __DIR__ . '/_admin.php';
 require_once __DIR__ . '/../inc/ai.php';
 
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fonte = (string)($_POST['fonte'] ?? 'file');
         if ($fonte === 'voce' && $az === 'genera') {
             // la voce AI si prepara in coda (Luce e Vlad possono richiedere qualche minuto): il file arriva da solo quando è pronto
-            if (!isset(voci_disponibili()[$r['voce']])) $r['voce'] = 'if_sara';
+            if (!isset(voci_disponibili()[$r['voce']])) $r['voce'] = voce_predefinita();
             $lavoro = ai_campi_voce($r['voce'], $r['testo']);
             $r['tipo'] = 'audio';
         } else {
@@ -57,7 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         registra('Contenuto salvato', $codice);
         if ($lavoro) {
             ai_avvia('voce', '/audio/speech', $lavoro, ['voce' => $r['voce']], $pid);
-            flash("Salvato: $codice. La voce AI è in preparazione: il file arriverà da solo tra poco (puoi lasciare aperta questa pagina).");
+            flash(ai_provider() === 'polza' ? "Salvato: $codice. La voce AI è pronta: ascoltala qui sotto."
+                : "Salvato: $codice. La voce AI è in preparazione: il file arriverà da solo tra poco (puoi lasciare aperta questa pagina).");
             torna('contenuti.php?id=' . $pid);
         }
         flash("Salvato: $codice");
@@ -70,10 +71,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($id || $nuovo) {
     if (isset($bozza)) $c = $bozza;
     elseif ($id) { $st = db()->prepare('SELECT * FROM contenuti WHERE id = ?'); $st->execute([$id]); $c = $st->fetch(); if (!$c) { flash('Non trovato.', 'errore'); torna('contenuti.php'); } }
-    else $c = ['id' => 0, 'codice' => nuovo_codice($libro_f), 'libro_id' => $libro_f, 'pagina' => 0, 'titolo' => '', 'testo' => '', 'voce' => 'if_sara', 'tipo' => 'audio', 'file' => ''];
+    else $c = ['id' => 0, 'codice' => nuovo_codice($libro_f), 'libro_id' => $libro_f, 'pagina' => 0, 'titolo' => '', 'testo' => '', 'voce' => voce_predefinita(), 'tipo' => 'audio', 'file' => ''];
     admin_testata($c['id'] ? 'Modifica ' . $c['codice'] : 'Nuovo audio, video o immagine', 'contenuti');
     if (!empty($errore)) echo '<p class="errore">' . e($errore) . '</p>';
-    $chiave_ok = deapi_chiave() !== '';
+    $chiave_ok = ai_pronto();
     ?>
 <form method="post" enctype="multipart/form-data" id="form-co" data-avvisa>
 <?= csrf_campo() ?><input type="hidden" name="id" value="<?= (int)$c['id'] ?>">
@@ -100,7 +101,7 @@ if ($id || $nuovo) {
 <div class="tipi-es" style="margin-bottom:12px">
   <label class="tipo-es"><input type="radio" name="fonte" value="file" checked><span class="ic">📁</span><b>Carica un file</b><small>Audio (mp3, m4a, wav), video (mp4) o immagine</small></label>
   <label class="tipo-es"><input type="radio" name="fonte" value="registra"><span class="ic">🎙</span><b>Registra la tua voce</b><small>Dal microfono del computer o del telefono</small></label>
-  <label class="tipo-es"><input type="radio" name="fonte" value="voce"><span class="ic">🤖</span><b>Voce AI</b><small>deAPI legge il testo qui sotto</small></label>
+  <label class="tipo-es"><input type="radio" name="fonte" value="voce"><span class="ic">🤖</span><b>Voce AI</b><small><?= e(ai_nome()) ?> legge il testo qui sotto</small></label>
 </div>
 <div data-fonte="file"><label>File <input type="file" name="file" id="file-media" accept=".mp3,.m4a,.aac,.ogg,.wav,.webm,.mp4,.mov,.jpg,.jpeg,.png,.webp,.gif,audio/mpeg,audio/mp4,audio/wav,video/mp4,video/quicktime,image/jpeg,image/png"></label>
   <p class="muto">Audio (mp3, m4a, wav, ogg), video (mp4, mov, webm) o immagini. Sul telefono, se vedi solo la galleria, scegli «File» o «Sfoglia».</p></div>
@@ -110,9 +111,9 @@ if ($id || $nuovo) {
   <audio id="reg-ascolta" controls hidden style="width:100%"></audio>
 </div>
 <div data-fonte="voce" hidden>
-  <?php if (!$chiave_ok): ?><p class="errore">Per la voce AI serve la chiave deAPI: inseriscila in <a href="scuola.php">Scuola → deAPI</a>.</p><?php endif; ?>
+  <?php if (!$chiave_ok): ?><p class="errore">Per la voce AI serve la chiave di Polza.ai: inseriscila in <a href="scuola.php">Scuola → Polza.ai</a>.</p><?php endif; ?>
   <label>Voce <select name="voce"><?php foreach (voci_disponibili() as $k => $v): ?><option value="<?= e($k) ?>" <?= $c['voce'] === $k ? 'selected' : '' ?>><?= e($v) ?></option><?php endforeach; ?></select></label>
-  <p class="muto">La voce legge il «Testo» qui sotto. Le voci pronte arrivano in pochi secondi; Luce e Vlad possono richiedere qualche minuto. Consuma credito deAPI. Le voci si regolano in <a href="ai.php?vista=voci">Studio AI → Voci</a>.</p>
+  <p class="muto">La voce legge il «Testo» qui sotto. Con Polza.ai la voce è pronta in pochi secondi (circa 2 ₽ ogni 1000 caratteri). Le voci si regolano in <a href="ai.php?vista=voci">Studio AI → Voci</a>.</p>
   <button class="bottone" name="azione" value="genera">🤖 Genera la voce e salva</button>
 </div>
 </div>

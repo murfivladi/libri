@@ -1,10 +1,23 @@
 <?php
-// Vlad Editore Scuola: panoramica dei libri scolastici, esercizi e contenuti, impostazioni (chiave deAPI).
+// Vlad Editore Scuola: panoramica dei libri scolastici, esercizi e contenuti, impostazioni (chiave Polza.ai, oppure deAPI).
 require __DIR__ . '/_admin.php';
 require_once __DIR__ . '/../inc/classi.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verifica();
+    if (($_POST['azione'] ?? '') === 'polza') {
+        $k = trim((string)($_POST['polza_chiave'] ?? ''));
+        if (!empty($_POST['togli'])) $k = '';
+        if ($k !== '' && !preg_match('/^[\w.\-]{16,200}$/', $k)) { flash('La chiave non sembra giusta: copiala per intero dalla pagina «API Keys» di polza.ai.', 'errore'); torna('scuola.php'); }
+        if ($k !== '' || !empty($_POST['togli'])) { imposta('polza_chiave', $k); registra('Chiave Polza.ai ' . ($k === '' ? 'tolta' : 'salvata')); flash($k === '' ? 'Chiave Polza.ai tolta.' : 'Chiave Polza.ai salvata: da ora lo Studio AI usa Polza.ai.'); }
+        if ($k === '' || empty($_POST['prova'])) torna('scuola.php');
+    }
+    if (($_POST['azione'] ?? '') === 'polza' || ($_POST['azione'] ?? '') === 'prova_polza') {
+        $t = microtime(true);
+        try { $b = polza_richiesta('GET', '/v2/balance', null, 20); flash('✓ Polza.ai risponde in ' . round((microtime(true) - $t) * 1000) . ' ms. Saldo: ' . number_format((float)($b['available'] ?? $b['amount'] ?? 0), 2, ',', '.') . ' ₽.'); }
+        catch (RuntimeException $e) { flash('✗ ' . $e->getMessage(), 'errore'); }
+        torna('scuola.php');
+    }
     if (($_POST['azione'] ?? '') === 'deapi') {
         $k = trim((string)($_POST['deapi_chiave'] ?? ''));
         if (!empty($_POST['togli'])) $k = '';
@@ -37,7 +50,7 @@ $libri = db()->query("SELECT l.id, l.titolo, l.pubblicato, l.copertina, l.pdf,
     FROM libri l WHERE l.sezione = 'scuola' AND l.eliminato IS NULL ORDER BY l.ordine, l.numero, l.id")->fetchAll();
 $tot_es = (int)db()->query('SELECT COUNT(*) FROM esercizi')->fetchColumn();
 $tot_co = (int)db()->query('SELECT COUNT(*) FROM contenuti')->fetchColumn();
-$chiave = deapi_chiave();
+$chiave = deapi_chiave(); $chiave_polza = polza_chiave();
 
 admin_testata('🎒 Vlad Editore Scuola', 'scuola');
 ?>
@@ -93,15 +106,26 @@ $cp = codice_prof();
 
 <div class="pannello">
   <p><a class="bottone" href="ai.php">✨ Apri lo Studio AI</a> <span class="muto">immagini con Vlad e Luce, voci, musica, animazioni</span></p>
-  <h2 style="margin-top:0">deAPI (voci e immagini con l'AI)</h2>
-  <p class="muto">Serve per creare l'audio con la voce AI direttamente dall'admin. La chiave si trova nella dashboard di deAPI. Stato: <?= $chiave !== '' ? '<b>chiave salvata</b> (…' . e(substr($chiave, -4)) . ')' : '<b>nessuna chiave</b>' ?>.</p>
+  <h2 style="margin-top:0">Polza.ai (immagini, voci, musica e video con l'AI)</h2>
+  <p class="muto">Una chiave sola per tutto lo Studio AI: immagini con Vlad e Luce come riferimento, voci, musica e animazioni. Non serve nessun proxy. La chiave si crea in <b>polza.ai → API Keys</b>. Stato: <?= $chiave_polza !== '' ? '<b>chiave salvata</b> (…' . e(substr($chiave_polza, -4)) . '), lo Studio AI usa Polza.ai' : '<b>nessuna chiave</b>' ?>.</p>
+  <form method="post" class="azioni-riga"><?= csrf_campo() ?><input type="hidden" name="azione" value="polza">
+    <input type="password" name="polza_chiave" placeholder="Incolla qui la chiave di Polza.ai" autocomplete="off" style="max-width:420px">
+    <button class="bottone">Salva</button> <button class="bottone sec" name="prova" value="1">Salva e prova</button>
+    <?php if ($chiave_polza !== ''): ?><button class="bottone sec" name="azione" value="prova_polza">Prova e mostra il saldo</button> <button class="bottone sec" name="togli" value="1" data-conferma="Togliere la chiave di Polza.ai?">Togli</button><?php endif; ?>
+  </form>
+  <p class="muto">Costi indicativi: immagine ~3 ₽ · voce ~2 ₽ ogni 1000 caratteri · musica 4–8 ₽ a brano · video ~2,6 ₽ al secondo. Togliere lo sfondo è gratis.</p>
+</div>
+
+<details class="pannello"<?= $chiave_polza === '' && $chiave !== '' ? ' open' : '' ?>>
+  <summary><b>Alternativa: deAPI</b> <span class="muto">(vecchio modo, si usa solo se manca la chiave di Polza.ai)</span></summary>
+  <p class="muto">Stato: <?= $chiave !== '' ? '<b>chiave salvata</b> (…' . e(substr($chiave, -4)) . ')' : '<b>nessuna chiave</b>' ?>.</p>
   <form method="post" class="azioni-riga" style="margin-bottom:10px"><?= csrf_campo() ?><input type="hidden" name="azione" value="deapi_indirizzo">
-    <input type="url" name="indirizzo" value="<?= e(impost('deapi_indirizzo')) ?>" placeholder="https://vladik-proxy.v7755837.deno.net (vuoto = nessun proxy)" style="max-width:420px" aria-label="Indirizzo del proxy">
+    <input type="url" name="indirizzo" value="<?= e(impost('deapi_indirizzo')) ?>" placeholder="Indirizzo di un proxy (vuoto = nessun proxy)" style="max-width:420px" aria-label="Indirizzo del proxy">
     <button class="bottone sec">Salva l'indirizzo</button> <button class="bottone sec" name="prova" value="1">Salva e prova</button></form>
-  <p class="muto"><?= deapi_proxy() !== '' ? 'Tutte le chiamate a deAPI (anche i download dei risultati) passano dal proxy <code>' . e(deapi_proxy()) . '</code>, che riceve la destinazione vera nell\'intestazione <code>vladik-proxy</code>.' : 'Nessun proxy: il sito chiama direttamente <code>' . e(DEAPI_UFFICIALE) . '</code>.' ?></p>
+  <p class="muto"><?= deapi_proxy() !== '' ? 'Le chiamate a deAPI passano dal proxy <code>' . e(deapi_proxy()) . '</code> (che riceve la destinazione vera nell\'intestazione <code>vladik-proxy</code>).' : 'Nessun proxy: il sito chiama direttamente <code>' . e(DEAPI_UFFICIALE) . '</code>.' ?></p>
   <form method="post" class="azioni-riga"><?= csrf_campo() ?><input type="hidden" name="azione" value="deapi">
     <input type="password" name="deapi_chiave" placeholder="Incolla qui la chiave deAPI" autocomplete="off" style="max-width:420px">
     <button class="bottone">Salva</button><?php if ($chiave !== ''): ?> <button class="bottone sec" name="togli" value="1" data-conferma="Togliere la chiave deAPI?">Togli</button><?php endif; ?>
   </form>
-</div>
+</details>
 <?php admin_piede();
