@@ -74,3 +74,4 @@ Stile di riferimento: impaginazione di un libro di grammatica scolastico italian
 51. «Schemi di sintesi e ripasso»: libretto a parte.
 52. Vlad controlla dopo ogni fase.
 53. Immagini con il modello più economico: **Nano Banana 2.1 a 1K (~3 ₽)**, default di `libro-01/genera.py`. Prima di ogni lotto si controlla il saldo Polza.
+54. Foglio personaggi scelto: Vlad **B**, Luce **B**, Ludovica **A**, Salvatore **B**, Wijdane **B**, prof.ssa Siligato **A**, Virgola **B**. Le schede scelte (senza scritte) sono in `riferimenti/<nome>.jpg` e `personaggi.json` le usa come riferimento.
