@@ -73,3 +73,4 @@ Stile di riferimento: impaginazione di un libro di grammatica scolastico italian
 50. Uscita: capitoli sul sito uno alla volta + due volumi PDF (A parti del discorso, B analisi logica) + un volume unico con tutto.
 51. «Schemi di sintesi e ripasso»: libretto a parte.
 52. Vlad controlla dopo ogni fase.
+53. Immagini con il modello più economico: **Nano Banana 2.1 a 1K (~3 ₽)**, default di `libro-01/genera.py`. Prima di ogni lotto si controlla il saldo Polza.
