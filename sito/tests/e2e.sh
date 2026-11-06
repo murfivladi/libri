@@ -96,15 +96,15 @@ chk "anteprima con token" "$(code "libro.php?s=libro-segreto&anteprima=$TK")" 20
 chk "anteprima con token sbagliato" "$(code "libro.php?s=libro-segreto&anteprima=sbagliato")" 404
 
 # ---------- sito pubblico: miniature, Open Graph, lettore, contatori ----------
-HOME=$(curl -s "$B/")
-chk "miniature nel catalogo (3 libri + 1 in evidenza)" "$(echo "$HOME" | conta 'src="uploads/thumb/400-')" 4
+HOME_HTML=$(curl -s "$B/")   # non chiamarla HOME: è la cartella di casa usata da curl e php
+chk "miniature nel catalogo (3 libri + 1 in evidenza)" "$(echo "$HOME_HTML" | conta 'src="uploads/thumb/400-')" 4
 chk "miniatura creata sul disco" "$([ -n "$(ls uploads/thumb 2>/dev/null)" ] && echo si)" si
 chk "Open Graph: immagine" "$(curl -s "$B/libro.php?s=il-custode-dell-etna" | conta 'og:image" content="http://127.0.0.1:'$PORT'/uploads/thumb/800-')" 1
 chk "Open Graph: tipo book" "$(curl -s "$B/libro.php?s=il-custode-dell-etna" | conta 'og:type" content="book"')" 1
 chk "link canonico" "$(curl -s "$B/libro.php?s=il-custode-dell-etna" | conta 'rel="canonical"')" 1
 chk "pagina Privacy" "$(code 'privacy.php')" 200
 chk "vecchio indirizzo privacy: 301" "$(curl -s -o /dev/null -w '%{http_code}' "$B/pagina.php?s=privacy")" 301
-chk "link Privacy nel piede" "$(echo "$HOME" | conta 'privacy.php')" 1
+chk "link Privacy nel piede" "$(echo "$HOME_HTML" | conta 'privacy.php')" 1
 chk "robots.txt" "$(curl -s "$B/robots.txt" | conta 'Disallow: /admin/')" 1
 chk "404 con grafica" "$(curl -s "$B/404.php" | conta 'Pagina non trovata')" 1
 chk "lettore: usa PDF.js locale" "$(curl -s "$B/leggi.php?s=il-custode-dell-etna" | conta 'assets/vendor/pdf.min.js')" 1
