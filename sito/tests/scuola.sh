@@ -316,7 +316,7 @@ fi
 
 # importa gli esercizi del capitolo 1 di «Chi fa cosa?» (stessi codici del PDF)
 Tk=$(tok "admin/esercizi.php")
-post admin/esercizi.php -F csrf=$Tk -F azione=importa -F libro_id=$LID -F "file=@$REPO/scuola/chi-fa-cosa/capitolo-01/esercizi.json" >/dev/null
+post admin/esercizi.php -F csrf=$Tk -F azione=importa -F libro_id=$LID -F "file=@$REPO/scuola/chi-fa-cosa/vecchia-versione/capitolo-01/esercizi.json" >/dev/null
 chk "importa: il codice di un audio non si sovrascrive" "$(curl -s -b "$J" "$B/admin/esercizi.php" | conta 'Saltati (codice o dati non validi): CFC-2')" 1
 chk "importa: esercizi del capitolo caricati" "$(sql "SELECT COUNT(*) FROM esercizi WHERE codice IN ('CFC-1','CFC-8','CFC-15','CFC-17') AND libro_id = $LID")" 4
 chk "importa: punti come nel PDF (CFC-8: 18)" "$(php -r 'require "inc/scuola.php"; echo punti_esercizio(db()->query("SELECT * FROM esercizi WHERE codice = \"CFC-8\"")->fetch());')" 18

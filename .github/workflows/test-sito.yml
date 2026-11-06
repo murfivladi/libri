@@ -64,6 +64,7 @@ jobs:
         run: bash sito/tests/duesiti.sh
       - name: Test della sezione Scuola
         run: |
+          sudo apt-get update -q
           sudo apt-get install -y -q python3-reportlab
           SENZA_BROWSER=1 bash sito/tests/scuola.sh
 
@@ -100,5 +101,6 @@ jobs:
         run: CON_BROWSER=1 bash sito/tests/duesiti.sh
       - name: Test nel browser (Scuola - esercizi, zone, editor)
         run: |
+          sudo apt-get update -q
           sudo apt-get install -y -q python3-reportlab
           bash sito/tests/scuola.sh
