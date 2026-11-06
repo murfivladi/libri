@@ -1,0 +1,28 @@
+{
+  "stile": "modern flat vector cartoon illustration in the style of contemporary Italian school textbooks for 12-year-olds: simple rounded shapes, big round white eyes with small black dot pupils, small pink cheek dots, light freckles, flat bright colors with very soft subtle shading, thin dark brown outlines, clean white background, friendly and expressive, no text, no letters, no watermark",
+  "personaggi": {
+    "vlad": {
+      "descrizione": "Vlad, a 13-year-old boy with short messy dark brown hair, brown eyes, light freckles, slim; bright orange hoodie with a small white open-book logo on the chest, dark blue jeans, white sneakers, holds a grey tablet",
+      "riferimento": "riferimenti/vlad-vecchio.jpg"
+    },
+    "luce": {
+      "descrizione": "Luce, a small female Shiba Inu dog with orange-red fur, cream chest, cheeks and paws, pointy ears with pink inside, curly fluffy tail, wears thin round black glasses, clever cheerful face",
+      "riferimento": "riferimenti/luce-vecchia.jpg"
+    },
+    "ludovica": {
+      "descrizione": "Ludovica, a 13-year-old girl with long wavy light brown hair in a high ponytail with a red scrunchie, big expressive hazel eyes, brave sporty look; teal t-shirt, light denim jacket, black leggings, red sneakers"
+    },
+    "salvatore": {
+      "descrizione": "Salvatore, a 13-year-old boy, a bit chubby and very cheerful, short curly black hair, big smile, always holding a snack (an arancino); yellow sweatshirt, khaki trousers, blue sneakers"
+    },
+    "wijdane": {
+      "descrizione": "Wijdane, a 13-year-old very clever girl of North African origin, warm brown skin, dark eyes, wears a soft lilac hijab, round thin glasses; purple cardigan over a white shirt, grey skirt over dark trousers, carries a thick book"
+    },
+    "prof_siligato": {
+      "descrizione": "Professoressa Marcella Siligato, the Italian teacher, a friendly woman aged about 57 with short curly white hair with a red pencil tucked into it, round glasses, kind smile; light blue shirt, long navy blue skirt, holds a register book"
+    },
+    "virgola": {
+      "descrizione": "Virgola, the school cat: an orange-ginger tabby cat with darker orange stripes, white muzzle and white paws, big green eyes, a long tail always curled at the tip in the shape of a comma, a bit cheeky and know-it-all expression"
+    }
+  }
+}
