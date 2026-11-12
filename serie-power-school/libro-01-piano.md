@@ -61,10 +61,10 @@ character reference sheet, full body front view, side view and back view, plain 
 
 ### prof — prof.ssa Siligato (синьора Силигато)
 - Учительница по Силам. Проводит бои, объясняет силу воды, в конце сидит внутри робота.
-- ~45 лет, чёрные кудри в пучке, красные очки, оливковый кардиган, свисток на шее, вечная чашка кофе. Её сила — тайна.
+- ~60 лет, седые кудри в пучке, красные очки, оливковый кардиган, свисток на шее, вечная чашка кофе. Её сила — тайна.
 
 ```
-character reference sheet, full body front view and side view plus a close-up of the face, plain white background, a school teacher, a Sicilian woman about 45 years old, curly black hair in a loose bun, red glasses, olive green cardigan over a white blouse, dark skirt, a whistle around her neck, strict but kind expression, vibrant children's book illustration, dynamic cartoon style with a light anime influence, clean shapes, no text, no letters, no watermark
+character reference sheet, full body front view and side view plus a close-up of the face, plain white background, a school teacher, a Sicilian woman about 60 years old, curly white hair in a loose bun, red glasses, olive green cardigan over a white blouse, dark skirt, a whistle around her neck, strict but kind expression, vibrant children's book illustration, dynamic cartoon style with a light anime influence, clean shapes, no text, no letters, no watermark
 ```
 
 ### compagni — одноклассники (одним листом)

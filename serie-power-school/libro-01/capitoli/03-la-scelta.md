@@ -1,7 +1,7 @@
 # La scelta
 @dove: Taormina, la Power School, l'aula di Poteri
 
-La professoressa Siligato ha circa quarantacinque anni, i capelli neri pieni di riccioli raccolti in uno chignon che si disfa sempre, gli occhiali rossi e un cardigan verde oliva che porta in ogni stagione. Al collo ha un fischietto d'argento, che usa negli scontri, e in mano sempre una tazza di caffè che non finisce mai.
+La professoressa Siligato ha una sessantina d'anni, i capelli bianchi pieni di riccioli raccolti in uno chignon che si disfa sempre, gli occhiali rossi e un cardigan verde oliva che porta in ogni stagione. Al collo ha un fischietto d'argento, che usa negli scontri, e in mano sempre una tazza di caffè che non finisce mai.
 
 Nessuno, nella nostra classe, sa qual è il suo potere. Abbiamo provato a indovinare per due anni. Il ragazzo del fuoco dice che è il tempo, perché arriva sempre puntuale al secondo. La ragazza del vento dice che è leggere nel pensiero, perché sa sempre chi non ha fatto i compiti. Io penso che sia qualcosa che ha a che fare con la calma, perché in sua presenza perfino il mio gufo smette di agitarsi. Ma lei non l'ha mai detto, e quando glielo chiediamo sorride e risponde: «Il mio potere è insegnarvi a usare il vostro».
 
