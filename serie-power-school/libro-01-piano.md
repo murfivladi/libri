@@ -59,16 +59,16 @@ character reference sheet, full body front view, side view and back view plus a 
 character reference sheet, full body front view, side view and back view, plain white background, V.O.X., a 12-year-old boy in a full electric armor suit, sleek dark graphite armor with glowing electric-yellow lines, rounded helmet with a black visor showing two yellow pixel eyes, a square touchscreen on the chest, four flexible metal tentacles coming from his back with small yellow-blue sparks at the tips, vibrant children's book illustration, dynamic cartoon style with a light anime influence, glowing electric effects, no text, no letters, no watermark
 ```
 
-### prof — учительница (*имя утвердить*)
-- В тексте без имени. Проводит бои, объясняет силу воды, в конце сидит внутри робота.
-- *Предлагаю:* **prof.ssa Lanza**, ~45 лет, чёрные кудри в пучке, красные очки, оливковый кардиган, свисток на шее. Её сила пока тайна.
+### prof — prof.ssa Siligato (синьора Силигато)
+- Учительница по Силам. Проводит бои, объясняет силу воды, в конце сидит внутри робота.
+- ~45 лет, чёрные кудри в пучке, красные очки, оливковый кардиган, свисток на шее, вечная чашка кофе. Её сила — тайна.
 
 ```
 character reference sheet, full body front view and side view plus a close-up of the face, plain white background, a school teacher, a Sicilian woman about 45 years old, curly black hair in a loose bun, red glasses, olive green cardigan over a white blouse, dark skirt, a whistle around her neck, strict but kind expression, vibrant children's book illustration, dynamic cartoon style with a light anime influence, clean shapes, no text, no letters, no watermark
 ```
 
 ### compagni — одноклассники (одним листом)
-- *Придумано:* Тано — огонь (рыжий, огоньки на ладонях); Джада — животные (сова на плече); Пьетро — камень (серая каменная кожа на руках); Нина — ветер (волосы парят).
+- Без имён: мальчик огня (рыжий, огоньки на ладонях), девочка животных с совой — **это рассказчица**, мальчик камня (серые каменные руки), девочка ветра (волосы парят).
 
 ```
 group character reference sheet, plain white background, four 12-year-old Sicilian school children with powers standing in a row: a red-haired boy with small flames on his palms, a girl with braids and an owl on her shoulder, a sturdy boy whose forearms are made of grey stone, a girl with long hair floating in the wind, casual colorful school clothes, vibrant children's book illustration, dynamic cartoon style with a light anime influence, no text, no letters, no watermark
@@ -89,27 +89,11 @@ reference sheet of three villain robots, plain white background, all made of rus
 
 ---
 
-## 3. План книги (на утверждение)
+## 3. План книги (написано)
 
-Твои 9 глав — основа, события не меняю. Расширяю в стиле твоих книг до **12 глав**
-(≈ 10–12 тысяч слов), 3-е лицо, прошедшее время, как у тебя.
-
-| № | Глава | Что происходит |
-|---|---|---|
-| 1 | La scuola dei poteri | Школа в Таормине, силы, Аврора и её forma risoluta |
-| 2 | Il compleanno | День рождения, Симоне, броня V.O.X. |
-| 3 | La scelta | Prof разрешает Авроре выбрать соперника → Симоне. Арена |
-| 4 | Lo scontro | Бой, серфборд, вода + молния = взрыв, Аврора побеждает |
-| 5 | Lezione importante | «Вода — не слабая сила», звонок, «можно у тебя переночевать?» |
-| 6 | La notte elettrica | *Новая:* ночёвка у Авроры → утром опаздывают |
-| 7 | Dove sono gli altri? | Пустая школа, огромный телевизор, карта на экране V.O.X. |
-| 8 | Il fiume | Переправа на «бублике», робот-акула |
-| 9 | Il passaggio bloccato | Огненная сфера, труба утаскивает V.O.X. |
-| 10 | Il coraggio | Аврора одна, плачет, находит озерцо |
-| 11 | Il lago Cristallino | Большой робот, огоньки, Аврора падает в воду |
-| 12 | La forma risoluta | Превращение, «Non toccare i miei amici!», победа, поцелуй |
-
----
+12 глав, ≈ 11 700 слов по-итальянски. Глава 1 и часть глав 11–12 рассказывает **одноклассница с совой** (без имени), остальное — от третьего лица.
+Тексты: `libro-01/capitoli/` (IT) и `libro-01/capitoli-ru/` (RU). Места картинок уже стоят в тексте (`[[tavola:cap04b|…]]`):
+положишь `immagini/cap04b.jpg` — и после `python3 build.py` картинка появится в нужном месте.
 
 ## 4. Промпты иллюстраций (обложка + 37 тавл, ~3 на главу)
 
@@ -329,15 +313,13 @@ Aurora and Simone as in the references on the lakeshore at sunset seen from behi
 
 ---
 
-## 5. Придумано мной — утверди или поправь
+## 5. Что придумано (утверди или поправь)
 
-1. Внешность Авроры, Симоне, брони V.O.X. Возраст обоих — 12 лет.
-2. Имя учительницы — **prof.ssa Lanza** (в тексте без имени).
-3. Одноклассники: Тано (огонь), Джада (сова), Пьетро (камень), Нина (ветер).
-4. Река = **Алькантара**, Lago Cristallino — у подножия Этны.
-5. Знак на роботах — **чёрная шестерёнка с глазом** (кто злодей — тайна книги 2).
-6. Новая глава 6 «La notte elettrica» (ночёвка → поэтому опоздали).
-7. Твоя глава 3 разделена на «La scelta» (выбор и арена) и «Lo scontro» (бой).
-8. Рассказ в 3-м лице, как у тебя (в главе 1 у тебя «наша школа» — оставить голос рассказчика-одноклассника или убрать?).
-
-**Вопрос:** книга одна или серия «Power School» (1, 2, 3…)?
+1. Внешность Авроры, Симоне, брони V.O.X. Обоим 12 лет, день рождения — вторник в марте.
+2. Рассказчица — одноклассница с совой (говорит с животными); сова видела всё сверху и вдохновляет Аврору в главе 10.
+3. Броню V.O.X. Симоне собрал с дядей-инженером из Катании; расшифровки «V.O.X.» — шутка.
+4. Мама Авроры (медсестра), бабушка, кот Тонно. Симоне ночует у Авроры → ночью во сне сжигает будильник искрой → они опаздывают и поэтому не попадают в робота.
+5. Путь: телепорт прыжками до реки Алькантара, переправа, подъём по лесам Этны. Lago Cristallino — выдуманное озеро на Этне.
+6. Внутри робота силы не работают (особый металл) — поэтому никто не сбежал.
+7. Знак злодея — чёрная шестерёнка с глазом; в конце находят надпись «QUESTO ERA SOLO L'INIZIO» — крючок на книгу 2.
+8. Исправлено по смыслу: взрыв в поединке — молния попадает в кипяток, вода становится паром; акулу побеждают, вытащив из воды; щит сферы сначала разбивает молния, потом вода гасит огонь; истинная форма раньше ни у кого не появлялась (у тебя в гл. 1 она описана как уже известная, а в гл. 9 все удивляются).
