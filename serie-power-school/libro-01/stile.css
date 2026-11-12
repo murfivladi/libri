@@ -104,3 +104,6 @@ em { font-style: italic; }
 .nella-collana img.emblema { display: block; width: 20mm; height: 20mm; margin: 12mm auto 0; }
 .nella-collana .editore { margin-top: 3mm; font-size: 8.5pt; letter-spacing: 0.3em; text-transform: uppercase; color: #b07a0c; }
 .capitolo.continua { break-before: page; }
+/* la capolettera non si stacca dalla sua riga */
+p.capolettera { display: flow-root; break-inside: avoid; }
+.stacco { break-after: avoid; }

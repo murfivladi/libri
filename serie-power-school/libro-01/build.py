@@ -89,32 +89,30 @@ def capitolo(path, numero):
         else:
             corrente.append(r.strip())
     if corrente: blocchi.append(" ".join(corrente))
-    out = [f'<section class="capitolo {mondo}">', '<div class="capitolo-testa">',
-           f'<p class="titolo-libro">{html.escape(SERIE)}</p>', f'<p class="numero-cap">{L["capitolo"]} {numero}</p>',
-           f'<h2 class="titolo-cap">{inline(titolo)}</h2>']
-    if dove: out.append(f'<p class="dove">{html.escape(dove)}</p>')
-    out.append('<p class="ornamento">' + {"oblio": "◇ ◇ ◇", "duecento": "✦ ✦ ✦"}.get(mondo, "• • •") + '</p></div>')
-    primo = True
-    pezzi = []
+    testa = [f'<section class="capitolo {mondo}">', '<div class="capitolo-testa">',
+             f'<p class="titolo-libro">{html.escape(SERIE)}</p>', f'<p class="numero-cap">{L["capitolo"]} {numero}</p>',
+             f'<h2 class="titolo-cap">{inline(titolo)}</h2>']
+    if dove: testa.append(f'<p class="dove">{html.escape(dove)}</p>')
+    testa.append('<p class="ornamento">' + {"oblio": "◇ ◇ ◇", "duecento": "✦ ✦ ✦"}.get(mondo, "• • •") + '</p></div>')
+    # pezzi: ["T", apertura, blocchi, chiusura] per il testo, (html, True) per le tavole
+    corpo, primo, pezzi = [], True, []
     for b in blocchi:
         if b == "* * *":
-            out.append('<p class="stacco">✦</p>'); primo = True; continue
+            corpo.append('<p class="stacco">✦</p>'); primo = True; continue
         m = re.match(r"\[\[tavola:([\w-]+)\|(.*)\]\]", b)
         if m:
             t = tavola(m.group(1), m.group(2))
             if t:        # chiude il testo, mette la tavola, riprende il capitolo su pagina nuova
-                out.append('</section>')
-                pezzi += [("\n".join(out), False), (t, True)]
-                out = [f'<section class="capitolo continua {mondo}">']
+                pezzi += [["T", testa, corpo, "</section>"], (t, True)]
+                testa, corpo = [f'<section class="capitolo continua {mondo}">'], []
             continue
         if b.startswith("||"):
-            out.append(f'<p class="iscrizione">{inline(b[2:].strip())}</p>'); continue
+            corpo.append(f'<p class="iscrizione">{inline(b[2:].strip())}</p>'); continue
         if b.startswith(">"):
-            out.append(f'<p class="quaderno">{inline(b[1:].strip())}</p>'); continue
+            corpo.append(f'<p class="quaderno">{inline(b[1:].strip())}</p>'); continue
         cl = ' class="primo capolettera"' if primo and not b.startswith("—") else (' class="primo"' if primo else "")
-        out.append(f"<p{cl}>{inline(b)}</p>"); primo = False
-    out.append('<p class="fine-cap">✦ ✦ ✦</p></section>')
-    pezzi.append(("\n".join(out), False))
+        corpo.append(f"<p{cl}>{inline(b)}</p>"); primo = False
+    pezzi.append(["T", testa, corpo, '<p class="fine-cap">✦ ✦ ✦</p></section>'])
     return pezzi
 
 
@@ -185,6 +183,11 @@ def segmento(html_corpo, nome, fisso, pagina_iniziale=1):
     return f_pdf
 
 
+def righe_ultima(pdf, n):
+    t = subprocess.run(["pdftotext", "-f", str(n), "-l", str(n), "-layout", pdf, "-"], capture_output=True, text=True).stdout
+    return max(0, sum(1 for r in t.splitlines() if r.strip()) - 1)      # -1: numero di pagina
+
+
 def pagine(pdf):
     r = subprocess.run(["pdfinfo", pdf], capture_output=True, text=True, check=True).stdout
     return int(re.search(r"Pages:\s+(\d+)", r).group(1))
@@ -207,10 +210,28 @@ def main():
     pezzi.append((ultima(), True))
 
     segmenti, totale = [], 0
-    for n, (corpo_html, fisso) in enumerate(pezzi, 1):
-        pdf = segmento(corpo_html, f"seg-{n:02d}", fisso, totale + 1)
+    for n, pezzo in enumerate(pezzi, 1):
+        nome = f"seg-{n:03d}"
+        if isinstance(pezzo, list):          # testo
+            _, apertura, corpo, chiusura = pezzo
+            prossimo = pezzi[n] if n < len(pezzi) else None
+            dopo = pezzi[n + 1] if n + 1 < len(pezzi) else None
+            while True:
+                pdf = segmento("\n".join(apertura + corpo + [chiusura]), nome, False, totale + 1)
+                np_ = pagine(pdf)
+                # prima di una tavola: se l'ultima pagina ha solo poche righe, sposta l'ultimo paragrafo dopo la tavola
+                if (prossimo and not isinstance(prossimo, list) and isinstance(dopo, list) and np_ > 1
+                        and len(corpo) > 1 and righe_ultima(pdf, np_) < 14):
+                    dopo[2].insert(0, corpo.pop())
+                    while corpo and corpo[-1] == '<p class="stacco">✦</p>':
+                        dopo[2].insert(0, corpo.pop())
+                    continue
+                break
+        else:
+            pdf = segmento(pezzo[0], nome, pezzo[1], totale + 1)
+            np_ = pagine(pdf)
         segmenti.append(pdf)
-        totale += pagine(pdf)
+        totale += np_
     subprocess.run(["pdfunite"] + segmenti + [PDF], check=True)
     print("Capitoli:", len(files), "| pagine:", totale, "| PDF creato:", PDF)
 
