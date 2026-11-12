@@ -1,10 +1,9 @@
 # Power School 1 · Il potere dell'acqua — da fare
 
-## Illustrazioni (le genera Vlad)
-- Prima i riferimenti dei personaggi (vedi `../libro-01-piano.md`, sezione 2) → `riferimenti/`.
-- Poi copertina + 37 tavole → `immagini/NOME.jpg` (nomi e prompt nel piano).
-- Dopo ogni gruppo di immagini: `python3 build.py` e `python3 build.py --ru`, poi copiare i PDF in `../per-il-sito/`.
-- Copertina per il sito: `pdftoppm -r 200 -f 1 -l 1 -jpeg -jpegopt quality=90 ...` (quando c'è `immagini/copertina.jpg`).
+## Illustrazioni
+- Fatte da Vlad: copertina + 33 tavole (immagini compresse a qualità 80).
+- Non fatte (Vlad ha deciso di fermarsi): cap02b, cap02c, cap03a, cap04d. I segnaposto restano nel testo: se un giorno arrivano, basta mettere `immagini/NOME.jpg` e rifare `python3 build.py` e `python3 build.py --ru`.
+- Da rifare, se si vuole: cap12d (il robot che esplode è grigio e Simone è senza armatura), cap10a e cap05c (elmo da cavaliere invece del casco di V.O.X.).
 
 ## Da controllare
 - Traduzione russa fatta dall'IA: va controllata da un madrelingua.
