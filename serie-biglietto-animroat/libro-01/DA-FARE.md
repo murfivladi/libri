@@ -6,7 +6,8 @@
 - Schede personaggi e prompt per le illustrazioni: `riferimenti/schede-e-prompt.md`.
 
 ## Manca
-- **Copertina e tavole**: le fa Vlad (`immagini/copertina.jpg`, `cap04/05/08/13/15.jpg`). Poi `python3 build.py` e riesportare per il sito.
+- Copertina e tavole cap04, cap05, cap08, cap13: fatte da Vlad (13/11/2026).
+- **Manca la tavola `cap15`** (neve a novembre): se Vlad la fa, `python3 build.py` e riesportare per il sito.
 - Rilettura di Vlad.
 
 ## Da approvare (inventato)
