@@ -72,7 +72,7 @@ Invece non disse niente per un bel pezzo. Poi parlò, con una voce diversa dal s
 
 — Scriveva — dissi.
 
-— Scriveva a se stesso. Perché non aveva nessun altro a cui scrivere. Tutti gli obbedivano, ma nessuno gli parlava davvero. Gli unici che gli dicevano la verità erano i suoi libri e una tartaruga grande come una noce. — Marco Aurelio chiuse gli occhi. — Era solo, Katja. Era l'uomo più saggio di Roma, e il più solo. E io ero troppo piccola per aiutarlo.
+— Scriveva a se stesso. Perché non aveva nessun altro a cui scrivere. Tutti gli obbedivano, ma nessuno gli parlava davvero. Gli unici che gli dicevano la verità erano i suoi libri e una tartaruga grande come una noce. — Marco Aurelio chiuse gli occhi. — Era solo, Katja. Era l'uomo più saggio di Roma, e il più solo. E io ero troppo piccolo per aiutarlo.
 
 Il vento fischiava sopra la duna.
 

@@ -48,7 +48,7 @@ Nico invece si inginocchiò davanti alla tartaruga, con gli occhi che brillavano
 
 — Come l'imperatore? — chiese Nico.
 
-— Come il mio padrone — corresse la tartaruga, e per un momento la sua voce cambiò, si fece morbida. — Marco Aurelio Antonino, imperatore di Roma e filosofo. Mi trovò da piccola in un campo sul Danubio, durante una guerra. Ero grande come una noce. Mi tenne nella sua tenda per tutta la campagna. La sera, quando scriveva i suoi pensieri, io stavo sulla sua scrivania. Mi leggeva ogni frase. Mi ha insegnato tutto quello che so.
+— Come il mio padrone — corresse la tartaruga, e per un momento la sua voce cambiò, si fece morbida. — Marco Aurelio Antonino, imperatore di Roma e filosofo. Mi trovò da piccolo in un campo sul Danubio, durante una guerra. Ero grande come una noce. Mi tenne nella sua tenda per tutta la campagna. La sera, quando scriveva i suoi pensieri, io stavo sulla sua scrivania. Mi leggeva ogni frase. Mi ha insegnato tutto quello che so.
 
 — Ma l'imperatore Marco Aurelio — dissi io, perché le date mi tornano sempre in mente nei momenti peggiori — è morto nel 180 dopo Cristo.
 
