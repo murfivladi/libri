@@ -68,7 +68,7 @@ Trentasette metri. Meno della lunghezza di un campo da calcio. Meno della distan
 
 E poi il *Flyer* scese, toccò la sabbia con i pattini, scivolò, si fermò.
 
-Nessuno disse niente. Per un momento lunghissimo, nella spiaggia più fredda del mondo, sette uomini, un ragazzo, una ragazza, un asino immaginario e una tartaruga di duemila anni restarono zitti a guardare.
+Nessuno disse niente. Per un momento lunghissimo, nella spiaggia più fredda del mondo, sei uomini, un ragazzo, una ragazza, un asino immaginario e una tartaruga di duemila anni restarono zitti a guardare.
 
 Poi Johnny Moore si mise a urlare. Lanciò il berretto in aria. Daniels lo abbracciò. Will Dough abbracciò Etheridge, che non abbracciava mai nessuno. Wilbur corse verso il fratello, e Orville si alzò dalla culla di legno, e i due fratelli si strinsero la mano.
 
