@@ -34,7 +34,7 @@ const html = path.resolve(__dirname, rel), out = path.join(__dirname, 'build');
     return { pagine: document.querySelectorAll('.pagina').length, prob };
   });
   fs.mkdirSync(out, { recursive: true });
-  const pdf = path.join(out, path.basename(html, '.html') + '.pdf');
+  const base = path.basename(html, '.html'), pdf = path.join(out, base === 'capitolo' ? 'chi-fa-cosa-' + path.basename(path.dirname(html)) + '.pdf' : base + '.pdf');
   await page.pdf({ path: pdf, format: 'A4', printBackground: true, preferCSSPageSize: true });
   if (anteprime) {
     fs.mkdirSync(anteprime, { recursive: true });

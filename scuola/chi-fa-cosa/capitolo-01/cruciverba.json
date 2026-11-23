@@ -1,0 +1,8 @@
+{"parole": [
+ {"n": 1, "parola": "ARTICOLO", "r": 0, "c": 0, "dir": "dx", "def": "Sta sempre davanti al nome: il, la, uno…"},
+ {"n": 1, "parola": "AVVERBIO", "r": 0, "c": 0, "dir": "giu", "def": "Risponde a come? quando? dove? (es. ieri, bene)"},
+ {"n": 2, "parola": "PRONOME", "r": 0, "c": 11, "dir": "giu", "def": "Prende il posto del nome: io, lei, la, che…"},
+ {"n": 4, "parola": "VERBO", "r": 2, "c": 9, "dir": "giu", "def": "Dice che cosa si fa o che cosa succede"},
+ {"n": 3, "parola": "NOME", "r": 3, "c": 3, "dir": "giu", "def": "Indica persone, animali, cose, luoghi, idee"},
+ {"n": 5, "parola": "INTERIEZIONE", "r": 6, "c": 0, "dir": "dx", "def": "Esprime un'emozione, da sola: oh!, uffa!"}
+]}

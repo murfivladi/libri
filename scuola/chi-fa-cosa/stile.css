@@ -188,4 +188,46 @@ table.griglia { width: 100%; border-collapse: collapse; font: 9.4pt var(--sans);
 .sezione-es::before { content: ""; width: 7mm; height: 3.2mm; background: var(--rosso); border-radius: .8mm; }
 .lettere { display: inline-flex; gap: 1.2mm; margin-left: 1mm; } .lettere span { border: .35mm solid #333; padding: 0 1.2mm; font-size: 8pt; font-weight: 700; }
 
-.pagina:has(.fascia) .angolo { display: none; }
+.pagina:has(.fascia) .angolo, .pagina:has(.testata-compito) .angolo { display: none; }
+
+/* ---------- cruciverba ---------- */
+table.cruciverba { border-collapse: collapse; margin: 2mm 0; }
+.cruciverba td { width: 7mm; height: 7mm; padding: 0; }
+.cruciverba td.c { border: .45mm solid var(--testo); position: relative; text-align: center; font: 800 10pt var(--sans); background: #fff; }
+.cruciverba sup { position: absolute; top: .3mm; left: .6mm; font: 700 5.6pt var(--sans); }
+.cruciverba-box { display: grid; grid-template-columns: auto 1fr; gap: 6mm; align-items: start; }
+.definizioni { font: 9.4pt/1.45 var(--sans); } .definizioni h4 { font: 900 8.6pt var(--sans); color: var(--rosso); text-transform: uppercase; margin: 0 0 1mm; }
+.definizioni p { margin: 0 0 1mm; }
+
+/* ---------- riepilogo ---------- */
+.riassunto { border: .8mm solid var(--blu); border-radius: 4mm; padding: 4mm 5mm 3mm; position: relative; margin-top: 7mm; font: 10pt/1.5 var(--sans); }
+.riassunto .tit, .errori .tit, .mappa-vuota .tit { position: absolute; top: -4mm; left: 5mm; background: #fff; padding: 0 2mm; font: 900 11pt var(--titoli); color: var(--blu); }
+.riassunto ol { margin: 0; padding-left: 5mm; } .riassunto li { margin-bottom: 1mm; }
+.errori { border: .8mm solid var(--viola); border-radius: 4mm; padding: 4mm 5mm 3mm; position: relative; margin-top: 7mm; font: 9.8pt/1.45 var(--sans); }
+.errori .tit { color: var(--viola); }
+.errori table { width: 100%; border-collapse: collapse; } .errori td { padding: 1.2mm 1.5mm; border-bottom: .3mm dashed #c9b8e2; vertical-align: top; }
+.mappa-vuota { border: .8mm solid var(--verde); border-radius: 4mm; padding: 6mm 5mm 4mm; position: relative; margin-top: 7mm; }
+.mappa-vuota .tit { color: var(--verde); }
+.mappa-vuota .righe-mappa { display: grid; grid-template-columns: 34mm 1fr; gap: 2.5mm 4mm; font: 9.6pt var(--sans); align-items: center; }
+.mappa-vuota .righe-mappa b { color: #fff; border-radius: 2mm; padding: 1.4mm 2mm; text-align: center; font-size: 8.6pt; text-transform: uppercase; }
+.vuoti { display: flex; gap: 2mm; flex-wrap: wrap; } .vuoti span { border: .35mm dashed #8a93a3; border-radius: 1.5mm; min-width: 27mm; height: 7mm; }
+
+/* ---------- verifica ---------- */
+.testata-verifica { display: flex; align-items: center; justify-content: space-between; background: var(--blu); color: #fff; border-radius: 3mm; padding: 2.5mm 5mm; margin-bottom: 4mm; }
+.testata-verifica h2 { font: 900 17pt var(--titoli); letter-spacing: .05em; }
+.testata-verifica .dati { font: 600 9pt var(--sans); } .testata-verifica .dati span { display: inline-block; min-width: 32mm; border-bottom: .3mm solid #fff; margin-left: 1mm; }
+.punti { font: 800 8.6pt var(--sans); color: var(--blu); white-space: nowrap; padding-top: .8mm; }
+.voto { display: flex; justify-content: flex-end; align-items: center; gap: 3mm; font: 900 12pt var(--sans); margin: 3mm 0; }
+.voto span { border: .6mm solid var(--blu); border-radius: 2mm; padding: 1mm 4mm; min-width: 26mm; text-align: right; }
+table.auto { width: 100%; border-collapse: collapse; font: 9.6pt var(--sans); margin-top: 2mm; }
+.auto th, .auto td { border: .35mm solid #c9cfda; padding: 1.6mm 2.2mm; } .auto th { background: #eef1f6; font-size: 8pt; text-transform: uppercase; }
+.auto td.f { text-align: center; font-size: 13pt; width: 17mm; }
+
+/* ---------- compito di realtà ---------- */
+.testata-compito { background: var(--arancio); color: #fff; margin: -17mm -16mm 7mm -19mm; padding: 9mm 16mm 6mm 19mm; border-bottom-right-radius: 18mm; }
+.testata-compito .sopra { font: 800 9pt var(--sans); letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
+.testata-compito h2 { font: 900 22pt var(--titoli); margin-top: 1mm; }
+.fasi { counter-reset: f; list-style: none; padding: 0; margin: 0; font: 10pt/1.5 var(--sans); }
+.fasi li { position: relative; padding: 0 0 3mm 12mm; } .fasi li::before { counter-increment: f; content: counter(f); position: absolute; left: 0; top: -.5mm; width: 8mm; height: 8mm; border-radius: 50%; background: var(--arancio); color: #fff; display: grid; place-items: center; font: 900 11pt var(--titoli); }
+.fasi b { color: var(--arancio); }
+.cartellone { border: .6mm dashed var(--arancio); border-radius: 4mm; height: 60mm; display: grid; place-items: center; color: var(--muto); font: italic 10pt var(--sans); margin: 3mm 0; background: var(--arancio-chiaro); }
