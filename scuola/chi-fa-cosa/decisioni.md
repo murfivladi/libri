@@ -75,3 +75,4 @@ Stile di riferimento: impaginazione di un libro di grammatica scolastico italian
 52. Vlad controlla dopo ogni fase.
 53. Immagini con il modello più economico: **Nano Banana 2.1 a 1K (~3 ₽)**, default di `libro-01/genera.py`. Prima di ogni lotto si controlla il saldo Polza.
 54. Foglio personaggi scelto: Vlad **B**, Luce **B**, Ludovica **A**, Salvatore **B**, Wijdane **B**, prof.ssa Siligato **A**, Virgola **B**. Le schede scelte (senza scritte) sono in `riferimenti/<nome>.jpg` e `personaggi.json` le usa come riferimento.
+55. Prova di impaginazione nel nuovo stile: `prova/impaginazione.html` → `build/impaginazione.pdf` (6 pagine: apertura su due pagine, per cominciare, dal testo alla grammatica, lezione, esercizi). Stile in `stile.css`, PDF con `build.js`. Le figure in `figure/` sono ritagli provvisori del foglio personaggi.
