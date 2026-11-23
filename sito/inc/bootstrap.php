@@ -206,6 +206,9 @@ function piede(): void {
 }
 
 // Aspetto personalizzabile dall'admin: emblema, logo, banner e colori.
+// file del sito con la data di modifica nell'indirizzo: dopo un aggiornamento il browser non usa la copia vecchia
+function ver(string $f): string { return $f . '?v=' . (@filemtime(__DIR__ . '/../' . $f) ?: 0); }
+
 function asset_personalizzato(string $chiave, string $predefinito, int $larghezza, string $prefisso): string {
     $f = impost($chiave);
     if ($f !== '') return con_prefisso(miniatura($f, $larghezza), $prefisso);

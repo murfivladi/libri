@@ -9,7 +9,10 @@ Uso:  python3 immagini.py [nome ...]
 """
 import json, os, sys, time, urllib.error, urllib.request
 
-API = os.environ.get("DEAPI_URL", "https://api.deapi.ai").rstrip("/") + "/api/v1/client"   # DEAPI_URL = proxy (es. https://vladproxy.v7755837.deno.net)
+API = "https://api.deapi.ai/api/v1/client"   # API nativa deAPI (la chiave "id|token" non vale sull'endpoint OpenAI)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../scripts"))
+from proxy_deapi import via_proxy   # noqa: E402  (proxy di Vlad, variabile DEAPI_PROXY)
+
 MODELLO = "Flux_2_Klein_4B_BF16"
 
 QUI = os.path.dirname(os.path.abspath(__file__))
@@ -26,7 +29,8 @@ UA = {"User-Agent": "Mozilla/5.0 (VladEditore)", "Accept": "application/json"}  
 
 def scarica(url, corpo=None, intestazioni={}):
     for tentativo in range(8):
-        req = urllib.request.Request(url, data=corpo, headers={**UA, **intestazioni})
+        indirizzo, h = via_proxy(url, {**UA, **intestazioni})
+        req = urllib.request.Request(indirizzo, data=corpo, headers=h)
         try:
             with urllib.request.urlopen(req, timeout=120) as r:
                 return r.read()

@@ -10,7 +10,8 @@ Esempi:
   python3 libro-01/genera.py --out riferimenti/nonna_tanya.jpg --scheda nonna_tanya
 
 La chiave API si legge dalla variabile d'ambiente POLZA (non viene mai stampata).
-Costo: circa 5 RUB per immagine con bytedance/seedream-4.5.
+Costo: circa 3 RUB per immagine con google/gemini-nano-banana-2.1 a 1K (default).
+Altri modelli con --modello (es. bytedance/seedream-4.5, ~5 RUB).
 """
 import argparse
 import base64
@@ -22,7 +23,7 @@ import tempfile
 
 QUI = os.path.dirname(os.path.abspath(__file__))
 URL = "https://polza.ai/api/v1/media"
-MODELLO = "bytedance/seedream-4.5"
+MODELLO = "google/gemini-nano-banana-2.1"   # ~3 RUB a 1K, accetta immagini di riferimento
 
 
 def carica_config(base):
@@ -66,6 +67,8 @@ def main():
     p.add_argument("--scena", default="", help="descrizione della scena in inglese")
     p.add_argument("--scheda", default="", help="genera la scheda di riferimento di un personaggio")
     p.add_argument("--aspect", default="2:3", help="rapporto, es. 2:3 (verticale), 3:2, 1:1")
+    p.add_argument("--modello", default=MODELLO, help="modello Polza (default %(default)s)")
+    p.add_argument("--risoluzione", default="1K", help="1K (economico), 2K o 4K; vale per i modelli che lo supportano")
     a = p.parse_args()
 
     chiave = os.environ.get("POLZA")
@@ -105,7 +108,7 @@ def main():
                 immagini.append({"type": "base64", "data": file_base64(percorso)})
 
     corpo = {
-        "model": MODELLO,
+        "model": a.modello,
         "input": {
             "prompt": prompt,
             "aspect_ratio": a.aspect,
@@ -113,6 +116,8 @@ def main():
         },
         "async": False,
     }
+    if "banana" in a.modello or "gpt-image" in a.modello or "flash-image" in a.modello:
+        corpo["input"]["image_resolution"] = a.risoluzione
     if immagini:
         corpo["input"]["images"] = immagini
 

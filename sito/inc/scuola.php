@@ -179,7 +179,10 @@ function mappa_scuola_libro(int $libro_id): array {
 // Dopo il salvataggio $GLOBALS['ultimo_media_tipo'] vale 'audio', 'video' o 'immagine'.
 function salva_media_da_percorso(string $tmp, bool $caricato, string $suggerito = ''): string {
     $mime = (new finfo(FILEINFO_MIME_TYPE))->file($tmp);
-    if ($mime === 'application/octet-stream' || $mime === 'video/x-matroska') $mime = str_starts_with($suggerito, 'video/') ? 'video/webm' : 'audio/webm';
+    if ($mime === 'application/octet-stream' && preg_match('/\.(mp3|m4a|wav|ogg|aac)$/i', $GLOBALS['nome_caricato'] ?? '', $m))   // mp3 senza intestazione: decide l'estensione
+        $mime = ['mp3' => 'audio/mpeg', 'm4a' => 'audio/mp4', 'wav' => 'audio/wav', 'ogg' => 'audio/ogg', 'aac' => 'audio/aac'][strtolower($m[1])];
+    elseif ($mime === 'application/octet-stream' || $mime === 'video/x-matroska') $mime = str_starts_with($suggerito, 'video/') ? 'video/webm' : 'audio/webm';
+    if ($mime === 'audio/x-mpeg' || $mime === 'audio/mpeg3') $mime = 'audio/mpeg';
     if (!isset(TIPI_MEDIA[$mime])) throw new RuntimeException('Tipo di file non ammesso (' . $mime . ').');
     $GLOBALS['ultimo_media_tipo'] = str_starts_with($mime, 'image/') ? 'immagine'
         : (str_starts_with($mime, 'audio/') ? 'audio' : ($mime === 'video/webm' && str_starts_with($suggerito, 'audio/') ? 'audio' : 'video'));
@@ -201,6 +204,7 @@ function salva_media(string $campo, int $max = 200 * 1024 * 1024): ?string {
     $f = $_FILES[$campo];
     if ($f['error'] !== UPLOAD_ERR_OK) throw new RuntimeException('Caricamento fallito (codice ' . $f['error'] . '). Controlla upload_max_filesize su PHP.');
     if ($f['size'] > $max) throw new RuntimeException('File troppo grande.');
+    $GLOBALS['nome_caricato'] = (string)$f['name'];
     return salva_media_da_percorso($f['tmp_name'], true, (string)($f['type'] ?? ''));
 }
 
@@ -210,27 +214,44 @@ const VOCI_TTS = [
     'if_sara' => 'Sara (donna, italiano)', 'im_nicola' => 'Nicola (uomo, italiano)',
 ];
 function deapi_chiave(): string { return trim(impost('deapi_chiave')); }
-// Indirizzo di deAPI: quello ufficiale oppure un proxy (es. https://vladproxy.v7755837.deno.net) che inoltra a api.deapi.ai.
+// Proxy (facoltativo): tutte le chiamate a deAPI, anche il download dei risultati da results.deapi.ai, passano da
+// un proxy (es. https://vladik-proxy.v7755837.deno.net). Il proxy riceve l'indirizzo vero nell'intestazione «vladik-proxy».
 const DEAPI_UFFICIALE = 'https://api.deapi.ai';
-function deapi_base(): string {
+function deapi_proxy(): string {
     $u = rtrim(trim(impost('deapi_indirizzo')), '/');
-    return preg_match('#^https://[a-z0-9.-]+(:\d+)?(/[\w./-]*)?$#i', $u) ? $u : DEAPI_UFFICIALE;
+    return preg_match('#^https://[a-z0-9.-]+(:\d+)?(/[\w./-]*)?$#i', $u) && $u !== DEAPI_UFFICIALE ? $u : '';
+}
+function deapi_base(): string { return deapi_proxy() ?: DEAPI_UFFICIALE; }
+// [indirizzo da chiamare, intestazioni in più] per un indirizzo di deAPI
+function deapi_via_proxy(string $url): array {
+    $p = deapi_proxy();
+    if ($p === '') return [$url, []];
+    $x = parse_url($url);
+    return [$p . ($x['path'] ?? '/') . (isset($x['query']) ? '?' . $x['query'] : ''), ['vladik-proxy: ' . $x['scheme'] . '://' . $x['host'] . (isset($x['port']) ? ':' . $x['port'] : '')]];
+}
+// Scarica un risultato di deAPI (immagine, audio, video), passando dal proxy se c'è.
+function deapi_scarica(string $url, int $max): string {
+    if (!preg_match('#^https://[a-z0-9.-]+\.deapi\.ai/#i', $url)) throw new RuntimeException('Indirizzo del risultato non valido.');
+    [$u, $h] = deapi_via_proxy($url);
+    return scarica_url($u, $max, $h);
 }
 
 function deapi_richiesta(string $metodo, string $percorso, ?array $campi = null, int $timeout = 60): array {
     if (!function_exists('curl_init')) throw new RuntimeException('Serve l\'estensione curl di PHP per usare deAPI.');
-    $ch = curl_init(deapi_base() . '/api/v2' . $percorso);
-    $h = ['Accept: application/json'];
+    [$url, $h] = deapi_via_proxy(DEAPI_UFFICIALE . '/api/v2' . $percorso);
+    $ch = curl_init($url);
+    $h[] = 'Accept: application/json';
     if (deapi_chiave() !== '') $h[] = 'Authorization: Bearer ' . deapi_chiave();
     curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => $timeout, CURLOPT_CONNECTTIMEOUT => 10, CURLOPT_HTTPHEADER => $h, CURLOPT_USERAGENT => 'VladEditore-Scuola/1.0']);
     if ($metodo === 'POST') { curl_setopt($ch, CURLOPT_POST, true); curl_setopt($ch, CURLOPT_POSTFIELDS, $campi ?? []); }
     $r = curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE); $err = curl_error($ch); curl_close($ch);
-    $proxy = deapi_base() !== DEAPI_UFFICIALE ? ' (tramite il proxy ' . deapi_base() . ')' : '';
+    $proxy = deapi_proxy() !== '' ? ' (tramite il proxy ' . deapi_proxy() . ')' : '';
     if ($r === false) throw new RuntimeException('deAPI non risponde' . $proxy . ': ' . $err);
-    if ($code === 401 || $code === 403) throw new RuntimeException('deAPI rifiuta la chiave: controlla Admin → Scuola → Impostazioni.');
-    if ($code === 429) throw new RuntimeException('deAPI: troppe richieste, riprova tra un minuto.');
     $j = json_decode((string)$r, true);
     if (!is_array($j) && $proxy) throw new RuntimeException("Il proxy non risponde come deAPI (HTTP $code)$proxy: controlla l'indirizzo in Admin → Scuola.");
+    if (is_array($j) && isset($j['error']) && !isset($j['data']) && $proxy) throw new RuntimeException('Il proxy dice: ' . mb_substr((string)$j['error'], 0, 200));
+    if ($code === 401 || $code === 403) throw new RuntimeException('deAPI rifiuta la chiave: controlla Admin → Scuola → deAPI.');
+    if ($code === 429) throw new RuntimeException('deAPI: troppe richieste, riprova tra un minuto.');
     if ($code >= 400 || !is_array($j) || !is_array($j['data'] ?? null)) throw new RuntimeException("deAPI ha risposto con un errore (HTTP $code)$proxy.");
     return $j['data'];
 }
@@ -251,10 +272,99 @@ function deapi_voce(string $testo, string $voce): string {
         if ($stato === 'done') {
             $url = (string)($j['result_url'] ?? '');
             if (!preg_match('#^https://#', $url)) throw new RuntimeException('deAPI non ha restituito il file.');
-            return scarica_url($url, 50 * 1024 * 1024);
+            return deapi_scarica($url, 50 * 1024 * 1024);
         }
         if (in_array($stato, ['error', 'failed', 'cancelled', 'canceled'], true)) throw new RuntimeException('deAPI: generazione non riuscita.');
         sleep(2);
     }
     throw new RuntimeException('deAPI ci mette troppo: riprova più tardi.');
+}
+
+// ---------- Polza.ai (immagini, voci, musica, video) ----------
+// Un solo servizio per tutto lo Studio AI: una chiave sola (Admin → Scuola → Polza.ai), nessun proxy (polza.ai si raggiunge direttamente).
+// Se la chiave Polza manca ma c'è quella di deAPI, lo Studio AI usa ancora deAPI (vecchio modo).
+const POLZA_STANDARD = 'https://polza.ai/api';
+function polza_chiave(): string { return trim(impost('polza_chiave')); }
+// «polza_url» in data/config.php serve solo ai test automatici (un finto Polza in locale)
+function polza_base(): string { $u = rtrim((string)(config()['polza_url'] ?? ''), '/'); return $u !== '' ? $u : POLZA_STANDARD; }
+function ai_provider(): string { return polza_chiave() !== '' ? 'polza' : 'deapi'; }
+function ai_pronto(): bool { return polza_chiave() !== '' || deapi_chiave() !== ''; }
+function ai_nome(): string { return ai_provider() === 'polza' ? 'Polza.ai' : 'deAPI'; }
+
+// Voci pronte (OpenAI via Polza): con «gpt-4o-mini-tts» parlano bene in italiano e si possono dirigere con le istruzioni.
+const VOCI_POLZA = [
+    'nova' => 'Nova (donna, chiara)', 'shimmer' => 'Shimmer (donna, dolce)', 'coral' => 'Coral (donna, vivace)', 'sage' => 'Sage (donna, calma)',
+    'onyx' => 'Onyx (uomo, profonda)', 'echo' => 'Echo (uomo, pacata)', 'ash' => 'Ash (uomo, giovane)', 'fable' => 'Fable (uomo, narratore)',
+    'alloy' => 'Alloy (neutra)',
+];
+function voce_predefinita(): string { return ai_provider() === 'polza' ? 'nova' : 'if_sara'; }
+
+function polza_messaggio(int $code, $j): string {
+    if ($code === 401 || $code === 403) return 'Polza.ai rifiuta la chiave: controlla Admin → Scuola → Polza.ai.';
+    if ($code === 402) return 'Il credito di Polza.ai è finito: ricarica il saldo su polza.ai.';
+    if ($code === 429) return 'Polza.ai: troppe richieste, riprova tra un minuto.';
+    $m = is_array($j) ? ($j['error']['message'] ?? $j['error'] ?? $j['message'] ?? '') : '';
+    if (is_array($m)) $m = json_encode($m, JSON_UNESCAPED_UNICODE);
+    return 'Polza.ai' . ($m !== '' ? ': ' . mb_substr((string)$m, 0, 220) : ' ha risposto con un errore') . " (HTTP $code).";
+}
+
+// Chiama l'API di Polza (JSON). Restituisce la risposta già decodificata; in caso di errore il codice dell'eccezione è il codice HTTP.
+function polza_richiesta(string $metodo, string $percorso, ?array $json = null, int $timeout = 60): array {
+    if (!function_exists('curl_init')) throw new RuntimeException('Serve l\'estensione curl di PHP per usare Polza.ai.');
+    if (polza_chiave() === '') throw new RuntimeException('Manca la chiave di Polza.ai: inseriscila in Admin → Scuola → Polza.ai.');
+    $ch = curl_init(polza_base() . $percorso);
+    $h = ['Accept: application/json', 'Authorization: Bearer ' . polza_chiave()];
+    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => $timeout, CURLOPT_CONNECTTIMEOUT => 10, CURLOPT_USERAGENT => 'VladEditore-Scuola/1.0']);
+    if ($metodo === 'POST') {
+        $h[] = 'Content-Type: application/json';
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($json ?? new stdClass, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    }
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $h);
+    $r = curl_exec($ch); $code = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE); $err = curl_error($ch); curl_close($ch);
+    if ($r === false) throw new RuntimeException('Polza.ai non risponde: ' . $err, 0);
+    $j = json_decode((string)$r, true);
+    if ($code >= 400 || !is_array($j)) throw new RuntimeException(polza_messaggio($code, $j), $code);
+    return $j;
+}
+
+// File locale → oggetto da mandare a Polza (immagine o audio in base64)
+function polza_file(string $percorso): array {
+    if (!is_file($percorso) || filesize($percorso) > 12 * 1024 * 1024) throw new RuntimeException('File di riferimento mancante o troppo grande (massimo 12 MB).');
+    $mime = (new finfo(FILEINFO_MIME_TYPE))->file($percorso) ?: 'application/octet-stream';
+    return ['type' => 'base64', 'data' => 'data:' . $mime . ';base64,' . base64_encode((string)file_get_contents($percorso))];
+}
+
+// Gli unici indirizzi da cui si scaricano i risultati: polza.ai (o il finto Polza dei test)
+function polza_url_valido(string $u): bool {
+    return (bool)preg_match('#^https://([a-z0-9-]+\.)*polza\.ai/#i', $u) || strncmp($u, polza_base() . '/', strlen(polza_base()) + 1) === 0;
+}
+// L'indirizzo del file finito nella risposta di GET /v1/media/{id} (può stare in data.url oppure in data[0].url)
+function polza_url_risultato(array $j): string {
+    $cerca = function ($x) use (&$cerca): string {
+        if (is_string($x)) return polza_url_valido($x) ? $x : '';
+        if (!is_array($x)) return '';
+        foreach (['url', 'audio_url', 'video_url', 'image_url'] as $k) if (isset($x[$k]) && is_string($x[$k]) && polza_url_valido($x[$k])) return $x[$k];
+        foreach ($x as $v) if ($u = $cerca($v)) return $u;
+        return '';
+    };
+    return $cerca($j['data'] ?? null);
+}
+function polza_errore_testo(array $j): string {
+    $e = $j['error'] ?? '';
+    if (is_array($e)) $e = $e['message'] ?? json_encode($e, JSON_UNESCAPED_UNICODE);
+    return mb_substr((string)$e, 0, 200) ?: 'generazione non riuscita';
+}
+// Scarica un risultato di Polza (immagine, audio, video): solo da polza.ai (o dal finto Polza dei test)
+function polza_scarica(string $url, int $max): string {
+    if (!polza_url_valido($url)) throw new RuntimeException('Indirizzo del risultato non valido.');
+    return scarica_url($url, $max);
+}
+
+// Trascrive un audio breve (Whisper via Polza, pochi centesimi): serve a far dire al personaggio le stesse parole dell'audio scelto.
+function polza_trascrivi(string $percorso): string {
+    $j = polza_richiesta('POST', '/v1/audio/transcriptions', ['model' => 'openai/whisper-1', 'language' => 'it', 'file' => polza_file($percorso)['data']], 90);
+    $t = trim((string)($j['text'] ?? ''));
+    if ($t === '') throw new RuntimeException('Non riesco a capire le parole dell\'audio scelto.');
+    return mb_substr($t, 0, 400);
 }

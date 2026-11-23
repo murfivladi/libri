@@ -1,7 +1,8 @@
 <?php
 // Scarica un file da un URL http(s) in un file temporaneo, con protezione SSRF.
 // Ritorna il percorso del file temporaneo, oppure lancia RuntimeException.
-function scarica_url(string $url, int $max): string {
+// $intestazioni: intestazioni HTTP in più (es. per passare da un proxy).
+function scarica_url(string $url, int $max, array $intestazioni = []): string {
     $tmp = tempnam(sys_get_temp_dir(), 'dl');
     for ($salti = 0; $salti < 4; $salti++) {
         $p = parse_url($url);
@@ -28,6 +29,7 @@ function scarica_url(string $url, int $max): string {
             CURLOPT_TIMEOUT => 120,
             CURLOPT_USERAGENT => 'VladEditore/1.0',
             CURLOPT_HEADER => false,
+            CURLOPT_HTTPHEADER => $intestazioni,
             CURLOPT_WRITEFUNCTION => function ($c, $dati) use ($f, $max, &$scritti, &$troppo) {
                 $scritti += strlen($dati);
                 if ($scritti > $max) { $troppo = true; return 0; }

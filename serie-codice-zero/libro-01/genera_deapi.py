@@ -13,14 +13,16 @@ import time
 import urllib.request
 
 QUI = os.path.dirname(os.path.abspath(__file__))
-BASE = os.environ.get("DEAPI_URL", "https://api.deapi.ai").rstrip("/") + "/api/v1/client"   # DEAPI_URL = proxy (es. https://vladproxy.v7755837.deno.net)
+BASE = "https://api.deapi.ai/api/v1/client"
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../scripts"))
+from proxy_deapi import via_proxy   # noqa: E402  (proxy di Vlad, variabile DEAPI_PROXY)
+
 MODELLO = "Flux_2_Klein_4B_BF16"
 
 
 def chiama(metodo, url, chiave, corpo=None):
-    req = urllib.request.Request(url, method=metodo, headers={
-        "Authorization": "Bearer " + chiave, "Accept": "application/json", "User-Agent": "curl/8.5.0", "Content-Type": "application/json"},
-        data=json.dumps(corpo).encode() if corpo else None)
+    url, h = via_proxy(url, {"Authorization": "Bearer " + chiave, "Accept": "application/json", "User-Agent": "curl/8.5.0", "Content-Type": "application/json"})
+    req = urllib.request.Request(url, method=metodo, headers=h, data=json.dumps(corpo).encode() if corpo else None)
     with urllib.request.urlopen(req, timeout=60) as r:
         return json.load(r)
 
@@ -50,7 +52,8 @@ def main():
             out = os.path.join(QUI, a.out)
             os.makedirs(os.path.dirname(out), exist_ok=True)
             tmp = out + ".tmp"
-            subprocess.run(["curl", "-sS", "-m", "90", "-o", tmp, d["result_url"]], check=True)
+            u, h = via_proxy(d["result_url"])
+            subprocess.run(["curl", "-sS", "-m", "90", "-o", tmp] + [x for k, v in h.items() for x in ("-H", f"{k}: {v}")] + [u], check=True)
             subprocess.run(["convert", tmp, "-quality", "92", out], check=True)
             os.remove(tmp)
             print("Immagine salvata:", out, "| costo ($):", d.get("price"))

@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:8.0
+        image: public.ecr.aws/docker/library/mysql:8.0   # mirror ufficiale: niente limite di download di Docker Hub
         env:
           MYSQL_ROOT_PASSWORD: root
         ports: ['3306:3306']
@@ -61,6 +61,7 @@ jobs:
         run: bash sito/tests/duesiti.sh
       - name: Test della sezione Scuola
         run: |
+          sudo apt-get update -q
           sudo apt-get install -y -q python3-reportlab
           SENZA_BROWSER=1 bash sito/tests/scuola.sh
 

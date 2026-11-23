@@ -1,0 +1,778 @@
+{
+ "versione": 1,
+ "esercizi": [
+  {
+   "codice": "CFC-18",
+   "pagina": 18,
+   "titolo": "Trova i nomi",
+   "consegna": "Scegli «nome» e tocca tutti i nomi.",
+   "tipo": "tocca",
+   "dati": {
+    "categorie": [
+     {
+      "nome": "nome",
+      "colore": "#1565c0"
+     }
+    ],
+    "frasi": [
+     {
+      "testo": "La mamma di Giulia prepara le arancine per la festa.",
+      "segni": {
+       "1": "nome",
+       "3": "nome",
+       "6": "nome",
+       "9": "nome"
+      },
+      "spiegazione": ""
+     },
+     {
+      "testo": "Un gatto nero dorme sul tetto della chiesa.",
+      "segni": {
+       "1": "nome",
+       "5": "nome",
+       "7": "nome"
+      },
+      "spiegazione": "«nero» dice com'è il gatto: è un aggettivo."
+     },
+     {
+      "testo": "Luce ha paura del temporale ma ama la neve del vulcano.",
+      "segni": {
+       "0": "nome",
+       "2": "nome",
+       "4": "nome",
+       "8": "nome",
+       "10": "nome"
+      },
+      "spiegazione": "«paura» è un nome astratto: si prova, ma non si vede."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-19",
+   "pagina": 18,
+   "titolo": "Maiuscola o minuscola?",
+   "consegna": "Scegli la forma giusta.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Il fiume … è freddo.",
+      "opzioni": [
+       "Alcantara",
+       "alcantara"
+      ],
+      "giusta": 0,
+      "spiegazione": "Nome proprio di fiume: maiuscola."
+     },
+     {
+      "testo": "Mio zio fa il …",
+      "opzioni": [
+       "Pescatore",
+       "pescatore"
+      ],
+      "giusta": 1,
+      "spiegazione": "Nome comune di persona: minuscola."
+     },
+     {
+      "testo": "In estate andiamo a …",
+      "opzioni": [
+       "Siracusa",
+       "siracusa"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Il mio … si chiama Luce.",
+      "opzioni": [
+       "Cane",
+       "cane"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Il mio cane si chiama …",
+      "opzioni": [
+       "Luce",
+       "luce"
+      ],
+      "giusta": 0,
+      "spiegazione": "Nome proprio di animale: maiuscola."
+     },
+     {
+      "testo": "Ogni … ho italiano.",
+      "opzioni": [
+       "Lunedì",
+       "lunedì"
+      ],
+      "giusta": 1,
+      "spiegazione": "In italiano i giorni della settimana vanno con la minuscola."
+     },
+     {
+      "testo": "Il … bagna Taormina.",
+      "opzioni": [
+       "Mar Ionio",
+       "mar ionio"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-20",
+   "pagina": 21,
+   "titolo": "Concreto o astratto?",
+   "consegna": "Trascina ogni nome nel gruppo giusto.",
+   "tipo": "gruppi",
+   "dati": {
+    "gruppi": [
+     {
+      "nome": "concreto",
+      "elementi": [
+       "zaino",
+       "profumo",
+       "onda",
+       "musica",
+       "granita"
+      ]
+     },
+     {
+      "nome": "astratto",
+      "elementi": [
+       "coraggio",
+       "gioia",
+       "noia",
+       "fiducia",
+       "gelosia"
+      ]
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-21",
+   "pagina": 21,
+   "titolo": "I nomi collettivi",
+   "consegna": "Di che cosa è fatto ogni gruppo?",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "gregge",
+      "opzioni": [
+       "uccelli",
+       "navi",
+       "pecore",
+       "musicisti",
+       "api",
+       "pini"
+      ],
+      "giusta": 2
+     },
+     {
+      "testo": "sciame",
+      "opzioni": [
+       "uccelli",
+       "navi",
+       "pecore",
+       "musicisti",
+       "api",
+       "pini"
+      ],
+      "giusta": 4
+     },
+     {
+      "testo": "stormo",
+      "opzioni": [
+       "uccelli",
+       "navi",
+       "pecore",
+       "musicisti",
+       "api",
+       "pini"
+      ],
+      "giusta": 0
+     },
+     {
+      "testo": "flotta",
+      "opzioni": [
+       "uccelli",
+       "navi",
+       "pecore",
+       "musicisti",
+       "api",
+       "pini"
+      ],
+      "giusta": 1
+     },
+     {
+      "testo": "pineta",
+      "opzioni": [
+       "uccelli",
+       "navi",
+       "pecore",
+       "musicisti",
+       "api",
+       "pini"
+      ],
+      "giusta": 5
+     },
+     {
+      "testo": "orchestra",
+      "opzioni": [
+       "uccelli",
+       "navi",
+       "pecore",
+       "musicisti",
+       "api",
+       "pini"
+      ],
+      "giusta": 3
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-22",
+   "pagina": 21,
+   "titolo": "Il femminile",
+   "consegna": "Scrivi il femminile.",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "il maestro → la [maestra]"
+     },
+     {
+      "testo": "il dottore → la [dottoressa]"
+     },
+     {
+      "testo": "il pittore → la [pittrice]"
+     },
+     {
+      "testo": "il genero → la [nuora]",
+      "spiegazione": "Nome indipendente: il femminile è una parola diversa."
+     },
+     {
+      "testo": "il gallo → la [gallina]"
+     },
+     {
+      "testo": "il collega → la [collega]",
+      "spiegazione": "Nome di genere comune: cambia solo l'articolo."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-23",
+   "pagina": 21,
+   "titolo": "Il plurale",
+   "consegna": "Scrivi il plurale. Attenzione ai nomi speciali!",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "il lago → i [laghi]"
+     },
+     {
+      "testo": "l'amico → gli [amici]",
+      "spiegazione": "«amico» è un'eccezione: amici, non amichi."
+     },
+     {
+      "testo": "la virtù → le [virtù]",
+      "spiegazione": "Nome accentato: invariabile."
+     },
+     {
+      "testo": "l'uovo → le [uova]",
+      "spiegazione": "Plurale irregolare, femminile."
+     },
+     {
+      "testo": "il film → i [film]",
+      "spiegazione": "Nome straniero: invariabile."
+     },
+     {
+      "testo": "la tesi → le [tesi]"
+     },
+     {
+      "testo": "l'uomo → gli [uomini]"
+     },
+     {
+      "testo": "il medico → i [medici]"
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-24",
+   "pagina": 21,
+   "titolo": "Vero o falso",
+   "consegna": "Decidi se ogni frase è vera o falsa.",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "«Profumo» è un nome astratto perché non si tocca.",
+      "vero": false,
+      "spiegazione": "Si sente con il naso: è concreto."
+     },
+     {
+      "testo": "«La tigre» si usa sia per il maschio sia per la femmina.",
+      "vero": true,
+      "spiegazione": "È un nome di genere promiscuo."
+     },
+     {
+      "testo": "«Forbici» non ha il singolare.",
+      "vero": true,
+      "spiegazione": "È un nome difettivo."
+     },
+     {
+      "testo": "I giorni della settimana si scrivono con la maiuscola.",
+      "vero": false
+     },
+     {
+      "testo": "«Le braccia» e «i bracci» hanno significati diversi.",
+      "vero": true,
+      "spiegazione": "Le braccia del corpo, i bracci di un fiume o di una gru."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-25",
+   "pagina": 23,
+   "titolo": "I nomi alterati",
+   "consegna": "Trascina ogni nome nel gruppo giusto.",
+   "tipo": "gruppi",
+   "dati": {
+    "gruppi": [
+     {
+      "nome": "diminutivo",
+      "elementi": [
+       "casetta",
+       "libretto"
+      ]
+     },
+     {
+      "nome": "accrescitivo",
+      "elementi": [
+       "nasone",
+       "omone"
+      ]
+     },
+     {
+      "nome": "vezzeggiativo",
+      "elementi": [
+       "cagnolino",
+       "boccuccia"
+      ]
+     },
+     {
+      "nome": "dispregiativo",
+      "elementi": [
+       "ragazzaccio",
+       "tempaccio"
+      ]
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-26",
+   "pagina": 23,
+   "titolo": "Nomi derivati",
+   "consegna": "Scrivi il nome derivato.",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "chi vende i fiori: [fioraio|fiorista]"
+     },
+     {
+      "testo": "chi lavora sul mare: [marinaio]"
+     },
+     {
+      "testo": "dove si fa il pane: [panificio|panetteria]"
+     },
+     {
+      "testo": "chi porta la posta: [postino]"
+     },
+     {
+      "testo": "dove si vendono i libri: [libreria]"
+     },
+     {
+      "testo": "chi suona il violino: [violinista]"
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-27",
+   "pagina": 23,
+   "titolo": "Alterato o falso alterato?",
+   "consegna": "Scegli: alterato o falso alterato?",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "mattone",
+      "opzioni": [
+       "alterato",
+       "falso alterato"
+      ],
+      "giusta": 1,
+      "spiegazione": "Non è un grande matto!"
+     },
+     {
+      "testo": "scarpone",
+      "opzioni": [
+       "alterato",
+       "falso alterato"
+      ],
+      "giusta": 0,
+      "spiegazione": "È una scarpa grande."
+     },
+     {
+      "testo": "bottone",
+      "opzioni": [
+       "alterato",
+       "falso alterato"
+      ],
+      "giusta": 1,
+      "spiegazione": "Non è una grande botte."
+     },
+     {
+      "testo": "gattino",
+      "opzioni": [
+       "alterato",
+       "falso alterato"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "tacchino",
+      "opzioni": [
+       "alterato",
+       "falso alterato"
+      ],
+      "giusta": 1,
+      "spiegazione": "Non è un piccolo tacco: è un animale."
+     },
+     {
+      "testo": "fiorellino",
+      "opzioni": [
+       "alterato",
+       "falso alterato"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-28",
+   "pagina": 23,
+   "titolo": "Il plurale dei composti",
+   "consegna": "Scrivi il plurale.",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "il pomodoro → i [pomodori]"
+     },
+     {
+      "testo": "il pescespada → i [pescispada]"
+     },
+     {
+      "testo": "la cassaforte → le [casseforti]"
+     },
+     {
+      "testo": "il cavatappi → i [cavatappi]",
+      "spiegazione": "Verbo + nome plurale: non cambia."
+     },
+     {
+      "testo": "il capolavoro → i [capolavori]"
+     },
+     {
+      "testo": "il francobollo → i [francobolli]"
+     }
+    ]
+   },
+   "livello": 3,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-29",
+   "pagina": 23,
+   "titolo": "L'analisi del nome",
+   "consegna": "Fai l'analisi grammaticale dei nomi.",
+   "tipo": "aperta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Taormina",
+      "esempio": "nome proprio di luogo (città), concreto, femminile singolare"
+     },
+     {
+      "testo": "stormo",
+      "esempio": "nome comune di animale, concreto, collettivo, maschile singolare"
+     },
+     {
+      "testo": "casetta",
+      "esempio": "nome comune di cosa, concreto, alterato (diminutivo di casa), femminile singolare"
+     }
+    ]
+   },
+   "livello": 3,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-30",
+   "pagina": 23,
+   "titolo": "I nomi sovrabbondanti",
+   "consegna": "Scegli il plurale giusto.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Vlad ha alzato le … al cielo.",
+      "opzioni": [
+       "braccia",
+       "bracci"
+      ],
+      "giusta": 0,
+      "spiegazione": "Del corpo: le braccia."
+     },
+     {
+      "testo": "Il fiume si divide in due …",
+      "opzioni": [
+       "braccia",
+       "bracci"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Le … di Siracusa sono antiche.",
+      "opzioni": [
+       "mura",
+       "muri"
+      ],
+      "giusta": 0,
+      "spiegazione": "Le mura di una città; i muri di una casa."
+     },
+     {
+      "testo": "Luce ha nascosto gli … in giardino.",
+      "opzioni": [
+       "ossi",
+       "ossa"
+      ],
+      "giusta": 0,
+      "spiegazione": "Gli ossi del cane; le ossa del corpo."
+     },
+     {
+      "testo": "Ho contato sulle …",
+      "opzioni": [
+       "dita",
+       "diti"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 1
+  },
+  {
+   "codice": "CFC-31",
+   "pagina": 24,
+   "titolo": "Luce alla Pescheria: hai capito?",
+   "consegna": "Vero o falso?",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Vlad va al mercato con la nonna.",
+      "vero": false,
+      "spiegazione": "Ci va con Luce: la nonna lo ha mandato."
+     },
+     {
+      "testo": "Luce guarda il pescespada.",
+      "vero": true
+     },
+     {
+      "testo": "Vlad compra le sarde.",
+      "vero": true
+     },
+     {
+      "testo": "Luce non mangia il biscotto.",
+      "vero": false,
+      "spiegazione": "Lo mangia in un secondo!"
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-32",
+   "pagina": 24,
+   "titolo": "I nomi del racconto",
+   "consegna": "Tocca tutti i nomi.",
+   "tipo": "tocca",
+   "dati": {
+    "categorie": [
+     {
+      "nome": "nome",
+      "colore": "#1565c0"
+     }
+    ],
+    "frasi": [
+     {
+      "testo": "Sabato mattina la nonna mi ha mandato a Catania a comprare il pesce.",
+      "segni": {
+       "0": "nome",
+       "1": "nome",
+       "3": "nome",
+       "8": "nome",
+       "12": "nome"
+      },
+      "spiegazione": "«Sabato» qui ha la maiuscola solo perché è all'inizio della frase."
+     },
+     {
+      "testo": "Davanti a un banco c'era un pescespada enorme.",
+      "segni": {
+       "3": "nome",
+       "6": "nome"
+      },
+      "spiegazione": "«pescespada» è un nome composto."
+     },
+     {
+      "testo": "Tornando a casa ho pensato che il mercato è come un vocabolario: ogni banco è pieno di nomi.",
+      "segni": {
+       "2": "nome",
+       "7": "nome",
+       "11": "nome",
+       "13": "nome",
+       "17": "nome"
+      },
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-34",
+   "pagina": 26,
+   "titolo": "Verifica: che tipo di nome è?",
+   "consegna": "Scegli il tipo giusto.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Palermo",
+      "opzioni": [
+       "comune",
+       "proprio"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "tristezza",
+      "opzioni": [
+       "concreto",
+       "astratto"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "folla",
+      "opzioni": [
+       "individuale",
+       "collettivo"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "giardiniere",
+      "opzioni": [
+       "primitivo",
+       "derivato"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "libraccio",
+      "opzioni": [
+       "alterato",
+       "composto"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "portafoglio",
+      "opzioni": [
+       "derivato",
+       "composto"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "rumore",
+      "opzioni": [
+       "concreto",
+       "astratto"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "pesce",
+      "opzioni": [
+       "primitivo",
+       "alterato"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  }
+ ]
+}

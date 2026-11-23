@@ -19,7 +19,7 @@ $scuola = $l['sezione'] === 'scuola';
 <meta name="robots" content="noindex">
 <title><?= e($l['titolo']) ?> · <?= e(t('Lettura')) ?></title>
 <link rel="icon" type="image/png" href="<?= e(asset_emblema()) ?>">
-<link rel="stylesheet" href="assets/stile.css"><?php if ($scuola): ?><link rel="stylesheet" href="assets/scuola.css"><?php endif; ?><?= stile_tema() ?></head>
+<link rel="stylesheet" href="<?= ver('assets/stile.css') ?>"><?php if ($scuola): ?><link rel="stylesheet" href="<?= ver('assets/scuola.css') ?>"><?php endif; ?><?= stile_tema() ?></head>
 <body class="lettore<?= $scuola ? ' lettore-scuola' : '' ?>" data-pdf="<?= e(url_pdf_lettore($file_pdf)) ?>" data-chiave="<?= e($l['slug'] . ($ru ? '-ru' : '')) ?>"<?php if ($sync): ?> data-api="api-lettore.php" data-csrf="<?= e(csrf()) ?>"<?php elseif (!$l['anteprima'] && registrazione_aperta()): ?> data-accedi="account.php?a=accedi&amp;ritorno=<?= e(urlencode('leggi.php?s=' . $l['slug'])) ?>"<?php endif; ?>>
 <div class="barra">
   <a class="indietro-libro" href="libro.php?s=<?= e($l['slug']) . $suffisso ?>" title="<?= e(t('Torna alla scheda')) ?>">←<span class="solo-pc"> <?= e($l['titolo']) ?></span></a>
@@ -66,7 +66,7 @@ $scuola = $l['sezione'] === 'scuola';
   <div class="riquadro"><div class="testa"><span id="titolo-finestra"></span><button type="button" id="chiudi-finestra" aria-label="Chiudi">✕</button></div><iframe id="cornice-scuola" title="Esercizio"></iframe></div>
 </div>
 <script>window.SCUOLA = <?= json_encode(mappa_scuola_libro((int)$l['id']), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;</script>
-<script src="assets/scuola-lettore.js"></script>
+<script src="<?= ver('assets/scuola-lettore.js') ?>"></script>
 <?php endif; ?>
-<script src="assets/lettore.js"></script>
+<script src="<?= ver('assets/lettore.js') ?>"></script>
 </body></html>

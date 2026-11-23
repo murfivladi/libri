@@ -1,0 +1,807 @@
+{
+ "versione": 1,
+ "esercizi": [
+  {
+   "codice": "CFC-35",
+   "pagina": 28,
+   "titolo": "L'articolo giusto",
+   "consegna": "Scegli l'articolo giusto.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "… sport",
+      "opzioni": [
+       "il",
+       "lo"
+      ],
+      "giusta": 1,
+      "spiegazione": "s + consonante: lo."
+     },
+     {
+      "testo": "… orologio",
+      "opzioni": [
+       "il",
+       "l'"
+      ],
+      "giusta": 1,
+      "spiegazione": "Davanti a vocale: l'."
+     },
+     {
+      "testo": "… estate",
+      "opzioni": [
+       "la",
+       "l'"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… zaini",
+      "opzioni": [
+       "i",
+       "gli"
+      ],
+      "giusta": 1,
+      "spiegazione": "Davanti a z: gli."
+     },
+     {
+      "testo": "… gnomo",
+      "opzioni": [
+       "il",
+       "lo"
+      ],
+      "giusta": 1,
+      "spiegazione": "Davanti a gn: lo."
+     },
+     {
+      "testo": "… cani",
+      "opzioni": [
+       "i",
+       "gli"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… psicologo",
+      "opzioni": [
+       "un",
+       "uno"
+      ],
+      "giusta": 1,
+      "spiegazione": "Davanti a ps: uno."
+     },
+     {
+      "testo": "… isola",
+      "opzioni": [
+       "un",
+       "un'"
+      ],
+      "giusta": 1,
+      "spiegazione": "Isola è femminile: un' con l'apostrofo."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-36",
+   "pagina": 28,
+   "titolo": "Trova gli articoli",
+   "consegna": "Scegli «articolo» e tocca tutti gli articoli.",
+   "tipo": "tocca",
+   "dati": {
+    "categorie": [
+     {
+      "nome": "articolo",
+      "colore": "#6a1b9a"
+     }
+    ],
+    "frasi": [
+     {
+      "testo": "Il nonno ha comprato una bicicletta e uno zainetto per la nipote.",
+      "segni": {
+       "0": "articolo",
+       "4": "articolo",
+       "7": "articolo",
+       "10": "articolo"
+      },
+      "spiegazione": ""
+     },
+     {
+      "testo": "Gli studenti leggono un racconto con la maestra.",
+      "segni": {
+       "0": "articolo",
+       "3": "articolo",
+       "6": "articolo"
+      },
+      "spiegazione": ""
+     },
+     {
+      "testo": "Luce ha nascosto le scarpe sotto il letto.",
+      "segni": {
+       "3": "articolo",
+       "6": "articolo"
+      },
+      "spiegazione": "«sotto» è una preposizione, non un articolo."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-37",
+   "pagina": 31,
+   "titolo": "Articolo e plurale",
+   "consegna": "Scrivi l'articolo determinativo al singolare e al plurale.",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "[lo] specchio → [gli] specchi"
+     },
+     {
+      "testo": "[l'] elefante → [gli] elefanti"
+     },
+     {
+      "testo": "[la] zucchina → [le] zucchine"
+     },
+     {
+      "testo": "[lo] yogurt → [gli] yogurt",
+      "spiegazione": "Davanti a y: lo / gli. «yogurt» è straniero: invariabile."
+     },
+     {
+      "testo": "[il] pesce → [i] pesci"
+     },
+     {
+      "testo": "[l'] onda → [le] onde",
+      "spiegazione": "Al plurale niente apostrofo: le onde."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-38",
+   "pagina": 31,
+   "titolo": "Un, uno, una o un'?",
+   "consegna": "Scegli l'articolo indeterminativo.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "… aquila",
+      "opzioni": [
+       "un",
+       "uno",
+       "una",
+       "un'"
+      ],
+      "giusta": 3,
+      "spiegazione": "Femminile davanti a vocale."
+     },
+     {
+      "testo": "… aereo",
+      "opzioni": [
+       "un",
+       "uno",
+       "una",
+       "un'"
+      ],
+      "giusta": 0,
+      "spiegazione": "Maschile: niente apostrofo."
+     },
+     {
+      "testo": "… scoiattolo",
+      "opzioni": [
+       "un",
+       "uno",
+       "una",
+       "un'"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… arancia",
+      "opzioni": [
+       "un",
+       "uno",
+       "una",
+       "un'"
+      ],
+      "giusta": 3,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… zebra",
+      "opzioni": [
+       "un",
+       "uno",
+       "una",
+       "un'"
+      ],
+      "giusta": 2,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… uovo",
+      "opzioni": [
+       "un",
+       "uno",
+       "una",
+       "un'"
+      ],
+      "giusta": 0,
+      "spiegazione": "Maschile: un uovo, senza apostrofo."
+     },
+     {
+      "testo": "… zaino",
+      "opzioni": [
+       "un",
+       "uno",
+       "una",
+       "un'"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… ape",
+      "opzioni": [
+       "un",
+       "uno",
+       "una",
+       "un'"
+      ],
+      "giusta": 3,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-39",
+   "pagina": 31,
+   "titolo": "Partitivo o preposizione?",
+   "consegna": "La parola tra asterischi è un articolo partitivo o una preposizione articolata?",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Al mercato ho comprato *delle* arance.",
+      "opzioni": [
+       "articolo partitivo",
+       "preposizione articolata"
+      ],
+      "giusta": 0,
+      "spiegazione": "= alcune arance."
+     },
+     {
+      "testo": "Il profumo *delle* arance riempie la cucina.",
+      "opzioni": [
+       "articolo partitivo",
+       "preposizione articolata"
+      ],
+      "giusta": 1,
+      "spiegazione": "= di + le: il profumo di che cosa?"
+     },
+     {
+      "testo": "Vuoi *dello* zucchero nel caffè?",
+      "opzioni": [
+       "articolo partitivo",
+       "preposizione articolata"
+      ],
+      "giusta": 0,
+      "spiegazione": "= un po' di zucchero."
+     },
+     {
+      "testo": "La casa *dei* nonni è vicino al mare.",
+      "opzioni": [
+       "articolo partitivo",
+       "preposizione articolata"
+      ],
+      "giusta": 1,
+      "spiegazione": "= di + i: la casa di chi?"
+     },
+     {
+      "testo": "In spiaggia abbiamo visto *dei* granchi.",
+      "opzioni": [
+       "articolo partitivo",
+       "preposizione articolata"
+      ],
+      "giusta": 0,
+      "spiegazione": "= alcuni granchi."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-40",
+   "pagina": 31,
+   "titolo": "Vero o falso",
+   "consegna": "Decidi se ogni frase è vera o falsa.",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "«Un'amico» è scritto in modo corretto.",
+      "vero": false,
+      "spiegazione": "«amico» è maschile: un amico, senza apostrofo."
+     },
+     {
+      "testo": "L'articolo indeterminativo non ha il plurale.",
+      "vero": true
+     },
+     {
+      "testo": "Si dice «lo gnocco» e «gli gnocchi».",
+      "vero": true
+     },
+     {
+      "testo": "Davanti a «nuovo zaino» si mette «lo».",
+      "vero": false,
+      "spiegazione": "Conta la parola che segue subito: «nuovo» → il nuovo zaino."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-41",
+   "pagina": 31,
+   "titolo": "La lista della spesa",
+   "consegna": "Scrivi la lista della spesa per la festa di Luce con tre partitivi e un indeterminativo.",
+   "tipo": "aperta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "La tua lista:",
+      "esempio": "Compriamo del pane, dello zucchero, delle arance e una torta."
+     }
+    ]
+   },
+   "livello": 3,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-42",
+   "pagina": 33,
+   "titolo": "Con o senza articolo?",
+   "consegna": "Scegli la forma giusta.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "… è un vulcano.",
+      "opzioni": [
+       "Etna",
+       "L'Etna"
+      ],
+      "giusta": 1,
+      "spiegazione": "I nomi dei monti vogliono l'articolo."
+     },
+     {
+      "testo": "… è una città.",
+      "opzioni": [
+       "Catania",
+       "La Catania"
+      ],
+      "giusta": 0,
+      "spiegazione": "I nomi di città non vogliono l'articolo."
+     },
+     {
+      "testo": "… è un fiume.",
+      "opzioni": [
+       "Po",
+       "Il Po"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… è un'isola.",
+      "opzioni": [
+       "Sicilia",
+       "La Sicilia"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… è mia amica.",
+      "opzioni": [
+       "Giulia",
+       "La Giulia"
+      ],
+      "giusta": 0,
+      "spiegazione": "Con i nomi di persona l'articolo non si usa (in alcune regioni si sente, ma non è corretto nella lingua scritta)."
+     },
+     {
+      "testo": "Abito vicino …",
+      "opzioni": [
+       "a Palermo",
+       "al Palermo"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-43",
+   "pagina": 33,
+   "titolo": "I nomi di parentela",
+   "consegna": "Scegli la forma giusta.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "… fa il pescatore.",
+      "opzioni": [
+       "Mio zio",
+       "Il mio zio"
+      ],
+      "giusta": 0,
+      "spiegazione": "Parente al singolare con «mio»: niente articolo."
+     },
+     {
+      "testo": "… vivono a Messina.",
+      "opzioni": [
+       "Miei cugini",
+       "I miei cugini"
+      ],
+      "giusta": 1,
+      "spiegazione": "Al plurale l'articolo ci vuole."
+     },
+     {
+      "testo": "… dorme.",
+      "opzioni": [
+       "Mia sorellina",
+       "La mia sorellina"
+      ],
+      "giusta": 1,
+      "spiegazione": "Nome alterato: l'articolo ci vuole."
+     },
+     {
+      "testo": "… lavora a scuola.",
+      "opzioni": [
+       "Suo padre",
+       "Il suo padre"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… cucina bene.",
+      "opzioni": [
+       "Loro nonna",
+       "La loro nonna"
+      ],
+      "giusta": 1,
+      "spiegazione": "Con «loro» l'articolo ci vuole sempre."
+     },
+     {
+      "testo": "… è gentile.",
+      "opzioni": [
+       "Tua madre",
+       "La tua madre"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-44",
+   "pagina": 33,
+   "titolo": "L'articolo trasforma le parole",
+   "consegna": "Con l'articolo queste parole sono diventate nomi. Che cosa erano prima?",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Il *dormire* fa bene.",
+      "opzioni": [
+       "verbo",
+       "aggettivo",
+       "congiunzione",
+       "avverbio"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Mi piace il *blu* del mare.",
+      "opzioni": [
+       "verbo",
+       "aggettivo",
+       "congiunzione",
+       "avverbio"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Non capisco il *perché*.",
+      "opzioni": [
+       "verbo",
+       "aggettivo",
+       "congiunzione",
+       "avverbio"
+      ],
+      "giusta": 2,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Il *bello* deve ancora venire.",
+      "opzioni": [
+       "verbo",
+       "aggettivo",
+       "congiunzione",
+       "avverbio"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-45",
+   "pagina": 33,
+   "titolo": "L'analisi dell'articolo",
+   "consegna": "«Lo zio ha portato degli gnocchi e un'anguria»: completa l'analisi.",
+   "tipo": "completa",
+   "dati": {
+    "banca": true,
+    "frasi": [
+     {
+      "testo": "Lo → articolo [determinativo], [maschile singolare]"
+     },
+     {
+      "testo": "degli → articolo [partitivo], [maschile plurale]"
+     },
+     {
+      "testo": "un' → articolo [indeterminativo], [femminile singolare]"
+     }
+    ]
+   },
+   "livello": 3,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-46",
+   "pagina": 33,
+   "titolo": "Rimetti in ordine",
+   "consegna": "Trascina le parole per formare la frase.",
+   "tipo": "ordina",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "Luce nasconde dei biscotti nello zaino."
+     },
+     {
+      "testo": "Luce invita gli amici alla festa."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-47",
+   "pagina": 33,
+   "titolo": "Caccia all'errore",
+   "consegna": "In ogni frase c'è un articolo sbagliato o giusto? Decidi.",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Ho visto uno zebra allo zoo.",
+      "vero": false,
+      "spiegazione": "zebra è femminile: una zebra."
+     },
+     {
+      "testo": "Gli gnomi abitano nel bosco.",
+      "vero": true
+     },
+     {
+      "testo": "Luce ha un'occhiale rotto.",
+      "vero": false,
+      "spiegazione": "«occhiali» si usa solo al plurale: gli occhiali."
+     },
+     {
+      "testo": "Ho regalato un orologio a mio padre.",
+      "vero": true
+     },
+     {
+      "testo": "Il zio di Vlad vive a Siracusa.",
+      "vero": false,
+      "spiegazione": "Davanti a z: lo zio."
+     },
+     {
+      "testo": "Ho incontrato un'amica in piazza.",
+      "vero": true
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 1
+  },
+  {
+   "codice": "CFC-48",
+   "pagina": 34,
+   "titolo": "Luce sull'Etna: hai capito?",
+   "consegna": "Vero o falso?",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Luce aveva già visto la neve.",
+      "vero": false,
+      "spiegazione": "La vede per la prima volta."
+     },
+     {
+      "testo": "Le pietre di lava sono pesanti.",
+      "vero": false,
+      "spiegazione": "Sono nere e leggere, piene di piccoli buchi."
+     },
+     {
+      "testo": "Nel rifugio bevono della cioccolata.",
+      "vero": true
+     },
+     {
+      "testo": "Al ritorno Luce dorme.",
+      "vero": true
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-49",
+   "pagina": 34,
+   "titolo": "Gli articoli del racconto",
+   "consegna": "Tocca tutti gli articoli.",
+   "tipo": "tocca",
+   "dati": {
+    "categorie": [
+     {
+      "nome": "articolo",
+      "colore": "#6a1b9a"
+     }
+    ],
+    "frasi": [
+     {
+      "testo": "Dal finestrino della macchina si vedevano gli alberi coperti di neve.",
+      "segni": {
+       "6": "articolo"
+      },
+      "spiegazione": "«Dal» e «della» sono preposizioni articolate, non articoli."
+     },
+     {
+      "testo": "Appena scesa, Luce ha visto la neve per la prima volta.",
+      "segni": {
+       "5": "articolo",
+       "8": "articolo"
+      },
+      "spiegazione": ""
+     },
+     {
+      "testo": "Abbiamo bevuto della cioccolata calda e mangiato dei biscotti.",
+      "segni": {
+       "2": "articolo",
+       "7": "articolo"
+      },
+      "spiegazione": "Qui «della» e «dei» sono partitivi: un po' di cioccolata, alcuni biscotti."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-51",
+   "pagina": 36,
+   "titolo": "Verifica: l'articolo giusto",
+   "consegna": "Scegli l'articolo giusto.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "… scoglio",
+      "opzioni": [
+       "il",
+       "lo"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… orologio",
+      "opzioni": [
+       "un",
+       "un'"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… psicologi",
+      "opzioni": [
+       "gli",
+       "i"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… amaca",
+      "opzioni": [
+       "la",
+       "l'"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… zoo",
+      "opzioni": [
+       "uno",
+       "un"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… altalena",
+      "opzioni": [
+       "un",
+       "un'"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… orsi",
+      "opzioni": [
+       "i",
+       "gli"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… nuovo stadio",
+      "opzioni": [
+       "il",
+       "lo"
+      ],
+      "giusta": 0,
+      "spiegazione": "Conta «nuovo»: il nuovo stadio."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  }
+ ]
+}

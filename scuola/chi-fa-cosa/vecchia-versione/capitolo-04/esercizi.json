@@ -1,0 +1,845 @@
+{
+ "versione": 1,
+ "esercizi": [
+  {
+   "codice": "CFC-52",
+   "pagina": 38,
+   "titolo": "Trova gli aggettivi",
+   "consegna": "Scegli «aggettivo» e tocca tutti gli aggettivi.",
+   "tipo": "tocca",
+   "dati": {
+    "categorie": [
+     {
+      "nome": "aggettivo",
+      "colore": "#ef6c00"
+     }
+    ],
+    "frasi": [
+     {
+      "testo": "Il mare calmo e azzurro brilla sotto il sole caldo.",
+      "segni": {
+       "2": "aggettivo",
+       "4": "aggettivo",
+       "9": "aggettivo"
+      },
+      "spiegazione": ""
+     },
+     {
+      "testo": "Una vecchia barca rossa dorme sulla spiaggia deserta.",
+      "segni": {
+       "1": "aggettivo",
+       "3": "aggettivo",
+       "7": "aggettivo"
+      },
+      "spiegazione": "«vecchia» sta prima del nome, ma è comunque un aggettivo."
+     },
+     {
+      "testo": "Luce è una cagnolina curiosa, allegra e golosa.",
+      "segni": {
+       "4": "aggettivo",
+       "5": "aggettivo",
+       "7": "aggettivo"
+      },
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-53",
+   "pagina": 38,
+   "titolo": "L'accordo",
+   "consegna": "Scegli la forma giusta dell'aggettivo.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "le scarpe …",
+      "opzioni": [
+       "nuovi",
+       "nuove"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "un gelato …",
+      "opzioni": [
+       "fresco",
+       "freschi"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "i ragazzi …",
+      "opzioni": [
+       "felice",
+       "felici"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "la torta …",
+      "opzioni": [
+       "dolce",
+       "dolci"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "gli zaini …",
+      "opzioni": [
+       "pesanti",
+       "pesante"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "le pareti …",
+      "opzioni": [
+       "blu",
+       "blue"
+      ],
+      "giusta": 0,
+      "spiegazione": "«blu» è invariabile."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-54",
+   "pagina": 41,
+   "titolo": "Accorda l'aggettivo",
+   "consegna": "Scrivi l'aggettivo accordato con il nome.",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "le onde (alto) → [alte]"
+     },
+     {
+      "testo": "i fiori (rosa) → [rosa]",
+      "spiegazione": "«rosa» è invariabile."
+     },
+     {
+      "testo": "gli amici (simpatico) → [simpatici]"
+     },
+     {
+      "testo": "le strade (lungo) → [lunghe]"
+     },
+     {
+      "testo": "i bambini (gentile) → [gentili]"
+     },
+     {
+      "testo": "Vlad e Luce (stanco) → [stanchi]",
+      "spiegazione": "Maschile + femminile → maschile plurale."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-55",
+   "pagina": 41,
+   "titolo": "I comparativi",
+   "consegna": "Completa con il comparativo indicato.",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "(maggioranza) L'Etna è [più] alta [del] Vesuvio."
+     },
+     {
+      "testo": "(minoranza) Il gatto è [meno] goloso [di] Luce."
+     },
+     {
+      "testo": "(uguaglianza) Giulia è [tanto|così] brava [quanto|come] Marco."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-56",
+   "pagina": 41,
+   "titolo": "Di che grado è?",
+   "consegna": "Scegli il grado dell'aggettivo tra asterischi.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Questa granita è *buonissima*.",
+      "opzioni": [
+       "positivo",
+       "comparativo di maggioranza",
+       "comparativo di minoranza",
+       "superlativo relativo",
+       "superlativo assoluto"
+      ],
+      "giusta": 4,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Vlad è *il più alto* della classe.",
+      "opzioni": [
+       "positivo",
+       "comparativo di maggioranza",
+       "comparativo di minoranza",
+       "superlativo relativo",
+       "superlativo assoluto"
+      ],
+      "giusta": 3,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Il mare oggi è *calmo*.",
+      "opzioni": [
+       "positivo",
+       "comparativo di maggioranza",
+       "comparativo di minoranza",
+       "superlativo relativo",
+       "superlativo assoluto"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Luce è *meno ubbidiente* del gatto.",
+      "opzioni": [
+       "positivo",
+       "comparativo di maggioranza",
+       "comparativo di minoranza",
+       "superlativo relativo",
+       "superlativo assoluto"
+      ],
+      "giusta": 2,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-57",
+   "pagina": 41,
+   "titolo": "Le forme speciali",
+   "consegna": "Scrivi la forma speciale.",
+   "tipo": "completa",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "più buono → [migliore]"
+     },
+     {
+      "testo": "cattivissimo → [pessimo]"
+     },
+     {
+      "testo": "più piccolo → [minore]"
+     },
+     {
+      "testo": "grandissimo → [massimo]"
+     },
+     {
+      "testo": "buonissimo → [ottimo]"
+     },
+     {
+      "testo": "più cattivo → [peggiore]"
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-58",
+   "pagina": 41,
+   "titolo": "Vero o falso",
+   "consegna": "Decidi se ogni frase è vera o falsa.",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "«Felice» ha quattro forme.",
+      "vero": false,
+      "spiegazione": "È di seconda classe: felice, felici."
+     },
+     {
+      "testo": "«Blu» è un aggettivo invariabile.",
+      "vero": true
+     },
+     {
+      "testo": "«Più migliore» è corretto.",
+      "vero": false,
+      "spiegazione": "«migliore» è già un comparativo."
+     },
+     {
+      "testo": "«Un vecchio amico» e «un amico vecchio» vogliono dire la stessa cosa.",
+      "vero": false,
+      "spiegazione": "Un vecchio amico = da tanto tempo; un amico vecchio = anziano."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-59",
+   "pagina": 41,
+   "titolo": "Confronta due animali",
+   "consegna": "Scrivi un comparativo di maggioranza, uno di uguaglianza e un superlativo.",
+   "tipo": "aperta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Le tue frasi:",
+      "esempio": "Il ghepardo è più veloce del leone. Il gatto è tanto curioso quanto Luce. La giraffa è l'animale più alto della savana."
+     }
+    ]
+   },
+   "livello": 3,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-60",
+   "pagina": 43,
+   "titolo": "Gli aggettivi determinativi",
+   "consegna": "Trascina ogni aggettivo nel gruppo giusto.",
+   "tipo": "gruppi",
+   "dati": {
+    "gruppi": [
+     {
+      "nome": "possessivo",
+      "elementi": [
+       "nostro",
+       "loro"
+      ]
+     },
+     {
+      "nome": "dimostrativo",
+      "elementi": [
+       "questa",
+       "quegli"
+      ]
+     },
+     {
+      "nome": "indefinito",
+      "elementi": [
+       "ogni",
+       "qualche"
+      ]
+     },
+     {
+      "nome": "numerale",
+      "elementi": [
+       "terzo",
+       "cinque"
+      ]
+     },
+     {
+      "nome": "interrogativo",
+      "elementi": [
+       "quale",
+       "quanti"
+      ]
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-61",
+   "pagina": 43,
+   "titolo": "Aggettivo o pronome?",
+   "consegna": "La parola tra asterischi è un aggettivo o un pronome?",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "*Questa* granita è al limone.",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 0,
+      "spiegazione": "Accompagna il nome «granita»."
+     },
+     {
+      "testo": "*Questa* è la mia.",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 1,
+      "spiegazione": "Sta da sola, al posto del nome."
+     },
+     {
+      "testo": "*Molti* amici sono venuti.",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "*Molti* sono rimasti a casa.",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Il *mio* cane si chiama Luce.",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Il tuo zaino è blu, il *mio* è rosso.",
+      "opzioni": [
+       "aggettivo",
+       "pronome"
+      ],
+      "giusta": 1,
+      "spiegazione": "«il mio» = il mio zaino: sta al posto del nome."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-62",
+   "pagina": 43,
+   "titolo": "Le forme di quello",
+   "consegna": "Scegli la forma giusta di «quello».",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "… gabbiano",
+      "opzioni": [
+       "quel",
+       "quello",
+       "quell'",
+       "quei",
+       "quegli",
+       "quella",
+       "quelle"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… scoglio",
+      "opzioni": [
+       "quel",
+       "quello",
+       "quell'",
+       "quei",
+       "quegli",
+       "quella",
+       "quelle"
+      ],
+      "giusta": 1,
+      "spiegazione": "Davanti a s + consonante: quello."
+     },
+     {
+      "testo": "… isola",
+      "opzioni": [
+       "quel",
+       "quello",
+       "quell'",
+       "quei",
+       "quegli",
+       "quella",
+       "quelle"
+      ],
+      "giusta": 2,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… studenti",
+      "opzioni": [
+       "quel",
+       "quello",
+       "quell'",
+       "quei",
+       "quegli",
+       "quella",
+       "quelle"
+      ],
+      "giusta": 4,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… fiori",
+      "opzioni": [
+       "quel",
+       "quello",
+       "quell'",
+       "quei",
+       "quegli",
+       "quella",
+       "quelle"
+      ],
+      "giusta": 3,
+      "spiegazione": ""
+     },
+     {
+      "testo": "… amici",
+      "opzioni": [
+       "quel",
+       "quello",
+       "quell'",
+       "quei",
+       "quegli",
+       "quella",
+       "quelle"
+      ],
+      "giusta": 4,
+      "spiegazione": "Maschile plurale davanti a vocale: quegli."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-63",
+   "pagina": 43,
+   "titolo": "L'analisi dell'aggettivo",
+   "consegna": "«Quei due gatti sono più furbi di Luce»: completa l'analisi.",
+   "tipo": "completa",
+   "dati": {
+    "banca": true,
+    "frasi": [
+     {
+      "testo": "Quei → aggettivo [dimostrativo], [maschile plurale]"
+     },
+     {
+      "testo": "due → aggettivo [numerale cardinale]"
+     },
+     {
+      "testo": "più furbi → aggettivo [qualificativo], grado [comparativo di maggioranza]"
+     }
+    ]
+   },
+   "livello": 3,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-64",
+   "pagina": 43,
+   "titolo": "Rimetti in ordine",
+   "consegna": "Trascina le parole per formare la frase.",
+   "tipo": "ordina",
+   "dati": {
+    "frasi": [
+     {
+      "testo": "Luce è una cagnolina golosissima."
+     },
+     {
+      "testo": "Questo gelato è più buono di quello."
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-65",
+   "pagina": 43,
+   "titolo": "Bel, bello o bell'?",
+   "consegna": "Scegli la forma giusta di «bello».",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Che … mare!",
+      "opzioni": [
+       "bel",
+       "bello",
+       "bell'",
+       "bei",
+       "begli"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Che … zaino!",
+      "opzioni": [
+       "bel",
+       "bello",
+       "bell'",
+       "bei",
+       "begli"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Che … albero!",
+      "opzioni": [
+       "bel",
+       "bello",
+       "bell'",
+       "bei",
+       "begli"
+      ],
+      "giusta": 2,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Che … occhi!",
+      "opzioni": [
+       "bel",
+       "bello",
+       "bell'",
+       "bei",
+       "begli"
+      ],
+      "giusta": 4,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Che … fiori!",
+      "opzioni": [
+       "bel",
+       "bello",
+       "bell'",
+       "bei",
+       "begli"
+      ],
+      "giusta": 3,
+      "spiegazione": ""
+     },
+     {
+      "testo": "Che … spettacolo!",
+      "opzioni": [
+       "bel",
+       "bello",
+       "bell'",
+       "bei",
+       "begli"
+      ],
+      "giusta": 1,
+      "spiegazione": "Davanti a s + consonante: bello."
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 1
+  },
+  {
+   "codice": "CFC-66",
+   "pagina": 44,
+   "titolo": "Il concorso: hai capito?",
+   "consegna": "Vero o falso?",
+   "tipo": "vf",
+   "dati": {
+    "domande": [
+     {
+      "testo": "Il concorso è a Catania.",
+      "vero": false,
+      "spiegazione": "È in piazza a Taormina."
+     },
+     {
+      "testo": "Luce finge di dormire.",
+      "vero": true
+     },
+     {
+      "testo": "Il gelato era alla fragola.",
+      "vero": false,
+      "spiegazione": "Era un cono al pistacchio."
+     },
+     {
+      "testo": "Luce vince una coccarda.",
+      "vero": true
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-67",
+   "pagina": 44,
+   "titolo": "Gli aggettivi del racconto",
+   "consegna": "Tocca tutti gli aggettivi qualificativi.",
+   "tipo": "tocca",
+   "dati": {
+    "categorie": [
+     {
+      "nome": "aggettivo",
+      "colore": "#ef6c00"
+     }
+    ],
+    "frasi": [
+     {
+      "testo": "C'era un barboncino bianco e profumato, un alano enorme e tranquillo, un bassotto lungo come un salame.",
+      "segni": {
+       "3": "aggettivo",
+       "5": "aggettivo",
+       "8": "aggettivo",
+       "10": "aggettivo",
+       "13": "aggettivo"
+      },
+      "spiegazione": ""
+     },
+     {
+      "testo": "Gli altri concorrenti erano bellissimi.",
+      "segni": {
+       "4": "aggettivo"
+      },
+      "spiegazione": "«bellissimi» è un superlativo assoluto. «altri» è un aggettivo indefinito, non qualificativo."
+     },
+     {
+      "testo": "Luce ha vinto una coccarda rossa e una scorta di biscotti.",
+      "segni": {
+       "5": "aggettivo"
+      },
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 2,
+   "extra": 0
+  },
+  {
+   "codice": "CFC-69",
+   "pagina": 46,
+   "titolo": "Verifica: di che tipo è l'aggettivo?",
+   "consegna": "Scegli il tipo dell'aggettivo.",
+   "tipo": "scelta",
+   "dati": {
+    "domande": [
+     {
+      "testo": "verde",
+      "opzioni": [
+       "qualificativo",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "numerale",
+       "interrogativo"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "vostro",
+      "opzioni": [
+       "qualificativo",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "numerale",
+       "interrogativo"
+      ],
+      "giusta": 1,
+      "spiegazione": ""
+     },
+     {
+      "testo": "quella",
+      "opzioni": [
+       "qualificativo",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "numerale",
+       "interrogativo"
+      ],
+      "giusta": 2,
+      "spiegazione": ""
+     },
+     {
+      "testo": "nessun",
+      "opzioni": [
+       "qualificativo",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "numerale",
+       "interrogativo"
+      ],
+      "giusta": 3,
+      "spiegazione": ""
+     },
+     {
+      "testo": "sesto",
+      "opzioni": [
+       "qualificativo",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "numerale",
+       "interrogativo"
+      ],
+      "giusta": 4,
+      "spiegazione": ""
+     },
+     {
+      "testo": "quale",
+      "opzioni": [
+       "qualificativo",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "numerale",
+       "interrogativo"
+      ],
+      "giusta": 5,
+      "spiegazione": ""
+     },
+     {
+      "testo": "timido",
+      "opzioni": [
+       "qualificativo",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "numerale",
+       "interrogativo"
+      ],
+      "giusta": 0,
+      "spiegazione": ""
+     },
+     {
+      "testo": "alcune",
+      "opzioni": [
+       "qualificativo",
+       "possessivo",
+       "dimostrativo",
+       "indefinito",
+       "numerale",
+       "interrogativo"
+      ],
+      "giusta": 3,
+      "spiegazione": ""
+     }
+    ]
+   },
+   "livello": 1,
+   "extra": 0
+  }
+ ]
+}
