@@ -5,8 +5,8 @@ Regola: tutti sono personaggi positivi o simpatici. Nessuno viene preso in giro 
 
 | Nome | Ruolo |
 |------|-------|
-| Vlad | protagonista |
-| Ludovica | migliore amica, aiutante coraggiosa, assistente tecnica |
+| Vlad | protagonista; programmatore e tecnico; russo |
+| Ludovica | migliore amica, aiutante coraggiosa |
 | Alice | entusiasta, sempre la prima ad alzare la mano (AI) |
 | Aurora | disegna, osservatrice (AI) |
 | Beatrice | entusiasta |
@@ -21,9 +21,9 @@ Regola: tutti sono personaggi positivi o simpatici. Nessuno viene preso in giro 
 | Riccardo | il simpatico, fa battute (AI) |
 | Salvatore | sempre affamato, buffo e buono (AI) |
 | Simone | curioso, fa domande (AI) |
-| Sofia | ucraina, sa molte cose russe |
+| Sofia | ucraina, sa il russo |
 | Stefano | sportivo, amico di Marco (AI) |
-| Thomas | bravo con la tecnologia (la LIM) (AI) |
+| Thomas | niente di speciale (correzione di Vlad, 13/11/2026) |
 | Vittoria | incoraggiante e buona |
 | Wijdane | molto intelligente |
 
